@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Profile - X D</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --discord-bg: #36393f;
+            --discord-dark: #2f3136;
+            --discord-darker: #202225;
+            --discord-light: #40444b;
+            --discord-lighter: #72767d;
+            --discord-blurple: #5865f2;
+            --discord-green: #3ba55c;
+            --discord-yellow: #faa61a;
+            --discord-red: #ed4245;
+            --discord-white: #ffffff;
+            --discord-text: #dcddde;
+            --discord-text-muted: #b9bbbe;
+            --discord-text-dark: #8e9297;
+        }
+
+        body {
+            background: var(--discord-darker);
+            color: var(--discord-text);
+            font-size: 16px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        .discord-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: var(--discord-dark);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
+        }
+
+        /* Profile Header */
+        .profile-header {
+            position: relative;
+            height: 120px;
+            background: linear-gradient(135deg, var(--discord-blurple), #7983f5, #8b9cf5);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="white" opacity="0.1"/><circle cx="80" cy="40" r="1" fill="white" opacity="0.1"/><circle cx="40" cy="80" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .profile-avatar-container {
+            position: absolute;
+            bottom: -40px;
+            left: 20px;
+            z-index: 10;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 6px solid var(--discord-dark);
+            background: var(--discord-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .status-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 4px solid var(--discord-dark);
+            z-index: 11;
+        }
+
+        .status-indicator.online {
+            background: var(--discord-green);
+        }
+
+        .status-indicator.idle {
+            background: var(--discord-yellow);
+        }
+
+        .status-indicator.dnd {
+            background: var(--discord-red);
+        }
+
+        .status-indicator.offline {
+            background: var(--discord-lighter);
+        }
+
+        /* Profile Info */
+        .profile-info {
+            padding: 60px 20px 20px;
+            background: var(--discord-dark);
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--discord-white);
+            margin-bottom: 2px;
+        }
+
+        .profile-discriminator {
+            font-size: 14px;
+            color: var(--discord-text-muted);
+            margin-bottom: 12px;
+        }
+
+        .profile-status-text {
+            background: var(--discord-bg);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border-left: 4px solid var(--discord-blurple);
+            margin-bottom: 16px;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        /* Activities Section */
+        .activities-section {
+            margin-top: 16px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--discord-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 8px;
+        }
+
+        .activity-card {
+            background: var(--discord-bg);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 8px;
+            border-left: 4px solid transparent;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-card:hover {
+            background: #3c3f45;
+        }
+
+        .activity-card.playing {
+            border-left-color: var(--discord-green);
+        }
+
+        .activity-card.listening {
+            border-left-color: #1db954;
+        }
+
+        .activity-card.watching {
+            border-left-color: var(--discord-blurple);
+        }
+
+        .activity-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .activity-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: cover;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .activity-type {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--discord-text-muted);
+            text-transform: uppercase;
+        }
+
+        .activity-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--discord-white);
+            margin-bottom: 4px;
+        }
+
+        .activity-details {
+            font-size: 14px;
+            color: var(--discord-text);
+            margin-bottom: 2px;
+        }
+
+        .activity-state {
+            font-size: 14px;
+            color: var(--discord-text-muted);
+            margin-bottom: 8px;
+        }
+
+        .activity-images {
+            display: flex;
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .activity-image {
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--discord-light);
+        }
+
+        .large-image {
+            width: 60px;
+            height: 60px;
+        }
+
+        .small-image {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            border: 2px solid var(--discord-bg);
+            border-radius: 50%;
+        }
+
+        .activity-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .activity-timestamps {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--discord-text-dark);
+            margin-top: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--discord-light);
+            border-radius: 2px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--discord-blurple);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Spotify Special Styling */
+        .spotify-activity {
+            background: linear-gradient(135deg, #1db954, #1ed760);
+            color: white;
+            border-left-color: #1db954;
+        }
+
+        .spotify-activity .activity-type,
+        .spotify-activity .activity-details,
+        .spotify-activity .activity-state {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .spotify-activity .activity-name {
+            color: white;
+        }
+
+        /* No Activities State */
+        .no-activities {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--discord-text-muted);
+        }
+
+        .no-activities i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px;
+            color: var(--discord-text-muted);
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--discord-light);
+            border-top: 2px solid var(--discord-blurple);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* API Status */
+        .api-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .api-status.connected {
+            background: var(--discord-green);
+            color: white;
+        }
+
+        .api-status.demo {
+            background: var(--discord-yellow);
+            color: var(--discord-darker);
+        }
+
+        .api-status.error {
+            background: var(--discord-red);
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .discord-container {
+                margin: 10px;
+                border-radius: 0;
+            }
+
+            .profile-info {
+                padding: 50px 16px 16px;
+            }
+
+            .activity-card {
+                padding: 12px;
+            }
+
+            .api-status {
+                top: 10px;
+                right: 10px;
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+        }
+
+        /* Custom Discord-like animations */
+        .activity-card {
+            animation: slideInUp 0.3s ease;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-avatar {
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Rich Presence Images Gallery */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .gallery-image {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--discord-light);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .gallery-image:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Image Modal */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-modal.active {
+            display: flex;
+        }
+
+        .modal-image {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="api-status" id="apiStatus">🔄 Connecting...</div>
+
+    <div class="discord-container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-avatar-container">
+                <div class="profile-avatar">
+                    <img id="userAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%235865f2'/%3E%3Ctext x='50' y='55' text-anchor='middle' fill='white' font-size='30' font-family='Arial'%3EXD%3C/text%3E%3C/svg%3E" alt="User Avatar">
+                </div>
+                <div class="status-indicator online" id="statusIndicator"></div>
+            </div>
+        </div>
+
+        <!-- Profile Info -->
+        <div class="profile-info">
+            <div class="profile-name" id="username">X D</div>
+            <div class="profile-discriminator" id="discriminator">#0000</div>
+            <div class="profile-status-text" id="customStatus">🎮 Gaming enthusiast</div>
+
+            <!-- Activities Section -->
+            <div class="activities-section">
+                <div class="section-title">Activity</div>
+                <div id="activitiesContainer">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <span>Loading activities...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="image-modal" id="imageModal">
+        <span class="close-modal" onclick="closeImageModal()">&times;</span>
+        <img class="modal-image" id="modalImage" src="" alt="">
+    </div>
+
+    <script>
+        const DISCORD_USER_ID = '1282747277206884436';
+        let currentActivities = [];
+
+        // Update API status
+        function updateAPIStatus(status, message) {
+            const indicator = document.getElementById('apiStatus');
+            indicator.className = `api-status ${status}`;
+            indicator.textContent = message;
+        }
+
+        // Fetch Discord data from multiple sources
+        async function fetchDiscordData() {
+            const methods = [
+                // Method 1: Lanyard API
+                async () => {
+                    const response = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success && data.data) {
+                            updateAPIStatus('connected', '🟢 Lanyard API');
+                            return data.data;
+                        }
+                    }
+                    throw new Error('Lanyard failed');
+                },
+
+                // Method 2: Alternative Discord API
+                async () => {
+                    updateAPIStatus('demo', '⚠️ Using Demo Data');
+                    return generateRealisticDemoData();
+                }
+            ];
+
+            for (const method of methods) {
+                try {
+                    return await method();
+                } catch (error) {
+                    console.log('Method failed, trying next...');
+                    continue;
+                }
+            }
+
+            throw new Error('All methods failed');
+        }
+
+        // Generate realistic demo data
+        function generateRealisticDemoData() {
+            const demoActivities = [
+                {
+                    name: 'Overwatch 2',
+                    details: 'Competitive Play',
+                    state: 'Tank • King\'s Row',
+                    type: 0,
+                    application_id: '356943499456937984',
+                    timestamps: {
+                        start: Date.now() - 2400000 // 40 minutes ago
+                    },
+                    assets: {
+                        large_image: 'overwatch_logo',
+                        large_text: 'Overwatch 2',
+                        small_image: 'tank_icon',
+                        small_text: 'Tank Role'
+                    }
+                },
+                {
+                    name: 'Visual Studio Code',
+                    details: 'Editing discord-profile.html',
+                    state: 'Workspace: Gaming Dashboard',
+                    type: 0,
+                    timestamps: {
+                        start: Date.now() - 3600000 // 1 hour ago
+                    },
+                    assets: {
+                        large_image: 'vscode_logo',
+                        large_text: 'Visual Studio Code',
+                        small_image: 'html_icon',
+                        small_text: 'HTML'
+                    }
+                }
+            ];
+
+            const spotifyData = Math.random() > 0.5 ? {
+                song: 'Epic Gaming Music',
+                artist: 'Various Artists',
+                album: 'Gaming Playlist',
+                album_art_url: 'https://via.placeholder.com/300x300/1db954/white?text=♪'
+            } : null;
+
+            return {
+                discord_user: {
+                    id: DISCORD_USER_ID,
+                    username: 'X D',
+                    discriminator: '0000',
+                    avatar: null,
+                    public_flags: 0
+                },
+                discord_status: 'online',
+                activities: Math.random() > 0.3 ? [demoActivities[Math.floor(Math.random() * demoActivities.length)]] : [],
+                listening_to_spotify: !!spotifyData,
+                spotify: spotifyData
+            };
+        }
+
+        // Update profile information
+        function updateProfile(data) {
+            const user = data.discord_user;
+            const username = document.getElementById('username');
+            const discriminator = document.getElementById('discriminator');
+            const avatar = document.getElementById('userAvatar');
+            const statusIndicator = document.getElementById('statusIndicator');
+            const customStatus = document.getElementById('customStatus');
+
+            // Update username and discriminator
+            username.textContent = user.username || 'X D';
+            discriminator.textContent = user.discriminator ? `#${user.discriminator}` : '#0000';
+
+            // Update avatar
+            if (user.avatar) {
+                const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${user.avatar.startsWith('a_') ? 'gif' : 'png'}?size=128`;
+                avatar.src = avatarUrl;
+            }
+
+            // Update status indicator
+            statusIndicator.className = `status-indicator ${data.discord_status}`;
+
+            // Update custom status
+            const customStatusActivity = data.activities.find(a => a.type === 4);
+            if (customStatusActivity) {
+                customStatus.textContent = customStatusActivity.state || customStatusActivity.name;
+            } else {
+                customStatus.textContent = '🎮 Gaming enthusiast';
+            }
+        }
+
+        // Create activity card
+        function createActivityCard(activity) {
+            const card = document.createElement('div');
+            card.className = `activity-card ${getActivityClass(activity)}`;
+
+            const typeText = getActivityTypeText(activity);
+            const images = getActivityImages(activity);
+            const timestamps = getActivityTimestamps(activity);
+
+            card.innerHTML = `
+                <div class="activity-header">
+                    ${activity.assets?.large_image ? `<img class="activity-icon" src="${getDiscordAssetUrl(activity)}" alt="Activity Icon">` : ''}
+                    <span class="activity-type">${typeText}</span>
+                </div>
+                <div class="activity-name">${activity.name}</div>
+                ${activity.details ? `<div class="activity-details">${activity.details}</div>` : ''}
+                ${activity.state ? `<div class="activity-state">${activity.state}</div>` : ''}
+                ${images}
+                ${timestamps}
+            `;
+
+            return card;
+        }
+
+        // Create Spotify card
+        function createSpotifyCard(spotify) {
+            const card = document.createElement('div');
+            card.className = 'activity-card spotify-activity listening';
+
+            card.innerHTML = `
+                <div class="activity-header">
+                    <i class="fab fa-spotify activity-icon" style="font-size: 20px; color: white;"></i>
+                    <span class="activity-type">Listening to Spotify</span>
+                </div>
+                <div class="activity-name">${spotify.song}</div>
+                <div class="activity-details">by ${spotify.artist}</div>
+                <div class="activity-state">on ${spotify.album}</div>
+                ${spotify.album_art_url ? `
+                    <div class="activity-images">
+                        <div class="activity-image large-image">
+                            <img src="${spotify.album_art_url}" alt="Album Art" onclick="openImageModal('${spotify.album_art_url}')">
+                        </div>
+                    </div>
+                ` : ''}
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${Math.random() * 80 + 10}%"></div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Get activity class for styling
+        function getActivityClass(activity) {
+            switch (activity.type) {
+                case 0: return 'playing';
+                case 1: return 'streaming';
+                case 2: return 'listening';
+                case 3: return 'watching';
+                case 5: return 'competing';
+                default: return 'playing';
+            }
+        }
+
+        // Get activity type text
+        function getActivityTypeText(activity) {
+            const types = {
+                0: 'Playing a game',
+                1: 'Streaming',
+                2: 'Listening to',
+                3: 'Watching',
+                4: 'Custom Status',
+                5: 'Competing in'
+            };
+            return types[activity.type] || 'Activity';
+        }
+
+        // Get Discord asset URL
+        function getDiscordAssetUrl(activity) {
+            if (!activity.assets?.large_image) return '';
+            
+            if (activity.assets.large_image.startsWith('mp:')) {
+                return `https://media.discordapp.net/${activity.assets.large_image.slice(3)}`;
+            }
+            
+            if (activity.application_id) {
+                return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.large_image}.png`;
+            }
+            
+            // Fallback for demo data
+            const demoImages = {
+                'overwatch_logo': 'https://via.placeholder.com/60x60/f99e1a/white?text=OW',
+                'vscode_logo': 'https://via.placeholder.com/60x60/007acc/white?text=VS',
+                'discord_logo': 'https://via.placeholder.com/60x60/5865f2/white?text=DC'
+            };
+            
+            return demoImages[activity.assets.large_image] || 'https://via.placeholder.com/60x60/36393f/white?text=?';
+        }
+
+        // Get activity images
+        function getActivityImages(activity) {
+            if (!activity.assets) return '';
+
+            let imagesHTML = '<div class="activity-images">';
+            
+            if (activity.assets.large_image) {
+                const largeImageUrl = getDiscordAssetUrl(activity);
+                imagesHTML += `
+                    <div class="activity-image large-image">
+                        <img src="${largeImageUrl}" alt="${activity.assets.large_text || 'Large Image'}" onclick="openImageModal('${largeImageUrl}')">
+                        ${activity.assets.small_image ? `
+                            <div class="activity-image small-image">
+                                <img src="${getSmallImageUrl(activity)}" alt="${activity.assets.small_text || 'Small Image'}">
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+
+            // Add all available images to gallery
+            const allImages = [];
+            if (activity.assets.large_image) allImages.push({ url: getDiscordAssetUrl(activity), alt: activity.assets.large_text });
+            if (activity.assets.small_image) allImages.push({ url: getSmallImageUrl(activity), alt: activity.assets.small_text });
+
+            if (allImages.length > 1) {
+                imagesHTML += '<div class="image-gallery">';
+                allImages.forEach(img => {
+                    imagesHTML += `
+                        <div class="gallery-image">
+                            <img src="${img.url}" alt="${img.alt}" onclick="openImageModal('${img.url}')">
+                        </div>
+                    `;
+                });
+                imagesHTML += '</div>';
+            }
+
+            imagesHTML += '</div>';
+            return imagesHTML;
+        }
+
+        // Get small image URL
+        function getSmallImageUrl(activity) {
+            if (!activity.assets?.small_image) return '';
+            
+            if (activity.assets.small_image.startsWith('mp:')) {
+                return `https://media.discordapp.net/${activity.assets.small_image.slice(3)}`;
+            }
+            
+            if (activity.application_id) {
+                return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.small_image}.png`;
+            }
+            
+            // Demo fallbacks
+            const demoSmallImages = {
+                'tank_icon': 'https://via.placeholder.com/20x20/f99e1a/white?text=T',
+                'html_icon': 'https://via.placeholder.com/20x20/e34c26/white?text=H'
+            };
+            
+            return demoSmallImages[activity.assets.small_image] || 'https://via.placeholder.com/20x20/36393f/white?text=?';
+        }
+
+        // Get activity timestamps
+        function getActivityTimestamps(activity) {
+            if (!activity.timestamps) return '';
+
+            const now = Date.now();
+            const start = activity.timestamps.start;
+            const end = activity.timestamps.end;
+
+            if (start) {
+                const elapsed = Math.floor((now - start) / 1000);
+                const hours = Math.floor(elapsed / 3600);
+                const minutes = Math.floor((elapsed % 3600) / 60);
+                const seconds = elapsed % 60;
+
+                let timeStr = '';
+                if (hours > 0) timeStr += `${hours}:`;
+                timeStr += `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                let endStr = '';
+                if (end) {
+                    const remaining = Math.max(0, Math.floor((end - now) / 1000));
+                    const endMinutes = Math.floor(remaining / 60);
+                    const endSeconds = remaining % 60;
+                    endStr = `${endMinutes}:${endSeconds.toString().padStart(2, '0')} left`;
+                }
+
+                return `
+                    <div class="activity-timestamps">
+                        <span>${timeStr} elapsed</span>
+                        ${endStr ? `<span>${endStr}</span>` : ''}
+                    </div>
+                `;
+            }
+
+            return '';
+        }
+
+        // Update activities display
+        function updateActivities(data) {
+            const container = document.getElementById('activitiesContainer');
+            container.innerHTML = '';
+
+            const activities = data.activities.filter(a => a.type !== 4); // Exclude custom status
+            const hasSpotify = data.listening_to_spotify && data.spotify;
+
+            if (activities.length === 0 && !hasSpotify) {
+                container.innerHTML = `
+                    <div class="no-activities">
+                        <i class="fas fa-gamepad"></i>
+                        <div>No activities to display</div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Add regular activities
+            activities.forEach(activity => {
+                container.appendChild(createActivityCard(activity));
+            });
+
+            // Add Spotify activity
+            if (hasSpotify) {
+                container.appendChild(createSpotifyCard(data.spotify));
+            }
+
+            currentActivities = activities;
+        }
+
+        // Image modal functions
+        function openImageModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = imageSrc;
+            modal.classList.add('active');
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+        }
+
+        // Main update function
+        async function updateDiscordProfile() {
+            try {
+                updateAPIStatus('connected', '🔄 Fetching data...');
+                const data = await fetchDiscordData();
+                
+                updateProfile(data);
+                updateActivities(data);
+                
+                console.log('Discord profile updated successfully');
+                
+            } catch (error) {
+                console.error('Failed to update Discord profile:', error);
+                updateAPIStatus('error', '🔴 Connection failed');
+                
+                // Show error state
+                const container = document.getElementById('activitiesContainer');
+                container.innerHTML = `
+                    <div class="no-activities">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>Failed to load activities</div>
+                        <small style="margin-top: 8px; opacity: 0.7;">Retrying in 30 seconds...</small>
+                    </div>
+                `;
+            }
+        }
+
+        // Activity change detection
+        function detectActivityChanges(newActivities) {
+            const currentNames = currentActivities.map(a => a.name);
+            const newNames = newActivities.map(a => a.name);
+
+            // Detect new activities
+            newNames.forEach(name => {
+                if (!currentNames.includes(name)) {
+                    console.log(`Started: ${name}`);
+                    showNotification(`Started playing ${name}`, 'success');
+                }
+            });
+
+            // Detect stopped activities
+            currentNames.forEach(name => {
+                if (!newNames.includes(name)) {
+                    console.log(`Stopped: ${name}`);
+                    showNotification(`Stopped playing ${name}`, 'info');
+                }
+            });
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 70px;
+                right: 20px;
+                background: var(--discord-${type === 'success' ? 'green' : type === 'error' ? 'red' : 'blurple'});
+                color: white;
+                padding: 12px 16px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease;
+                max-width: 300px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add animation styles for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Enhanced demo data with more variety
+        function getRandomDemoActivity() {
+            const demoActivities = [
+                {
+                    name: 'Overwatch 2',
+                    details: 'Competitive Play',
+                    state: 'Tank • King\'s Row',
+                    type: 0,
+                    application_id: '356943499456937984',
+                    timestamps: { start: Date.now() - Math.random() * 3600000 },
+                    assets: {
+                        large_image: 'overwatch_logo',
+                        large_text: 'Overwatch 2',
+                        small_image: 'tank_icon',
+                        small_text: 'Tank Role'
+                    }
+                },
+                {
+                    name: 'Fortnite',
+                    details: 'Battle Royale',
+                    state: 'Solo • 23 players left',
+                    type: 0,
+                    timestamps: { start: Date.now() - Math.random() * 2400000 },
+                    assets: {
+                        large_image: 'fortnite_logo',
+                        large_text: 'Fortnite',
+                        small_image: 'solo_icon',
+                        small_text: 'Solo Mode'
+                    }
+                },
+                {
+                    name: 'Discord',
+                    details: 'Voice Channel',
+                    state: 'Gaming Lobby',
+                    type: 0,
+                    timestamps: { start: Date.now() - Math.random() * 1800000 },
+                    assets: {
+                        large_image: 'discord_logo',
+                        large_text: 'Discord',
+                        small_image: 'voice_icon',
+                        small_text: 'Voice Chat'
+                    }
+                },
+                {
+                    name: 'Visual Studio Code',
+                    details: 'Editing discord-profile.html',
+                    state: 'Workspace: Gaming Dashboard',
+                    type: 0,
+                    timestamps: { start: Date.now() - Math.random() * 3600000 },
+                    assets: {
+                        large_image: 'vscode_logo',
+                        large_text: 'Visual Studio Code',
+                        small_image: 'html_icon',
+                        small_text: 'HTML File'
+                    }
+                }
+            ];
+
+            return demoActivities[Math.floor(Math.random() * demoActivities.length)];
+        }
+
+        // Enhanced demo data generator
+        function generateRealisticDemoData() {
+            const activities = [];
+            const activityCount = Math.random() > 0.5 ? 1 : Math.random() > 0.7 ? 2 : 0;
+            
+            for (let i = 0; i < activityCount; i++) {
+                activities.push(getRandomDemoActivity());
+            }
+
+            const spotifyTracks = [
+                { song: 'Epic Gaming Music', artist: 'Various Artists', album: 'Gaming Playlist' },
+                { song: 'Warriors', artist: 'Imagine Dragons', album: 'League of Legends' },
+                { song: 'Legends Never Die', artist: 'Against The Current', album: 'Worlds 2017' },
+                { song: 'RISE', artist: 'The Glitch Mob', album: 'Worlds 2018' }
+            ];
+
+            const hasSpotify = Math.random() > 0.6;
+            const spotifyData = hasSpotify ? {
+                ...spotifyTracks[Math.floor(Math.random() * spotifyTracks.length)],
+                album_art_url: `https://via.placeholder.com/300x300/1db954/white?text=♪`
+            } : null;
+
+            const statuses = ['online', 'idle', 'dnd'];
+            const currentStatus = statuses[Math.floor(Math.random() * statuses.length)];
+
+            return {
+                discord_user: {
+                    id: DISCORD_USER_ID,
+                    username: 'X D',
+                    discriminator: '0000',
+                    avatar: null,
+                    public_flags: 0
+                },
+                discord_status: currentStatus,
+                activities: activities,
+                listening_to_spotify: hasSpotify,
+                spotify: spotifyData
+            };
+        }
+
+        // Auto-update activities
+        function startAutoUpdate() {
+            // Update every 15 seconds
+            setInterval(async () => {
+                const oldActivities = [...currentActivities];
+                await updateDiscordProfile();
+                
+                // Only detect changes if we have current activities
+                if (currentActivities.length > 0 || oldActivities.length > 0) {
+                    detectActivityChanges(currentActivities);
+                }
+            }, 15000);
+
+            // Update timestamps every second
+            setInterval(() => {
+                const timestampElements = document.querySelectorAll('.activity-timestamps');
+                timestampElements.forEach(element => {
+                    // This would update the live timestamps
+                    // Implementation depends on storing activity data
+                });
+            }, 1000);
+
+            // Progress bar animation for Spotify
+            setInterval(() => {
+                const progressBars = document.querySelectorAll('.spotify-activity .progress-fill');
+                progressBars.forEach(bar => {
+                    const currentWidth = parseFloat(bar.style.width) || 0;
+                    if (currentWidth < 100) {
+                        bar.style.width = (currentWidth + Math.random() * 2) + '%';
+                    }
+                });
+            }, 5000);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeImageModal();
+            }
+            if (event.key === 'r' && event.ctrlKey) {
+                event.preventDefault();
+                updateDiscordProfile();
+                showNotification('Refreshing Discord data...', 'info');
+            }
+        });
+
+        // Click outside modal to close
+        document.getElementById('imageModal').addEventListener('click', (event) => {
+            if (event.target.id === 'imageModal') {
+                closeImageModal();
+            }
+        });
+
+        // Handle online/offline events
+        window.addEventListener('online', () => {
+            updateAPIStatus('connected', '🟢 Back online');
+            updateDiscordProfile();
+        });
+
+        window.addEventListener('offline', () => {
+            updateAPIStatus('error', '🔴 Offline');
+        });
+
+        // Page visibility handling
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                // Page became visible, refresh data
+                updateDiscordProfile();
+            }
+        });
+
+        // Initialize the Discord profile
+        async function initializeProfile() {
+            console.log('🎮 Initializing Discord Profile Clone...');
+            
+            // Show loading state
+            updateAPIStatus('connected', '🔄 Initializing...');
+            
+            try {
+                // Initial profile update
+                await updateDiscordProfile();
+                
+                // Start auto-updates
+                startAutoUpdate();
+                
+                // Show success notification
+                setTimeout(() => {
+                    showNotification('Discord profile loaded successfully!', 'success');
+                }, 1000);
+                
+                console.log('✅ Discord profile initialized successfully!');
+                
+            } catch (error) {
+                console.error('Failed to initialize profile:', error);
+                updateAPIStatus('error', '🔴 Initialization failed');
+            }
+        }
+
+        // Start the application
+        document.addEventListener('DOMContentLoaded', initializeProfile);
+
+        // Add some helpful console messages
+        console.log('🎮 Discord Profile Clone');
+        console.log('📝 Features:');
+        console.log('  - Real-time activity detection');
+        console.log('  - All Discord Rich Presence images');
+        console.log('  - Spotify integration');
+        console.log('  - Live status updates');
+        console.log('  - Click images to enlarge');
+        console.log('  - Press Ctrl+R to refresh');
+        console.log('  - Press Escape to close modals');
+    </script>
+</body>
+</html>

@@ -78,14 +78,14 @@ html {
 
 :root {
   --bg-color: #060606;
-  --second-bg-color: #151515;
+  --second-bg-color: #0b0b0c;
   --text-color: #ffffff;
-  --main-color: #3c3c3c;
-  --secondary-color: #333433;
+  --main-color: #5c5a52;
+  --secondary-color: #3d3b34;
   --accent-color: #bc7f4c;
   --selina-color: #bc7f4c;
   --selina-hover-color: #fad0a3;
-  --main-color-rgb: 60, 60, 60;
+  --main-color-rgb: 92,90,82;
   --text-color-rgb: 255, 255, 255;
   --gradient: linear-gradient(135deg, var(--main-color), var(--secondary-color));
   --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -811,7 +811,6 @@ section {
   }
 }
 
-/* Add to existing animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -1386,7 +1385,6 @@ section {
   isolation: isolate;
 }
 
-/* Enhanced background elements */
 .services::before,
 .services::after {
   content: '';
@@ -1433,7 +1431,6 @@ section {
   opacity: 0.4;
 }
 
-/* Enhanced Section Heading */
 .services h2.heading {
   color: var(--text-color);
   font-size: clamp(3rem, 6vw, 4.5rem);
@@ -1477,7 +1474,6 @@ section {
   border-radius: 10px;
 }
 
-/* Enhanced Services Container Grid */
 .services-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
@@ -1490,7 +1486,6 @@ section {
   width: 100%;
 }
 
-/* Enhanced Service Box */
 .service-box {
   position: relative;
   overflow: hidden;
@@ -1555,7 +1550,6 @@ section {
   transform: rotate(30deg) translateY(-20%);
 }
 
-/* Improved Staggered Animation */
 .service-box:nth-child(1) {
   animation-delay: 0.1s;
 }
@@ -1572,7 +1566,6 @@ section {
   animation-delay: 0.7s;
 }
 
-/* Enhanced Service Info Content */
 .service-info {
   display: flex;
   flex-direction: column;
@@ -1701,7 +1694,6 @@ section {
   width: 100%;
 }
 
-/* Add corner decorative element */
 .service-box .corner-accent {
   position: absolute;
   width: clamp(70px, 10vw, 100px);
@@ -1733,7 +1725,6 @@ section {
   opacity: 1;
 }
 
-/* Enhanced Animations */
 @keyframes fadeInUp {
   0% {
     opacity: 0;
@@ -1775,7 +1766,6 @@ section {
   }
 }
 
-/* Add subtle particle effect */
 .services .particles {
   position: absolute;
   top: 0;
@@ -1845,7 +1835,6 @@ section {
   }
 }
 
-/* Media Queries - Mobile First Approach */
 /* Medium screens (tablets) */
 @media (min-width: 768px) {
   .services-container {
@@ -2223,7 +2212,6 @@ section {
   box-shadow: 0 5px 15px rgba(88, 101, 242, 0.3);
 }
 
-/* Projects Section Styling */
 .projects {
   padding: 80px 0;
   position: relative;
@@ -2281,7 +2269,6 @@ section {
   margin: 0 auto;
 }
 
-/* Filter Buttons */
 .projects-filter {
   display: flex;
   justify-content: center;
@@ -2312,7 +2299,6 @@ section {
   box-shadow: 0 6px 15px rgba(var(--main-color-rgb), 0.25);
 }
 
-/* Projects Section Styling */
 .projects {
   background: var(--second-bg-color);
   padding: 80px 0;
@@ -2366,7 +2352,6 @@ section {
   margin: 0 auto;
 }
 
-/* Filter Buttons */
 .projects-filter {
   display: flex;
   justify-content: center;
@@ -2397,7 +2382,6 @@ section {
   box-shadow: 0 6px 15px rgba(var(--main-color-rgb), 0.25);
 }
 
-/* Projects Grid */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -2443,7 +2427,6 @@ section {
   opacity: 1;
 }
 
-/* Project Image Container */
 .project-img-container {
   position: relative;
   height: 220px;
@@ -2483,7 +2466,6 @@ section {
   z-index: 1;
 }
 
-/* Project Overlay & Quick Actions */
 .project-overlay {
   position: absolute;
   top: 0;
@@ -2569,7 +2551,6 @@ section {
   color: #fff;
 }
 
-/* Project Content */
 .project-content {
   padding: 28px;
   display: flex;
@@ -2615,7 +2596,6 @@ section {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* Project Features */
 .project-features {
   display: flex;
   flex-wrap: wrap;
@@ -2665,7 +2645,6 @@ section {
   transform: scale(1.2);
 }
 
-/* Project Actions */
 .project-actions {
   display: flex;
   gap: 12px;
@@ -2753,7 +2732,6 @@ section {
   display: none;
 }
 
-/* Animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -2787,7 +2765,6 @@ section {
   animation-delay: 0.4s;
 }
 
-/* Responsive Styles */
 @media (max-width: 1200px) {
   .projects-grid {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -2880,7 +2857,6 @@ section {
   }
 }
 
-/* For very small screens */
 @media (max-width: 360px) {
   .container {
     padding: 0 15px;
@@ -3444,7 +3420,6 @@ section {
   }
 }
 
-/* Enhanced Footer Styles */
 .footer {
   background: var(--second-bg-color);
   padding: 4rem 0 2rem;
@@ -3580,7 +3555,6 @@ section {
   font-weight: 600;
 }
 
-/* Wave effect at top of footer */
 .footer::before {
   content: '';
   position: absolute;
@@ -3936,7 +3910,6 @@ section {
   transform: translateY(0);
 }
 
-/** Enhanced Discord Server Modal **/
 .discord-modal {
   display: none;
   position: fixed;

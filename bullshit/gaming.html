@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaming Status - X D</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #060606;
+            --second-bg-color: #151515;
+            --text-color: #ffffff;
+            --main-color: #3c3c3c;
+            --secondary-color: #333433;
+            --main-color-rgb: 60, 60, 60;
+            --text-color-rgb: 255, 255, 255;
+            --gradient: linear-gradient(135deg, var(--main-color), var(--secondary-color));
+            --discord-color: #5865F2;
+            --success-color: #43B581;
+            --warning-color: #FAA61A;
+            --danger-color: #ED4245;
+            --overwatch-color: #f99e1a;
+            --fortnite-color: #00d4ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 1rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem 0;
+        }
+
+        .title {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text-color), var(--main-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            color: rgba(var(--text-color-rgb), 0.7);
+        }
+
+        /* Main Status Card */
+        .status-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--discord-color), var(--overwatch-color));
+            border-radius: 1.5rem 1.5rem 0 0;
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--success-color);
+            position: relative;
+            animation: pulse-indicator 2s infinite;
+        }
+
+        .status-indicator.offline {
+            background: var(--danger-color);
+            animation: none;
+        }
+
+        .status-indicator.idle {
+            background: var(--warning-color);
+        }
+
+        .status-indicator.dnd {
+            background: var(--danger-color);
+        }
+
+        @keyframes pulse-indicator {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        .status-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .last-seen {
+            font-size: 0.9rem;
+            color: rgba(var(--text-color-rgb), 0.6);
+            margin-left: auto;
+        }
+
+        /* Activities Container */
+        .activities-container {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 1rem;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .activity-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.discord {
+            background: var(--discord-color);
+        }
+
+        .activity-icon.overwatch {
+            background: var(--overwatch-color);
+        }
+
+        .activity-icon.fortnite {
+            background: var(--fortnite-color);
+        }
+
+        .activity-icon.spotify {
+            background: #1DB954;
+        }
+
+        .activity-icon.custom {
+            background: var(--main-color);
+        }
+
+        .activity-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .activity-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            color: var(--text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .activity-info {
+            font-size: 0.9rem;
+            color: rgba(var(--text-color-rgb), 0.7);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: rgba(var(--text-color-rgb), 0.5);
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        /* Stats Mini Cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-mini {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 1rem;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-mini:hover {
+            transform: translateY(-3px);
+            border-color: rgba(var(--main-color-rgb), 0.5);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.2rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: rgba(var(--text-color-rgb), 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Recent Activity Feed */
+        .activity-feed {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feed-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .feed-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .feed-item:last-child {
+            border-bottom: none;
+        }
+
+        .feed-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            background: rgba(var(--main-color-rgb), 0.2);
+            color: var(--main-color);
+            flex-shrink: 0;
+        }
+
+        .feed-text {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .feed-time {
+            font-size: 0.8rem;
+            color: rgba(var(--text-color-rgb), 0.5);
+            flex-shrink: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .container {
+                padding: 0;
+            }
+
+            .header {
+                margin-bottom: 1.5rem;
+                padding: 1rem 0;
+            }
+
+            .status-card {
+                padding: 1.2rem;
+                margin-bottom: 1.2rem;
+            }
+
+            .activity-item {
+                padding: 0.8rem;
+            }
+
+            .activity-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+
+            .stat-mini {
+                padding: 0.8rem;
+            }
+
+            .activity-feed {
+                padding: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .status-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .last-seen {
+                margin-left: 0;
+            }
+
+            .activity-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.8rem;
+            }
+
+            .activity-time {
+                text-align: center;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(var(--main-color-rgb), 0.3);
+            border-top: 3px solid var(--main-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* No Activities State */
+        .no-activities {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(var(--text-color-rgb), 0.5);
+        }
+
+        .no-activities i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        /* API Status Indicator */
+        .api-status {
+            display: none;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .api-status.online {
+            background: rgba(67, 181, 129, 0.9);
+            color: white;
+        }
+
+        .api-status.demo {
+            background: rgba(255, 193, 7, 0.9);
+            color: black;
+        }
+
+        .api-status.offline {
+            background: rgba(237, 66, 69, 0.9);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="api-status" id="apiStatus">🔄 Connecting...</div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Gaming Status</h1>
+            <p class="subtitle">Real-time activity monitoring</p>
+        </div>
+
+        <!-- Main Status -->
+        <div class="status-card">
+            <div class="status-header">
+                <div class="status-indicator" id="statusIndicator"></div>
+                <span class="status-text" id="statusText">Checking status...</span>
+                <span class="last-seen" id="lastSeen"></span>
+            </div>
+
+            <!-- Activities Container -->
+            <div class="activities-container" id="activitiesContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <span style="margin-left: 0.8rem;">Loading activities...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-row">
+            <div class="stat-mini">
+                <div class="stat-value" id="onlineTime">--</div>
+                <div class="stat-label">Online Time</div>
+            </div>
+            <div class="stat-mini">
+                <div class="stat-value" id="gamesPlayed">--</div>
+                <div class="stat-label">Games Today</div>
+            </div>
+            <div class="stat-mini">
+                <div class="stat-value" id="discordStatus">--</div>
+                <div class="stat-label">Discord</div>
+            </div>
+        </div>
+
+        <!-- Activity Feed -->
+        <div class="activity-feed">
+            <h3 class="feed-title">Recent Activity</h3>
+            <div id="activityFeed">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <span style="margin-left: 0.8rem;">Loading feed...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_CONFIG = {
+            DISCORD_USER_ID: '1282747277206884436',
+            FORTNITE_API_KEY: 'c39ee70d-c7604483-77abb43d-250c3754',
+            DISCORD_BOT_TOKEN: 'MTM1ODgwNTUxODAzODA3NzUwMA.GgdL_0.BUS1v1rUP2Xdww7ZmEK0zrVvUMW8QA6ADuI8Jw',
+            FORTNITE_USERNAME: 'xm5o'
+        };
+
+        let lastKnownActivities = [];
+        let sessionStartTime = Date.now();
+        let gamesPlayedToday = 0;
+
+        // Update API status indicator
+        function updateAPIStatus(status, message) {
+            const indicator = document.getElementById('apiStatus');
+            indicator.className = `api-status ${status}`;
+            indicator.textContent = message;
+        }
+
+        // Fetch Discord status using multiple methods
+        async function fetchDiscordStatus() {
+            try {
+                updateAPIStatus('online', '🔄 Fetching Discord...');
+                
+                // Method 1: Try Lanyard API
+                let response = await fetch(`https://api.lanyard.rest/v1/users/${API_CONFIG.DISCORD_USER_ID}`);
+                if (!response.ok && response.status === 404) {
+                    console.log('User not monitored by Lanyard, trying alternative methods...');
+                    throw new Error('User not monitored by Lanyard');
+                }
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (response.ok && data.success && data.data) {
+                        updateAPIStatus('online', '🟢 Lanyard API');
+                        return data.data;
+                    }
+                }
+                
+                // Method 2: Try alternative Discord API endpoint
+                console.log('Lanyard failed, trying alternative...');
+                response = await fetch(`https://discordapp.com/api/users/${API_CONFIG.DISCORD_USER_ID}`, {
+                    headers: {
+                        'Authorization': `Bot ${API_CONFIG.DISCORD_BOT_TOKEN}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const userData = await response.json();
+                    updateAPIStatus('online', '🟢 Discord API');
+                    return {
+                        discord_user: userData,
+                        discord_status: 'online', // Default since we can't get real status from this endpoint
+                        activities: [], // Would need WebSocket connection for real activities
+                        listening_to_spotify: false
+                    };
+                }
+                
+                // Method 3: Use Bot Token to fetch user info
+                console.log('Direct API failed, trying bot method...');
+                const botResponse = await fetchViaBot();
+                if (botResponse) {
+                    return botResponse;
+                }
+                
+                throw new Error('All Discord API methods failed');
+                
+            } catch (error) {
+                console.error('Discord API Error:', error);
+                console.log('Falling back to demo mode with realistic data...');
+                updateAPIStatus('demo', '⚠️ Demo Mode');
+                return generateDemoData();
+            }
+        }
+
+        // Alternative method using Discord Bot
+        async function fetchViaBot() {
+            try {
+                // This would typically require a backend, but we'll simulate it
+                const response = await fetch(`https://discord.com/api/v10/users/@me`, {
+                    headers: {
+                        'Authorization': `Bot ${API_CONFIG.DISCORD_BOT_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const botData = await response.json();
+                    console.log('Bot API successful:', botData);
+                    return {
+                        discord_user: botData,
+                        discord_status: 'online',
+                        activities: [],
+                        listening_to_spotify: false
+                    };
+                }
+            } catch (error) {
+                console.log('Bot API also failed:', error);
+            }
+            return null;
+        }
+
+        // Generate realistic demo data
+        function generateDemoData() {
+            const statuses = ['online', 'idle', 'dnd'];
+            const currentStatus = statuses[Math.floor(Math.random() * statuses.length)];
+            
+            const demoActivities = [
+                {
+                    name: 'Overwatch 2',
+                    details: 'Competitive Play',
+                    state: 'Tank • King\'s Row',
+                    type: 0,
+                    timestamps: {
+                        start: Date.now() - (Math.random() * 3600000) // Up to 1 hour ago
+                    }
+                },
+                {
+                    name: 'Discord',
+                    details: 'Voice Channel',
+                    state: 'Gaming Lobby',
+                    type: 0,
+                    timestamps: {
+                        start: Date.now() - (Math.random() * 1800000) // Up to 30 mins ago
+                    }
+                }
+            ];
+
+            // Randomly include activities
+            const activities = [];
+            if (Math.random() > 0.3) activities.push(demoActivities[0]); // 70% chance Overwatch
+            if (Math.random() > 0.5) activities.push(demoActivities[1]); // 50% chance Discord
+
+            return {
+                discord_status: currentStatus,
+                activities: activities,
+                listening_to_spotify: Math.random() > 0.7, // 30% chance
+                spotify: Math.random() > 0.7 ? {
+                    song: 'Epic Gaming Music',
+                    artist: 'Various Artists',
+                    album: 'Gaming Soundtrack'
+                } : null,
+                discord_user: {
+                    id: API_CONFIG.DISCORD_USER_ID,
+                    username: 'X D',
+                    discriminator: '0000'
+                }
+            };
+        }
+
+        // Enhanced demo mode with realistic activity simulation
+        function startDemoMode() {
+            console.log('🎭 Starting enhanced demo mode...');
+            
+            const demoActivities = [
+                {
+                    name: 'Overwatch 2',
+                    details: 'Competitive Play',
+                    states: ['Tank • King\'s Row', 'Support • Hanamura', 'DPS • Gibraltar'],
+                    icon: 'fas fa-crosshairs',
+                    class: 'overwatch'
+                },
+                {
+                    name: 'Fortnite',
+                    details: 'Battle Royale',
+                    states: ['Solos • 12 players left', 'Duos • Storm closing', 'Creative Mode'],
+                    icon: 'fas fa-gamepad',
+                    class: 'fortnite'
+                },
+                {
+                    name: 'Discord',
+                    details: 'Voice Channel',
+                    states: ['Gaming Lobby', 'Community Chat', 'Private Call'],
+                    icon: 'fab fa-discord',
+                    class: 'discord'
+                }
+            ];
+
+            let currentDemo = {
+                discord_status: 'online',
+                activities: [],
+                listening_to_spotify: false,
+                spotify: null
+            };
+
+            function updateDemoData() {
+                // Random status change (20% chance)
+                if (Math.random() < 0.2) {
+                    const statuses = ['online', 'idle', 'dnd'];
+                    currentDemo.discord_status = statuses[Math.floor(Math.random() * statuses.length)];
+                    addToActivityFeed('fas fa-circle', `Status changed to ${currentDemo.discord_status}`);
+                }
+
+                // Random activity changes
+                currentDemo.activities = [];
+                
+                // 80% chance of having at least one activity
+                if (Math.random() > 0.2) {
+                    const activity = demoActivities[Math.floor(Math.random() * demoActivities.length)];
+                    const state = activity.states[Math.floor(Math.random() * activity.states.length)];
+                    
+                    currentDemo.activities.push({
+                        name: activity.name,
+                        details: activity.details,
+                        state: state,
+                        type: 0,
+                        timestamps: {
+                            start: Date.now() - (Math.random() * 3600000)
+                        }
+                    });
+                }
+
+                // 30% chance of having a second activity
+                if (Math.random() > 0.7 && currentDemo.activities.length > 0) {
+                    const secondActivity = demoActivities.find(a => a.name !== currentDemo.activities[0].name);
+                    if (secondActivity) {
+                        const state = secondActivity.states[Math.floor(Math.random() * secondActivity.states.length)];
+                        currentDemo.activities.push({
+                            name: secondActivity.name,
+                            details: secondActivity.details,
+                            state: state,
+                            type: 0,
+                            timestamps: {
+                                start: Date.now() - (Math.random() * 1800000)
+                            }
+                        });
+                    }
+                }
+
+                // Spotify (25% chance)
+                if (Math.random() > 0.75) {
+                    currentDemo.listening_to_spotify = true;
+                    currentDemo.spotify = {
+                        song: 'Epic Gaming Beats',
+                        artist: 'Gaming Music Co.',
+                        album: 'Focus Playlist'
+                    };
+                } else {
+                    currentDemo.listening_to_spotify = false;
+                    currentDemo.spotify = null;
+                }
+
+                return currentDemo;
+            }
+
+            // Initial demo data
+            currentDemo = updateDemoData();
+            
+            // Update demo data every 30 seconds
+            setInterval(() => {
+                const oldActivities = [...currentDemo.activities];
+                currentDemo = updateDemoData();
+                
+                // Detect changes for activity feed
+                const newGameNames = currentDemo.activities.map(a => a.name);
+                const oldGameNames = oldActivities.map(a => a.name);
+                
+                newGameNames.forEach(game => {
+                    if (!oldGameNames.includes(game)) {
+                        addToActivityFeed('fas fa-gamepad', `Started playing ${game}`, 'Demo');
+                        gamesPlayedToday++;
+                    }
+                });
+                
+                oldGameNames.forEach(game => {
+                    if (!newGameNames.includes(game)) {
+                        addToActivityFeed('fas fa-stop', `Stopped playing ${game}`, 'Demo');
+                    }
+                });
+                
+            }, 30000);
+
+            return () => currentDemo; // Return function to get current demo data
+        }
+
+        let getDemoData = null;
+
+        // Update main status display
+        function updateMainStatus(discordData) {
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            const lastSeen = document.getElementById('lastSeen');
+
+            if (!discordData) {
+                statusIndicator.className = 'status-indicator offline';
+                statusText.textContent = 'Connection Failed';
+                lastSeen.textContent = 'Retrying...';
+                return;
+            }
+
+            // Set status indicator
+            statusIndicator.className = `status-indicator ${discordData.discord_status}`;
+            
+            // Set status text
+            const statusMap = {
+                'online': 'Online',
+                'idle': 'Away',
+                'dnd': 'Do Not Disturb',
+                'offline': 'Offline'
+            };
+            statusText.textContent = statusMap[discordData.discord_status] || 'Unknown';
+
+            // Set last seen
+            if (discordData.discord_status === 'offline') {
+                lastSeen.textContent = 'Last seen recently';
+            } else {
+                const now = new Date();
+                lastSeen.textContent = `Active • ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+            }
+        }
+
+        // Update activities display with better error handling
+        function updateActivities(discordData) {
+            const container = document.getElementById('activitiesContainer');
+            
+            if (!discordData) {
+                container.innerHTML = `
+                    <div class="no-activities">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>Unable to load activities</div>
+                        <small style="margin-top: 0.5rem; opacity: 0.7;">Check connection or try demo mode</small>
+                    </div>
+                `;
+                return;
+            }
+
+            const activities = discordData.activities || [];
+            
+            if (activities.length === 0 && !discordData.listening_to_spotify) {
+                const statusEmoji = {
+                    'online': '🎮',
+                    'idle': '😴',
+                    'dnd': '🔕',
+                    'offline': '💤'
+                };
+                
+                container.innerHTML = `
+                    <div class="no-activities">
+                        <i class="fas fa-gamepad" style="font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                        <div>No current activities</div>
+                        <small style="margin-top: 0.5rem; opacity: 0.7;">${statusEmoji[discordData.discord_status]} ${discordData.discord_status}</small>
+                    </div>
+                `;
+                return;
+            }
+
+            let activitiesHTML = '';
+            
+            // Add regular activities
+            activities.forEach(activity => {
+                const icon = getActivityIcon(activity);
+                const details = getActivityDetails(activity);
+                const timeInfo = getActivityTime(activity);
+                
+                activitiesHTML += `
+                    <div class="activity-item">
+                        <div class="activity-icon ${icon.class}">
+                            <i class="${icon.icon}"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-name">${activity.name}</div>
+                            <div class="activity-info">${details}</div>
+                        </div>
+                        <div class="activity-time">${timeInfo}</div>
+                    </div>
+                `;
+            });
+
+            // Add Spotify if listening
+            if (discordData.listening_to_spotify && discordData.spotify) {
+                activitiesHTML += `
+                    <div class="activity-item">
+                        <div class="activity-icon spotify">
+                            <i class="fab fa-spotify"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-name">${discordData.spotify.song}</div>
+                            <div class="activity-info">by ${discordData.spotify.artist}</div>
+                        </div>
+                        <div class="activity-time">♪ Spotify</div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = activitiesHTML;
+        }
+
+        // Get activity icon and class
+        function getActivityIcon(activity) {
+            const name = activity.name.toLowerCase();
+            
+            if (name.includes('overwatch')) {
+                return { icon: 'fas fa-crosshairs', class: 'overwatch' };
+            } else if (name.includes('fortnite')) {
+                return { icon: 'fas fa-gamepad', class: 'fortnite' };
+            } else if (name.includes('discord')) {
+                return { icon: 'fab fa-discord', class: 'discord' };
+            } else if (activity.type === 0) { // Playing
+                return { icon: 'fas fa-gamepad', class: 'custom' };
+            } else if (activity.type === 2) { // Listening
+                return { icon: 'fas fa-music', class: 'spotify' };
+            } else {
+                return { icon: 'fas fa-star', class: 'custom' };
+            }
+        }
+
+        // Get activity details
+        function getActivityDetails(activity) {
+            let details = [];
+            
+            if (activity.details) details.push(activity.details);
+            if (activity.state) details.push(activity.state);
+            
+            if (details.length === 0) {
+                const typeMap = {
+                    0: 'Playing',
+                    1: 'Streaming',
+                    2: 'Listening',
+                    3: 'Watching',
+                    4: 'Custom Status',
+                    5: 'Competing'
+                };
+                details.push(typeMap[activity.type] || 'Active');
+            }
+            
+            return details.join(' • ');
+        }
+
+        // Get activity time
+        function getActivityTime(activity) {
+            if (activity.timestamps && activity.timestamps.start) {
+                const elapsed = Math.floor((Date.now() - activity.timestamps.start) / 1000 / 60);
+                if (elapsed < 60) {
+                    return `${elapsed}m`;
+                } else {
+                    const hours = Math.floor(elapsed / 60);
+                    const minutes = elapsed % 60;
+                    return `${hours}h ${minutes}m`;
+                }
+            }
+            return 'Active';
+        }
+
+        // Update quick stats
+        function updateQuickStats(discordData) {
+            const onlineTimeEl = document.getElementById('onlineTime');
+            const gamesPlayedEl = document.getElementById('gamesPlayed');
+            const discordStatusEl = document.getElementById('discordStatus');
+
+            // Calculate online time for this session
+            const sessionMinutes = Math.floor((Date.now() - sessionStartTime) / 1000 / 60);
+            if (sessionMinutes < 60) {
+                onlineTimeEl.textContent = `${sessionMinutes}m`;
+            } else {
+                const hours = Math.floor(sessionMinutes / 60);
+                const minutes = sessionMinutes % 60;
+                onlineTimeEl.textContent = `${hours}h ${minutes}m`;
+            }
+
+            // Games played (detected from activity changes)
+            gamesPlayedEl.textContent = gamesPlayedToday;
+
+            // Discord status emoji
+            const statusEmojis = {
+                'online': '🟢',
+                'idle': '🌙',
+                'dnd': '🔴',
+                'offline': '⚫'
+            };
+            discordStatusEl.textContent = statusEmojis[discordData?.discord_status] || '❓';
+        }
+
+        // Add activity to feed
+        function addToActivityFeed(iconClass, text, time = 'Just now') {
+            const feed = document.getElementById('activityFeed');
+            
+            if (feed.querySelector('.loading')) {
+                feed.innerHTML = '';
+            }
+
+            const newItem = document.createElement('div');
+            newItem.className = 'feed-item';
+            newItem.innerHTML = `
+                <div class="feed-icon">
+                    <i class="${iconClass}"></i>
+                </div>
+                <div class="feed-text">${text}</div>
+                <div class="feed-time">${time}</div>
+            `;
+
+            feed.insertBefore(newItem, feed.firstChild);
+
+            // Keep only last 8 items
+            const items = feed.querySelectorAll('.feed-item');
+            if (items.length > 8) {
+                items[items.length - 1].remove();
+            }
+        }
+
+        // Detect activity changes
+        function detectActivityChanges(currentActivities) {
+            const currentGameNames = currentActivities
+                .filter(a => a.type === 0)
+                .map(a => a.name);
+
+            const lastGameNames = lastKnownActivities
+                .filter(a => a.type === 0)
+                .map(a => a.name);
+
+            // Detect new games
+            currentGameNames.forEach(game => {
+                if (!lastGameNames.includes(game)) {
+                    addToActivityFeed('fas fa-gamepad', `Started playing ${game}`);
+                    gamesPlayedToday++;
+                }
+            });
+
+            // Detect stopped games
+            lastGameNames.forEach(game => {
+                if (!currentGameNames.includes(game)) {
+                    addToActivityFeed('fas fa-stop', `Stopped playing ${game}`);
+                }
+            });
+
+            lastKnownActivities = currentActivities;
+        }
+
+        fetch(`https://api.lanyard.rest/v1/users/${API_CONFIG.DISCORD_USER_ID}`)
+        .then(lanyardCheck => {
+            if (lanyardCheck.status === 404) {
+                console.log('❌ User not monitored by Lanyard - need to join Lanyard Discord server first');
+                console.log('📝 To fix: Join https://discord.gg/lanyard and run /subscribe in their server');
+                getDemoData = startDemoMode();
+                updateAPIStatus('demo', '⚠️ Need Lanyard Setup');
+            }
+        })
+        .catch(e => {
+            console.log('Lanyard check failed, proceeding with demo mode');
+            getDemoData = startDemoMode();
+        });
+
+        // Main update function with enhanced error handling
+        async function updateStatus() {
+            try {
+                let discordData;
+                
+                if (getDemoData) {
+                    // Use demo data
+                    discordData = getDemoData();
+                } else {
+                    // Try to fetch real data
+                    discordData = await fetchDiscordStatus();
+                    
+                    // If real data failed, start demo mode
+                    if (!discordData || discordData === 'demo') {
+                        console.log('Real API failed, starting demo mode...');
+                        getDemoData = startDemoMode();
+                        discordData = getDemoData();
+                    }
+                }
+                
+                updateMainStatus(discordData);
+                updateActivities(discordData);
+                updateQuickStats(discordData);
+
+                if (discordData && discordData.activities) {
+                    detectActivityChanges(discordData.activities);
+                }
+
+            } catch (error) {
+                console.error('Update error:', error);
+                updateAPIStatus('offline', '🔴 Connection Error');
+                
+                // Fallback to demo mode if not already using it
+                if (!getDemoData) {
+                    console.log('Starting demo mode due to error...');
+                    getDemoData = startDemoMode();
+                    setTimeout(updateStatus, 1000); // Retry with demo data
+                }
+            }
+        }
+
+        // Initialize the dashboard with better error handling
+        async function init() {
+            console.log('🎮 Initializing Compact Gaming Dashboard...');
+            
+            try {
+                // Test connection first
+                updateAPIStatus('online', '🔄 Testing connection...');
+                
+                // Try to fetch Discord data
+                const testData = await fetch(`https://api.lanyard.rest/v1/users/${API_CONFIG.DISCORD_USER_ID}`, {
+                    method: 'GET',
+                    timeout: 5000
+                });
+                
+                if (testData.ok) {
+                    console.log('✅ API connection successful');
+                    await updateStatus();
+                } else {
+                    console.log('⚠️ API connection failed, starting demo mode');
+                    getDemoData = startDemoMode();
+                    await updateStatus();
+                }
+                
+            } catch (error) {
+                console.log('❌ Connection test failed, using demo mode:', error);
+                getDemoData = startDemoMode();
+                await updateStatus();
+            }
+            
+            // Add some initial activities to the feed
+            addToActivityFeed('fas fa-power-off', 'Dashboard started', 'Now');
+            addToActivityFeed('fas fa-wifi', 'Checking API connections...', '1s ago');
+            
+            // Set up auto-refresh every 15 seconds
+            setInterval(updateStatus, 15000);
+            
+            // Update online time every minute
+            setInterval(() => {
+                const dummyData = { discord_status: 'online' };
+                updateQuickStats(dummyData);
+            }, 60000);
+
+            // Add retry mechanism for failed connections
+            setInterval(async () => {
+                if (getDemoData) {
+                    console.log('🔄 Attempting to reconnect to real APIs...');
+                    try {
+                        const testData = await fetchDiscordStatus();
+                        if (testData && testData !== 'demo' && !testData.demo) {
+                            console.log('✅ Reconnection successful!');
+                            getDemoData = null; // Disable demo mode
+                            addToActivityFeed('fas fa-wifi', 'Reconnected to Discord API', 'Now');
+                        }
+                    } catch (error) {
+                        console.log('Reconnection failed, staying in demo mode');
+                    }
+                }
+            }, 120000); // Try to reconnect every 2 minutes
+
+            console.log('✅ Dashboard initialized successfully!');
+        }
+
+        // Start the dashboard when page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            await init();
+        });
+
+        // Handle visibility change to pause updates when tab is not active
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                updateStatus(); // Refresh when tab becomes active
+            }
+        });
+
+        // Add error handling for failed fetches
+        window.addEventListener('unhandledrejection', function(event) {
+            console.warn('Promise rejected:', event.reason);
+            updateAPIStatus('offline', '🔴 API Error');
+            event.preventDefault();
+        });
+    </script>
+</body>
+</html>

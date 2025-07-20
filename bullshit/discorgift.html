@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nitro Generator - Fun</title>
+    <style>
+        body {
+            background: #36393f;
+            color: #dcddde;
+            font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        .container {
+            background: #2f3136;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .discord-logo {
+            width: 150px;
+            margin-bottom: 1rem;
+        }
+
+        .nitro-box {
+            background: #40444b;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .code {
+            font-family: monospace;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: #b9bbbe;
+        }
+
+        .generate-btn {
+            background: #5865f2;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 1rem 0;
+        }
+
+        .generate-btn:hover {
+            background: #4752c4;
+        }
+
+        .warning {
+            color: #ed4245;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .disclaimer {
+            color: #72767d;
+            font-size: 0.8rem;
+            margin-top: 2rem;
+        }
+
+        .loading {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://discord.com/assets/847541504914fd33810e70a0ea73177e.ico" 
+             alt="Discord Logo" 
+             class="discord-logo loading"
+             onerror="this.style.display='none'">
+
+        <h1>Nitro Generator</h1>
+        <div class="nitro-box">
+            <div class="code" id="code">Click generate to start</div>
+        </div>
+
+        <button class="generate-btn" onclick="generateCode()">Generate Code</button>
+        <div class="warning">⚠️ This is a fun simulation only ⚠️</div>
+        <div class="disclaimer">
+            This is not a real Discord Nitro generator. Real Nitro gifts can only be obtained 
+            through official Discord promotions. This is for entertainment purposes only.
+        </div>
+
+        <div class="stats" id="stats"></div>
+    </div>
+
+    <script>
+        let attempts = 0
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+
+        function generateCode() {
+            attempts++
+            const startTime = Date.now()
+            
+            // Show loading animation
+            const logo = document.querySelector('.discord-logo')
+            logo.classList.add('loading')
+            
+            // Generate fake code
+            setTimeout(() => {
+                let code = 'https://discord.gift/'
+                for (let i = 0; i < 24; i++) {
+                    code += characters.charAt(Math.floor(Math.random() * characters.length))
+                    if (i % 6 === 5 && i !== 23) code += '-'
+                }
+                
+                document.getElementById('code').textContent = code
+                logo.classList.remove('loading')
+                
+                // Update statistics
+                const timeDiff = ((Date.now() - startTime) / 1000).toFixed(2)
+                document.getElementById('stats').innerHTML = `
+                    <p>Attempts: ${attempts}</p>
+                    <p>Last generated: ${timeDiff} seconds ago</p>
+                    <p>Success rate: 0.00%</p>
+                `
+            }, 1500)
+        }
+
+        // Initial statistics
+        generateCode()
+    </script>
+</body>
+</html>
