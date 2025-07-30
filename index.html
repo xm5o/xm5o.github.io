@@ -12,10 +12,10 @@
       content="developer, portfolio, web development, mobile apps, gaming, coding projects"
     />
 
-    <meta property="og:title" content="- X D - Developer Portfolio" />
+    <meta property="og:title" content="Immortal" />
     <meta property="og:type" content="website" />
-    <!-- <meta property="og:image" content="assets/image.png" />
-    <meta property="image" content="assets/image.png" /> -->
+    <meta property="og:image" content="assets/image.png" />
+    <meta property="image" content="assets/image.png" />
     <meta
       property="og:description"
       content="Personal portfolio of a creative developer (maybe)"
@@ -24,10 +24,10 @@
     <link rel="preload" href="assets/image.png" as="image" type="image/jpeg" />
     <link rel="preload" href="css/style.css" as="style" />
 
-    <title>- X D - Developer Portfolio</title>
+    <title>Immortal</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/contact.css" />
-    <link rel="stylesheet" href="css/celebrate.css" />
+    <!-- <link rel="stylesheet" href="css/celebrate.css" /> -->
     <link
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
@@ -74,135 +74,151 @@
       </a> -->
     </header>
 
-    <div id="milestonePopup" class="milestone-popup">
-      <div class="popup-content">
-        <span class="close-popup">&times;</span>
-        <div class="celebration-header">
-          <i class="bx bxs-party"></i>
-          <h2>We've Hit <span id="milestoneNumber">1000</span> Views!</h2>
-        </div>
-        <div class="celebration-body">
-          <p>Amazing! Together we're growing this community.</p>
-          <div class="progress-container">
-            <div class="progress-bar">
-              <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div class="progress-text">
-              <span>Current: <span id="currentCount">0</span></span>
-              <span>Next Goal: <span id="nextGoal">2000</span></span>
-            </div>
-          </div>
-        </div>
-        <!-- <div class="celebration-footer">
-          <button class="share-btn">
-            <i class="bx bxs-share-alt"></i> Share the Milestone
-          </button>
-        </div> -->
-      </div>
-    </div>
-
     <!-- Home Section -->
     <section class="home" id="home">
+      <!-- Floating Particles Background -->
+      <div class="particles-container">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      </div>
+
+      <!-- Geometric Background Elements -->
+      <div class="geometric-bg">
+        <div class="geo-shape geo-circle"></div>
+        <div class="geo-shape geo-triangle"></div>
+        <div class="geo-shape geo-square"></div>
+      </div>
+
       <div class="home-content">
         <div class="hero-text">
-          <h1 class="gradient-heading">It's <span>- X D -</span></h1>
+          <div class="text-reveal">
+            <h1 class="gradient-heading">
+              It's <span class="immortal-text">Immortal</span>
+              <div class="heading-decoration"></div>
+            </h1>
+          </div>
+          
           <div class="animated-titles">
             <h3 class="typewriter">
               I'm a <span class="role-switch animated-role">Web Developer</span>
             </h3>
             <p class="tagline">
-              He/Him | Creative developer building digital experiences
+              <span class="tagline-highlight">He/Him</span> | Creative developer building 
+              <span class="tagline-highlight">digital experiences</span> that inspire
             </p>
           </div>
+
+          <!-- Enhanced Social Links -->
           <div class="social-links">
-            <a
-              href="https://youtube.com/@voixj"
-              target="_blank"
-              aria-label="YouTube"
-              class="social-btn"
-            >
+            <a href="https://youtube.com/@voixj" target="_blank" aria-label="YouTube" class="social-btn youtube">
               <i class="bx bxl-youtube"></i>
-              <span class="hover-bg"></span>
+              <span class="social-tooltip">YouTube</span>
+              <div class="hover-ripple"></div>
             </a>
-            <a
-              href="https://instagram.com/xm5o_"
-              target="_blank"
-              aria-label="Instagram"
-              class="social-btn"
-            >
+            <a href="https://instagram.com/xm5o_" target="_blank" aria-label="Instagram" class="social-btn instagram">
               <i class="bx bxl-instagram"></i>
-              <span class="hover-bg"></span>
+              <span class="social-tooltip">Instagram</span>
+              <div class="hover-ripple"></div>
             </a>
-            <a
-              href="https://discord.com/users/1282747277206884436"
-              target="_blank"
-              aria-label="Discord"
-              class="social-btn"
-            >
+            <a href="https://discord.com/users/1282747277206884436" target="_blank" aria-label="Discord" class="social-btn discord">
               <i class="bx bxl-discord-alt"></i>
-              <span class="hover-bg"></span>
+              <span class="social-tooltip">Discord</span>
+              <div class="hover-ripple"></div>
             </a>
-            <a
-              href="https://www.tiktok.com/@xm5o_"
-              target="_blank"
-              aria-label="TikTok"
-              class="social-btn"
-            >
+            <a href="https://www.tiktok.com/@xm5o_" target="_blank" aria-label="TikTok" class="social-btn tiktok">
               <i class="bx bxl-tiktok"></i>
-              <span class="hover-bg"></span>
+              <span class="social-tooltip">TikTok</span>
+              <div class="hover-ripple"></div>
             </a>
-            <a
-              href="https://x.com/voixj1"
-              target="_blank"
-              aria-label="Twitter"
-              class="social-btn"
-            >
+            <a href="https://x.com/voixj1" target="_blank" aria-label="Twitter" class="social-btn twitter">
               <i class="bx bxl-twitter"></i>
-              <span class="hover-bg"></span>
+              <span class="social-tooltip">Twitter</span>
+              <div class="hover-ripple"></div>
             </a>
           </div>
+
+          <!-- Enhanced CTA Buttons -->
           <div class="cta-group">
-            <a class="cta-btn discord-cta" target="_blank">
+            <a class="cta-btn discord-cta enhanced-btn" target="_blank">
+              <div class="btn-bg"></div>
               <i class="bx bxs-door-open"></i>
-              Join Community
+              <span style="color: var(--text-color);">Join Community</span>
+              <div class="btn-shine"></div>
             </a>
-            <a href="#projects" class="cta-btn projects-cta">
+            <a href="#projects" class="cta-btn projects-cta enhanced-btn">
+              <div class="btn-bg"></div>
               <i class="bx bx-code-alt"></i>
-              View Projects
+              <span>View Projects</span>
+              <div class="btn-shine"></div>
             </a>
-            <a
-              href="https://xm5o.github.io/commission/"
-              class="cta-btn projects-cta"
-              target="_blank"
-            >
-              <i class="bx bx-code-alt"></i>
-              Commission
+            <a href="https://xm5o.github.io/commission/" class="cta-btn commission-cta enhanced-btn" target="_blank">
+              <div class="btn-bg"></div>
+              <i class="bx bx-brush"></i>
+              <span>Commission Work</span>
+              <div class="btn-shine"></div>
             </a>
           </div>
         </div>
       </div>
 
+      <!-- Enhanced Hero Image -->
       <div class="hero-image">
         <div class="image-wrapper">
-          <!-- <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Ccircle cx='200' cy='200' r='180' fill='%23908f8f' opacity='0.3'/%3E%3Ctext x='200' y='220' text-anchor='middle' font-size='40' fill='%23ffffff' font-family='Arial'%3EProfile%3C/text%3E%3C/svg%3E" alt="Profile" loading="lazy" class="profile-img" /> -->
-          <img
-            src="assets/image.jpg"
-            alt="Profile"
-            loading="lazy"
-            class="profile-img"
-          />
-          <div class="glow-effect"></div>
+          <!-- Animated Border -->
+          <div class="image-border">
+            <div class="border-segment"></div>
+            <div class="border-segment"></div>
+            <div class="border-segment"></div>
+            <div class="border-segment"></div>
+          </div>
+          
+          <!-- Profile Image with Enhanced Effects -->
+          <div class="profile-container">
+            <img src="assets/avatar1.jpg" alt="Profile" loading="lazy" class="profile-img" />
+            <div class="profile-overlay"></div>
+            
+            <!-- Floating Icons Around Image -->
+            <div class="floating-icon floating-icon-1">
+              <i class="bx bx-code-curly"></i>
+            </div>
+            <div class="floating-icon floating-icon-2">
+              <i class="bx bx-palette"></i>
+            </div>
+            <div class="floating-icon floating-icon-3">
+              <i class="bx bx-rocket"></i>
+            </div>
+            <div class="floating-icon floating-icon-4">
+              <i class="bx bx-bulb"></i>
+            </div>
+          </div>
+          
+          <!-- Enhanced Glow Effects -->
+          <div class="glow-effect primary-glow"></div>
+          <div class="glow-effect secondary-glow"></div>
+          <div class="orbital-ring"></div>
         </div>
       </div>
 
-      <!-- Visitor Counter -->
-      <div class="visitor-counter" style="min-width: 150px; max-width: 350px">
+      <!-- Enhanced Visitor Counter -->
+      <div class="visitor-counter enhanced-counter">
+        <div class="counter-glow"></div>
         <div class="db-status" id="dbStatus"></div>
-        <i class="bx bx-show-alt"></i>
+        
+        <div class="counter-icon">
+          <i class="bx bx-show-alt"></i>
+          <div class="icon-pulse"></div>
+        </div>
+        
         <div class="counter-content">
-          <h4>Views</h4>
+          <h4>Site Views</h4>
           <div class="counter-number" id="visitorCount">0</div>
-          <div class="counter-stats" style="display: none">
+          <div class="counter-stats" style="display: none;">
             <div class="stat-item">
               <i class="bx bx-calendar"></i>
               <span id="todayViews">0 today</span>
@@ -212,6 +228,21 @@
               <span id="lastVisit">Just now</span>
             </div>
           </div>
+        </div>
+        
+        <!-- Counter Animation Lines -->
+        <div class="counter-lines">
+          <div class="line line-1"></div>
+          <div class="line line-2"></div>
+          <div class="line line-3"></div>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div class="scroll-indicator">
+        <!-- <div class="scroll-text">Scroll Down</div> -->
+        <div class="scroll-arrow">
+          <i class="bx bx-chevron-down"></i>
         </div>
       </div>
     </section>
@@ -225,14 +256,14 @@
         <div id="serverBanner" class="server-banner">
           <img
             id="serverIcon"
-            src="assets/image.jpg"
+            src="assets/avatar1.jpg"
             alt="Server Icon"
             class="server-icon"
           />
         </div>
 
         <div class="server-info">
-          <h3 id="serverName">- X D - Community</h3>
+          <h3 id="serverName">Immortal Community</h3>
           <p id="serverDescription">
             Join our creative developer community where we share knowledge,
             collaborate on projects, and grow together as developers.
@@ -290,7 +321,7 @@
 
           <div class="about-content-wrapper">
             <div class="about-img-container">
-              <img src="assets/image.jpg" alt="Profile Picture" />
+              <img src="assets/avatar1.jpg" alt="Profile Picture" />
               <div class="experience-badge">
                 <span class="years">3+</span>
                 <span class="text">Years<br />Coding</span>
@@ -318,7 +349,7 @@
                 <div class="personal-info">
                   <div class="info-item">
                     <span class="label">Name:</span>
-                    <span class="value">- X D -</span>
+                    <span class="value">Immortal</span>
                   </div>
                   <div class="info-item">
                     <span class="label">Age:</span>
@@ -593,7 +624,7 @@
               <div class="project-img-container">
                 <div
                   class="project-img"
-                  style="background-image: url('./assets/image.jpg')"
+                  style="background-image: url('./assets/avatar1.jpg')"
                 ></div>
                 <div class="status-badge">NEW</div>
                 <div class="project-overlay">
@@ -928,129 +959,275 @@
 
       <!-- Contact Section -->
       <section class="contact" id="contact">
-        <div class="section-header">
-          <h2 class="heading">Contact <span>Me</span></h2>
-          <p class="contact-subtitle">
-            Ready to collaborate? Let's connect and build something amazing
-            together!
-          </p>
+        <div class="contact-particles">
+          <div class="contact-particle"></div>
+          <div class="contact-particle"></div>
+          <div class="contact-particle"></div>
+          <div class="contact-particle"></div>
+          <div class="contact-particle"></div>
         </div>
 
-        <div class="contact-container">
-          <!-- Primary Discord Contact -->
-          <div class="primary-contact">
-            <div class="contact-header">
-              <i class="bx bxl-discord-alt discord-icon-main"></i>
-              <h3 class="primary-title">Let's Connect on Discord!</h3>
-              <p class="primary-subtitle">
-                The fastest and most efficient way to reach me
-              </p>
+        <div class="contact-geometric-bg">
+          <div class="contact-geo-shape contact-geo-circle-1"></div>
+          <div class="contact-geo-shape contact-geo-triangle-1"></div>
+          <div class="contact-geo-shape contact-geo-square-1"></div>
+          <div class="contact-geo-shape contact-geo-circle-2"></div>
+        </div>
+
+        <div class="section-header enhanced-section-header">
+          <div class="header-decoration top-decoration"></div>
+          
+          <h2 class="heading enhanced-heading">
+            <span class="heading-word">Contact</span> 
+            <span class="heading-word highlight-word">Me</span>
+            <div class="heading-underline"></div>
+          </h2>
+          
+          <p class="contact-subtitle enhanced-subtitle">
+            Ready to collaborate? Let's connect and build something 
+            <span class="subtitle-highlight">amazing together!</span>
+            <span class="subtitle-decoration"></span>
+          </p>
+
+          <div class="header-decoration bottom-decoration"></div>
+        </div>
+
+        <div class="contact-container enhanced-contact-container">
+          <div class="primary-contact enhanced-primary-contact">
+            <div class="primary-contact-bg"></div>
+            <div class="primary-contact-glow"></div>
+            
+            <div class="contact-header enhanced-contact-header">
+              <div class="discord-icon-wrapper">
+                <i class="bx bxl-discord-alt discord-icon-main"></i>
+                <div class="icon-pulse-ring"></div>
+                <div class="icon-pulse-ring delayed"></div>
+              </div>
+              
+              <div class="header-text">
+                <h3 class="primary-title enhanced-primary-title">
+                  Let's Connect on Discord!
+                  <span class="title-decoration"></span>
+                </h3>
+                <p class="primary-subtitle enhanced-primary-subtitle">
+                  The fastest and most efficient way to reach me
+                  <span class="subtitle-accent">⚡</span>
+                </p>
+              </div>
             </div>
 
-            <div class="discord-info-card">
-              <div class="discord-username">@trr0</div>
-              <!-- <div class="discord-id">ID: 1282747277206884436</div> -->
+            <div class="discord-info-card enhanced-discord-info">
+              <div class="discord-username-wrapper">
+                <div class="username-icon">
+                  <i class="bx bx-user"></i>
+                </div>
+                <div class="discord-username">@trr0</div>
+                <div class="username-badge">Active</div>
+              </div>
+              <div class="discord-status-indicator">
+                <div class="status-dot online"></div>
+                <span class="status-text">Online Now</span>
+              </div>
             </div>
 
-            <div class="discord-features">
-              <div class="feature-item">
-                <i class="bx bx-time-five"></i>
+            <div class="discord-features enhanced-features">
+              <div class="feature-item enhanced-feature">
+                <div class="feature-icon-wrapper">
+                  <i class="bx bx-time-five"></i>
+                  <div class="icon-bg"></div>
+                </div>
                 <span class="feature-text">Quick responses</span>
+                <div class="feature-glow"></div>
               </div>
-              <div class="feature-item">
-                <i class="bx bx-chat"></i>
+              
+              <div class="feature-item enhanced-feature">
+                <div class="feature-icon-wrapper">
+                  <i class="bx bx-chat"></i>
+                  <div class="icon-bg"></div>
+                </div>
                 <span class="feature-text">Real-time communication</span>
+                <div class="feature-glow"></div>
               </div>
-              <div class="feature-item">
-                <i class="bx bx-devices"></i>
+              
+              <div class="feature-item enhanced-feature">
+                <div class="feature-icon-wrapper">
+                  <i class="bx bx-devices"></i>
+                  <div class="icon-bg"></div>
+                </div>
                 <span class="feature-text">Available on all devices</span>
+                <div class="feature-glow"></div>
               </div>
-              <div class="feature-item">
-                <i class="bx bx-group"></i>
+              
+              <div class="feature-item enhanced-feature">
+                <div class="feature-icon-wrapper">
+                  <i class="bx bx-group"></i>
+                  <div class="icon-bg"></div>
+                </div>
                 <span class="feature-text">Direct collaboration</span>
+                <div class="feature-glow"></div>
               </div>
             </div>
 
-            <div class="discord-cta" style="background: none;">
-              <a
-                href="https://discord.com/users/1282747277206884436"
-                class="discord-btn"
-                target="_blank"
-              >
+            <div class="discord-cta enhanced-discord-cta" style="background: none;">
+              <a href="https://discord.com/users/1282747277206884436" class="discord-btn enhanced-discord-btn" target="_blank">
+                <div class="btn-background"></div>
+                <div class="btn-shine-effect"></div>
                 <i class="bx bxl-discord-alt"></i>
-                Message Me on Discord
+                <span style="color: var(--text-color);">Message Me on Discord</span>
+                <div class="btn-pulse-ring"></div>
               </a>
+            </div>
+
+            <div class="contact-lines">
+              <div class="contact-line line-1"></div>
+              <div class="contact-line line-2"></div>
+              <div class="contact-line line-3"></div>
+              <div class="contact-line line-4"></div>
             </div>
           </div>
 
-          <div class="secondary-contact">
-            <div class="contact-card">
-              <div class="card-header">
-                <h3 class="card-title">Why Discord First?</h3>
+          <div class="secondary-contact enhanced-secondary-contact">
+            <div class="contact-card enhanced-contact-card">
+              <div class="card-bg-effect"></div>
+              <div class="card-header enhanced-card-header">
+                <div class="card-icon">
+                  <i class="bx bx-star"></i>
+                </div>
+                <h3 class="card-title enhanced-card-title">
+                  Why Discord First?
+                  <div class="title-underline"></div>
+                </h3>
               </div>
-              <div class="discord-features">
-                <div class="feature-item">
+              
+              <div class="discord-features enhanced-card-features">
+                <div class="feature-item card-feature">
+                  <div class="feature-bullet"></div>
                   <span class="feature-text">Instant notifications</span>
                 </div>
-                <div class="feature-item">
+                <div class="feature-item card-feature">
+                  <div class="feature-bullet"></div>
                   <span class="feature-text">Easy file sharing</span>
                 </div>
-                <div class="feature-item">
+                <div class="feature-item card-feature">
+                  <div class="feature-bullet"></div>
                   <span class="feature-text">Voice & video calls</span>
                 </div>
-                <div class="feature-item">
+                <div class="feature-item card-feature">
+                  <div class="feature-bullet"></div>
                   <span class="feature-text">Secure platform</span>
                 </div>
               </div>
             </div>
 
-            <div class="contact-card">
-              <div class="card-header">
-                <h3 class="card-title">Alternative Platforms</h3>
+            <div class="contact-card enhanced-contact-card">
+              <div class="card-bg-effect"></div>
+              <div class="card-header enhanced-card-header">
+                <div class="card-icon">
+                  <i class="bx bx-link"></i>
+                </div>
+                <h3 class="card-title enhanced-card-title">
+                  Alternative Platforms
+                  <div class="title-underline"></div>
+                </h3>
               </div>
 
-              <div class="social-grid">
-                <div class="social-item">
-                  <a
-                    href="https://instagram.com/xm5o_"
-                    class="social-icon-link"
-                    target="_blank"
-                  >
+              <div class="social-grid enhanced-social-grid">
+                <div class="social-item enhanced-social-item">
+                  <a href="https://instagram.com/xm5o_" class="social-icon-link enhanced-social-link" target="_blank">
+                    <div class="social-bg instagram-bg"></div>
                     <i class="bx bxl-instagram"></i>
+                    <div class="social-ripple"></div>
                   </a>
                   <span class="social-label">Instagram</span>
+                  <div class="social-glow instagram-glow"></div>
                 </div>
 
-                <div class="social-item">
-                  <a
-                    href="https://x.com/voixj1"
-                    class="social-icon-link"
-                    target="_blank"
-                  >
+                <div class="social-item enhanced-social-item">
+                  <a href="https://x.com/voixj1" class="social-icon-link enhanced-social-link" target="_blank">
+                    <div class="social-bg twitter-bg"></div>
                     <i class="bx bxl-twitter"></i>
+                    <div class="social-ripple"></div>
                   </a>
                   <span class="social-label">Twitter/X</span>
+                  <div class="social-glow twitter-glow"></div>
                 </div>
               </div>
 
-              <div class="email-section">
-                <p class="email-text">For formal business inquiries:</p>
-                <a
-                  href="mailto:immortal.web.dev.contact@gmail.com"
-                  class="email-link"
-                >
-                  immortal.web.dev.contact@gmail.com
+              <div class="email-section enhanced-email-section">
+                <div class="email-header">
+                  <i class="bx bx-envelope"></i>
+                  <p class="email-text">For formal business inquiries:</p>
+                </div>
+                <a href="mailto:immortal.web.dev.contact@gmail.com" class="email-link enhanced-email-link">
+                  <i class="bx bx-copy email-copy-icon"></i>
+                  <span>immortal.web.dev.contact@gmail.com</span>
+                  <div class="email-shine"></div>
                 </a>
+                <div class="email-copied-notification">Email copied to clipboard!</div>
               </div>
             </div>
 
-            <div class="response-notice">
-              <i class="bx bx-time-five notice-icon"></i>
-              <p class="notice-text">
-                <strong>Response Time:</strong> Usually within 1-6 hours on
-                Discord during active hours (faster than email!)
+            <div class="response-notice enhanced-response-notice">
+              <div class="notice-bg"></div>
+              <div class="notice-icon-wrapper">
+                <i class="bx bx-time-five notice-icon"></i>
+                <div class="notice-icon-glow"></div>
+              </div>
+              <p class="notice-text enhanced-notice-text">
+                <strong>Response Time:</strong> Usually within 
+                <span class="time-highlight">1-6 hours</span> on Discord during active hours 
+                <span class="notice-accent">(faster than email!)</span>
               </p>
+              <div class="notice-pulse"></div>
             </div>
+
+            <div class="contact-stats">
+              <div class="stat-item">
+                <div class="stat-icon">
+                  <i class="bx bx-stopwatch"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-number">< 4hrs</div>
+                  <div class="stat-label">Avg Response Time</div>
+                </div>
+              </div>
+              
+              <div class="stat-item">
+                <div class="stat-icon">
+                  <i class="bx bx-happy"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-number">98%</div>
+                  <div class="stat-label">Satisfaction Rate</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="floating-contact-elements">
+          <div class="floating-element element-1">
+            <i class="bx bx-message-square-dots"></i>
+          </div>
+          <div class="floating-element element-2">
+            <i class="bx bx-phone"></i>
+          </div>
+          <div class="floating-element element-3">
+            <i class="bx bx-envelope"></i>
+          </div>
+          <div class="floating-element element-4">
+            <i class="bx bx-chat"></i>
+          </div>
+        </div>
+
+        <div class="contact-success-modal" id="contactSuccessModal">
+          <div class="success-modal-content">
+            <div class="success-icon">
+              <i class="bx bx-check-circle"></i>
+            </div>
+            <h3>Message Sent Successfully!</h3>
+            <p>I'll get back to you as soon as possible.</p>
+            <button class="close-success-modal">Close</button>
           </div>
         </div>
       </section>
@@ -1099,12 +1276,10 @@
             <li><a href="#contact">Contact</a></li>
           </ul>
 
-          <p class="copyright">© <span>- X D- </span> | All Rights Reserved</p>
+          <p class="copyright">© <span>Immortal </span> | All Rights Reserved</p>
         </div>
       </footer>
     </div>
-
-    <script src="scripts/celebrate.js"></script>
 
     <script src="scripts/utils.js"></script>
     <script src="scripts/navbar.js"></script>

@@ -1,35 +1,6 @@
-// home.js
 document.addEventListener('DOMContentLoaded', () => {
-  // Dynamic Typing Effect
-  const roles = ["Web Developer", "Gamer", "Bot Designer", "FnF Charter and Coder", "Fnf modcharter"];
-  const roleElement = document.querySelector('.animated-role');
-  let currentRole = 0;
-  let charIndex = 0;
-  let isDeleting = false;
+  initTypewriterEffect();
 
-  function typeEffect() {
-    const currentText = roles[currentRole];
-
-    if (!isDeleting) {
-      roleElement.textContent = currentText.slice(0, charIndex++);
-      if (charIndex > currentText.length) {
-        isDeleting = true;
-        setTimeout(typeEffect, 2000);
-        return;
-      }
-    } else {
-      roleElement.textContent = currentText.slice(0, charIndex--);
-      if (charIndex === 0) {
-        isDeleting = false;
-        currentRole = (currentRole + 1) % roles.length;
-      }
-    }
-
-    setTimeout(typeEffect, isDeleting ? 50 : 150);
-  }
-  typeEffect();
-
-  // Profile Image Hover Effect
   const profileImg = document.querySelector('.profile-img');
   profileImg.addEventListener('mousemove', (e) => {
     const rect = profileImg.getBoundingClientRect();
@@ -46,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     profileImg.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
   });
 
-  // Social Links Particle Effect
   const socialLinks = document.querySelectorAll('.social-btn');
   socialLinks.forEach(link => {
     link.addEventListener('mousemove', (e) => {
@@ -60,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Smooth Scroll to Projects
   document.querySelector('.projects-cta').addEventListener('click', (e) => {
     e.preventDefault();
     const projectsSection = document.querySelector('#projects');
@@ -70,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Loading Animation Observer
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -81,3 +49,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.home-content > *').forEach(el => observer.observe(el));
 });
+
+function initTypewriterEffect() {
+    const roles = [
+        "Web Developer", "Gamer", "Bot Designer", "FnF Charter and Coder", "Fnf modcharter"
+    ];
+    
+    const roleElement = document.querySelector('.animated-role');
+    if (!roleElement) return;
+    
+    let currentRoleIndex = 0;
+    let currentCharIndex = 0;
+    let isDeleting = false;
+    let typeSpeed = 150;
+    
+    function typeRole() {
+        const currentRole = roles[currentRoleIndex];
+        
+        if (isDeleting) {
+            roleElement.textContent = currentRole.substring(0, currentCharIndex - 1);
+            currentCharIndex--;
+            typeSpeed = 75;
+        } else {
+            roleElement.textContent = currentRole.substring(0, currentCharIndex + 1);
+            currentCharIndex++;
+            typeSpeed = 150;
+        }
+        
+        // If word is complete
+        if (!isDeleting && currentCharIndex === currentRole.length) {
+            typeSpeed = 2000; // Pause at end
+            isDeleting = true;
+        } else if (isDeleting && currentCharIndex === 0) {
+            isDeleting = false;
+            currentRoleIndex = (currentRoleIndex + 1) % roles.length;
+            typeSpeed = 500;
+        }
+        
+        setTimeout(typeRole, typeSpeed);
+    }
+    
+    // Start typewriter effect
+    setTimeout(typeRole, 1000);
+}
