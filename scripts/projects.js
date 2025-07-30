@@ -1,13 +1,9 @@
-// projects.js
 document.addEventListener('DOMContentLoaded', function () {
-  // Project filtering functionality
   const filterButtons = document.querySelectorAll('.filter-btn');
   const projectCards = document.querySelectorAll('.project-card');
 
-  // Initialize with all projects visible
   filterProjects('all');
 
-  // Add click event to filter buttons
   filterButtons.forEach(button => {
     button.addEventListener('click', function () {
       filterButtons.forEach(btn => btn.classList.remove('active'));
@@ -37,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Scroll reveal animation
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -49,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   projectCards.forEach(card => observer.observe(card));
 
-  // Touch device detection
   function isTouchDevice() {
     return ('ontouchstart' in window) ||
       (navigator.maxTouchPoints > 0) ||
@@ -66,7 +60,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Adjust layout based on screen size
   function adjustLayout() {
     const actions = document.querySelectorAll('.project-actions');
     actions.forEach(action => {

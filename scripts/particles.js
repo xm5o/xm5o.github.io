@@ -1,4 +1,3 @@
-// particles.js
 class ParticleCanvas {
   constructor() {
     this.canvas = document.createElement('canvas');
@@ -57,5 +56,4 @@ class ParticleCanvas {
   }
 }
 
-// Initialize particle background
 new ParticleCanvas();

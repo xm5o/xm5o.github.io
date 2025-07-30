@@ -75,16 +75,13 @@ class UniqueVisitorTracker {
     if (this.hasShownContent) return;
     this.hasShownContent = true;
     
-    // Hide loading indicator
     if (this.loadingIndicator) {
       this.loadingIndicator.style.display = 'none';
     }
-    
-    // Show main content
+
     if (this.mainContent) {
       this.mainContent.style.display = 'block';
       
-      // Add animations to sections
       const sections = this.mainContent.querySelectorAll('section');
       sections.forEach((section, index) => {
         setTimeout(() => {

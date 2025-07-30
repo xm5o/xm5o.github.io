@@ -1,4 +1,3 @@
-// navbar.js
 const menuIcon = document.getElementById("menu-icon");
 const closeMenu = document.getElementById("close-menu");
 const navbar = document.querySelector(".navbar");

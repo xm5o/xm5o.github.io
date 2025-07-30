@@ -1,20 +1,14 @@
-// Function to detect if user is on mobile device
 function isMobile() {
-    // Method 1: Check user agent
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
     const mobileRegex = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
     
-    // Method 2: Check screen width (optional additional check)
     const isSmallScreen = window.innerWidth <= 768;
     
-    // Method 3: Check for touch capability
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     
-    // Return true if any mobile indicators are present
     return mobileRegex.test(userAgent) || (isSmallScreen && isTouchDevice);
 }
 
-// Function to create mobile message with site styling
 function createMobileMessage() {
     const messageContainer = document.createElement('div');
     messageContainer.className = 'mobile-contact-message';
@@ -32,7 +26,6 @@ function createMobileMessage() {
         </div>
     `;
     
-    // Add inline styles that match your site's design
     const styles = `
         .mobile-contact-message {
             background: var(--second-bg-color, #0b0b0c);
@@ -178,7 +171,6 @@ function createMobileMessage() {
         }
     `;
     
-    // Add styles to document if not already added
     if (!document.getElementById('mobile-message-styles')) {
         const styleSheet = document.createElement('style');
         styleSheet.id = 'mobile-message-styles';
@@ -189,7 +181,6 @@ function createMobileMessage() {
     return messageContainer;
 }
 
-// Function to handle contact section on mobile
 function handleContactOnMobile() {
     const contactSection = document.getElementById('contact');
     
@@ -199,18 +190,15 @@ function handleContactOnMobile() {
     }
     
     if (isMobile()) {
-        // Hide original content
         const originalContent = contactSection.innerHTML;
         contactSection.setAttribute('data-original-content', originalContent);
         
-        // Clear section and add mobile message
         contactSection.innerHTML = '';
         const mobileMessage = createMobileMessage();
         contactSection.appendChild(mobileMessage);
         
         console.log('Mobile detected - contact section replaced with mobile message');
     } else {
-        // Restore original content if it was replaced
         const originalContent = contactSection.getAttribute('data-original-content');
         if (originalContent) {
             contactSection.innerHTML = originalContent;
@@ -221,21 +209,14 @@ function handleContactOnMobile() {
     }
 }
 
-// Run when DOM is loaded
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', handleContactOnMobile);
-} else {
-    handleContactOnMobile();
-}
+document.addEventListener('DOMContentLoaded', handleContactOnMobile);
 
-// Optional: Re-check on window resize (for responsive behavior)
 let resizeTimer;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(handleContactOnMobile, 250);
 });
 
-// Optional: Add FontAwesome if not already loaded (for icons)
 if (!document.querySelector('link[href*="fontawesome"]') && !document.querySelector('link[href*="font-awesome"]')) {
     const fontAwesome = document.createElement('link');
     fontAwesome.rel = 'stylesheet';

@@ -1,4 +1,3 @@
-// skills.js
 document.addEventListener('DOMContentLoaded', function () {
   const skillBars = document.querySelectorAll('.skill-progress');
   const animateSkills = () => {
