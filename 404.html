@@ -755,7 +755,6 @@
     </main>
 
     <script>
-        // Enhanced cursor tracking (desktop only)
         if (window.innerWidth > 768) {
             let cursorX = 50;
             let cursorY = 50;
@@ -780,7 +779,6 @@
             updateCursor();
         }
 
-        // Enhanced keyboard navigation
         document.addEventListener('keydown', (e) => {
             const button = document.querySelector('.back-button');
             
@@ -802,9 +800,7 @@
             }
         });
 
-        // Performance optimization for mobile
         if (window.innerWidth <= 768) {
-            // Disable intensive animations on low-power devices
             const isLowPowerDevice = navigator.hardwareConcurrency <= 2 || 
                                    navigator.deviceMemory <= 2 ||
                                    navigator.connection?.effectiveType === 'slow-2g' ||
@@ -825,7 +821,6 @@
             }
         }
 
-        // Smooth scroll behavior for back navigation
         window.addEventListener('popstate', () => {
             document.body.style.opacity = '0.7';
             document.body.style.transform = 'scale(0.98)';
@@ -836,11 +831,9 @@
             }, 150);
         });
 
-        // Auto-focus management for accessibility
         document.addEventListener('DOMContentLoaded', () => {
             const button = document.querySelector('.back-button');
             
-            // Set initial focus after animations complete
             setTimeout(() => {
                 if (document.activeElement === document.body) {
                     button.focus();
@@ -848,7 +841,6 @@
             }, 2500);
         });
 
-        // Handle visibility changes for performance
         document.addEventListener('visibilitychange', () => {
             const particles = document.querySelectorAll('.particle');
             const bgLayer = document.querySelector('.bg-layer');
@@ -866,19 +858,15 @@
             }
         });
 
-        // Fallback navigation for edge cases
         const backButton = document.querySelector('.back-button');
         
         backButton.addEventListener('click', (e) => {
-            // Check if there's history to go back to
             if (window.history.length <= 1) {
                 e.preventDefault();
-                // Fallback to homepage or root
                 window.location.href = '/';
             }
         });
 
-        // Touch event optimization for mobile
         if ('ontouchstart' in window) {
             let touchStartTime = 0;
             
@@ -889,7 +877,6 @@
             backButton.addEventListener('touchend', (e) => {
                 const touchDuration = Date.now() - touchStartTime;
                 
-                // Prevent accidental taps (too short) or long presses
                 if (touchDuration < 50 || touchDuration > 500) {
                     e.preventDefault();
                     return false;
@@ -897,7 +884,6 @@
             });
         }
 
-        // Easter egg: Konami code
         let konamiCode = [];
         const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // ↑↑↓↓←→←→BA
         
@@ -909,12 +895,10 @@
             }
             
             if (konamiCode.join(',') === konami.join(',')) {
-                // Easter egg activation
                 document.body.style.filter = 'hue-rotate(180deg) saturate(2)';
                 document.querySelector('.error-title').textContent = 'You Found Me!';
                 document.querySelector('.error-subtitle').textContent = 'The legendary Konami code still works in the void.';
                 
-                // Reset after 3 seconds
                 setTimeout(() => {
                     document.body.style.filter = '';
                     document.querySelector('.error-title').textContent = 'Lost in the Void';
@@ -925,18 +909,13 @@
             }
         });
 
-        // Console message for developers
-        console.log(`
-╔══════════════════════════════════════╗
-║              404 - VOID              ║
-║                                      ║
-║  You've found our premium 404 page!  ║
-║  Built with modern web technologies  ║
-║  and optimized for all devices.      ║
-║                                      ║
-║  Try the Konami code: ↑↑↓↓←→←→BA     ║
-╚══════════════════════════════════════╝
-        `);
+//         console.log(`
+    // ╔══════════════════════════════════════╗
+    // ║              404 - VOID              ║
+    // ║                                      ║
+    // ║  Try the Konami code: ↑↑↓↓←→←→BA     ║
+    // ╚══════════════════════════════════════╝
+//         `);
     </script>
 </body>
 </html>

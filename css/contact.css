@@ -1490,7 +1490,6 @@
   }
 }
 
-/* Enhanced Subtitle */
 .enhanced-subtitle {
   font-size: clamp(1.6rem, 3vw, 2rem);
   color: rgba(var(--text-color-rgb), 0.9);
@@ -1551,7 +1550,6 @@
   }
 }
 
-/* Enhanced Contact Container */
 .enhanced-contact-container {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
@@ -1562,7 +1560,6 @@
   z-index: 2;
 }
 
-/* Enhanced Primary Contact */
 .enhanced-primary-contact {
   position: relative;
   background: rgba(var(--main-color-rgb), 0.05);
@@ -1843,4 +1840,272 @@
   display: flex;
   align-items: center;
   gap: 0.8rem;
+}
+
+/* Mobile Responsiveness - Additional Styles */
+@media (max-width: 768px) {
+  /* Base contact section adjustments */
+  .contact {
+    padding: 6rem 4% 4rem;
+  }
+  
+  /* Header adjustments */
+  .enhanced-section-header {
+    margin-bottom: 4rem;
+  }
+  
+  .enhanced-heading {
+    font-size: clamp(2.8rem, 8vw, 3.5rem);
+    margin-bottom: 1.5rem;
+  }
+  
+  .enhanced-subtitle {
+    font-size: 1.4rem;
+    max-width: 90%;
+  }
+  
+  /* Contact container layout */
+  .enhanced-contact-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  /* Primary contact card */
+  .enhanced-primary-contact {
+    padding: 2rem;
+    border-radius: 20px;
+  }
+  
+  /* Discord header */
+  .enhanced-contact-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  
+  .header-text {
+    text-align: center;
+  }
+  
+  .title-decoration {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80% !important;
+  }
+  
+  /* Discord features grid */
+  .enhanced-features {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .enhanced-feature {
+    padding: 1.2rem;
+  }
+  
+  /* Discord CTA button */
+  .enhanced-discord-btn {
+    padding: 1.5rem;
+    font-size: 1.6rem;
+  }
+  
+  /* Secondary contact cards */
+  .enhanced-contact-card {
+    padding: 1.8rem;
+  }
+  
+  .enhanced-card-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .title-underline {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  /* Social grid */
+  .enhanced-social-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  
+  .enhanced-social-link {
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
+  }
+  
+  /* Email section */
+  .enhanced-email-section {
+    padding: 1.5rem;
+  }
+  
+  .enhanced-email-link {
+    font-size: 1.3rem;
+    padding: 1rem;
+  }
+  
+  /* Response notice */
+  .enhanced-response-notice {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .notice-icon-wrapper {
+    margin: 0 auto;
+  }
+  
+  /* Stats grid */
+  .contact-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  
+  .stat-item {
+    padding: 1.2rem;
+  }
+  
+  /* Hide floating elements on mobile */
+  .floating-contact-elements {
+    display: none;
+  }
+  
+  /* Success modal */
+  .success-modal-content {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Further adjustments for very small screens */
+  .contact {
+    padding: 5rem 3% 3rem;
+  }
+  
+  .enhanced-heading {
+    font-size: 2.5rem;
+  }
+  
+  .enhanced-subtitle {
+    font-size: 1.3rem;
+  }
+  
+  /* Discord info card */
+  .enhanced-discord-info {
+    padding: 1.5rem;
+  }
+  
+  .discord-username-wrapper {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.8rem;
+  }
+  
+  .username-badge {
+    margin-top: 0.5rem;
+  }
+  
+  /* Stats grid */
+  .contact-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .stat-item {
+    padding: 1rem;
+  }
+  
+  /* Email link text */
+  .enhanced-email-link span {
+    font-size: 1.2rem;
+    word-break: break-all;
+  }
+  
+  /* Response notice text */
+  .enhanced-notice-text {
+    font-size: 1.3rem;
+  }
+}
+
+/* Specific adjustments for landscape mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .contact {
+    padding: 5rem 4% 3rem;
+  }
+  
+  .enhanced-contact-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .enhanced-features {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .contact-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Accessibility improvements for mobile */
+@media (max-width: 768px) {
+  /* Increase tap targets */
+  .enhanced-feature,
+  .enhanced-social-link,
+  .enhanced-email-link,
+  .enhanced-discord-btn {
+    min-height: 44px; /* Apple's recommended minimum tap target size */
+  }
+  
+  /* Ensure text is readable */
+  .feature-text,
+  .card-feature .feature-text,
+  .enhanced-notice-text,
+  .email-text {
+    font-size: 1.3rem !important;
+  }
+  
+  /* Adjust icon sizes */
+  .feature-icon-wrapper,
+  .username-icon,
+  .stat-icon {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 1.6rem !important;
+  }
+  
+  .card-icon {
+    width: 45px !important;
+    height: 45px !important;
+    font-size: 1.8rem !important;
+  }
+}
+
+/* Performance optimizations for mobile */
+@media (max-width: 768px) and (prefers-reduced-motion: no-preference) {
+  /* Reduce animation intensity */
+  .status-dot,
+  .icon-pulse-ring,
+  .btn-pulse-ring,
+  .notice-pulse {
+    animation-duration: 3s;
+  }
+  
+  .contact-line {
+    animation-duration: 6s;
+  }
+  
+  /* Disable some decorative animations */
+  .primary-contact-glow,
+  .feature-glow,
+  .social-glow,
+  .card-bg-effect {
+    animation: none !important;
+    opacity: 0.3 !important;
+  }
 }

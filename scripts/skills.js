@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const value = bar.getAttribute('data-value');
       bar.style.width = value + '%';
     });
-  }
+  };
 
   const tabButtons = document.querySelectorAll('.tab-btn');
   const tabContents = document.querySelectorAll('.tab-content');
@@ -22,14 +22,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animateSkills();
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
+  const skillsSection = document.querySelector('.skills-section');
+  if (skillsSection) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateSkills();
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
 
-  document.querySelector('.skills-section').forEach(el => observer.observe(el));
+    observer.observe(skillsSection);
+  }
 });

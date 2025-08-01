@@ -5,9 +5,9 @@ const closeModal = document.querySelector('.close-modal');
 const serverConfig = {
   serverId: "",
   inviteCode: "WBQssXDfKJ",
-  name: "Immortal Community",
+  name: "Loading",
   description: "",
-  icon: "assets/image.jpg",
+  icon: "assets/avatar1.jpg",
   banner: "",
   fallbackMembers: 0,
   fallbackOnline: 0
