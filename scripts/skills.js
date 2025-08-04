@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const skillBars = document.querySelectorAll('.skill-progress');
   const animateSkills = () => {
     skillBars.forEach(bar => {
-      const value = bar.getAttribute('data-value');
+      const value = bar.getAttribute('value');
       bar.style.width = value + '%';
     });
   };

@@ -48,7 +48,6 @@ class UniqueVisitorTracker {
         this.loadingIndicator.style.display = 'flex';
       }
       
-      // Update progress bar
       this.updateProgress(20);
 
       this.deviceFingerprint = this.generateDeviceFingerprint();
@@ -179,15 +178,33 @@ class UniqueVisitorTracker {
       const ipExists = !ipSnapshot.empty;
       const fingerprintExists = !fingerprintSnapshot.empty;
       
+      let existingDocId = null;
+      let lastVisit = null;
+      
+      if (ipExists) {
+        existingDocId = ipSnapshot.docs[0].id;
+        lastVisit = ipSnapshot.docs[0].data().lastVisit;
+      } else if (fingerprintExists) {
+        existingDocId = fingerprintSnapshot.docs[0].id;
+        lastVisit = fingerprintSnapshot.docs[0].data().lastVisit;
+      }
+      
       return {
         exists: ipExists || fingerprintExists,
         ipExists,
         fingerprintExists,
-        lastVisit: ipExists ? ipSnapshot.docs[0].data().lastVisit : null
+        lastVisit,
+        existingDocId
       };
     } catch (error) {
       console.error('Error checking IP existence:', error);
-      return { exists: false, ipExists: false, fingerprintExists: false, lastVisit: null };
+      return { 
+        exists: false, 
+        ipExists: false, 
+        fingerprintExists: false, 
+        lastVisit: null,
+        existingDocId: null
+      };
     }
   }
 
@@ -207,14 +224,14 @@ class UniqueVisitorTracker {
         lastVisit: now,
         visitDate: today,
         userAgent: navigator.userAgent,
-        timestamp: now
+        timestamp: now,
+        visitCount: 1
       };
       
       const docId = `${ipData.ip}_${this.deviceFingerprint}`.replace(/[^a-zA-Z0-9]/g, '_');
       const docRef = this.firestore.doc(this.ipDocRef, docId);
       
       await this.firestore.setDoc(docRef, visitorData);
-      // console.log('✅ Unique visitor saved:', docId);
       
     } catch (error) {
       console.error('Error saving unique visitor:', error);
@@ -226,16 +243,15 @@ class UniqueVisitorTracker {
       const ipData = await this.getUserIP();
       this.userIP = ipData.ip;
       
-      // console.log('🔍 Checking IP:', this.userIP, 'Fingerprint:', this.deviceFingerprint);
-      
       const existsData = await this.checkIfIPExists(this.userIP, this.deviceFingerprint);
       
       if (existsData.exists) {
-        // console.log('🔄 Returning visitor detected - not incrementing count');
-        
         try {
-          const docId = `${this.userIP}_${this.deviceFingerprint}`.replace(/[^a-zA-Z0-9]/g, '_');
-          const docRef = this.firestore.doc(this.ipDocRef, docId);
+          if (!existsData.existingDocId) {
+            throw new Error('Existing document ID not found');
+          }
+          
+          const docRef = this.firestore.doc(this.ipDocRef, existsData.existingDocId);
           await this.firestore.updateDoc(docRef, {
             lastVisit: new Date().toISOString(),
             visitCount: this.firestore.increment(1)
@@ -247,12 +263,8 @@ class UniqueVisitorTracker {
         this.showVisitorStatus('returning', existsData.lastVisit);
         
       } else {
-        // console.log('🆕 New unique visitor - incrementing count');
-        
         await this.saveUniqueVisitor(ipData);
-        
         await this.incrementVisitorCount(ipData);
-        
         this.showVisitorStatus('new');
       }
       
@@ -360,7 +372,6 @@ class UniqueVisitorTracker {
             counterElement.textContent = parseInt(cachedCount).toLocaleString();
             counterElement.style.opacity = '0.7';
           }
-          // console.log('📱 Loaded cached view count:', cachedCount);
         }
       }
     } catch (error) {
@@ -423,9 +434,6 @@ class UniqueVisitorTracker {
       }
       counterElement.textContent = Math.floor(current).toLocaleString();
     }, 16);
-    setTimeout(() => {
-      checkMilestone(targetNumber);
-    }, duration + 100);
   }
 
   updateLastVisitorInfo(lastVisitor) {
@@ -486,14 +494,14 @@ class UniqueVisitorTracker {
       if (type === 'new') {
         statusElement.innerHTML = `
           <div style="color: #4ade80; font-weight: bold;">
-            🆕 New Unique Visitor! Welcome! (${timeStr})
+            <p>🆕 New Unique Visitor! Welcome! (${timeStr})</p>
           </div>
         `;
       } else {
         const lastVisitTime = lastVisit ? this.getTimeAgo(new Date(lastVisit)) : 'unknown';
         statusElement.innerHTML = `
           <div style="color: #fbbf24; font-weight: bold;">
-            🔄 Welcome Back! Last visit: ${lastVisitTime} (${timeStr})
+            <p>🔄 Welcome Back! Last visit: ${lastVisitTime} (${timeStr})</p>
           </div>
         `;
       }
