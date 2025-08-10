@@ -11,12 +11,13 @@
     <meta property="image" content="assets/avatar1.jpg" />
     <meta property="og:description" content="Personal portfolio of a creative developer (maybe)"/>
 
-    <link rel="preload" href="assets/avatar1.jpg" as="image" type="image/jpeg" />
-    <link rel="preload" href="css/style.css" as="style" />
+    <!-- <link rel="preload" href="assets/avatar1.jpg" as="image" type="image/jpeg" />
+    <link rel="preload" href="css/style.css" as="style" /> -->
 
     <title>Immortal</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/contact.css" />
+    <link rel="stylesheet" href="css/blog.css" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   </head>
@@ -37,6 +38,7 @@
         <a href="#about">About</a>
         <a href="#services">Skills</a>
         <a href="#projects">Projects</a>
+        <a href="#blog">Blog</a>
         <a href="#contact">Contact</a>
 
         <!-- <div class="mobile-language-toggle">
@@ -310,7 +312,7 @@
               <div class="tab-content active" id="profile-tab">
                 <div class="about-text">
                   <p>
-                    Normal person love to code random things and make websites
+                    I'm a normal person who loves to code random things and make websites
                     and love to play games and chill with <span>friends</span>.
                     Always looking to make some <span>new friends</span> and
                     love to chat with everyone <span>(maybe)</span>. My Favorite
@@ -654,6 +656,87 @@
     </div>
   </section> -->
 
+      <!-- Blog/Updates Section -->
+      <section class="blog" id="blog">
+        <!-- Background Elements -->
+        <div class="blog-particles-container">
+          <div class="blog-particle"></div>
+          <div class="blog-particle"></div>
+          <div class="blog-particle"></div>
+          <div class="blog-particle"></div>
+          <div class="blog-particle"></div>
+          <div class="blog-particle"></div>
+        </div>
+
+        <!-- Geometric Background -->
+        <div class="blog-geometric-bg">
+          <div class="blog-geo-shape blog-geo-circle"></div>
+          <div class="blog-geo-shape blog-geo-triangle"></div>
+          <div class="blog-geo-shape blog-geo-square"></div>
+        </div>
+
+        <div class="blog-container">
+          <div class="blog-section-header">
+            <h2 class="blog-gradient-heading">
+              Blog & <span>Updates</span>
+              <div class="blog-heading-decoration"></div>
+            </h2>
+            <p class="blog-section-subtitle">
+              Stay updated with my <span class="blog-tagline-highlight">latest projects</span>, 
+              development insights, and community updates
+            </p>
+          </div>
+
+          <!-- Category Filter -->
+          <div class="blog-filter">
+            <button class="blog-filter-btn active" data-category="all">
+              All Posts
+            </button>
+            <button class="blog-filter-btn" data-category="development">
+              Development
+            </button>
+            <!-- <button class="blog-filter-btn" data-category="fnf">
+              FNF Modding
+            </button> -->
+            <button class="blog-filter-btn" data-category="community">
+              Community
+            </button>
+            <!-- <button class="blog-filter-btn" data-category="tutorials">
+              Tutorials
+            </button> -->
+          </div>
+
+          <!-- Blog Grid -->
+          <div class="blog-grid" id="blogGrid">
+            <!-- Blog posts will be dynamically inserted here -->
+          </div>
+
+          <!-- Load More Button -->
+          <div class="blog-load-more-container">
+            <button class="blog-load-more-btn" id="loadMoreBtn">
+              <div class="btn-bg-effect"></div>
+              <i class="bx bx-refresh"></i>
+              <span>Load More Posts</span>
+              <div class="btn-shine-effect"></div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Blog Post Modal -->
+        <div class="blog-modal" id="blogModal">
+          <div class="blog-modal-content">
+            <div class="blog-modal-header">
+              <button class="blog-modal-close" id="blogModalClose">
+                <i class="bx bx-x"></i>
+              </button>
+            </div>
+            <div class="blog-modal-body" id="blogModalBody">
+              <!-- Modal content will be dynamically inserted here -->
+            </div>
+          </div>
+        </div>
+      </section>
+  
       <!-- Contact Section -->
       <section class="contact" id="contact">
         <div class="contact-particles">
@@ -985,6 +1068,7 @@
     <script src="scripts/discord-modal.js"></script>
     <script src="scripts/skills.js"></script>
     <script src="scripts/projects.js"></script>
+    <script src="scripts/blog.js"></script>
     <script src="scripts/faq.js"></script>
 
     <!-- hide some sections until i make it responsive for mobile -->
