@@ -6,7 +6,7 @@
 **AR:**  
 🚫 هذا المشروع **خاص**، ولا أسمح بـ **نسخه أو استخدامه أو إعادة نشره أو تعديله** إلا بعد الحصول على **إذن خطي مني**.
 
-> 🔒 All rights reserved © - X D -
+> 🔒 All rights reserved © Immortal
 > ⚠️ Unauthorized use will be reported and action may be taken.
 
 ---
