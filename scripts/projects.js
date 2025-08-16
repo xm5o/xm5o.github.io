@@ -39,7 +39,7 @@ class ProjectsManager {
         image: './assets/avatar1.jpg',
         features: ['Chart', 'Modchart', 'Code', 'Free', 'Paid'],
         links: {
-          website: 'https://xm5o.github.io/commission/',
+          website: 'commission/index.html',
           demo: null,
           github: null
         },
