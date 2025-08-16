@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="css/blog.css" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <script src="scripts/mobile-enhancements.js" defer></script>
   </head>
 
   <body>
@@ -55,7 +56,7 @@
 
     <!-- Home Section -->
     <section class="home" id="home">
-      <!-- Floating Particles Background -->
+      <!-- Enhanced Floating Particles Background -->
       <div class="particles-container">
         <div class="particle"></div>
         <div class="particle"></div>
@@ -65,83 +66,165 @@
         <div class="particle"></div>
         <div class="particle"></div>
         <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
       </div>
 
-      <!-- Geometric Background Elements -->
+      <!-- Enhanced Geometric Background Elements -->
       <div class="geometric-bg">
         <div class="geo-shape geo-circle"></div>
         <div class="geo-shape geo-triangle"></div>
         <div class="geo-shape geo-square"></div>
+        <div class="geo-shape geo-hexagon"></div>
+        <div class="geo-shape geo-diamond"></div>
+      </div>
+
+      <!-- Animated Background Grid -->
+      <div class="grid-background">
+        <div class="grid-line grid-vertical"></div>
+        <div class="grid-line grid-horizontal"></div>
+      </div>
+
+      <!-- Floating Code Elements -->
+      <div class="code-elements">
+        <div class="code-snippet code-1">
+          <span class="code-bracket">{</span>
+          <span class="code-text">creativity</span>
+          <span class="code-bracket">}</span>
+        </div>
+        <!-- <div class="code-snippet code-2">
+          <span class="code-bracket">&lt;</span>
+          <span class="code-text">innovation</span>
+          <span class="code-bracket">/&gt;</span>
+        </div> -->
+        <div class="code-snippet code-3">
+          <span class="code-text">console.log</span>
+          <span class="code-bracket">(</span>
+          <span class="code-string">"hello world"</span>
+          <span class="code-bracket">)</span>
+        </div>
       </div>
 
       <div class="home-content">
         <div class="hero-text">
-          <div class="text-reveal">
-            <h1 class="gradient-heading">
-              It's <span class="immortal-text">Immortal</span>
-              <div class="heading-decoration"></div>
-            </h1>
+          <!-- Enhanced Text Reveal with Stagger Animation -->
+          <div class="text-reveal-container">
+            <div class="text-reveal">
+              <h1 class="gradient-heading">
+                <span class="word-animate" style="--delay: 0.1s">It's</span>
+                <span class="immortal-text word-animate" style="--delay: 0.3s">Immortal</span>
+                <div class="heading-decoration"></div>
+              </h1>
+            </div>
+            
+            <!-- Subtitle with Enhanced Animation -->
+            <div class="subtitle-container">
+              <div class="subtitle-line"></div>
+              <p class="subtitle-text">Where Code Meets Creativity</p>
+              <div class="subtitle-line"></div>
+            </div>
           </div>
           
           <div class="animated-titles">
             <h3 class="typewriter">
               I'm a <span class="role-switch animated-role">Web Developer</span>
             </h3>
-            <p class="tagline">
+            <p class="tagline enhanced-tagline">
               <span class="tagline-highlight">He/Him</span> | Creative developer building 
-              <span class="tagline-highlight">digital experiences</span> that inspire
+              <span class="tagline-highlight">digital experiences</span> that inspire and 
+              <span class="tagline-highlight">transform ideas</span> into reality
             </p>
+            
+            <!-- New Stats Section -->
+            <div class="hero-stats">
+              <div class="stat-item">
+                <div class="stat-number" data-target="3">0</div>
+                <div class="stat-label">Years Experience</div>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-item">
+                <div class="stat-number" data-target="3">0</div>
+                <div class="stat-label">Projects Completed</div>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-item">
+                <div class="stat-number" data-target="20">0</div>
+                <div class="stat-label">Happy Clients</div>
+              </div>
+            </div>
           </div>
 
-          <!-- Enhanced Social Links -->
-          <div class="social-links">
-            <a href="https://youtube.com/@voixj" target="_blank" aria-label="YouTube" class="social-btn youtube">
-              <i class="bx bxl-youtube"></i>
-              <span class="social-tooltip">YouTube</span>
-              <div class="hover-ripple"></div>
+          <!-- Enhanced Social Links with New Design -->
+          <div class="social-links enhanced-social">
+            <!-- <div class="social-label">Connect with me</div> -->
+            <div class="social-buttons">
+              <a href="https://youtube.com/@voixj" target="_blank" aria-label="YouTube" class="social-btn youtube">
+                <div class="social-bg"></div>
+                <i class="bx bxl-youtube"></i>
+                <span class="social-tooltip">YouTube</span>
+                <div class="hover-ripple"></div>
+              </a>
+              <a href="https://instagram.com/xm5o_" target="_blank" aria-label="Instagram" class="social-btn instagram">
+                <div class="social-bg"></div>
+                <i class="bx bxl-instagram"></i>
+                <span class="social-tooltip">Instagram</span>
+                <div class="hover-ripple"></div>
+              </a>
+              <a href="https://discord.com/users/1282747277206884436" target="_blank" aria-label="Discord" class="social-btn discord">
+                <div class="social-bg"></div>
+                <i class="bx bxl-discord-alt"></i>
+                <span class="social-tooltip">Discord</span>
+                <div class="hover-ripple"></div>
+              </a>
+              <a href="https://www.tiktok.com/@xm5o_" target="_blank" aria-label="TikTok" class="social-btn tiktok">
+                <div class="social-bg"></div>
+                <i class="bx bxl-tiktok"></i>
+                <span class="social-tooltip">TikTok</span>
+                <div class="hover-ripple"></div>
+              </a>
+              <a href="https://x.com/voixj1" target="_blank" aria-label="Twitter" class="social-btn twitter">
+                <div class="social-bg"></div>
+                <i class="bx bxl-twitter"></i>
+                <span class="social-tooltip">Twitter</span>
+                <div class="hover-ripple"></div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Enhanced CTA Buttons with New Design -->
+          <div class="cta-group enhanced-cta">
+            <a href="#projects" class="cta-btn projects-cta enhanced-btn primary-btn">
+              <div class="btn-bg"></div>
+              <div class="btn-icon">
+                <i class="bx bx-code-alt"></i>
+              </div>
+              <span class="btn-text" style="color: var(--text-color);">Explore My Work</span>
+              <div class="btn-shine"></div>
+              <div class="btn-particles">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
             </a>
-            <a href="https://instagram.com/xm5o_" target="_blank" aria-label="Instagram" class="social-btn instagram">
-              <i class="bx bxl-instagram"></i>
-              <span class="social-tooltip">Instagram</span>
-              <div class="hover-ripple"></div>
-            </a>
-            <a href="https://discord.com/users/1282747277206884436" target="_blank" aria-label="Discord" class="social-btn discord">
-              <i class="bx bxl-discord-alt"></i>
-              <span class="social-tooltip">Discord</span>
-              <div class="hover-ripple"></div>
-            </a>
-            <a href="https://www.tiktok.com/@xm5o_" target="_blank" aria-label="TikTok" class="social-btn tiktok">
-              <i class="bx bxl-tiktok"></i>
-              <span class="social-tooltip">TikTok</span>
-              <div class="hover-ripple"></div>
-            </a>
-            <a href="https://x.com/voixj1" target="_blank" aria-label="Twitter" class="social-btn twitter">
-              <i class="bx bxl-twitter"></i>
-              <span class="social-tooltip">Twitter</span>
-              <div class="hover-ripple"></div>
+            <a href="commission/index.html" class="cta-btn commission-cta enhanced-btn secondary-btn">
+              <div class="btn-bg"></div>
+              <div class="btn-icon">
+                <i class="bx bx-brush"></i>
+              </div>
+              <span class="btn-text" style="color: var(--accent-color);">Hire Me</span>
+              <div class="btn-shine"></div>
             </a>
           </div>
 
-          <!-- Enhanced CTA Buttons -->
-          <div class="cta-group">
-            <a class="cta-btn discord-cta enhanced-btn" target="_blank">
-              <div class="btn-bg"></div>
-              <i class="bx bxs-door-open"></i>
-              <span style="color: var(--text-color);">Join Community</span>
-              <div class="btn-shine"></div>
-            </a>
-            <a href="#projects" class="cta-btn projects-cta enhanced-btn">
-              <div class="btn-bg"></div>
-              <i class="bx bx-code-alt"></i>
-              <span>View Projects</span>
-              <div class="btn-shine"></div>
-            </a>
-            <a href="https://xm5o.github.io/commission/" class="cta-btn commission-cta enhanced-btn" target="_blank">
-              <div class="btn-bg"></div>
-              <i class="bx bx-brush"></i>
-              <span style="color: var(--accent-color);">Commission Work</span>
-              <div class="btn-shine"></div>
-            </a>
+          <!-- New Skills Preview -->
+          <div class="skills-preview">
+            <div class="skill-tag">Lua</div>
+            <div class="skill-tag">Haxe</div>
+            <div class="skill-tag">JavaScript</div>
+            <div class="skill-tag">CSS3</div>
+            <div class="skill-tag">HTML5</div>
           </div>
         </div>
       </div>
@@ -704,6 +787,9 @@
             <!-- <button class="blog-filter-btn" data-category="tutorials">
               Tutorials
             </button> -->
+            <!-- <button class="blog-filter-btn" data-category="other">
+              Other
+            </button> -->
           </div>
 
           <!-- Blog Grid -->
@@ -719,20 +805,6 @@
               <span>Load More Posts</span>
               <div class="btn-shine-effect"></div>
             </button>
-          </div>
-        </div>
-
-        <!-- Blog Post Modal -->
-        <div class="blog-modal" id="blogModal">
-          <div class="blog-modal-content">
-            <div class="blog-modal-header">
-              <button class="blog-modal-close" id="blogModalClose">
-                <i class="bx bx-x"></i>
-              </button>
-            </div>
-            <div class="blog-modal-body" id="blogModalBody">
-              <!-- Modal content will be dynamically inserted here -->
-            </div>
           </div>
         </div>
       </section>
@@ -1062,9 +1134,9 @@
     </div>
 
     <script src="scripts/utils.js"></script>
-    <script src="scripts/navbar.js"></script>
+    <!-- <script src="scripts/navbar.js"></script> -->
     <!-- <script src="scripts/particles.js"></script> -->
-    <script src="scripts/home.js"></script>
+    <!-- <script src="scripts/home.js"></script> -->
     <script src="scripts/discord-modal.js"></script>
     <script src="scripts/skills.js"></script>
     <script src="scripts/projects.js"></script>
