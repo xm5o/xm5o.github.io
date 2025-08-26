@@ -1030,7 +1030,7 @@ window.addEventListener('resize', handleResize);
 document.addEventListener('contextmenu', (e) => {
     if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') {
         e.preventDefault();
-        e.target.style.animation = 'shake 0.3s ease-in-out';
+        e.target.style.animation = 'shake 1s ease-in-out';
         setTimeout(() => {
             e.target.style.animation = '';
         }, 300);
