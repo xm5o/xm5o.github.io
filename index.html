@@ -8,10 +8,9 @@
 
     <meta property="og:title" content="Immortal" />
     <meta property="og:type" content="website" />
-    <meta property="image" content="assets/avatar1.jpg" />
     <meta property="og:description" content="Personal portfolio of a creative developer (maybe)"/>
 
-    <!-- <link rel="preload" href="assets/avatar1.jpg" as="image" type="image/jpeg" />
+    <!-- <link rel="preload" href="assets/pfp.jpg" as="image" type="image/jpeg" />
     <link rel="preload" href="css/style.css" as="style" /> -->
 
     <title>Immortal</title>
@@ -20,7 +19,9 @@
     <link rel="stylesheet" href="css/blog.css" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-    <script src="scripts/mobile-enhancements.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- <script src="scripts/mobile-enhancements.js" defer></script> -->
   </head>
 
   <body>
@@ -140,20 +141,21 @@
             <!-- New Stats Section -->
             <div class="hero-stats">
               <div class="stat-item">
-                <div class="stat-number" data-target="3">0</div>
+                <div class="stat-number" data-target="4">0</div>
                 <div class="stat-label">Years Experience</div>
               </div>
               <div class="stat-divider"></div>
               <div class="stat-item">
-                <div class="stat-number" data-target="3">0</div>
+                <div class="stat-number" data-target="4">0</div>
                 <div class="stat-label">Projects Completed</div>
               </div>
-              <div class="stat-divider"></div>
+              <!-- <div class="stat-divider"></div>
               <div class="stat-item">
                 <div class="stat-number" data-target="20">0</div>
                 <div class="stat-label">Happy Clients</div>
-              </div>
+              </div> -->
             </div>
+
           </div>
 
           <!-- Enhanced Social Links with New Design -->
@@ -219,9 +221,9 @@
           </div>
 
           <!-- New Skills Preview -->
-          <div class="skills-preview">
-            <div class="skill-tag">Lua</div>
-            <div class="skill-tag">Haxe</div>
+          <div class="skills-preview" style="display: none;">
+            <!-- <div class="skill-tag">Lua</div> -->
+            <!-- <div class="skill-tag">Haxe</div> -->
             <div class="skill-tag">JavaScript</div>
             <div class="skill-tag">CSS3</div>
             <div class="skill-tag">HTML5</div>
@@ -242,7 +244,7 @@
           
           <!-- Profile Image with Enhanced Effects -->
           <div class="profile-container">
-            <img src="assets/avatar1.jpg" alt="Profile" loading="lazy" class="profile-img" />
+            <img src="assets/pfp.jpg" alt="Profile" loading="lazy" class="profile-img" />
             <div class="profile-overlay"></div>
             
             <!-- Floating Icons Around Image -->
@@ -318,7 +320,7 @@
         <div id="serverBanner" class="server-banner">
           <img
             id="serverIcon"
-            src="assets/avatar1.jpg"
+            src="assets/pfp.jpg"
             alt="Server Icon"
             class="server-icon"
           />
@@ -358,7 +360,7 @@
     </div>
 
     <!-- Loading Indicator -->
-    <div id="loadingIndicator" class="loading-indicator">
+    <div id="loadingIndicator" class="loading-indicator" style="display: none">
       <div class="spinner">
         <div class="spinner-inner"></div>
       </div>
@@ -368,7 +370,7 @@
       </div> -->
     </div>
 
-    <div id="mainContent" style="display: none">
+    <div id="mainContent">
       <!-- About Section -->
       <section class="about" id="about">
         <div class="about-container">
@@ -383,9 +385,9 @@
 
           <div class="about-content-wrapper">
             <div class="about-img-container">
-              <img src="assets/avatar1.jpg" alt="Profile Picture" />
+              <img src="assets/pfp.jpg" alt="Profile Picture" />
               <div class="experience-badge">
-                <span class="years">3+</span>
+                <span class="years">4+</span>
                 <span class="text">Years<br />Coding</span>
               </div>
             </div>
@@ -1121,7 +1123,7 @@
           </div>
 
           <ul class="footer-nav">
-            <li><a href="#">Home</a></li>
+            <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#services">Skills</a></li>
             <li><a href="#projects">Projects</a></li>
@@ -1137,11 +1139,11 @@
     <!-- <script src="scripts/navbar.js"></script> -->
     <!-- <script src="scripts/particles.js"></script> -->
     <!-- <script src="scripts/home.js"></script> -->
-    <script src="scripts/discord-modal.js"></script>
+    <!-- <script src="scripts/discord-modal.js"></script> -->
     <script src="scripts/skills.js"></script>
     <script src="scripts/projects.js"></script>
     <script src="scripts/blog.js"></script>
-    <script src="scripts/faq.js"></script>
+    <!-- <script src="scripts/faq.js"></script> -->
 
     <!-- hide some sections until i make it responsive for mobile -->
     <!-- <script src="scripts/hide.js"></script> -->

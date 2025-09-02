@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F0m's Overwatch Career Profile</title>
+    <style>
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #1a1f2e;
+            --bg-tertiary: #252b3d;
+            --accent-orange: #ff9c43;
+            --accent-blue: #00d4ff;
+            --accent-purple: #9966ff;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b8c4;
+            --text-muted: #7a8194;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, #ff9c43, #ff5e62);
+            --gradient-secondary: linear-gradient(135deg, #00d4ff, #9966ff);
+            --gradient-bg: linear-gradient(135deg, rgba(255, 156, 67, 0.1), rgba(0, 212, 255, 0.1));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle at top right, #1a1f2e, #0a0e1a);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .player-banner {
+            position: relative;
+            background: linear-gradient(135deg, #1a1f2e, #252b3d);
+            border-radius: 2rem;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .player-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="grad1" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:%23ff9c43;stop-opacity:0.1" /><stop offset="100%" style="stop-color:%2300d4ff;stop-opacity:0.05" /></radialGradient></defs><rect width="1000" height="1000" fill="url(%23grad1)"/></svg>');
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .player-banner-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .player-avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 6px solid transparent;
+            background: var(--gradient-primary);
+            padding: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-name {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(255, 156, 67, 0.3);
+        }
+
+        .player-stats-row {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .player-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .player-stat:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .player-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .player-stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-bg);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card-header {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .stat-card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .stat-card-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            margin: 0 -1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .stat-value {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .heroes-section {
+            margin-bottom: 3rem;
+        }
+
+        .heroes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .heroes-title {
+            font-size: 2rem;
+            font-weight: 600;
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .heroes-filter {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 2rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--gradient-primary);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .heroes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .hero-card {
+            background: var(--bg-secondary);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-bg);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .hero-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-card:hover::before {
+            opacity: 1;
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 1rem;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-info {
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .hero-stat {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .hero-stat-value {
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
+
+        .stadium-section {
+            background: var(--bg-secondary);
+            border-radius: 2rem;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stadium-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-bg);
+            opacity: 0.3;
+        }
+
+        .stadium-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .stadium-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stadium-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stadium-stat {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .stadium-stat:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .stadium-stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .stadium-stat-label {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-secondary);
+            border-radius: 50%;
+            border-top-color: var(--accent-orange);
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            color: #ff5e62;
+            background: rgba(255, 94, 98, 0.1);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin: 2rem 0;
+            text-align: center;
+            border: 1px solid rgba(255, 94, 98, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .player-banner-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .player-avatar {
+                width: 150px;
+                height: 150px;
+            }
+
+            .player-name {
+                font-size: 2.5rem;
+            }
+
+            .player-stats-row {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .heroes-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .heroes-filter {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .stadium-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .fade-in-delay {
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loading" class="loading">Loading your Overwatch career stats...</div>
+        <div id="error-container"></div>
+        
+        <div id="stats-container" style="display: none;">
+            <!-- Player Banner -->
+            <div class="player-banner fade-in">
+                <div class="player-banner-content">
+                    <div class="player-avatar">
+                        <img id="player-avatar" src="/api/placeholder/200/200" alt="Player Avatar">
+                    </div>
+                    <div class="player-info">
+                        <h1 class="player-name">F0m#2582</h1>
+                        <div class="player-stats-row">
+                            <div class="player-stat">
+                                <div class="player-stat-value" id="player-level">-</div>
+                                <div class="player-stat-label">Level</div>
+                            </div>
+                            <div class="player-stat">
+                                <div class="player-stat-value" id="games-won">-</div>
+                                <div class="player-stat-label">Games Won</div>
+                            </div>
+                            <div class="player-stat">
+                                <div class="player-stat-value" id="endorsement-level">-</div>
+                                <div class="player-stat-label">Endorsement</div>
+                            </div>
+                            <div class="player-stat">
+                                <div class="player-stat-value" id="competitive-rank">-</div>
+                                <div class="player-stat-label">Rank</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid fade-in-delay">
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon">🏆</div>
+                        <h2>Competitive Overview</h2>
+                    </div>
+                    <div class="stat-card-content" id="competitive-stats">
+                        <div class="loading">Loading competitive stats...</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon">📊</div>
+                        <h2>Career Statistics</h2>
+                    </div>
+                    <div class="stat-card-content" id="career-stats">
+                        <div class="loading">Loading career stats...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stadium Section -->
+            <div class="stadium-section fade-in">
+                <div class="stadium-content">
+                    <h2 class="stadium-title">Stadium Statistics</h2>
+                    <div class="stadium-stats" id="stadium-stats">
+                        <div class="stadium-stat">
+                            <div class="stadium-stat-value" id="total-playtime">-</div>
+                            <div class="stadium-stat-label">Total Playtime</div>
+                        </div>
+                        <div class="stadium-stat">
+                            <div class="stadium-stat-value" id="total-eliminations">-</div>
+                            <div class="stadium-stat-label">Total Eliminations</div>
+                        </div>
+                        <div class="stadium-stat">
+                            <div class="stadium-stat-value" id="total-damage">-</div>
+                            <div class="stadium-stat-label">Damage Dealt</div>
+                        </div>
+                        <div class="stadium-stat">
+                            <div class="stadium-stat-value" id="total-healing">-</div>
+                            <div class="stadium-stat-label">Healing Done</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Heroes Section -->
+            <div class="heroes-section fade-in-delay">
+                <div class="heroes-header">
+                    <h2 class="heroes-title">Top Heroes</h2>
+                    <div class="heroes-filter">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="tank">Tank</button>
+                        <button class="filter-btn" data-filter="damage">Damage</button>
+                        <button class="filter-btn" data-filter="support">Support</button>
+                    </div>
+                </div>
+                <div class="heroes-grid" id="top-heroes">
+                    <div class="loading">Loading hero statistics...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'https://overfast-api.tekrop.fr';
+        const BATTLETAG = 'F0m-2582';
+
+        const HERO_ROLES = {
+            'ana': 'support', 'baptiste': 'support', 'brigitte': 'support', 'kiriko': 'support',
+            'lucio': 'support', 'mercy': 'support', 'moira': 'support', 'zenyatta': 'support',
+            'lifeweaver': 'support', 'illari': 'support', 'juno': 'support',
+            'dva': 'tank', 'junker-queen': 'tank', 'orisa': 'tank', 'ramattra': 'tank',
+            'reinhardt': 'tank', 'roadhog': 'tank', 'sigma': 'tank', 'winston': 'tank',
+            'wrecking-ball': 'tank', 'zarya': 'tank', 'mauga': 'tank',
+            'ashe': 'damage', 'bastion': 'damage', 'cassidy': 'damage', 'echo': 'damage',
+            'genji': 'damage', 'hanzo': 'damage', 'junkrat': 'damage', 'mei': 'damage',
+            'pharah': 'damage', 'reaper': 'damage', 'soldier-76': 'damage', 'sombra': 'damage',
+            'symmetra': 'damage', 'torbjorn': 'damage', 'tracer': 'damage', 'widowmaker': 'damage',
+            'venture': 'damage'
+        };
+
+        // Hero icon mapping
+        const HERO_ICONS = {
+            'ana': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'ashe': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/39aae28e78db2c2e18b2bb0b34d3c1f6b28f3e5b00f8b66e9b4e6c7b7d5f6e0.png',
+            'baptiste': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/e6ee000e6e4e2c5c5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5.png',
+            'bastion': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'brigitte': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'cassidy': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'dva': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'doomfist': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'echo': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'genji': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'hanzo': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'junkrat': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'lucio': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'mei': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'mercy': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'moira': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'orisa': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'pharah': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'reaper': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'reinhardt': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'roadhog': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'sigma': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'soldier-76': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'sombra': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'symmetra': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'torbjorn': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'tracer': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'widowmaker': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'winston': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'wrecking-ball': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'zarya': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png',
+            'zenyatta': 'https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e9fac6ec0d3c5f58c6c28a4c3543e315924b0076a3c5e58cc4eb59f01e8e7c7.png'
+        };
+
+        let currentFilter = 'all';
+        let heroesData = [];
+
+        async function fetchWithErrorHandling(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status} - ${response.statusText}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Fetch error:', error);
+                throw error;
+            }
+        }
+
+        function formatTime(seconds) {
+            if (!seconds || seconds === 0) return '0h 0m';
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            return `${hours}h ${minutes}m`;
+        }
+
+        function formatNumber(num) {
+            if (!num) return '0';
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        function capitalizeWords(str) {
+            return str.split('-').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+        }
+
+        function getHeroIcon(heroKey) {
+            return HERO_ICONS[heroKey] || '/api/placeholder/80/80';
+        }
+
+        async function fetchPlayerStats() {
+            const loading = document.getElementById('loading');
+            const statsContainer = document.getElementById('stats-container');
+            const errorContainer = document.getElementById('error-container');
+            
+            loading.style.display = 'block';
+            statsContainer.style.display = 'none';
+            errorContainer.innerHTML = '';
+
+            try {
+                console.log('Fetching player summary...');
+                const summary = await fetchWithErrorHandling(`${API_BASE_URL}/players/${BATTLETAG}`);
+                console.log('Summary data:', summary);
+                
+                console.log('Fetching player stats...');
+                let stats = null;
+                try {
+                    stats = await fetchWithErrorHandling(`${API_BASE_URL}/players/${BATTLETAG}`);
+                    console.log('Stats data:', stats);
+                } catch (statsError) {
+                    console.warn('Could not fetch detailed stats:', statsError);
+                }
+
+                updatePlayerInfo(summary, stats);
+                if (stats) {
+                    updateCompetitiveStats(stats);
+                    updateCareerStats(stats);
+                    updateStadiumStats(stats);
+                    updateTopHeroes(stats);
+                }
+
+                loading.style.display = 'none';
+                statsContainer.style.display = 'block';
+                
+                setTimeout(() => {
+                    document.querySelectorAll('.fade-in, .fade-in-delay').forEach(el => {
+                        el.style.opacity = '1';
+                    });
+                }, 100);
+
+            } catch (error) {
+                console.error('Error fetching player data:', error);
+                loading.style.display = 'none';
+                errorContainer.innerHTML = `
+                    <div class="error-message">
+                        <h3>Unable to load player statistics</h3>
+                        <p>Please ensure the profile is public and try again later.</p>
+                        <small>Error: ${error.message}</small>
+                    </div>
+                `;
+            }
+        }
+
+        function updatePlayerInfo(summary, stats) {
+            const avatar = document.getElementById('player-avatar');
+            if (summary.avatar) {
+                avatar.src = summary.avatar;
+            }
+
+            const levelEl = document.getElementById('player-level');
+            levelEl.textContent = summary.competitive?.pc?.tank?.division ? 
+                summary.competitive.pc.tank.division : summary.level || '-';
+
+            const gamesWonEl = document.getElementById('games-won');
+            gamesWonEl.textContent = summary.games_won || '0';
+
+            const endorsementEl = document.getElementById('endorsement-level');
+            endorsementEl.textContent = summary.endorsement || '0';
+
+            const rankEl = document.getElementById('competitive-rank');
+            if (summary.competitive?.pc?.tank?.division) {
+                rankEl.textContent = summary.competitive.pc.tank.division;
+            } else {
+                rankEl.textContent = 'Unranked';
+            }
+        }
+
+        function updateCompetitiveStats(stats) {
+            const container = document.getElementById('competitive-stats');
+            
+            if (!stats.competitive || Object.keys(stats.competitive).length === 0) {
+                container.innerHTML = '<div class="stat-item"><span class="stat-label">No competitive data available</span></div>';
+                return;
+            }
+
+            let html = '';
+            
+            const competitive = stats.competitive;
+            
+            if (competitive.tank) {
+                html += `
+                    <div class="stat-item">
+                        <span class="stat-label">Tank Rank</span>
+                        <span class="stat-value">${competitive.tank.division || 'Unranked'}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Tank Games Won</span>
+                        <span class="stat-value">${competitive.tank.wins || '0'}</span>
+                    </div>
+                `;
+            }
+            
+            if (competitive.damage) {
+                html += `
+                    <div class="stat-item">
+                        <span class="stat-label">Damage Rank</span>
+                        <span class="stat-value">${competitive.damage.division || 'Unranked'}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Damage Games Won</span>
+                        <span class="stat-value">${competitive.damage.wins || '0'}</span>
+                    </div>
+                `;
+            }
+            
+            if (competitive.support) {
+                html += `
+                    <div class="stat-item">
+                        <span class="stat-label">Support Rank</span>
+                        <span class="stat-value">${competitive.support.division || 'Unranked'}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Support Games Won</span>
+                        <span class="stat-value">${competitive.support.wins || '0'}</span>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html || '<div class="stat-item"><span class="stat-label">No competitive data available</span></div>';
+        }
+
+        function updateCareerStats(stats) {
+            const container = document.getElementById('career-stats');
+            
+            if (!stats.career_stats || Object.keys(stats.career_stats).length === 0) {
+                container.innerHTML = '<div class="stat-item"><span class="stat-label">No career statistics available</span></div>';
+                return;
+            }
+
+            let html = '';
+            const careerStats = stats.career_stats;
+            
+            const allHeroStats = careerStats.all_heroes || {};
+            const gameStats = allHeroStats.game || {};
+            const combatStats = allHeroStats.combat || {};
+            const bestStats = allHeroStats.best || {};
+            
+            html += `
+                <div class="stat-item">
+                    <span class="stat-label">K/D Ratio</span>
+                    <span class="stat-value">${combatStats.eliminations_per_life ? combatStats.eliminations_per_life.toFixed(2) : 'N/A'}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Win Percentage</span>
+                    <span class="stat-value">${gameStats.win_percentage ? (gameStats.win_percentage * 100).toFixed(1) + '%' : 'N/A'}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Weapon Accuracy</span>
+                    <span class="stat-value">${combatStats.weapon_accuracy ? (combatStats.weapon_accuracy * 100).toFixed(1) + '%' : 'N/A'}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Critical Hit Accuracy</span>
+                    <span class="stat-value">${combatStats.critical_hit_accuracy ? (combatStats.critical_hit_accuracy * 100).toFixed(1) + '%' : 'N/A'}</span>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        function updateStadiumStats(stats) {
+            if (!stats.career_stats) return;
+            
+            const allHeroStats = stats.career_stats.all_heroes || {};
+            const gameStats = allHeroStats.game || {};
+            const combatStats = allHeroStats.combat || {};
+            const assistsStats = allHeroStats.assists || {};
+            
+            const playtimeEl = document.getElementById('total-playtime');
+            playtimeEl.textContent = formatTime(gameStats.time_played);
+            
+            const eliminationsEl = document.getElementById('total-eliminations');
+            eliminationsEl.textContent = formatNumber(combatStats.eliminations);
+        
+            const damageEl = document.getElementById('total-damage');
+            damageEl.textContent = formatNumber(combatStats.all_damage_done);
+            
+            const healingEl = document.getElementById('total-healing');
+            healingEl.textContent = formatNumber(assistsStats.healing_done);
+        }
+
+        function updateTopHeroes(stats) {
+            const container = document.getElementById('top-heroes');
+            
+            if (!stats.top_heroes || Object.keys(stats.top_heroes).length === 0) {
+                container.innerHTML = '<div class="stat-item"><span class="stat-label">No hero statistics available</span></div>';
+                return;
+            }
+
+            heroesData = [];
+            
+            for (const [heroKey, heroData] of Object.entries(stats.top_heroes)) {
+                if (heroData.time_played > 0) {
+                    heroesData.push({
+                        key: heroKey,
+                        name: capitalizeWords(heroKey),
+                        role: HERO_ROLES[heroKey] || 'unknown',
+                        timePlayed: heroData.time_played,
+                        winPercentage: heroData.win_percentage,
+                        gamesWon: heroData.games_won
+                    });
+                }
+            }
+            
+            heroesData.sort((a, b) => b.timePlayed - a.timePlayed);
+            
+            renderHeroes();
+        }
+
+        function renderHeroes() {
+            const container = document.getElementById('top-heroes');
+            
+            if (heroesData.length === 0) {
+                container.innerHTML = '<div class="stat-item"><span class="stat-label">No hero statistics available</span></div>';
+                return;
+            }
+            
+            let html = '';
+            
+            heroesData.forEach(hero => {
+                if (currentFilter !== 'all' && hero.role !== currentFilter) return;
+                
+                html += `
+                    <div class="hero-card" data-hero="${hero.key}" data-role="${hero.role}">
+                        <img class="hero-icon" src="${getHeroIcon(hero.key)}" alt="${hero.name}">
+                        <div class="hero-info">
+                            <h3 class="hero-name">${hero.name}</h3>
+                            <div class="hero-stats">
+                                <div class="hero-stat">
+                                    <span>Time Played</span>
+                                    <span class="hero-stat-value">${formatTime(hero.timePlayed)}</span>
+                                </div>
+                                <div class="hero-stat">
+                                    <span>Win Percentage</span>
+                                    <span class="hero-stat-value">${hero.winPercentage ? (hero.winPercentage * 100).toFixed(1) + '%' : 'N/A'}</span>
+                                </div>
+                                <div class="hero-stat">
+                                    <span>Games Won</span>
+                                    <span class="hero-stat-value">${hero.gamesWon || '0'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html || '<div class="hero-card"><div class="hero-info">No heroes found for this role</div></div>';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchPlayerStats();
+            
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderHeroes();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
