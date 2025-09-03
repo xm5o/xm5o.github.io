@@ -36,7 +36,7 @@ class ProjectsManager {
         description: 'If you need a charter, modcharter, or even a coder... Check my commission page for more details.',
         category: 'web',
         status: 'active',
-        image: './assets/avatar1.jpg',
+        image: './assets/fnf_commission.png',
         features: ['Chart', 'Modchart', 'Code', 'Free', 'Paid'],
         links: {
           website: 'commission/index.html',
@@ -45,6 +45,25 @@ class ProjectsManager {
         },
         badge: 'NEW',
         badgeType: 'success'
+      },
+      {
+        id: 'immortal-collection',
+        title: 'Immortal and DarkM7 Collection',
+        description: 'A mysterious project shrouded in secrecy. Something incredible is brewing behind the scenes...',
+        category: 'game',
+        status: 'coming-soon',
+        image: './assets/immortal_collection.png',
+        features: [
+          { icon: 'fas fa-question', text: 'Coming Soon...' }
+        ],
+        links: {
+          website: null,
+          demo: null,
+          github: null
+        },
+        badge: 'Coming Soon',
+        badgeType: 'coming-soon',
+        releaseDate: null
       },
       {
         id: 'psycho-funkin',
@@ -108,26 +127,26 @@ class ProjectsManager {
       //   badgeType: 'coming-soon',
       //   releaseDate: null
       // },
-      {
-        id: 'fortnite-hub',
-        title: 'Fortnite Hub',
-        description: 'Your one-stop destination for everything Fortnite, including guides, news, stats tracking and item shop updates.',
-        category: 'web',
-        status: 'active',
-        image: './assets/fnhub.png',
-        features: [
-          { icon: 'fas fa-tshirt', text: 'Skins & Cosmetics' },
-          { icon: 'fas fa-map', text: 'Map Updates' },
-          { icon: 'fas fa-calendar-alt', text: 'Tournaments' }
-        ],
-        links: {
-          website: 'https://xm5o.github.io/fortnite/',
-          demo: null,
-          github: null
-        },
-        badge: null, // Updated Daily
-        badgeType: null // success
-      }
+      // {
+      //   id: 'fortnite-hub',
+      //   title: 'Fortnite Hub',
+      //   description: 'Your one-stop destination for everything Fortnite, including guides, news, stats tracking and item shop updates.',
+      //   category: 'web',
+      //   status: 'active',
+      //   image: './assets/fnhub.png',
+      //   features: [
+      //     { icon: 'fas fa-tshirt', text: 'Skins & Cosmetics' },
+      //     { icon: 'fas fa-map', text: 'Map Updates' },
+      //     { icon: 'fas fa-calendar-alt', text: 'Tournaments' }
+      //   ],
+      //   links: {
+      //     website: 'https://xm5o.github.io/fortnite/',
+      //     demo: null,
+      //     github: null
+      //   },
+      //   badge: null, // Updated Daily
+      //   badgeType: null // success
+      // }
     ];
   }
 
