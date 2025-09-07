@@ -46,6 +46,7 @@ class ProjectsManager {
         badge: 'NEW',
         badgeType: 'success'
       },
+      /*
       {
         id: 'immortal-collection',
         title: 'Immortal and DarkM7 Collection',
@@ -65,6 +66,7 @@ class ProjectsManager {
         badgeType: 'coming-soon',
         releaseDate: null
       },
+      */
       {
         id: 'psycho-funkin',
         title: 'Psycho Funkin',
