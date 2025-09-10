@@ -1,295 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Personal portfolio of a developer showcasing projects, skills, and creative coding journey"/>
-    <meta name="keywords" content="developer, portfolio, web development, mobile apps, gaming, coding projects"/>
 
-    <meta property="og:title" content="Immortal" />
-    <meta property="og:type" content="website" />
-    <meta property="og:description" content="Personal portfolio of a creative developer (maybe)"/>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Personal portfolio of a developer showcasing projects, skills, and creative coding journey" />
+  <meta name="keywords" content="developer, portfolio, web development, mobile apps, gaming, coding projects" />
 
-    <!-- <link rel="preload" href="assets/pfp.jpg" as="image" type="image/jpeg" />
+  <meta property="og:title" content="Immortal" />
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content="Personal portfolio of a creative developer (maybe)" />
+
+  <!-- <link rel="preload" href="assets/pfp.jpg" as="image" type="image/jpeg" />
     <link rel="preload" href="css/style.css" as="style" /> -->
 
-    <title>Immortal</title>
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/contact.css" />
-    <link rel="stylesheet" href="css/blog.css" />
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="scripts/translate.js"></script>
-    <!-- <script src="scripts/mobile-enhancements.js" defer></script> -->
-  </head>
+  <title>Immortal</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/contact.css" />
+  <link rel="stylesheet" href="css/blog.css" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Arabic Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- RTL Support CSS -->
+  <style>
+    /* RTL Support */
+    [dir="rtl"] {
+      font-family: 'Tajawal', 'Cairo', Arial, sans-serif;
+    }
+    
+    [dir="rtl"] .navbar {
+      flex-direction: row-reverse;
+    }
+    
+    [dir="rtl"] .home-content {
+      text-align: right;
+    }
+    
+    [dir="rtl"] .hero-text {
+      text-align: right;
+    }
+    
+    [dir="rtl"] .social-buttons {
+      flex-direction: row-reverse;
+    }
+    
+    [dir="rtl"] .cta-group {
+      flex-direction: row-reverse;
+    }
+    
+    [dir="rtl"] .about-content-wrapper {
+      flex-direction: row-reverse;
+    }
+    
+    [dir="rtl"] .services-container {
+      direction: rtl;
+    }
+    
+    [dir="rtl"] .projects-grid {
+      direction: rtl;
+    }
+    
+    [dir="rtl"] .songs-grid {
+      direction: rtl;
+    }
+    
+    [dir="rtl"] .song-info {
+      text-align: right;
+    }
+    
+    [dir="rtl"] .song-meta {
+      flex-direction: row-reverse;
+    }
+    
+    [dir="rtl"] .contact-form {
+      direction: rtl;
+    }
+    
+    [dir="rtl"] .contact-info {
+      text-align: right;
+    }
+    
+    /* Preserve English text direction for song titles and artist names */
+    [dir="rtl"] .song-title,
+    [dir="rtl"] .song-artist,
+    [dir="rtl"] .current-song-title,
+    [dir="rtl"] .current-song-artist {
+      direction: ltr;
+      text-align: left;
+    }
+    
+    /* Adjust margins and paddings for RTL */
+    [dir="rtl"] .mobile-language-toggle {
+      margin-right: auto;
+      margin-left: 0;
+    }
+    
+    [dir="rtl"] .desktop-language {
+      margin-left: auto;
+      margin-right: 0;
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="scripts/translate.js"></script>
+  <!-- <script src="scripts/mobile-enhancements.js" defer></script> -->
+</head>
 
-  <body>
-    <header class="header" role="banner">
-      <a href="#" class="logo" aria-label="Personal Logo">Immo<span>rtal</span></a>
+<body>
+  <header class="header" role="banner">
+    <a href="#" class="logo" aria-label="Personal Logo">Immo<span>rtal</span></a>
 
-      <a id="menu-icon" aria-label="Toggle Mobile Menu" aria-expanded="false">
-        <i class="bx bx-menu"></i>
-      </a>
+    <a id="menu-icon" aria-label="Toggle Mobile Menu" aria-expanded="false">
+      <i class="bx bx-menu"></i>
+    </a>
 
-      <nav class="navbar" role="navigation" aria-label="Main Navigation">
-        <button id="close-menu" aria-label="Close Mobile Menu">
-          <i class="bx bx-x"></i>
-        </button>
-        <a href="#home" data-translate="nav.home">Home</a>
-        <a href="#about" data-translate="nav.about">About</a>
-        <a href="#services" data-translate="nav.skills">Skills</a>
-        <a href="#projects" data-translate="nav.projects">Projects</a>
-        <a href="#blog" data-translate="nav.blog">Blog</a>
-        <a href="#contact" data-translate="nav.contact">Contact</a>
-
-        <div class="mobile-language-toggle">
-          <button id="mobile-language-toggle" aria-label="Toggle Language">
-            <i class="bx bx-globe"></i> <span id="mobile-language-text">EN</span>
-          </button>
-        </div>
-      </nav>
-
-      <button id="desktop-language-toggle" class="desktop-language" aria-label="Toggle Language">
-        <i class="bx bx-globe"></i> <span id="desktop-language-text">EN</span>
+    <nav class="navbar" role="navigation" aria-label="Main Navigation">
+      <button id="close-menu" aria-label="Close Mobile Menu">
+        <i class="bx bx-x"></i>
       </button>
-    </header>
+      <a href="#home" data-translate="nav.home">Home</a>
+      <a href="#about" data-translate="nav.about">About</a>
+      <a href="#services" data-translate="nav.skills">Skills</a>
+      <a href="#projects" data-translate="nav.projects">Projects</a>
+      <a href="#music" data-translate="nav.music">Music</a>
+      <a href="#blog" data-translate="nav.blog">Blog</a>
+      <a href="#contact" data-translate="nav.contact">Contact</a>
 
-    <!-- Home Section -->
-    <section class="home" id="home">
-      <!-- Enhanced Floating Particles Background -->
-      <div class="particles-container">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
+      <div class="mobile-language-toggle">
+        <button id="mobile-language-toggle" aria-label="Toggle Language">
+          <i class="bx bx-globe"></i> <span id="mobile-language-text">EN</span>
+        </button>
       </div>
+    </nav>
 
-      <!-- Enhanced Geometric Background Elements -->
-      <div class="geometric-bg">
-        <div class="geo-shape geo-circle"></div>
-        <div class="geo-shape geo-triangle"></div>
-        <div class="geo-shape geo-square"></div>
-        <div class="geo-shape geo-hexagon"></div>
-        <div class="geo-shape geo-diamond"></div>
+    <button id="desktop-language-toggle" class="desktop-language" aria-label="Toggle Language">
+      <i class="bx bx-globe"></i> <span id="desktop-language-text">EN</span>
+    </button>
+  </header>
+
+  <!-- Home Section -->
+  <section class="home" id="home">
+    <!-- Enhanced Floating Particles Background -->
+    <div class="particles-container">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+
+    <!-- Enhanced Geometric Background Elements -->
+    <div class="geometric-bg">
+      <div class="geo-shape geo-circle"></div>
+      <div class="geo-shape geo-triangle"></div>
+      <div class="geo-shape geo-square"></div>
+      <div class="geo-shape geo-hexagon"></div>
+      <div class="geo-shape geo-diamond"></div>
+    </div>
+
+    <!-- Animated Background Grid -->
+    <div class="grid-background">
+      <div class="grid-line grid-vertical"></div>
+      <div class="grid-line grid-horizontal"></div>
+    </div>
+
+    <!-- Floating Code Elements -->
+    <div class="code-elements">
+      <div class="code-snippet code-1">
+        <span class="code-bracket">{</span>
+        <span class="code-text">creativity</span>
+        <span class="code-bracket">}</span>
       </div>
-
-      <!-- Animated Background Grid -->
-      <div class="grid-background">
-        <div class="grid-line grid-vertical"></div>
-        <div class="grid-line grid-horizontal"></div>
-      </div>
-
-      <!-- Floating Code Elements -->
-      <div class="code-elements">
-        <div class="code-snippet code-1">
-          <span class="code-bracket">{</span>
-          <span class="code-text">creativity</span>
-          <span class="code-bracket">}</span>
-        </div>
-        <!-- <div class="code-snippet code-2">
+      <!-- <div class="code-snippet code-2">
           <span class="code-bracket">&lt;</span>
           <span class="code-text">innovation</span>
           <span class="code-bracket">/&gt;</span>
         </div> -->
-        <div class="code-snippet code-3">
-          <span class="code-text">console.log</span>
-          <span class="code-bracket">(</span>
-          <span class="code-string">"hello world"</span>
-          <span class="code-bracket">)</span>
-        </div>
+      <div class="code-snippet code-3">
+        <span class="code-text">console.log</span>
+        <span class="code-bracket">(</span>
+        <span class="code-string">"hello world"</span>
+        <span class="code-bracket">)</span>
       </div>
+    </div>
 
-      <div class="home-content">
-        <div class="hero-text">
-          <!-- Enhanced Text Reveal with Stagger Animation -->
-          <div class="text-reveal-container">
-            <div class="text-reveal">
-              <h1 class="gradient-heading">
-                <span class="word-animate" style="--delay: 0.1s">It's</span>
-                <span class="immortal-text word-animate" style="--delay: 0.3s">Immortal</span>
-                <div class="heading-decoration"></div>
-              </h1>
-            </div>
-            
-            <!-- Subtitle with Enhanced Animation -->
-            <div class="subtitle-container">
-              <div class="subtitle-line"></div>
-              <p class="subtitle-text">Where Code Meets Creativity</p>
-              <div class="subtitle-line"></div>
-            </div>
+    <div class="home-content">
+      <div class="hero-text">
+        <!-- Enhanced Text Reveal with Stagger Animation -->
+        <div class="text-reveal-container">
+          <div class="text-reveal">
+            <h1 class="gradient-heading">
+              <span class="word-animate" style="--delay: 0.1s">It's</span>
+              <span class="immortal-text word-animate" style="--delay: 0.3s">Immortal</span>
+              <div class="heading-decoration"></div>
+            </h1>
           </div>
-          
-          <div class="animated-titles">
-            <h3 class="typewriter">
-              I'm a <span class="role-switch animated-role">Web Developer</span>
-            </h3>
-            <p class="tagline enhanced-tagline">
-              <span class="tagline-highlight">He/Him</span> | Creative developer building 
-              <span class="tagline-highlight">digital experiences</span> that inspire and 
-              <span class="tagline-highlight">transform ideas</span> into reality
-            </p>
-            
-            <!-- New Stats Section -->
-            <div class="hero-stats">
-              <div class="stat-item">
-                <div class="stat-number" data-target="4">0</div>
-                <div class="stat-label">Years Experience</div>
-              </div>
-              <div class="stat-divider"></div>
-              <div class="stat-item">
-                <div class="stat-number" data-target="4">0</div>
-                <div class="stat-label">Projects Completed</div>
-              </div>
-              <!-- <div class="stat-divider"></div>
+
+          <!-- Subtitle with Enhanced Animation -->
+          <div class="subtitle-container">
+            <div class="subtitle-line"></div>
+            <p class="subtitle-text">Where Code Meets Creativity</p>
+            <div class="subtitle-line"></div>
+          </div>
+        </div>
+
+        <div class="animated-titles">
+          <h3 class="typewriter">
+            I'm a <span class="role-switch animated-role">Web Developer</span>
+          </h3>
+          <p class="tagline enhanced-tagline">
+            <span class="tagline-highlight">He/Him</span> | Creative developer building
+            <span class="tagline-highlight">digital experiences</span> that inspire and
+            <span class="tagline-highlight">transform ideas</span> into reality
+          </p>
+
+          <!-- New Stats Section -->
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="stat-number" data-target="4">0</div>
+              <div class="stat-label">Years Experience</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-number" data-target="4">0</div>
+              <div class="stat-label">Projects Completed</div>
+            </div>
+            <!-- <div class="stat-divider"></div>
               <div class="stat-item">
                 <div class="stat-number" data-target="20">0</div>
                 <div class="stat-label">Happy Clients</div>
               </div> -->
-            </div>
-
           </div>
 
-          <!-- Enhanced Social Links with New Design -->
-          <div class="social-links enhanced-social">
-            <!-- <div class="social-label">Connect with me</div> -->
-            <div class="social-buttons">
-              <a href="https://youtube.com/@voixj" target="_blank" aria-label="YouTube" class="social-btn youtube">
-                <div class="social-bg"></div>
-                <i class="bx bxl-youtube"></i>
-                <!-- <span class="social-tooltip">YouTube</span> -->
-                <div class="hover-ripple"></div>
-              </a>
-              <a href="https://instagram.com/xm5o_" target="_blank" aria-label="Instagram" class="social-btn instagram">
-                <div class="social-bg"></div>
-                <i class="bx bxl-instagram"></i>
-                <!-- <span class="social-tooltip">Instagram</span> -->
-                <div class="hover-ripple"></div>
-              </a>
-              <a href="https://discord.com/users/1282747277206884436" target="_blank" aria-label="Discord" class="social-btn discord">
-                <div class="social-bg"></div>
-                <i class="bx bxl-discord-alt"></i>
-                <!-- <span class="social-tooltip">Discord</span> -->
-                <div class="hover-ripple"></div>
-              </a>
-              <a href="https://www.tiktok.com/@xm5o_" target="_blank" aria-label="TikTok" class="social-btn tiktok">
-                <div class="social-bg"></div>
-                <i class="bx bxl-tiktok"></i>
-                <!-- <span class="social-tooltip">TikTok</span> -->
-                <div class="hover-ripple"></div>
-              </a>
-              <a href="https://x.com/voixj1" target="_blank" aria-label="Twitter" class="social-btn twitter">
-                <div class="social-bg"></div>
-                <i class="bx bxl-twitter"></i>
-                <!-- <span class="social-tooltip">Twitter</span> -->
-                <div class="hover-ripple"></div>
-              </a>
-              <a href="https://www.twitch.tv/xm5o_" target="_blank" aria-label="Twitch" class="social-btn twitch">
-                <div class="social-bg"></div>
-                <i class="bx bxl-twitch"></i>
-                <!-- <span class="social-tooltip">Twitch</span> -->
-                <div class="hover-ripple"></div>
-              </a>
-            </div>
-          </div>
+        </div>
 
-          <!-- Enhanced CTA Buttons with New Design -->
-          <div class="cta-group enhanced-cta">
-            <a href="#projects" class="cta-btn projects-cta enhanced-btn primary-btn">
-              <div class="btn-bg"></div>
-              <div class="btn-icon">
-                <i class="bx bx-code-alt"></i>
-              </div>
-              <span class="btn-text" style="color: var(--text-color);">Explore My Work</span>
-              <div class="btn-shine"></div>
-              <div class="btn-particles">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
+        <!-- Enhanced Social Links with New Design -->
+        <div class="social-links enhanced-social">
+          <!-- <div class="social-label">Connect with me</div> -->
+          <div class="social-buttons">
+            <a href="https://youtube.com/@voixj" target="_blank" aria-label="YouTube" class="social-btn youtube">
+              <div class="social-bg"></div>
+              <i class="bx bxl-youtube"></i>
+              <!-- <span class="social-tooltip">YouTube</span> -->
+              <div class="hover-ripple"></div>
             </a>
-            <a href="commission/index.html" class="cta-btn commission-cta enhanced-btn secondary-btn">
-              <div class="btn-bg"></div>
-              <div class="btn-icon">
-                <i class="bx bx-brush"></i>
-              </div>
-              <span class="btn-text" style="color: var(--accent-color);">Hire Me</span>
-              <div class="btn-shine"></div>
+            <a href="https://instagram.com/xm5o_" target="_blank" aria-label="Instagram" class="social-btn instagram">
+              <div class="social-bg"></div>
+              <i class="bx bxl-instagram"></i>
+              <!-- <span class="social-tooltip">Instagram</span> -->
+              <div class="hover-ripple"></div>
+            </a>
+            <a href="https://discord.com/users/1282747277206884436" target="_blank" aria-label="Discord"
+              class="social-btn discord">
+              <div class="social-bg"></div>
+              <i class="bx bxl-discord-alt"></i>
+              <!-- <span class="social-tooltip">Discord</span> -->
+              <div class="hover-ripple"></div>
+            </a>
+            <a href="https://www.tiktok.com/@xm5o_" target="_blank" aria-label="TikTok" class="social-btn tiktok">
+              <div class="social-bg"></div>
+              <i class="bx bxl-tiktok"></i>
+              <!-- <span class="social-tooltip">TikTok</span> -->
+              <div class="hover-ripple"></div>
+            </a>
+            <a href="https://x.com/voixj1" target="_blank" aria-label="Twitter" class="social-btn twitter">
+              <div class="social-bg"></div>
+              <i class="bx bxl-twitter"></i>
+              <!-- <span class="social-tooltip">Twitter</span> -->
+              <div class="hover-ripple"></div>
+            </a>
+            <a href="https://www.twitch.tv/xm5o_" target="_blank" aria-label="Twitch" class="social-btn twitch">
+              <div class="social-bg"></div>
+              <i class="bx bxl-twitch"></i>
+              <!-- <span class="social-tooltip">Twitch</span> -->
+              <div class="hover-ripple"></div>
             </a>
           </div>
+        </div>
 
-          <!-- New Skills Preview -->
-          <div class="skills-preview" style="display: none;">
-            <!-- <div class="skill-tag">Lua</div> -->
-            <!-- <div class="skill-tag">Haxe</div> -->
-            <div class="skill-tag">JavaScript</div>
-            <div class="skill-tag">CSS3</div>
-            <div class="skill-tag">HTML5</div>
-          </div>
+        <!-- Enhanced CTA Buttons with New Design -->
+        <div class="cta-group enhanced-cta">
+          <a href="#projects" class="cta-btn projects-cta enhanced-btn primary-btn">
+            <div class="btn-bg"></div>
+            <div class="btn-icon">
+              <i class="bx bx-code-alt"></i>
+            </div>
+            <span class="btn-text" style="color: var(--text-color);">Explore My Work</span>
+            <div class="btn-shine"></div>
+            <div class="btn-particles">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </a>
+          <a href="commission/index.html" class="cta-btn commission-cta enhanced-btn secondary-btn">
+            <div class="btn-bg"></div>
+            <div class="btn-icon">
+              <i class="bx bx-brush"></i>
+            </div>
+            <span class="btn-text" style="color: var(--accent-color);">Hire Me</span>
+            <div class="btn-shine"></div>
+          </a>
+        </div>
+
+        <!-- New Skills Preview -->
+        <div class="skills-preview" style="display: none;">
+          <!-- <div class="skill-tag">Lua</div> -->
+          <!-- <div class="skill-tag">Haxe</div> -->
+          <div class="skill-tag">JavaScript</div>
+          <div class="skill-tag">CSS3</div>
+          <div class="skill-tag">HTML5</div>
         </div>
       </div>
+    </div>
 
-      <!-- Enhanced Hero Image -->
-      <div class="hero-image">
-        <div class="image-wrapper">
-          <!-- Animated Border -->
-          <div class="image-border">
-            <div class="border-segment"></div>
-            <div class="border-segment"></div>
-            <div class="border-segment"></div>
-            <div class="border-segment"></div>
-          </div>
-          
-          <!-- Profile Image with Enhanced Effects -->
-          <div class="profile-container">
-            <img src="assets/pfp.jpg" alt="Profile" loading="lazy" class="profile-img" />
-            <div class="profile-overlay"></div>
-            
-            <!-- Floating Icons Around Image -->
-            <div class="floating-icon floating-icon-1">
-              <i class="bx bx-code-curly"></i>
-            </div>
-            <div class="floating-icon floating-icon-2">
-              <i class="bx bx-palette"></i>
-            </div>
-            <div class="floating-icon floating-icon-3">
-              <i class="bx bx-rocket"></i>
-            </div>
-            <div class="floating-icon floating-icon-4">
-              <i class="bx bx-bulb"></i>
-            </div>
-          </div>
-          
-          <!-- Enhanced Glow Effects -->
-          <div class="glow-effect primary-glow"></div>
-          <div class="glow-effect secondary-glow"></div>
-          <div class="orbital-ring"></div>
+    <!-- Enhanced Hero Image -->
+    <div class="hero-image">
+      <div class="image-wrapper">
+        <!-- Animated Border -->
+        <div class="image-border">
+          <div class="border-segment"></div>
+          <div class="border-segment"></div>
+          <div class="border-segment"></div>
+          <div class="border-segment"></div>
         </div>
+
+        <!-- Profile Image with Enhanced Effects -->
+        <div class="profile-container">
+          <img src="assets/pfp.jpg" alt="Profile" loading="lazy" class="profile-img" />
+          <div class="profile-overlay"></div>
+
+          <!-- Floating Icons Around Image -->
+          <div class="floating-icon floating-icon-1">
+            <i class="bx bx-code-curly"></i>
+          </div>
+          <div class="floating-icon floating-icon-2">
+            <i class="bx bx-palette"></i>
+          </div>
+          <div class="floating-icon floating-icon-3">
+            <i class="bx bx-rocket"></i>
+          </div>
+          <div class="floating-icon floating-icon-4">
+            <i class="bx bx-bulb"></i>
+          </div>
+        </div>
+
+        <!-- Enhanced Glow Effects -->
+        <div class="glow-effect primary-glow"></div>
+        <div class="glow-effect secondary-glow"></div>
+        <div class="orbital-ring"></div>
+      </div>
+    </div>
+
+    <!-- Enhanced Visitor Counter -->
+    <div class="visitor-counter enhanced-counter">
+      <div class="counter-glow"></div>
+      <div class="db-status" id="dbStatus"></div>
+
+      <div class="counter-icon">
+        <i class="bx bx-show-alt"></i>
+        <div class="icon-pulse"></div>
       </div>
 
-      <!-- Enhanced Visitor Counter -->
-      <div class="visitor-counter enhanced-counter">
-        <div class="counter-glow"></div>
-        <div class="db-status" id="dbStatus"></div>
-        
-        <div class="counter-icon">
-          <i class="bx bx-show-alt"></i>
-          <div class="icon-pulse"></div>
-        </div>
-        
-        <div class="counter-content">
-          <h4>Site Views</h4>
-          <div class="counter-number" id="visitorCount">0</div>
-          <!-- <div class="counter-stats" style="display: none;">
+      <div class="counter-content">
+        <h4>Site Views</h4>
+        <div class="counter-number" id="visitorCount">0</div>
+        <!-- <div class="counter-stats" style="display: none;">
             <div class="stat-item">
               <i class="bx bx-calendar"></i>
               <span id="todayViews">0 today</span>
@@ -299,234 +384,224 @@
               <span id="lastVisit">Just now</span>
             </div>
           </div> -->
-        </div>
-        
-        <!-- Counter Animation Lines -->
-        <div class="counter-lines">
-          <div class="line line-1"></div>
-          <div class="line line-2"></div>
-          <div class="line line-3"></div>
-        </div>
       </div>
 
-      <!-- Scroll Indicator -->
-      <div class="scroll-indicator">
-        <!-- <div class="scroll-text">Scroll Down</div> -->
-        <div class="scroll-arrow">
-          <i class="bx bx-chevron-down"></i>
-        </div>
-      </div>
-    </section>
-
-    <!-- Enhanced Discord Server Modal -->
-    <div id="discordModal" class="discord-modal">
-      <div class="modal-content">
-        <span class="close-modal">&times;</span>
-
-        <!-- Server Banner with optional background image and floating animations -->
-        <div id="serverBanner" class="server-banner">
-          <img
-            id="serverIcon"
-            src="assets/pfp.jpg"
-            alt="Server Icon"
-            class="server-icon"
-          />
-        </div>
-
-        <div class="server-info">
-          <h3 id="serverName">Immortal Community</h3>
-          <p id="serverDescription">
-            Join our creative developer community where we share knowledge,
-            collaborate on projects, and grow together as developers.
-          </p>
-
-          <div class="server-stats">
-            <div class="stat">
-              <i class="bx bxs-user"></i>
-              <div class="stat-number" id="memberCount">0</div>
-              <div class="stat-label">Members</div>
-            </div>
-            <div class="stat">
-              <i class="bx bxs-user-check"></i>
-              <div class="stat-number" id="onlineCount">0</div>
-              <div class="stat-label">Online</div>
-            </div>
-          </div>
-
-          <a
-            id="joinButton"
-            href="https://discord.gg/WBQssXDfKJ"
-            target="_blank"
-            class="join-btn"
-          >
-            <i class="bx bxl-discord-alt"></i>
-            Join Server
-          </a>
-        </div>
+      <!-- Counter Animation Lines -->
+      <div class="counter-lines">
+        <div class="line line-1"></div>
+        <div class="line line-2"></div>
+        <div class="line line-3"></div>
       </div>
     </div>
 
-    <!-- Loading Indicator -->
-    <div id="loadingIndicator" class="loading-indicator" style="display: none">
-      <div class="spinner">
-        <div class="spinner-inner"></div>
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+      <!-- <div class="scroll-text">Scroll Down</div> -->
+      <div class="scroll-arrow">
+        <i class="bx bx-chevron-down"></i>
       </div>
-      <p>Please wait...</p>
-      <!-- <div class="progress-bar">
+    </div>
+  </section>
+
+  <!-- Enhanced Discord Server Modal -->
+  <div id="discordModal" class="discord-modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+
+      <!-- Server Banner with optional background image and floating animations -->
+      <div id="serverBanner" class="server-banner">
+        <img id="serverIcon" src="assets/pfp.jpg" alt="Server Icon" class="server-icon" />
+      </div>
+
+      <div class="server-info">
+        <h3 id="serverName">Immortal Community</h3>
+        <p id="serverDescription">
+          Join our creative developer community where we share knowledge,
+          collaborate on projects, and grow together as developers.
+        </p>
+
+        <div class="server-stats">
+          <div class="stat">
+            <i class="bx bxs-user"></i>
+            <div class="stat-number" id="memberCount">0</div>
+            <div class="stat-label">Members</div>
+          </div>
+          <div class="stat">
+            <i class="bx bxs-user-check"></i>
+            <div class="stat-number" id="onlineCount">0</div>
+            <div class="stat-label">Online</div>
+          </div>
+        </div>
+
+        <a id="joinButton" href="https://discord.gg/WBQssXDfKJ" target="_blank" class="join-btn">
+          <i class="bx bxl-discord-alt"></i>
+          Join Server
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div id="loadingIndicator" class="loading-indicator" style="display: none">
+    <div class="spinner">
+      <div class="spinner-inner"></div>
+    </div>
+    <p>Please wait...</p>
+    <!-- <div class="progress-bar">
         <div class="progress"></div>
       </div> -->
-    </div>
+  </div>
 
-    <div id="mainContent">
-      <!-- About Section -->
-      <section class="about" id="about">
-        <div class="about-container">
-          <div class="about-header">
-            <h2>About <span>Me</span></h2>
-            <div class="tab-navigation">
-              <button class="tab-btn active" data-tab="profile">Profile</button>
-              <button class="tab-btn" data-tab="experience">Experience</button>
-              <!-- <button class="tab-btn" data-tab="education">Education</button> -->
+  <div id="mainContent">
+    <!-- About Section -->
+    <section class="about" id="about">
+      <div class="about-container">
+        <div class="about-header">
+          <h2>About <span>Me</span></h2>
+          <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="profile">Profile</button>
+            <button class="tab-btn" data-tab="experience">Experience</button>
+            <!-- <button class="tab-btn" data-tab="education">Education</button> -->
+          </div>
+        </div>
+
+        <div class="about-content-wrapper">
+          <div class="about-img-container">
+            <img src="assets/pfp.jpg" alt="Profile Picture" />
+            <div class="experience-badge">
+              <span class="years">4+</span>
+              <span class="text">Years<br />Coding</span>
             </div>
           </div>
 
-          <div class="about-content-wrapper">
-            <div class="about-img-container">
-              <img src="assets/pfp.jpg" alt="Profile Picture" />
-              <div class="experience-badge">
-                <span class="years">4+</span>
-                <span class="text">Years<br />Coding</span>
-              </div>
-            </div>
-
-            <div class="about-content-tabs">
-              <!-- Profile Tab -->
-              <div class="tab-content active" id="profile-tab">
-                <div class="about-text">
-                  <p>
-                    I'm a normal person who loves to code random things and make websites
-                    and love to play games and chill with <span>friends</span>.
-                    Always looking to make some <span>new friends</span> and
-                    love to chat with everyone <span>(maybe)</span>. My Favorite
-                    game is <span>Overwatch</span>.
-                  </p>
-                  <!-- <p>
+          <div class="about-content-tabs">
+            <!-- Profile Tab -->
+            <div class="tab-content active" id="profile-tab">
+              <div class="about-text">
+                <p>
+                  I'm a normal person who loves to code random things and make websites
+                  and love to play games and chill with <span>friends</span>.
+                  Always looking to make some <span>new friends</span> and
+                  love to chat with everyone <span>(maybe)</span>. My Favorite
+                  game is <span>Overwatch</span>.
+                </p>
+                <!-- <p>
                     I specialize in creating interactive web experiences, mobile
                     applications projects with a focus on user engagement and
                     clean code.
                   </p> -->
-                </div>
+              </div>
 
-                <div class="personal-info">
-                  <div class="info-item">
-                    <span class="label">Name:</span>
-                    <span class="value">Immortal</span>
-                  </div>
-                  <div class="info-item">
-                    <span class="label">Age:</span>
-                    <span class="value">??</span>
-                  </div>
-                  <div class="info-item">
-                    <span class="label">Pronouns:</span>
-                    <span class="value">He/Him</span>
-                  </div>
-                  <div class="info-item">
-                    <span class="label">Location:</span>
-                    <span class="value">Earth</span>
-                  </div>
-                  <div class="info-item">
-                    <span class="label">Freelance:</span>
-                    <span class="value available">Available</span>
-                  </div>
+              <div class="personal-info">
+                <div class="info-item">
+                  <span class="label">Name:</span>
+                  <span class="value">Immortal</span>
                 </div>
-
-                <!-- Skill Progress Bars -->
-                <div class="skill-section">
-                  <h3>Technical Skills</h3>
-                  <div class="skill-bars">
-                    <div class="skill-bar">
-                      <div class="skill-info">
-                        <span>Coding</span>
-                        <span class="percent">45%</span>
-                      </div>
-                      <div class="skill-progress-bg">
-                        <div class="skill-progress" value="45"></div>
-                      </div>
-                    </div>
-                    <div class="skill-bar">
-                      <div class="skill-info">
-                        <span>Gaming</span>
-                        <span class="percent">55%</span>
-                      </div>
-                      <div class="skill-progress-bg">
-                        <div class="skill-progress" value="55"></div>
-                      </div>
-                    </div>
-                  </div>
+                <div class="info-item">
+                  <span class="label">Age:</span>
+                  <span class="value">??</span>
                 </div>
-
-                <div class="tech-stack">
-                  <h3>Technologies I Work With</h3>
-                  <div class="tech-icons">
-                    <div class="tech-icon">
-                      <i class="fab fa-html5"></i>
-                      <span>HTML5</span>
-                    </div>
-                    <div class="tech-icon">
-                      <i class="fab fa-css3-alt"></i>
-                      <span>CSS3</span>
-                    </div>
-                    <div class="tech-icon">
-                      <i class="fab fa-js"></i>
-                      <span>JavaScript</span>
-                    </div>
-                  </div>
+                <div class="info-item">
+                  <span class="label">Pronouns:</span>
+                  <span class="value">He/Him</span>
                 </div>
-
-                <div class="cta-buttons">
-                  <a href="#contact" class="btn">Get In Touch</a>
+                <div class="info-item">
+                  <span class="label">Location:</span>
+                  <span class="value">Earth</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Freelance:</span>
+                  <span class="value available">Available</span>
                 </div>
               </div>
 
-              <!-- Experience Tab -->
-              <div class="tab-content" id="experience-tab">
-                <div class="timeline">
-                  <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">Present</div>
-                    <div class="timeline-content">
-                      <h3>Discord Bot Developer</h3>
-                      <p>
-                        Created and maintained "Selina" Discord bot with
-                        moderation tools, fun commands, and server management
-                        features
-                      </p>
+              <!-- Skill Progress Bars -->
+              <div class="skill-section">
+                <h3>Technical Skills</h3>
+                <div class="skill-bars">
+                  <div class="skill-bar">
+                    <div class="skill-info">
+                      <span>Coding</span>
+                      <span class="percent">45%</span>
+                    </div>
+                    <div class="skill-progress-bg">
+                      <div class="skill-progress" value="45"></div>
                     </div>
                   </div>
-                  <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">2024 - Present</div>
-                    <div class="timeline-content">
-                      <h3>FNF Modcharter</h3>
-                      <p>
-                        Designed and developed custom charts and game mechanics
-                        for Friday Night Funkin' mods including "Psycho Funkin"
-                      </p>
+                  <div class="skill-bar">
+                    <div class="skill-info">
+                      <span>Gaming</span>
+                      <span class="percent">55%</span>
                     </div>
-                  </div>
-                  <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">2023 - Present</div>
-                    <div class="timeline-content">
-                      <h3>Web Developer</h3>
-                      <p>Created various web projects.</p>
+                    <div class="skill-progress-bg">
+                      <div class="skill-progress" value="55"></div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Education Tab -->
-              <!-- <div class="tab-content" id="education-tab">
+              <div class="tech-stack">
+                <h3>Technologies I Work With</h3>
+                <div class="tech-icons">
+                  <div class="tech-icon">
+                    <i class="fab fa-html5"></i>
+                    <span>HTML5</span>
+                  </div>
+                  <div class="tech-icon">
+                    <i class="fab fa-css3-alt"></i>
+                    <span>CSS3</span>
+                  </div>
+                  <div class="tech-icon">
+                    <i class="fab fa-js"></i>
+                    <span>JavaScript</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cta-buttons">
+                <a href="#contact" class="btn">Get In Touch</a>
+              </div>
+            </div>
+
+            <!-- Experience Tab -->
+            <div class="tab-content" id="experience-tab">
+              <div class="timeline">
+                <div class="timeline-item">
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-date">Present</div>
+                  <div class="timeline-content">
+                    <h3>Discord Bot Developer</h3>
+                    <p>
+                      Created and maintained "Selina" Discord bot with
+                      moderation tools, fun commands, and server management
+                      features
+                    </p>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-date">2024 - Present</div>
+                  <div class="timeline-content">
+                    <h3>FNF Modcharter</h3>
+                    <p>
+                      Designed and developed custom charts and game mechanics
+                      for Friday Night Funkin' mods including "Psycho Funkin"
+                    </p>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-date">2023 - Present</div>
+                  <div class="timeline-content">
+                    <h3>Web Developer</h3>
+                    <p>Created various web projects.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Education Tab -->
+            <!-- <div class="tab-content" id="education-tab">
             <div class="timeline">
               <div class="timeline-item">
                 <div class="timeline-dot"></div>
@@ -554,132 +629,133 @@
               </div>
             </div>
           </div> -->
-            </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Services Section -->
-      <section class="services" id="services">
-        <div class="particles-container">
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
+    <!-- Services Section -->
+    <section class="services" id="services">
+      <div class="particles-container">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      </div>
+
+      <div class="geometric-bg">
+        <div class="geo-shape geo-circle"></div>
+        <div class="geo-shape geo-triangle"></div>
+        <div class="geo-shape geo-square"></div>
+      </div>
+
+      <div class="container">
+        <div class="section-header">
+          <h2 class="gradient-heading">My <span>Skills</span></h2>
+          <p class="section-subtitle">
+            Discover my <span class="tagline-highlight">technical expertise</span> and
+            creative abilities that drive innovative solutions
+          </p>
         </div>
 
-        <div class="geometric-bg">
-          <div class="geo-shape geo-circle"></div>
-          <div class="geo-shape geo-triangle"></div>
-          <div class="geo-shape geo-square"></div>
-        </div>
-
-        <div class="container">
-          <div class="section-header">
-            <h2 class="gradient-heading">My <span>Skills</span></h2>
-            <p class="section-subtitle">
-              Discover my <span class="tagline-highlight">technical expertise</span> and 
-              creative abilities that drive innovative solutions
-            </p>
-          </div>
-
-          <div class="services-container">
-            <div class="service-box">
-              <div class="service-info">
-                <i class="bx bx-code"></i>
-                <h4>Coding & Modcharting</h4>
-                <p>
-                  Experienced coder for websites and skilled modcharter for Friday
-                  Night Funkin' (FNF). Available to collaborate on your mod
-                  projects - contact me via Discord or through the form below.
-                </p>
-                <div class="skill-progress-container">
-                  <div class="skill-progress-bar">
-                    <div class="skill-progress-fill"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="service-box">
-              <div class="service-info">
-                <i class="bx bx-game"></i>
-                <h4>Gaming</h4>
-                <p>
-                  Passionate gamer who enjoys competitive play, achieving high
-                  rankings, and having fun with friends. Always looking for new
-                  challenges and gaming experiences.
-                </p>
-                <div class="skill-progress-container">
-                  <div class="skill-progress-bar">
-                    <div class="skill-progress-fill"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="service-box">
-              <div class="service-info">
-                <i class="bx bx-chat"></i>
-                <h4>Communication</h4>
-                <p>
-                  Enjoy connecting with others in communities and public servers.
-                  Open to making new friends and building relationships - feel
-                  free to reach out anytime!
-                </p>
-                <div class="skill-progress-container">
-                  <div class="skill-progress-bar">
-                    <div class="skill-progress-fill"></div>
-                  </div>
+        <div class="services-container">
+          <div class="service-box">
+            <div class="service-info">
+              <i class="bx bx-code"></i>
+              <h4>Coding & Modcharting</h4>
+              <p>
+                Experienced coder for websites and skilled modcharter for Friday
+                Night Funkin' (FNF). Available to collaborate on your mod
+                projects - contact me via Discord or through the form below.
+              </p>
+              <div class="skill-progress-container">
+                <div class="skill-progress-bar">
+                  <div class="skill-progress-fill"></div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      <!-- Projects Sections -->
-      <section class="projects" id="projects">
-        <div class="particles-container">
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-        </div>
-
-        <div class="geometric-bg">
-          <div class="geo-shape geo-circle"></div>
-          <div class="geo-shape geo-triangle"></div>
-          <div class="geo-shape geo-square"></div>
-        </div>
-
-        <div class="container">
-          <div class="section-header">
-            <h2 class="gradient-heading">My <span>Projects</span></h2>
-            <p class="section-subtitle">
-              Discover the <span class="tagline-highlight">innovative solutions</span> and creative projects I've been working on recently
-            </p>
+          <div class="service-box">
+            <div class="service-info">
+              <i class="bx bx-game"></i>
+              <h4>Gaming</h4>
+              <p>
+                Passionate gamer who enjoys competitive play, achieving high
+                rankings, and having fun with friends. Always looking for new
+                challenges and gaming experiences.
+              </p>
+              <div class="skill-progress-container">
+                <div class="skill-progress-bar">
+                  <div class="skill-progress-fill"></div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="projects-filter">
-            <button class="filter-btn active" data-filter="all">
-              All Projects
-            </button>
-            <!-- <button class="filter-btn" data-filter="app">Apps</button> -->
-            <button class="filter-btn" data-filter="game">Games</button>
-            <button class="filter-btn" data-filter="web">Web</button>
-          </div>
-
-          <div class="projects-grid">
+          <div class="service-box">
+            <div class="service-info">
+              <i class="bx bx-chat"></i>
+              <h4>Communication</h4>
+              <p>
+                Enjoy connecting with others in communities and public servers.
+                Open to making new friends and building relationships - feel
+                free to reach out anytime!
+              </p>
+              <div class="skill-progress-container">
+                <div class="skill-progress-bar">
+                  <div class="skill-progress-fill"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- <section>
+    <!-- Projects Sections -->
+    <section class="projects" id="projects">
+      <div class="particles-container">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      </div>
+
+      <div class="geometric-bg">
+        <div class="geo-shape geo-circle"></div>
+        <div class="geo-shape geo-triangle"></div>
+        <div class="geo-shape geo-square"></div>
+      </div>
+
+      <div class="container">
+        <div class="section-header">
+          <h2 class="gradient-heading">My <span>Projects</span></h2>
+          <p class="section-subtitle">
+            Discover the <span class="tagline-highlight">innovative solutions</span> and creative projects I've been
+            working on recently
+          </p>
+        </div>
+
+        <div class="projects-filter">
+          <button class="filter-btn active" data-filter="all">
+            All Projects
+          </button>
+          <!-- <button class="filter-btn" data-filter="app">Apps</button> -->
+          <button class="filter-btn" data-filter="game">Games</button>
+          <button class="filter-btn" data-filter="web">Web</button>
+        </div>
+
+        <div class="projects-grid">
+        </div>
+      </div>
+    </section>
+
+    <!-- <section>
     <div class="container">
       <h1>Frequently Asked Questions</h1>
       
@@ -719,7 +795,7 @@
     </div>
   </section> -->
 
-      <!-- <section class="discord-widget">
+    <!-- <section class="discord-widget">
     <div class="widget-container">
       <div class="custom-widget">
         <div class="server-header">
@@ -773,311 +849,556 @@
     </div>
   </section> -->
 
-      <!-- Blog/Updates Section -->
-      <section class="blog" id="blog">
-        <!-- Background Elements -->
-        <div class="blog-particles-container">
-          <div class="blog-particle"></div>
-          <div class="blog-particle"></div>
-          <div class="blog-particle"></div>
-          <div class="blog-particle"></div>
-          <div class="blog-particle"></div>
-          <div class="blog-particle"></div>
+    <!-- Cigarettes After Sex Section -->
+    <section class="music-section" id="music">
+      <!-- Background Elements -->
+      <div class="music-particles-container">
+        <div class="music-particle"></div>
+        <div class="music-particle"></div>
+        <div class="music-particle"></div>
+        <div class="music-particle"></div>
+        <div class="music-particle"></div>
+        <div class="music-particle"></div>
+      </div>
+
+      <!-- Geometric Background -->
+      <div class="music-geometric-bg">
+        <div class="music-geo-shape music-geo-circle"></div>
+        <div class="music-geo-shape music-geo-triangle"></div>
+        <div class="music-geo-shape music-geo-square"></div>
+      </div>
+
+      <div class="music-container">
+        <!-- Enhanced Band Header -->
+        <div class="band-header">
+          <div class="band-banner">
+            <div class="banner-fade-top"></div>
+            <div class="banner-fade-bottom"></div>
+          </div>
+          <h2 class="band-name">Cigarettes After Sex</h2>
+          <p class="band-description">
+            An American Dream Pop band founded in 2008 in El Paso, Texas by Greg Gonzalez.
+            The band is known for their dreamy, calm style and soft sound that creates romantic and intimate
+            atmospheres.
+          </p>
         </div>
 
-        <!-- Geometric Background -->
-        <div class="blog-geometric-bg">
-          <div class="blog-geo-shape blog-geo-circle"></div>
-          <div class="blog-geo-shape blog-geo-triangle"></div>
-          <div class="blog-geo-shape blog-geo-square"></div>
-        </div>
-
-        <div class="blog-container">
-          <div class="blog-section-header">
-            <h2 class="blog-gradient-heading">
-              Blog & <span>Updates</span>
-              <div class="blog-heading-decoration"></div>
-            </h2>
-            <p class="blog-section-subtitle">
-              Stay updated with my <span class="blog-tagline-highlight">latest projects</span>, 
-              development insights, and community updates
-            </p>
+        <!-- Enhanced Songs Grid -->
+        <div class="songs-grid">
+          <div class="song-card" data-song="apocalypse">
+            <div class="song-image">
+              <img
+                src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c267729189e29e133756_Cigarettes%2BAfter%2BSex-p-500.jpg"
+                alt="Apocalypse" />
+              <div class="play-overlay">
+                <button class="play-btn" data-preview="./assets/music/apocalypse.mp3">
+                  <i class="bx bx-play"></i>
+                </button>
+              </div>
+              <div class="song-duration">3:42</div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Apocalypse</h3>
+              <p class="song-preview">A dreamy song about love and loss with beautiful poetic style</p>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">2017</span>
+              </div>
+            </div>
           </div>
 
-          <!-- Category Filter -->
-          <div class="blog-filter">
-            <button class="blog-filter-btn active" data-category="all">
-              All Posts
+          <div class="song-card" data-song="sesame-syrup">
+            <div class="song-image">
+              <img
+                src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c2ab3553da315057921f_Crush-p-500.jpg"
+                alt="Sesame Syrup" />
+              <div class="play-overlay">
+                <button class="play-btn" data-preview="./assets/music/sesame-syrup.mp3">
+                  <i class="bx bx-play"></i>
+                </button>
+              </div>
+              <div class="song-duration">4:15</div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Sesame Syrup</h3>
+              <p class="song-preview">A soothing and calming song that expresses protection and safety in love</p>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">2019</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card" data-song="dark-vacay">
+            <div class="song-image">
+              <img
+                src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/669003328c84d4ebb0e0198a_Xs_3000x%20(2)%20(1)-p-500.jpg"
+                alt="Dark Vacay" />
+              <div class="play-overlay">
+                <button class="play-btn" data-preview="./assets/music/dark-vacay.mp3">
+                  <i class="bx bx-play"></i>
+                </button>
+              </div>
+              <div class="song-duration">3:28</div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Dark Vacay</h3>
+              <p class="song-preview">A moody track that takes you to a world of calm and beauty</p>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">2024</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card" data-song="bubblegum">
+            <div class="song-image">
+              <img
+                src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/656f879c4c22fe49879310b8_Bubblegum.jpg"
+                alt="Bubblegum" />
+              <div class="play-overlay">
+                <button class="play-btn" data-preview="./assets/music/bubblegum.mp3">
+                  <i class="bx bx-play"></i>
+                </button>
+              </div>
+              <div class="song-duration">4:02</div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Bubblegum</h3>
+              <p class="song-preview">A sweet and nostalgic song about memories and youthful romance</p>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">2023</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card" data-song="heavenly">
+            <div class="song-image">
+              <img src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/657046caf7ba342d201c8b82_Cry.jpg"
+                alt="Heavenly" />
+              <div class="play-overlay">
+                <button class="play-btn" data-preview="./assets/music/heavenly.mp3">
+                  <i class="bx bx-play"></i>
+                </button>
+              </div>
+              <div class="song-duration">3:55</div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Heavenly</h3>
+              <p class="song-preview">A heavenly song that transports you to a world of peace and beauty</p>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">2017</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card" data-song="k">
+            <div class="song-image">
+              <img
+                src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c267729189e29e133756_Cigarettes%2BAfter%2BSex-p-500.jpg"
+                alt="K." />
+              <div class="play-overlay">
+                <button class="play-btn" data-preview="./assets/music/k.mp3">
+                  <i class="bx bx-play"></i>
+                </button>
+              </div>
+              <div class="song-duration">4:33</div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">K.</h3>
+              <p class="song-preview">An emotional song that tells a deep love story with simple and touching words</p>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">2017</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card" data-song="sweet">
+            <div class="song-image">
+              <img
+                src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c267729189e29e133756_Cigarettes%2BAfter%2BSex-p-500.jpg"
+                alt="Sweet" />
+              <div class="play-overlay">
+                <button class="play-btn" data-preview="./assets/music/sweet.mp3">
+                  <i class="bx bx-play"></i>
+                </button>
+              </div>
+              <div class="song-duration">3:17</div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Sweet</h3>
+              <p class="song-preview">A sweet and tender song that expresses beautiful feelings and memories</p>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">2017</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="audio-player" id="audioPlayer">
+        <div class="audio-player-header">
+            <div class="audio-player-image">
+                <img src="" alt="Song Cover" />
+            </div>
+            <div class="audio-player-info">
+                <h4 class="current-song-title"></h4>
+                <p class="current-song-artist">Cigarettes After Sex</p>
+            </div>
+            <button class="close-audio">
+                <i class="bx bx-x"></i>
             </button>
-            <button class="blog-filter-btn" data-category="development">
-              Development
+        </div>
+        <div class="audio-controls">
+            <button class="audio-control-btn prev-btn">
+                <i class="bx bx-skip-previous"></i>
             </button>
-            <!-- <button class="blog-filter-btn" data-category="fnf">
+            <button class="audio-control-btn play-pause-btn">
+                <i class="bx bx-pause"></i>
+            </button>
+            <button class="audio-control-btn next-btn">
+                <i class="bx bx-skip-next"></i>
+            </button>
+            <div class="audio-progress-container">
+                <div class="audio-progress">
+                    <div class="audio-progress-fill"></div>
+                    <div class="audio-progress-handle"></div>
+                </div>
+                <div class="audio-time">
+                    <span class="current-time">0:00</span>
+                    <span class="total-time">0:00</span>
+                </div>
+            </div>
+            <div class="audio-volume">
+                <button class="volume-btn">
+                    <i class="bx bx-volume-full"></i>
+                </button>
+                <div class="volume-slider-container">
+                    <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.5">
+                </div>
+            </div>
+        </div>
+        <div class="audio-visualizer">
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+        </div>
+    </div>
+
+    <!-- Blog/Updates Section -->
+    <section class="blog" id="blog">
+      <!-- Background Elements -->
+      <div class="blog-particles-container">
+        <div class="blog-particle"></div>
+        <div class="blog-particle"></div>
+        <div class="blog-particle"></div>
+        <div class="blog-particle"></div>
+        <div class="blog-particle"></div>
+        <div class="blog-particle"></div>
+      </div>
+
+      <!-- Geometric Background -->
+      <div class="blog-geometric-bg">
+        <div class="blog-geo-shape blog-geo-circle"></div>
+        <div class="blog-geo-shape blog-geo-triangle"></div>
+        <div class="blog-geo-shape blog-geo-square"></div>
+      </div>
+
+      <div class="blog-container">
+        <div class="blog-section-header">
+          <h2 class="blog-gradient-heading">
+            Blog & <span>Updates</span>
+            <div class="blog-heading-decoration"></div>
+          </h2>
+          <p class="blog-section-subtitle">
+            Stay updated with my <span class="blog-tagline-highlight">latest projects</span>,
+            development insights, and community updates
+          </p>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="blog-filter">
+          <button class="blog-filter-btn active" data-category="all">
+            All Posts
+          </button>
+          <button class="blog-filter-btn" data-category="development">
+            Development
+          </button>
+          <!-- <button class="blog-filter-btn" data-category="fnf">
               FNF Modding
             </button> -->
-            <button class="blog-filter-btn" data-category="community">
-              Community
-            </button>
-            <!-- <button class="blog-filter-btn" data-category="tutorials">
+          <button class="blog-filter-btn" data-category="community">
+            Community
+          </button>
+          <!-- <button class="blog-filter-btn" data-category="tutorials">
               Tutorials
             </button> -->
-            <!-- <button class="blog-filter-btn" data-category="other">
+          <!-- <button class="blog-filter-btn" data-category="other">
               Other
             </button> -->
-          </div>
-
-          <!-- Blog Grid -->
-          <div class="blog-grid" id="blogGrid">
-            <!-- Blog posts will be dynamically inserted here -->
-          </div>
-
-          <!-- Load More Button -->
-          <div class="blog-load-more-container">
-            <button class="blog-load-more-btn" id="loadMoreBtn">
-              <div class="btn-bg-effect"></div>
-              <i class="bx bx-refresh"></i>
-              <span>Load More Posts</span>
-              <div class="btn-shine-effect"></div>
-            </button>
-          </div>
-        </div>
-      </section>
-  
-      <!-- Contact Section -->
-      <section class="contact" id="contact">
-        <div class="contact-particles">
-          <div class="contact-particle"></div>
-          <div class="contact-particle"></div>
-          <div class="contact-particle"></div>
-          <div class="contact-particle"></div>
-          <div class="contact-particle"></div>
         </div>
 
-        <div class="contact-geometric-bg">
-          <div class="contact-geo-shape contact-geo-circle-1"></div>
-          <div class="contact-geo-shape contact-geo-triangle-1"></div>
-          <div class="contact-geo-shape contact-geo-square-1"></div>
-          <div class="contact-geo-shape contact-geo-circle-2"></div>
+        <!-- Blog Grid -->
+        <div class="blog-grid" id="blogGrid">
+          <!-- Blog posts will be dynamically inserted here -->
         </div>
 
-        <div class="section-header enhanced-section-header">
-          <div class="header-decoration top-decoration"></div>
-          
-          <h2 class="heading enhanced-heading">
-            <span class="heading-word">Contact</span> 
-            <span class="heading-word highlight-word">Me</span>
-            <div class="heading-underline"></div>
-          </h2>
-          
-          <p class="contact-subtitle enhanced-subtitle">
-            Ready to collaborate? Let's connect and build something 
-            <span class="subtitle-highlight">amazing together!</span>
-            <span class="subtitle-decoration"></span>
-          </p>
-
-          <div class="header-decoration bottom-decoration"></div>
+        <!-- Load More Button -->
+        <div class="blog-load-more-container">
+          <button class="blog-load-more-btn" id="loadMoreBtn">
+            <div class="btn-bg-effect"></div>
+            <i class="bx bx-refresh"></i>
+            <span>Load More Posts</span>
+            <div class="btn-shine-effect"></div>
+          </button>
         </div>
+      </div>
+    </section>
 
-        <div class="contact-container enhanced-contact-container">
-          <div class="primary-contact enhanced-primary-contact">
-            <div class="primary-contact-bg"></div>
-            <div class="primary-contact-glow"></div>
-            
-            <div class="contact-header enhanced-contact-header">
-              <div class="discord-icon-wrapper">
-                <i class="bx bxl-discord-alt discord-icon-main"></i>
-                <div class="icon-pulse-ring"></div>
-                <div class="icon-pulse-ring delayed"></div>
-              </div>
-              
-              <div class="header-text">
-                <h3 class="primary-title enhanced-primary-title">
-                  Let's Connect on Discord!
-                  <span class="title-decoration"></span>
-                </h3>
-                <p class="primary-subtitle enhanced-primary-subtitle">
-                  The fastest and most efficient way to reach me
-                  <span class="subtitle-accent">⚡</span>
-                </p>
-              </div>
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+      <div class="contact-particles">
+        <div class="contact-particle"></div>
+        <div class="contact-particle"></div>
+        <div class="contact-particle"></div>
+        <div class="contact-particle"></div>
+        <div class="contact-particle"></div>
+      </div>
+
+      <div class="contact-geometric-bg">
+        <div class="contact-geo-shape contact-geo-circle-1"></div>
+        <div class="contact-geo-shape contact-geo-triangle-1"></div>
+        <div class="contact-geo-shape contact-geo-square-1"></div>
+        <div class="contact-geo-shape contact-geo-circle-2"></div>
+      </div>
+
+      <div class="section-header enhanced-section-header">
+        <div class="header-decoration top-decoration"></div>
+
+        <h2 class="heading enhanced-heading">
+          <span class="heading-word">Contact</span>
+          <span class="heading-word highlight-word">Me</span>
+          <div class="heading-underline"></div>
+        </h2>
+
+        <p class="contact-subtitle enhanced-subtitle">
+          Ready to collaborate? Let's connect and build something
+          <span class="subtitle-highlight">amazing together!</span>
+          <span class="subtitle-decoration"></span>
+        </p>
+
+        <div class="header-decoration bottom-decoration"></div>
+      </div>
+
+      <div class="contact-container enhanced-contact-container">
+        <div class="primary-contact enhanced-primary-contact">
+          <div class="primary-contact-bg"></div>
+          <div class="primary-contact-glow"></div>
+
+          <div class="contact-header enhanced-contact-header">
+            <div class="discord-icon-wrapper">
+              <i class="bx bxl-discord-alt discord-icon-main"></i>
+              <div class="icon-pulse-ring"></div>
+              <div class="icon-pulse-ring delayed"></div>
             </div>
 
-            <div class="discord-info-card enhanced-discord-info">
-              <div class="discord-username-wrapper">
-                <div class="username-icon">
-                  <i class="bx bx-user"></i>
-                </div>
-                <div class="discord-username">@trr0</div>
-                <div class="username-badge" style="display: none;">Active</div>
-              </div>
-              <div class="discord-status-indicator" style="display: none;">
-                <div class="status-dot online"></div>
-                <span class="status-text">Online Now</span>
-              </div>
-            </div>
-
-            <div class="discord-features enhanced-features">
-              <div class="feature-item enhanced-feature">
-                <div class="feature-icon-wrapper">
-                  <i class="bx bx-time-five"></i>
-                  <div class="icon-bg"></div>
-                </div>
-                <span class="feature-text">Quick responses</span>
-                <div class="feature-glow"></div>
-              </div>
-              
-              <div class="feature-item enhanced-feature">
-                <div class="feature-icon-wrapper">
-                  <i class="bx bx-chat"></i>
-                  <div class="icon-bg"></div>
-                </div>
-                <span class="feature-text">Real-time communication</span>
-                <div class="feature-glow"></div>
-              </div>
-              
-              <div class="feature-item enhanced-feature">
-                <div class="feature-icon-wrapper">
-                  <i class="bx bx-devices"></i>
-                  <div class="icon-bg"></div>
-                </div>
-                <span class="feature-text">Available on all devices</span>
-                <div class="feature-glow"></div>
-              </div>
-              
-              <div class="feature-item enhanced-feature">
-                <div class="feature-icon-wrapper">
-                  <i class="bx bx-group"></i>
-                  <div class="icon-bg"></div>
-                </div>
-                <span class="feature-text">Direct collaboration</span>
-                <div class="feature-glow"></div>
-              </div>
-            </div>
-
-            <div class="discord-cta enhanced-discord-cta" style="background: none;">
-              <a href="https://discord.com/users/1282747277206884436" class="discord-btn enhanced-discord-btn" target="_blank">
-                <div class="btn-background"></div>
-                <div class="btn-shine-effect"></div>
-                <i class="bx bxl-discord-alt"></i>
-                <span style="color: var(--text-color);">Message Me on Discord</span>
-                <div class="btn-pulse-ring"></div>
-              </a>
-            </div>
-
-            <div class="contact-lines">
-              <div class="contact-line line-1"></div>
-              <div class="contact-line line-2"></div>
-              <div class="contact-line line-3"></div>
-              <div class="contact-line line-4"></div>
-            </div>
-          </div>
-
-          <div class="secondary-contact enhanced-secondary-contact">
-            <div class="contact-card enhanced-contact-card">
-              <div class="card-bg-effect"></div>
-              <div class="card-header enhanced-card-header">
-                <div class="card-icon">
-                  <i class="bx bx-star"></i>
-                </div>
-                <h3 class="card-title enhanced-card-title">
-                  Why Discord First?
-                  <div class="title-underline"></div>
-                </h3>
-              </div>
-              
-              <div class="discord-features enhanced-card-features">
-                <div class="feature-item card-feature">
-                  <div class="feature-bullet"></div>
-                  <span class="feature-text">Instant notifications</span>
-                </div>
-                <div class="feature-item card-feature">
-                  <div class="feature-bullet"></div>
-                  <span class="feature-text">Easy file sharing</span>
-                </div>
-                <div class="feature-item card-feature">
-                  <div class="feature-bullet"></div>
-                  <span class="feature-text">Voice & video calls</span>
-                </div>
-                <div class="feature-item card-feature">
-                  <div class="feature-bullet"></div>
-                  <span class="feature-text">Secure platform</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="contact-card enhanced-contact-card">
-              <div class="card-bg-effect"></div>
-              <div class="card-header enhanced-card-header">
-                <div class="card-icon">
-                  <i class="bx bx-link"></i>
-                </div>
-                <h3 class="card-title enhanced-card-title">
-                  Alternative Platforms
-                  <div class="title-underline"></div>
-                </h3>
-              </div>
-
-              <div class="social-grid enhanced-social-grid">
-                <div class="social-item enhanced-social-item">
-                  <a href="https://instagram.com/xm5o_" class="social-icon-link enhanced-social-link" target="_blank">
-                    <div class="social-bg instagram-bg"></div>
-                    <i class="bx bxl-instagram"></i>
-                    <div class="social-ripple"></div>
-                  </a>
-                  <span class="social-label">Instagram</span>
-                  <div class="social-glow instagram-glow"></div>
-                </div>
-
-                <div class="social-item enhanced-social-item" style="display: none;">
-                  <a href="https://x.com/voixj1" class="social-icon-link enhanced-social-link" target="_blank">
-                    <div class="social-bg twitter-bg"></div>
-                    <i class="bx bxl-twitter"></i>
-                    <div class="social-ripple"></div>
-                  </a>
-                  <span class="social-label">Twitter/X</span>
-                  <div class="social-glow twitter-glow"></div>
-                </div>
-              </div>
-
-              <div class="email-section enhanced-email-section">
-                <div class="email-header">
-                  <i class="bx bx-envelope"></i>
-                  <p class="email-text">For formal business inquiries:</p>
-                </div>
-                <a href="mailto:immortal.web.dev.contact@gmail.com" class="email-link enhanced-email-link">
-                  <i class="bx bx-copy email-copy-icon"></i>
-                  <span>immortal.web.dev.contact@gmail.com</span>
-                  <div class="email-shine"></div>
-                </a>
-                <div class="email-copied-notification">Email copied to clipboard!</div>
-              </div>
-            </div>
-
-            <div class="response-notice enhanced-response-notice">
-              <div class="notice-bg"></div>
-              <div class="notice-icon-wrapper">
-                <i class="bx bx-time-five notice-icon"></i>
-                <div class="notice-icon-glow"></div>
-              </div>
-              <p class="notice-text enhanced-notice-text">
-                <strong>Response Time:</strong> Usually within 
-                <span class="time-highlight">1-6 hours</span> on Discord during active hours 
-                <span class="notice-accent">(faster than email!)</span>
+            <div class="header-text">
+              <h3 class="primary-title enhanced-primary-title">
+                Let's Connect on Discord!
+                <span class="title-decoration"></span>
+              </h3>
+              <p class="primary-subtitle enhanced-primary-subtitle">
+                The fastest and most efficient way to reach me
+                <span class="subtitle-accent">⚡</span>
               </p>
-              <div class="notice-pulse"></div>
+            </div>
+          </div>
+
+          <div class="discord-info-card enhanced-discord-info">
+            <div class="discord-username-wrapper">
+              <div class="username-icon">
+                <i class="bx bx-user"></i>
+              </div>
+              <div class="discord-username">@trr0</div>
+              <div class="username-badge" style="display: none;">Active</div>
+            </div>
+            <div class="discord-status-indicator" style="display: none;">
+              <div class="status-dot online"></div>
+              <span class="status-text">Online Now</span>
+            </div>
+          </div>
+
+          <div class="discord-features enhanced-features">
+            <div class="feature-item enhanced-feature">
+              <div class="feature-icon-wrapper">
+                <i class="bx bx-time-five"></i>
+                <div class="icon-bg"></div>
+              </div>
+              <span class="feature-text">Quick responses</span>
+              <div class="feature-glow"></div>
             </div>
 
-            <div class="contact-stats">
-              <div class="stat-item">
-                <div class="stat-icon">
-                  <i class="bx bx-stopwatch"></i>
-                </div>
-                <div class="stat-content">
-                  <div class="stat-number">< 4hrs</div>
-                  <div class="stat-label">Avg Response Time</div>
+            <div class="feature-item enhanced-feature">
+              <div class="feature-icon-wrapper">
+                <i class="bx bx-chat"></i>
+                <div class="icon-bg"></div>
+              </div>
+              <span class="feature-text">Real-time communication</span>
+              <div class="feature-glow"></div>
+            </div>
+
+            <div class="feature-item enhanced-feature">
+              <div class="feature-icon-wrapper">
+                <i class="bx bx-devices"></i>
+                <div class="icon-bg"></div>
+              </div>
+              <span class="feature-text">Available on all devices</span>
+              <div class="feature-glow"></div>
+            </div>
+
+            <div class="feature-item enhanced-feature">
+              <div class="feature-icon-wrapper">
+                <i class="bx bx-group"></i>
+                <div class="icon-bg"></div>
+              </div>
+              <span class="feature-text">Direct collaboration</span>
+              <div class="feature-glow"></div>
+            </div>
+          </div>
+
+          <div class="discord-cta enhanced-discord-cta" style="background: none;">
+            <a href="https://discord.com/users/1282747277206884436" class="discord-btn enhanced-discord-btn"
+              target="_blank">
+              <div class="btn-background"></div>
+              <div class="btn-shine-effect"></div>
+              <i class="bx bxl-discord-alt"></i>
+              <span style="color: var(--text-color);">Message Me on Discord</span>
+              <div class="btn-pulse-ring"></div>
+            </a>
+          </div>
+
+          <div class="contact-lines">
+            <div class="contact-line line-1"></div>
+            <div class="contact-line line-2"></div>
+            <div class="contact-line line-3"></div>
+            <div class="contact-line line-4"></div>
+          </div>
+        </div>
+
+        <div class="secondary-contact enhanced-secondary-contact">
+          <div class="contact-card enhanced-contact-card">
+            <div class="card-bg-effect"></div>
+            <div class="card-header enhanced-card-header">
+              <div class="card-icon">
+                <i class="bx bx-star"></i>
+              </div>
+              <h3 class="card-title enhanced-card-title">
+                Why Discord First?
+                <div class="title-underline"></div>
+              </h3>
+            </div>
+
+            <div class="discord-features enhanced-card-features">
+              <div class="feature-item card-feature">
+                <div class="feature-bullet"></div>
+                <span class="feature-text">Instant notifications</span>
+              </div>
+              <div class="feature-item card-feature">
+                <div class="feature-bullet"></div>
+                <span class="feature-text">Easy file sharing</span>
+              </div>
+              <div class="feature-item card-feature">
+                <div class="feature-bullet"></div>
+                <span class="feature-text">Voice & video calls</span>
+              </div>
+              <div class="feature-item card-feature">
+                <div class="feature-bullet"></div>
+                <span class="feature-text">Secure platform</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-card enhanced-contact-card">
+            <div class="card-bg-effect"></div>
+            <div class="card-header enhanced-card-header">
+              <div class="card-icon">
+                <i class="bx bx-link"></i>
+              </div>
+              <h3 class="card-title enhanced-card-title">
+                Alternative Platforms
+                <div class="title-underline"></div>
+              </h3>
+            </div>
+
+            <div class="social-grid enhanced-social-grid">
+              <div class="social-item enhanced-social-item">
+                <a href="https://instagram.com/xm5o_" class="social-icon-link enhanced-social-link" target="_blank">
+                  <div class="social-bg instagram-bg"></div>
+                  <i class="bx bxl-instagram"></i>
+                  <div class="social-ripple"></div>
+                </a>
+                <span class="social-label">Instagram</span>
+                <div class="social-glow instagram-glow"></div>
+              </div>
+
+              <div class="social-item enhanced-social-item" style="display: none;">
+                <a href="https://x.com/voixj1" class="social-icon-link enhanced-social-link" target="_blank">
+                  <div class="social-bg twitter-bg"></div>
+                  <i class="bx bxl-twitter"></i>
+                  <div class="social-ripple"></div>
+                </a>
+                <span class="social-label">Twitter/X</span>
+                <div class="social-glow twitter-glow"></div>
+              </div>
+            </div>
+
+            <div class="email-section enhanced-email-section">
+              <div class="email-header">
+                <i class="bx bx-envelope"></i>
+                <p class="email-text">For formal business inquiries:</p>
+              </div>
+              <a href="mailto:immortal.web.dev.contact@gmail.com" class="email-link enhanced-email-link">
+                <i class="bx bx-copy email-copy-icon"></i>
+                <span>immortal.web.dev.contact@gmail.com</span>
+                <div class="email-shine"></div>
+              </a>
+              <div class="email-copied-notification">Email copied to clipboard!</div>
+            </div>
+          </div>
+
+          <div class="response-notice enhanced-response-notice">
+            <div class="notice-bg"></div>
+            <div class="notice-icon-wrapper">
+              <i class="bx bx-time-five notice-icon"></i>
+              <div class="notice-icon-glow"></div>
+            </div>
+            <p class="notice-text enhanced-notice-text">
+              <strong>Response Time:</strong> Usually within
+              <span class="time-highlight">1-6 hours</span> on Discord during active hours
+              <span class="notice-accent">(faster than email!)</span>
+            </p>
+            <div class="notice-pulse"></div>
+          </div>
+
+          <div class="contact-stats">
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="bx bx-stopwatch"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-number">
+                  < 4hrs</div>
+                    <div class="stat-label">Avg Response Time</div>
                 </div>
               </div>
-              
+
               <div class="stat-item">
                 <div class="stat-icon">
                   <i class="bx bxs-happy-alt"></i>
@@ -1116,70 +1437,56 @@
             <button class="close-success-modal">Close</button>
           </div>
         </div>
-      </section>
+    </section>
 
-      <footer class="footer">
-        <div class="footer-container">
-          <div class="social-icons">
-            <a
-              href="https://youtube.com/voixj"
-              target="_blank"
-              aria-label="YouTube"
-            >
-              <i class="bx bxl-youtube"></i>
-            </a>
-            <a
-              href="https://instagram.com/voixj"
-              target="_blank"
-              aria-label="Instagram"
-            >
-              <i class="bx bxl-instagram"></i>
-            </a>
-            <a
-              href="https://discord.com/users/1282747277206884436"
-              target="_blank"
-              aria-label="Discord"
-            >
-              <i class="bx bxl-discord-alt"></i>
-            </a>
-            <a href="https://x.com/voixj1" target="_blank" aria-label="Twitter">
-              <i class="bx bxl-twitter"></i>
-            </a>
-            <a
-              href="https://www.twitch.tv/xm5o_"
-              target="_blank"
-              aria-label="Twitch"
-            >
-              <i class="bx bxl-twitch"></i>
-            </a>
-          </div>
-
-          <ul class="footer-nav">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#services">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-
-          <p class="copyright">© <span>Immortal </span> | All Rights Reserved</p>
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="social-icons">
+          <a href="https://youtube.com/voixj" target="_blank" aria-label="YouTube">
+            <i class="bx bxl-youtube"></i>
+          </a>
+          <a href="https://instagram.com/voixj" target="_blank" aria-label="Instagram">
+            <i class="bx bxl-instagram"></i>
+          </a>
+          <a href="https://discord.com/users/1282747277206884436" target="_blank" aria-label="Discord">
+            <i class="bx bxl-discord-alt"></i>
+          </a>
+          <a href="https://x.com/voixj1" target="_blank" aria-label="Twitter">
+            <i class="bx bxl-twitter"></i>
+          </a>
+          <a href="https://www.twitch.tv/xm5o_" target="_blank" aria-label="Twitch">
+            <i class="bx bxl-twitch"></i>
+          </a>
         </div>
-      </footer>
-    </div>
 
-    <script src="scripts/utils.js"></script>
-    <script src="scripts/navbar.js"></script>
-    <!-- <script src="scripts/particles.js"></script> -->
-    <script src="scripts/home.js"></script>
-    <script src="scripts/discord-modal.js"></script>
-    <script src="scripts/skills.js"></script>
-    <script src="scripts/projects.js"></script>
-    <script src="scripts/blog.js"></script>
-    <script src="scripts/faq.js"></script>
+        <ul class="footer-nav">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#music">Music</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
 
-    <!-- hide some sections until i make it responsive for mobile -->
-    <!-- <script src="scripts/hide.js"></script> -->
+        <p class="copyright">© <span>Immortal </span> | All Rights Reserved</p>
+      </div>
+    </footer>
+  </div>
 
-    <script type="module" src="scripts/views.js"></script>
-  </body>
+  <script src="scripts/utils.js"></script>
+  <script src="scripts/navbar.js"></script>
+  <!-- <script src="scripts/particles.js"></script> -->
+  <script src="scripts/home.js"></script>
+  <script src="scripts/discord-modal.js"></script>
+  <script src="scripts/skills.js"></script>
+  <script src="scripts/projects.js"></script>
+  <script src="scripts/music.js"></script>
+  <script src="scripts/blog.js"></script>
+  <script src="scripts/faq.js"></script>
+
+  <!-- hide some sections until i make it responsive for mobile -->
+  <!-- <script src="scripts/hide.js"></script> -->
+
+  <script type="module" src="scripts/views.js"></script>
+</body>
 </html>

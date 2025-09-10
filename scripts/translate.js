@@ -10,6 +10,7 @@ class TranslationSystem {
           about: 'About',
           skills: 'Skills',
           projects: 'Projects',
+          music: 'Music',
           blog: 'Blog',
           contact: 'Contact'
         },
@@ -88,6 +89,17 @@ class TranslationSystem {
           online: 'Online',
           joinServer: 'Join Server'
         },
+        // Music Section
+        music: {
+          bandDescription: 'An American Dream Pop band founded in 2008 in El Paso, Texas by Greg Gonzalez. The band is known for their dreamy, calm style and soft sound that creates romantic and intimate atmospheres.',
+          apocalypsePreview: 'A dreamy song about love and loss with beautiful poetic style',
+          sesameSyrupPreview: 'A soothing and calming song that expresses protection and safety in love',
+          darkVacayPreview: 'A moody track that takes you to a world of calm and beauty',
+          bubblegumPreview: 'A sweet and nostalgic song about memories and youthful romance',
+          heavenlyPreview: 'A heavenly song that transports you to a world of peace and beauty',
+          kPreview: 'An emotional song that tells a deep love story with simple and touching words',
+          sweetPreview: 'A sweet and tender song that expresses beautiful feelings and memories'
+        },
         // General
         general: {
           loading: 'Please wait...',
@@ -101,6 +113,7 @@ class TranslationSystem {
           about: 'نبذة عني',
           skills: 'المهارات',
           projects: 'المشاريع',
+          music: 'الموسيقى',
           blog: 'التحديثات',
           contact: 'التواصل'
         },
@@ -178,6 +191,17 @@ class TranslationSystem {
           members: 'الأعضاء',
           online: 'متصل',
           joinServer: 'انضم للخادم'
+        },
+        // Music Section
+        music: {
+          bandDescription: 'فرقة دريم بوب أمريكية تأسست عام 2008 في إل باسو، تكساس على يد جريج جونزاليس. تشتهر الفرقة بأسلوبها الحالم والهادئ وصوتها الناعم الذي يخلق أجواء رومانسية وحميمية.',
+          apocalypsePreview: 'أغنية حالمة عن الحب والفقدان بأسلوب شعري جميل',
+          sesameSyrupPreview: 'أغنية مهدئة ومطمئنة تعبر عن الحماية والأمان في الحب',
+          darkVacayPreview: 'مقطوعة موسيقية مزاجية تأخذك إلى عالم من الهدوء والجمال',
+          bubblegumPreview: 'أغنية حلوة وحنينة عن الذكريات والرومانسية الشبابية',
+          heavenlyPreview: 'أغنية سماوية تنقلك إلى عالم من السلام والجمال',
+          kPreview: 'أغنية عاطفية تروي قصة حب عميقة بكلمات بسيطة ومؤثرة',
+          sweetPreview: 'أغنية حلوة ورقيقة تعبر عن المشاعر والذكريات الجميلة'
         },
         // General
         general: {
@@ -369,6 +393,21 @@ class TranslationSystem {
     if (aboutDescription) {
       aboutDescription.innerHTML = translations.about.description.replace(/\*\*(.*?)\*\*/g, '<span>$1</span>');
     }
+
+    // Music section specific translations
+    const bandDescription = document.querySelector('.band-description');
+    if (bandDescription) {
+      bandDescription.textContent = translations.music.bandDescription;
+    }
+
+    const songCards = document.querySelectorAll('.song-card');
+    songCards.forEach(card => {
+      const songData = card.getAttribute('data-song');
+      const songPreviewElement = card.querySelector('.song-preview');
+      if (songPreviewElement && translations.music[`${songData}Preview`]) {
+        songPreviewElement.textContent = translations.music[`${songData}Preview`];
+      }
+    });
   }
 
   getTranslation(key) {

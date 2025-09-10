@@ -46,25 +46,25 @@ class ProjectsManager {
         badge: 'NEW',
         badgeType: 'success'
       },
-      {
-        id: 'immortal-collection',
-        title: 'Immortal and DarkM7 Collection',
-        description: 'A mysterious project shrouded in secrecy. Something incredible is brewing behind the scenes...',
-        category: 'game',
-        status: 'coming-soon',
-        image: './assets/immortal_collection.png',
-        features: [
-          { icon: 'fas fa-question', text: 'Coming Soon...' }
-        ],
-        links: {
-          website: null,
-          demo: null,
-          github: null
-        },
-        badge: 'Coming Soon',
-        badgeType: 'coming-soon',
-        releaseDate: null
-      },
+      // {
+      //   id: 'immortal-collection',
+      //   title: 'Immortal and DarkM7 Collection',
+      //   description: 'A mysterious project shrouded in secrecy. Something incredible is brewing behind the scenes...',
+      //   category: 'game',
+      //   status: 'coming-soon',
+      //   image: './assets/immortal_collection.png',
+      //   features: [
+      //     { icon: 'fas fa-question', text: 'Coming Soon...' }
+      //   ],
+      //   links: {
+      //     website: null,
+      //     demo: null,
+      //     github: null
+      //   },
+      //   badge: 'Coming Soon',
+      //   badgeType: 'coming-soon',
+      //   releaseDate: null
+      // },
       {
         id: 'psycho-funkin',
         title: 'Psycho Funkin',
