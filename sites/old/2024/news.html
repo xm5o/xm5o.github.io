@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Css -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <script src="scripts/loader.js"></script>
+    <link rel="stylesheet" href="css/loader.css">
+    <!-- End -->
+    <!-- Scripts -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <title>Patch Notes</title>
+    <link rel="icon" href="images/f0m.jpg">
+</head>
+<body>
+
+    <div class="load-screen">
+        <span class="loader"></span>
+    </div>
+
+    <div class="header">
+    <header>
+        <h2>- X <span> D -</span></h2>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a class="active" href="news.html">Patch Notes</a></li>
+            <li><a href="overwatch.html">Overwatch Career profile</a></li>
+            <!-- <li>
+                <a href="#">More</a>
+                <ul class="dropdown">
+                    <li><a href="settings.html">Settings</a></li>
+                </ul>
+            </li> -->
+        </ul>
+    </header>
+    </div>
+
+    <!-- Side Menu -->
+    <input type="checkbox" id="check">
+        <label for="check">
+        <a id="menu">Menu</a>
+        <a id="cancel">Close</a>
+        </label>
+        <div class="sidebar">
+            <header>- X D -</header>
+            <ul>
+                <i class="fas fa-clock"></i>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="overwatch.html">Overwatch Career profile</a></li>
+                <!-- <li><a href="settings.html">Settings</a></li> -->
+            </ul>
+        </div>
+    <!-- End -->
+
+    <h1 class="title">Patch Notes</h1>
+    <h2 class="des">What News In Last Update?</h2>
+    <hr>
+
+    <div class="blog-container" id="blogContainer"></div>
+    <script src="scripts/blog.js"></script>
+
+    <footer class="footer">
+        <h6>©<p id="currentYear"></p> All rights reserved.</h6>
+        <a href="index.html">Home</a>
+    </footer>
+    <script>
+        const currentYear = new Date().getFullYear();
+        document.getElementById('currentYear').innerHTML = currentYear;
+    </script>
+
+    <div id="settings" style="display: none;">
+        <h1 style="margin-bottom: 20px; font-size: 32px;">Font Manager</h1>
+        <label for="font-size">Text Size:</label>
+        <input type="range" id="font-size" min="12" max="24" value="16" step="1">
+        <p>Font Size: <span id="font-size-text"></span></p>
+        
+        <hr>
+
+        <label for="theme-selector"></label>
+        <h1 style="margin-bottom: 20px; font-size: 32px;">Select Themes</h1>
+        <select id="theme-selector" onchange="changeTheme(this.value)">
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+            <option value="black">Dark (Reverse)</option>
+        </select>
+        </div>
+    </div>
+
+    <!-- <script src="scripts/settings.js"></script> -->
+</body>
+</html>

@@ -1,0 +1,82 @@
+.toast.show{
+    position: fixed;
+    top: 250px;
+    right: 50px;
+    border-radius: 15px;
+    z-index: 9999;
+    background: #212226;
+    padding: 20px 35px 20px 25px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+    border-left: 6px solid #fff;
+    border-top: 6px solid #fff;
+    overflow: hidden;
+}
+
+.toast.hide{
+    animation: hide_slide 1s ease forwards;
+}
+
+@keyframes hide_slide{
+    40%{transform: translateX(0%);}
+    80%{transform: translateX(-10%);}
+    100%{transform: translateX(150%); display: none;}
+}
+
+
+.toast .toast-content{
+    display: flex;
+    align-items: center;
+}
+
+.toast-content .message{
+    display: flex;
+    flex-direction: column;
+    margin: 0 20px;
+}
+
+.message .text{
+    font-size: 20px;
+    font-weight: 400;
+    color: #666;
+}
+
+.message .text.text-1{
+    font-weight: 600;
+    color: #fff;
+}
+
+.toast .progress{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: #666;
+}
+
+.toast .progress::before{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+
+    animation: progress 5s linear forwards;
+}
+
+@keyframes progress {
+    100%{
+        right: 100%;
+    }
+}
+
+@media screen and (max-width: 575px){
+    .toast.show{
+        width: 100%;
+        height: auto;
+        left: 0;
+        top: 0;
+    }
+}

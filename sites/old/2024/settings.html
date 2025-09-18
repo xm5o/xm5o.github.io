@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Settings</title>
+</head>
+<body>
+    <div id="settings">
+        <h1 style="margin-bottom: 20px; font-size: 32px;">Font Manager</h1>
+        <label for="font-size">Text Size:</label>
+        <input type="range" id="font-size" min="12" max="24" value="16" step="1">
+        <p>Font Size: <span id="font-size-text"></span></p>
+        
+        <hr>
+
+        <label for="theme-selector"></label>
+        <h1 style="margin-bottom: 20px; font-size: 32px;">Select Themes</h1>
+        <select id="theme-selector" onchange="changeTheme(this.value)">
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+            <option value="black">Dark (Reverse)</option>
+        </select>
+        
+        <a style="margin-top: 20px;" href="index.html" class="btn" id="back">Back</a>
+    </div>
+
+    <script src="scripts/settings.js"></script>
+</body>
+</html>
