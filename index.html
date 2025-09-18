@@ -104,13 +104,13 @@
   </style>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <!-- <script src="scripts/translate.js"></script>
-  <script src="scripts/mobile-enhancements.js" defer></script> -->
+  <!-- <script src="scripts/translate.js"></script> -->
+  <!-- <script src="scripts/mobile-enhancements.js" defer></script> -->
 </head>
 
 <body>
   <header class="header" role="banner">
-    <a href="#" class="logo" aria-label="Personal Logo">Immo<span>rtal</span></a>
+    <a href="#" class="logo" aria-label="Personal Logo">Immortal</a>
 
     <a id="menu-icon" aria-label="Toggle Mobile Menu" aria-expanded="false">
       <i class="bx bx-menu"></i>
@@ -224,7 +224,7 @@
           </p>
 
           <!-- New Stats Section -->
-          <div class="hero-stats">
+          <!-- <div class="hero-stats">
             <div class="stat-item">
               <div class="stat-number" data-target="4">0</div>
               <div class="stat-label">Years Experience</div>
@@ -234,12 +234,12 @@
               <div class="stat-number" data-target="4">0</div>
               <div class="stat-label">Projects Completed</div>
             </div>
-            <!-- <div class="stat-divider"></div>
+            <div class="stat-divider"></div>
               <div class="stat-item">
                 <div class="stat-number" data-target="20">0</div>
                 <div class="stat-label">Happy Clients</div>
-              </div> -->
-          </div>
+              </div>
+          </div> -->
 
         </div>
 
@@ -391,6 +391,28 @@
         <div class="line line-1"></div>
         <div class="line line-2"></div>
         <div class="line line-3"></div>
+      </div>
+    </div>
+
+    <!-- Enhanced Discord Widget -->
+    <div id="discord-widget" class="discord-widget">
+      <div class="discord-profile loading">
+        <div class="discord-avatar-container">
+          <div class="discord-avatar-placeholder">
+            <i class="bx bxl-discord-alt"></i>
+          </div>
+          <div class="discord-status-indicator offline"></div>
+        </div>
+        
+        <div class="discord-info">
+          <div class="discord-nameplate">
+            <div class="discord-display-name">Loading...</div>
+          </div>
+          <div class="discord-custom-status">
+            <span class="status-emoji"></span>
+            <span class="status-text">Connecting to Discord</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1483,6 +1505,7 @@
   <script src="scripts/music.js"></script>
   <script src="scripts/blog.js"></script>
   <script src="scripts/faq.js"></script>
+  <script src="scripts/discord-activity.js"></script>
 
   <!-- hide some sections until i make it responsive for mobile -->
   <!-- <script src="scripts/hide.js"></script> -->
