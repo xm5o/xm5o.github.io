@@ -6,8 +6,14 @@ class DiscordActivity {
     this.maxRetries = 3;
     this.updateInterval = 15000; // 15 seconds
     this.intervalId = null;
+    this.userData = null;
     
     this.init();
+  }
+
+  // Device detection function
+  isDesktop() {
+    return window.innerWidth >= 1024 && !('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }
 
   async init() {
@@ -41,6 +47,9 @@ class DiscordActivity {
     const widget = document.getElementById('discord-widget');
     if (!widget) return;
 
+    // Store userData for expanded view
+    this.userData = userData;
+
     // Extract user data
     const username = userData.discord_user?.username || 'Unknown';
     const displayName = userData.discord_user?.display_name || username;
@@ -73,9 +82,14 @@ class DiscordActivity {
     const nameToDisplay = globalName || displayName || username;
     const shouldShowUsername = discriminator && discriminator !== '0';
 
+    // Check if desktop for clickable functionality
+    const isDesktop = this.isDesktop();
+    const clickableClass = isDesktop ? 'clickable' : '';
+    const clickableAttr = isDesktop ? 'tabindex="0" role="button" aria-label="View Discord profile details"' : '';
+
     // Update widget content
     widget.innerHTML = `
-      <div class="discord-profile">
+      <div class="discord-profile ${clickableClass}" ${clickableAttr}>
         <div class="discord-avatar-container">
           <img src="${avatarUrl}" alt="${nameToDisplay}" class="discord-avatar" 
                onerror="this.onerror=null; this.src='https://cdn.discordapp.com/embed/avatars/0.png';" />
@@ -104,6 +118,7 @@ class DiscordActivity {
             </div>
           ` : ''}
         </div>
+        ${isDesktop ? '<div class="click-indicator"><i class="bx bx-expand-alt"></i></div>' : ''}
       </div>
     `;
 
@@ -112,6 +127,17 @@ class DiscordActivity {
     const profile = widget.querySelector('.discord-profile');
     if (profile) {
       profile.classList.remove('loading');
+      
+      // Add click event listener for desktop only
+      if (isDesktop) {
+        profile.addEventListener('click', () => this.showExpandedView());
+        profile.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.showExpandedView();
+          }
+        });
+      }
     }
   }
 
@@ -144,6 +170,191 @@ class DiscordActivity {
       'offline': '⚫'
     };
     return statusIcons[status] || '⚫';
+  }
+
+  showExpandedView() {
+    if (!this.userData) return;
+
+    // Remove existing modal if present
+    const existingModal = document.getElementById('discord-expanded-modal');
+    if (existingModal) {
+      existingModal.remove();
+    }
+
+    const userData = this.userData;
+    const username = userData.discord_user?.username || 'Unknown';
+    const displayName = userData.discord_user?.display_name || username;
+    const globalName = userData.discord_user?.global_name || displayName;
+    const discriminator = userData.discord_user?.discriminator;
+    const avatar = userData.discord_user?.avatar;
+    const status = userData.discord_status || 'offline';
+    const userId = userData.discord_user?.id;
+    
+    // Get custom status if available
+    const customStatus = userData.activities?.find(activity => activity.type === 4);
+    const statusText = customStatus?.state || '';
+    const statusEmoji = customStatus?.emoji;
+
+    // Get activity status (playing, listening, etc.)
+    const activity = userData.activities?.find(activity => activity.type !== 4);
+    
+    // Build avatar URL
+    let avatarUrl;
+    if (avatar) {
+      avatarUrl = `https://cdn.discordapp.com/avatars/${userId}/${avatar}.${avatar.startsWith('a_') ? 'gif' : 'png'}?size=256`;
+    } else {
+      const defaultAvatarId = discriminator && discriminator !== '0' 
+        ? parseInt(discriminator) % 5 
+        : (parseInt(userId) >> 22) % 6;
+      avatarUrl = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarId}.png`;
+    }
+
+    // Determine which name to display
+    const nameToDisplay = globalName || displayName || username;
+    const shouldShowUsername = discriminator && discriminator !== '0';
+
+    // Get badges (mock data for now - Discord API doesn't provide badges via Lanyard)
+    const badges = this.getMockBadges(userData);
+    
+    // Get clan tag (from display name if present)
+    const clanTag = this.extractClanTag(displayName);
+
+    // Create modal
+    const modal = document.createElement('div');
+    modal.id = 'discord-expanded-modal';
+    modal.className = 'discord-expanded-modal';
+    modal.innerHTML = `
+      <div class="discord-modal-overlay">
+        <div class="discord-modal-content">
+          <button class="discord-modal-close" aria-label="Close">&times;</button>
+          
+          <div class="discord-expanded-header">
+            <div class="discord-expanded-avatar-container">
+              <img src="${avatarUrl}" alt="${nameToDisplay}" class="discord-expanded-avatar" 
+                   onerror="this.onerror=null; this.src='https://cdn.discordapp.com/embed/avatars/0.png';" />
+              <div class="discord-expanded-status-indicator ${status}"></div>
+            </div>
+            
+            <div class="discord-expanded-info">
+              <div class="discord-expanded-nameplate">
+                <div class="discord-expanded-display-name">
+                  ${clanTag ? `<span class="clan-tag">${clanTag}</span>` : ''}
+                  ${nameToDisplay}
+                </div>
+                ${shouldShowUsername ? `<div class="discord-expanded-username">@${username}#${discriminator}</div>` : `<div class="discord-expanded-username">@${username}</div>`}
+              </div>
+              
+              ${statusText ? `
+                <div class="discord-expanded-custom-status">
+                  ${statusEmoji ? `<span class="status-emoji">${this.renderEmoji(statusEmoji)}</span>` : ''}
+                  <span class="status-text">${statusText}</span>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+
+          ${badges.length > 0 ? `
+            <div class="discord-badges-section">
+              <h3>Badges</h3>
+              <div class="discord-badges">
+                ${badges.map(badge => `
+                  <div class="discord-badge" title="${badge.name}">
+                    <i class="${badge.icon}"></i>
+                    <span>${badge.name}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+
+          ${activity ? `
+            <div class="discord-activity-section">
+              <h3>Activity</h3>
+              <div class="discord-expanded-activity">
+                <div class="activity-type">${this.getActivityTypeText(activity.type)}</div>
+                <div class="activity-name">${activity.name}</div>
+                ${activity.details ? `<div class="activity-details">${activity.details}</div>` : ''}
+                ${activity.state ? `<div class="activity-state">${activity.state}</div>` : ''}
+              </div>
+            </div>
+          ` : ''}
+
+          <div class="discord-actions">
+            <a href="https://discord.com/users/${userId}" target="_blank" class="discord-message-btn">
+              <i class="bx bxl-discord-alt"></i>
+              Send Message
+            </a>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Add event listeners
+    const closeBtn = modal.querySelector('.discord-modal-close');
+    const overlay = modal.querySelector('.discord-modal-overlay');
+    
+    closeBtn.addEventListener('click', () => this.closeExpandedView());
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        this.closeExpandedView();
+      }
+    });
+
+    // Add escape key listener
+    const escapeHandler = (e) => {
+      if (e.key === 'Escape') {
+        this.closeExpandedView();
+        document.removeEventListener('keydown', escapeHandler);
+      }
+    };
+    document.addEventListener('keydown', escapeHandler);
+
+    // Animate in
+    requestAnimationFrame(() => {
+      modal.classList.add('show');
+    });
+  }
+
+  closeExpandedView() {
+    const modal = document.getElementById('discord-expanded-modal');
+    if (modal) {
+      modal.classList.remove('show');
+      setTimeout(() => {
+        modal.remove();
+      }, 300);
+    }
+  }
+
+  getMockBadges(userData) {
+    // Mock badges based on user data - in a real implementation, 
+    // you'd need to use Discord's API directly or have this data from another source
+    const badges = [];
+    
+    // Add some example badges based on status or activities
+    if (userData.discord_status === 'online') {
+      badges.push({ name: 'Active User', icon: 'bx bx-check-circle' });
+    }
+    
+    if (userData.activities?.some(activity => activity.type === 0)) {
+      badges.push({ name: 'Gamer', icon: 'bx bx-game' });
+    }
+    
+    if (userData.activities?.some(activity => activity.type === 2)) {
+      badges.push({ name: 'Music Lover', icon: 'bx bx-music' });
+    }
+
+    // Add some default badges
+    badges.push({ name: 'Discord User', icon: 'bx bxl-discord-alt' });
+    
+    return badges;
+  }
+
+  extractClanTag(displayName) {
+    // Look for clan tags in common formats like [TAG], {TAG}, (TAG)
+    const clanTagMatch = displayName?.match(/^[\[\{\(]([A-Z0-9]{2,6})[\]\}\)]/);
+    return clanTagMatch ? clanTagMatch[0] : null;
   }
 
   handleError() {
