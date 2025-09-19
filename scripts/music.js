@@ -28,13 +28,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Song data with enhanced information
     const songData = {
-        'apocalypse': {
-            title: 'Apocalypse',
+        // 'apocalypse': {
+        //     title: 'Apocalypse',
+        //     artist: 'Cigarettes After Sex',
+        //     image: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c267729189e29e133756_Cigarettes%2BAfter%2BSex-p-500.jpg',
+        //     preview: './assets/music/Apocalypse.mp3',
+        //     fallback: './assets/music/Apocalypse.ogg',
+        //     duration: '3:42'
+        // },
+        'flash': {
+            title: 'flash',
             artist: 'Cigarettes After Sex',
             image: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c267729189e29e133756_Cigarettes%2BAfter%2BSex-p-500.jpg',
-            preview: './assets/music/Apocalypse.mp3',
-            fallback: './assets/music/Apocalypse.ogg',
-            duration: '3:42'
+            preview: './assets/music/flash.mp3',
+            fallback: './assets/music/flash.ogg',
+            duration: '4:34'
         },
         'sesame-syrup': {
             title: 'Sesame Syrup',

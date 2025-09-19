@@ -4,7 +4,7 @@ class DiscordActivity {
     this.apiUrl = `https://api.lanyard.rest/v1/users/${this.userId}`;
     this.retryCount = 0;
     this.maxRetries = 3;
-    this.updateInterval = 15000; // 15 seconds
+    this.updateInterval = 1000; // 1 seconds
     this.intervalId = null;
     this.userData = null;
     

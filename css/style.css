@@ -7892,7 +7892,7 @@ section {
   height: 18px;
   border-radius: 50%;
   border: 3px solid var(--bg-color);
-  animation: statusPulse 2s ease-in-out infinite;
+  /* animation: statusPulse 2s ease-in-out infinite; */
 }
 
 .discord-status-indicator.online {
