@@ -165,8 +165,8 @@ class DiscordActivity {
   getStatusIcon(status) {
     const statusIcons = {
       'online': '🟢',
-      'idle': '🟡', 
-      'dnd': '🔴',
+      'idle': '🌙', 
+      'dnd': '⛔',
       'offline': '⚫'
     };
     return statusIcons[status] || '⚫';

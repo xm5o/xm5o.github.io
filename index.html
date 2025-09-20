@@ -121,6 +121,7 @@
         <i class="bx bx-x"></i>
       </button>
       <a href="#home" data-translate="nav.home">Home</a>
+      <a href="#upcoming" data-translate="nav.upcoming">Upcoming</a>
       <a href="#about" data-translate="nav.about">About</a>
       <a href="#services" data-translate="nav.skills">Skills</a>
       <a href="#projects" data-translate="nav.projects">Projects</a>
@@ -425,12 +426,71 @@
     </div>
   </section>
 
-  <!-- Enhanced Discord Server Modal -->
+  <!-- Upcoming Things Section -->
+  <section class="upcoming-things" id="upcoming">
+    <div class="upcoming-particles-container">
+      <div class="upcoming-particle"></div>
+      <div class="upcoming-particle"></div>
+      <div class="upcoming-particle"></div>
+      <div class="upcoming-particle"></div>
+      <div class="upcoming-particle"></div>
+      <div class="upcoming-particle"></div>
+    </div>
+
+    <div class="upcoming-geometric-bg">
+      <div class="upcoming-geo-shape upcoming-geo-circle"></div>
+      <div class="upcoming-geo-shape upcoming-geo-triangle"></div>
+      <div class="upcoming-geo-shape upcoming-geo-square"></div>
+      <div class="upcoming-geo-shape upcoming-geo-hexagon"></div>
+    </div>
+
+    <div class="upcoming-container">
+      <div class="upcoming-section-header">
+        <h2 class="upcoming-gradient-heading">
+          Upcoming <span>Things</span>
+          <div class="upcoming-heading-decoration"></div>
+        </h2>
+        <p class="upcoming-section-subtitle">
+          Stay tuned for <span class="upcoming-tagline-highlight">exciting projects</span>,
+          new releases, and upcoming collaborations
+        </p>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="upcoming-filter">
+        <button class="upcoming-filter-btn active" data-filter="all">
+          All Updates
+        </button>
+        <button class="upcoming-filter-btn" data-filter="projects">
+          Projects
+        </button>
+        <button class="upcoming-filter-btn" data-filter="releases">
+          Releases
+        </button>
+        <!-- <button class="upcoming-filter-btn" data-filter="events">
+          Events
+        </button> -->
+      </div>
+
+      <div class="upcoming-grid" id="upcomingGrid">
+      </div>
+
+      <div class="upcoming-load-more-container">
+        <button class="upcoming-load-more-btn" id="upcomingLoadMoreBtn">
+          <div class="btn-bg-effect"></div>
+          <i class="bx bx-refresh"></i>
+          <span>Load More</span>
+          <div class="btn-shine-effect"></div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Discord Server Modal -->
   <div id="discordModal" class="discord-modal">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
 
-      <!-- Server Banner with optional background image and floating animations -->
       <div id="serverBanner" class="server-banner">
         <img id="serverIcon" src="assets/pfp.jpg" alt="Server Icon" class="server-icon" />
       </div>
@@ -1528,6 +1588,14 @@
   <script src="scripts/blog.js"></script>
   <script src="scripts/faq.js"></script>
   <script src="scripts/discord-activity.js"></script>
+  <script src="scripts/video-thumbnail.js"></script>
+  <script src="scripts/upcoming.js"></script>
+  <script>
+    // Initialize upcoming things when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      window.upcomingThings = new UpcomingThings();
+    });
+  </script>
 
   <!-- hide some sections until i make it responsive for mobile -->
   <!-- <script src="scripts/hide.js"></script> -->

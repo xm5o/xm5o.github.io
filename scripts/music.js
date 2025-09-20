@@ -37,11 +37,11 @@ document.addEventListener('DOMContentLoaded', function() {
         //     duration: '3:42'
         // },
         'flash': {
-            title: 'flash',
+            title: 'Flash',
             artist: 'Cigarettes After Sex',
             image: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c267729189e29e133756_Cigarettes%2BAfter%2BSex-p-500.jpg',
-            preview: './assets/music/flash.mp3',
-            fallback: './assets/music/flash.ogg',
+            preview: './assets/music/Flash.mp3',
+            fallback: './assets/music/Flash.ogg',
             duration: '4:34'
         },
         'sesame-syrup': {
