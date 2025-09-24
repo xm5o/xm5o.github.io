@@ -1,19 +1,23 @@
-// Enhanced Music Player JavaScript
+// Enhanced Music Player JavaScript with Fullscreen Support
 document.addEventListener('DOMContentLoaded', function() {
     let currentAudio = null;
     let audioPlayer = null;
+    let fullscreenPlayer = null;
     let currentSongIndex = 0;
     let isPlaying = false;
+    let isFullscreen = false;
     let playlist = [];
     
     // Initialize audio player
     audioPlayer = document.getElementById('audioPlayer');
+    fullscreenPlayer = document.getElementById('fullscreenPlayer');
     
     // Get player elements
     const playPauseBtn = audioPlayer.querySelector('.play-pause-btn');
     const prevBtn = audioPlayer.querySelector('.prev-btn');
     const nextBtn = audioPlayer.querySelector('.next-btn');
     const closeBtn = audioPlayer.querySelector('.close-audio');
+    const fullscreenBtn = audioPlayer.querySelector('.fullscreen-btn');
     const progressFill = audioPlayer.querySelector('.audio-progress-fill');
     const progressBar = audioPlayer.querySelector('.audio-progress');
     const progressHandle = audioPlayer.querySelector('.audio-progress-handle');
@@ -26,16 +30,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const volumeSlider = audioPlayer.querySelector('.volume-slider');
     const visualizerBars = audioPlayer.querySelectorAll('.visualizer-bar');
     
+    // Get fullscreen player elements
+    const fullscreenClose = fullscreenPlayer.querySelector('.fullscreen-close');
+    const fullscreenMinimize = fullscreenPlayer.querySelector('.fullscreen-minimize');
+    const fullscreenImage = fullscreenPlayer.querySelector('.fullscreen-image');
+    const fullscreenTitle = fullscreenPlayer.querySelector('.fullscreen-title');
+    const fullscreenArtist = fullscreenPlayer.querySelector('.fullscreen-artist');
+    const fullscreenPlayPause = fullscreenPlayer.querySelector('.fullscreen-play-pause');
+    const fullscreenPrev = fullscreenPlayer.querySelector('.fullscreen-prev');
+    const fullscreenNext = fullscreenPlayer.querySelector('.fullscreen-next');
+    const fullscreenProgressFill = fullscreenPlayer.querySelector('.fullscreen-progress-fill');
+    const fullscreenProgressBar = fullscreenPlayer.querySelector('.fullscreen-progress');
+    const fullscreenProgressHandle = fullscreenPlayer.querySelector('.fullscreen-progress-handle');
+    const fullscreenCurrentTime = fullscreenPlayer.querySelector('.fullscreen-current-time');
+    const fullscreenTotalTime = fullscreenPlayer.querySelector('.fullscreen-total-time');
+    const fullscreenVolumeBtn = fullscreenPlayer.querySelector('.fullscreen-volume-btn');
+    const fullscreenVolumeSlider = fullscreenPlayer.querySelector('.fullscreen-volume-slider');
+    
     // Song data with enhanced information
     const songData = {
-        // 'apocalypse': {
-        //     title: 'Apocalypse',
-        //     artist: 'Cigarettes After Sex',
-        //     image: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c267729189e29e133756_Cigarettes%2BAfter%2BSex-p-500.jpg',
-        //     preview: './assets/music/Apocalypse.mp3',
-        //     fallback: './assets/music/Apocalypse.ogg',
-        //     duration: '3:42'
-        // },
         'flash': {
             title: 'Flash',
             artist: 'Cigarettes After Sex',
@@ -43,6 +56,14 @@ document.addEventListener('DOMContentLoaded', function() {
             preview: './assets/music/Flash.mp3',
             fallback: './assets/music/Flash.ogg',
             duration: '4:34'
+        },
+        'cry': {
+            title: 'Cry',
+            artist: 'Cigarettes After Sex',
+            image: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/657046caf7ba342d201c8b82_Cry.jpg',
+            preview: './assets/music/Cry.mp3',
+            fallback: './assets/music/Cry.ogg',
+            duration: '3:55'
         },
         'sesame-syrup': {
             title: 'Sesame Syrup',
@@ -109,20 +130,29 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateProgress() {
         if (currentAudio && currentAudio.duration) {
             const progress = (currentAudio.currentTime / currentAudio.duration) * 100;
+            
+            // Update regular player
             progressFill.style.width = progress + '%';
             progressHandle.style.left = progress + '%';
             currentTimeEl.textContent = formatTime(currentAudio.currentTime);
+            
+            // Update fullscreen player
+            if (isFullscreen) {
+                fullscreenProgressFill.style.width = progress + '%';
+                fullscreenProgressHandle.style.left = progress + '%';
+                fullscreenCurrentTime.textContent = formatTime(currentAudio.currentTime);
+            }
         }
     }
     
     // Update visualizer bars
     function updateVisualizer() {
-        if (isPlaying) {
+        if (isPlaying && visualizerBars.length > 0) {
             visualizerBars.forEach((bar, index) => {
                 const height = Math.random() * 35 + 8;
                 bar.style.height = height + 'px';
             });
-        } else {
+        } else if (visualizerBars.length > 0) {
             visualizerBars.forEach(bar => {
                 bar.style.height = '8px';
             });
@@ -132,6 +162,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // Start visualizer animation
     function startVisualizer() {
         setInterval(updateVisualizer, 150);
+    }
+    
+    // Update UI for both players
+    function updatePlayerUI(song) {
+        // Update regular player
+        playerImage.src = song.image;
+        playerTitle.textContent = song.title;
+        playerArtist.textContent = song.artist;
+        totalTimeEl.textContent = song.duration;
+        
+        // Update fullscreen player
+        if (isFullscreen) {
+            fullscreenImage.src = song.image;
+            fullscreenTitle.textContent = song.title;
+            fullscreenArtist.textContent = song.artist;
+            fullscreenTotalTime.textContent = song.duration;
+        }
+    }
+    
+    // Sync play/pause buttons
+    function updatePlayPauseButtons() {
+        const icon = isPlaying ? '<i class="bx bx-pause"></i>' : '<i class="bx bx-play"></i>';
+        playPauseBtn.innerHTML = icon;
+        if (isFullscreen) {
+            fullscreenPlayPause.innerHTML = icon;
+        }
     }
     
     // Load and play song
@@ -150,10 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
         currentAudio.volume = volumeSlider.value;
         
         // Update player UI
-        playerImage.src = song.image;
-        playerTitle.textContent = song.title;
-        playerArtist.textContent = song.artist;
-        totalTimeEl.textContent = song.duration;
+        updatePlayerUI(song);
         
         // Show player
         audioPlayer.classList.add('active');
@@ -173,7 +226,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         currentAudio.addEventListener('loadedmetadata', function() {
-            totalTimeEl.textContent = formatTime(currentAudio.duration);
+            const duration = formatTime(currentAudio.duration);
+            totalTimeEl.textContent = duration;
+            if (isFullscreen) {
+                fullscreenTotalTime.textContent = duration;
+            }
         });
         
         currentAudio.addEventListener('canplay', function() {
@@ -181,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (autoPlay) {
                 currentAudio.play().then(() => {
                     isPlaying = true;
-                    playPauseBtn.innerHTML = '<i class="bx bx-pause"></i>';
+                    updatePlayPauseButtons();
                 }).catch(error => {
                     console.error('Error playing audio:', error);
                     tryFallbackAudio(song);
@@ -225,11 +282,18 @@ document.addEventListener('DOMContentLoaded', function() {
     function showLoadingState() {
         playPauseBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
         playPauseBtn.disabled = true;
+        if (isFullscreen) {
+            fullscreenPlayPause.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
+            fullscreenPlayPause.disabled = true;
+        }
     }
     
     function hideLoadingState() {
-        playPauseBtn.innerHTML = isPlaying ? '<i class="bx bx-pause"></i>' : '<i class="bx bx-play"></i>';
+        updatePlayPauseButtons();
         playPauseBtn.disabled = false;
+        if (isFullscreen) {
+            fullscreenPlayPause.disabled = false;
+        }
     }
     
     // Play next song
@@ -244,6 +308,102 @@ document.addEventListener('DOMContentLoaded', function() {
         loadSong(playlist[currentSongIndex]);
     }
     
+    // Toggle play/pause
+    function togglePlayPause() {
+        if (!currentAudio) return;
+        
+        if (currentAudio.paused) {
+            currentAudio.play().then(() => {
+                isPlaying = true;
+                updatePlayPauseButtons();
+            }).catch(error => {
+                console.error('Error playing audio:', error);
+                showAudioError('Unable to play audio');
+            });
+        } else {
+            currentAudio.pause();
+            isPlaying = false;
+            updatePlayPauseButtons();
+        }
+    }
+    
+    // Enter fullscreen mode
+    function enterFullscreen() {
+        if (!currentAudio) return;
+        
+        isFullscreen = true;
+        fullscreenPlayer.classList.add('active');
+        
+        // Update fullscreen UI with current song data
+        const currentSong = songData[playlist[currentSongIndex]];
+        if (currentSong) {
+            updatePlayerUI(currentSong);
+        }
+        
+        // Sync volume
+        fullscreenVolumeSlider.value = volumeSlider.value;
+        
+        // Update play/pause button
+        updatePlayPauseButtons();
+        
+        // Hide regular player temporarily
+        audioPlayer.style.opacity = '0';
+        
+        // Remove blur effects in fullscreen
+        document.body.style.overflow = 'hidden';
+    }
+    
+    // Exit fullscreen mode
+    function exitFullscreen() {
+        isFullscreen = false;
+        fullscreenPlayer.classList.remove('active');
+        
+        // Show regular player
+        audioPlayer.style.opacity = '1';
+        
+        // Restore body scroll
+        document.body.style.overflow = '';
+    }
+    
+    // Progress bar interaction helper
+    function updateProgressFromEvent(e, progressBar, isFullscreenBar = false) {
+        if (!currentAudio || !currentAudio.duration) return;
+        
+        const rect = progressBar.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const width = rect.width;
+        const percentage = Math.max(0, Math.min(1, clickX / width));
+        
+        currentAudio.currentTime = currentAudio.duration * percentage;
+    }
+    
+    // Volume control helper
+    function updateVolume(value) {
+        if (currentAudio) {
+            currentAudio.volume = value;
+        }
+        
+        // Update volume icons
+        const volume = parseFloat(value);
+        const updateVolumeIcon = (btn) => {
+            const volumeIcon = btn.querySelector('i');
+            if (volume === 0) {
+                volumeIcon.className = 'bx bx-volume-mute';
+            } else if (volume < 0.5) {
+                volumeIcon.className = 'bx bx-volume-low';
+            } else {
+                volumeIcon.className = 'bx bx-volume-full';
+            }
+        };
+        
+        updateVolumeIcon(volumeBtn);
+        if (isFullscreen) {
+            updateVolumeIcon(fullscreenVolumeBtn);
+        }
+    }
+    
+    // Event Listeners
+    
     // Play button click handlers for song cards
     document.querySelectorAll('.play-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
@@ -257,71 +417,85 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Play/Pause button in player
-    playPauseBtn.addEventListener('click', function() {
-        if (!currentAudio) return;
-        
-        if (currentAudio.paused) {
-            currentAudio.play().then(() => {
-                isPlaying = true;
-                this.innerHTML = '<i class="bx bx-pause"></i>';
-            }).catch(error => {
-                console.error('Error playing audio:', error);
-                showAudioError('Unable to play audio');
-            });
-        } else {
-            currentAudio.pause();
-            isPlaying = false;
-            this.innerHTML = '<i class="bx bx-play"></i>';
-        }
-    });
+    // Regular player controls
+    playPauseBtn.addEventListener('click', togglePlayPause);
+    prevBtn.addEventListener('click', playPrevious);
+    nextBtn.addEventListener('click', playNext);
+    fullscreenBtn.addEventListener('click', enterFullscreen);
     
-    // Previous button
-    prevBtn.addEventListener('click', function() {
-        playPrevious();
-    });
-    
-    // Next button
-    nextBtn.addEventListener('click', function() {
-        playNext();
-    });
-    
-    // Close button
     closeBtn.addEventListener('click', function() {
         if (currentAudio) {
             currentAudio.pause();
             currentAudio = null;
         }
         audioPlayer.classList.remove('active');
+        if (isFullscreen) {
+            exitFullscreen();
+        }
         isPlaying = false;
         progressFill.style.width = '0%';
         progressHandle.style.left = '0%';
         currentTimeEl.textContent = '0:00';
     });
     
-    // Progress bar click and drag
+    // Fullscreen player controls
+    fullscreenPlayPause.addEventListener('click', togglePlayPause);
+    fullscreenPrev.addEventListener('click', playPrevious);
+    fullscreenNext.addEventListener('click', playNext);
+    fullscreenClose.addEventListener('click', function() {
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio = null;
+        }
+        audioPlayer.classList.remove('active');
+        exitFullscreen();
+        isPlaying = false;
+    });
+    fullscreenMinimize.addEventListener('click', exitFullscreen);
+    
+    // Progress bar interactions - Regular player
     let isDragging = false;
     
     progressBar.addEventListener('mousedown', function(e) {
         isDragging = true;
-        updateProgressFromEvent(e);
+        updateProgressFromEvent(e, progressBar);
     });
     
     progressBar.addEventListener('touchstart', function(e) {
         isDragging = true;
-        updateProgressFromEvent(e.touches[0]);
+        updateProgressFromEvent(e.touches[0], progressBar);
     });
     
+    // Progress bar interactions - Fullscreen player
+    fullscreenProgressBar.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        updateProgressFromEvent(e, fullscreenProgressBar, true);
+    });
+    
+    fullscreenProgressBar.addEventListener('touchstart', function(e) {
+        isDragging = true;
+        updateProgressFromEvent(e.touches[0], fullscreenProgressBar, true);
+    });
+    
+    // Global mouse/touch events
     document.addEventListener('mousemove', function(e) {
         if (isDragging) {
-            updateProgressFromEvent(e);
+            if (isFullscreen) {
+                updateProgressFromEvent(e, fullscreenProgressBar, true);
+            } else {
+                updateProgressFromEvent(e, progressBar);
+            }
         }
     });
     
     document.addEventListener('touchmove', function(e) {
         if (isDragging) {
             e.preventDefault();
-            updateProgressFromEvent(e.touches[0]);
+            if (isFullscreen) {
+                updateProgressFromEvent(e.touches[0], fullscreenProgressBar, true);
+            } else {
+                updateProgressFromEvent(e.touches[0], progressBar);
+            }
         }
     });
     
@@ -333,48 +507,45 @@ document.addEventListener('DOMContentLoaded', function() {
         isDragging = false;
     });
     
-    function updateProgressFromEvent(e) {
-        if (!currentAudio || !currentAudio.duration) return;
-        
-        const rect = progressBar.getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const width = rect.width;
-        const percentage = Math.max(0, Math.min(1, clickX / width));
-        
-        currentAudio.currentTime = currentAudio.duration * percentage;
-    }
-    
     // Volume controls
     volumeSlider.addEventListener('input', function() {
-        if (currentAudio) {
-            currentAudio.volume = this.value;
-        }
-        
-        // Update volume icon
-        const volume = parseFloat(this.value);
-        const volumeIcon = volumeBtn.querySelector('i');
-        
-        if (volume === 0) {
-            volumeIcon.className = 'bx bx-volume-mute';
-        } else if (volume < 0.5) {
-            volumeIcon.className = 'bx bx-volume-low';
-        } else {
-            volumeIcon.className = 'bx bx-volume-full';
+        updateVolume(this.value);
+        // Sync fullscreen volume slider
+        if (isFullscreen) {
+            fullscreenVolumeSlider.value = this.value;
         }
     });
     
+    fullscreenVolumeSlider.addEventListener('input', function() {
+        updateVolume(this.value);
+        // Sync regular volume slider
+        volumeSlider.value = this.value;
+    });
+    
     volumeBtn.addEventListener('click', function() {
-        const volumeIcon = this.querySelector('i');
-        
         if (currentAudio && currentAudio.volume > 0) {
             currentAudio.volume = 0;
             volumeSlider.value = 0;
-            volumeIcon.className = 'bx bx-volume-mute';
+            fullscreenVolumeSlider.value = 0;
         } else if (currentAudio) {
             currentAudio.volume = 0.5;
             volumeSlider.value = 0.5;
-            volumeIcon.className = 'bx bx-volume-full';
+            fullscreenVolumeSlider.value = 0.5;
         }
+        updateVolume(currentAudio ? currentAudio.volume : 0);
+    });
+    
+    fullscreenVolumeBtn.addEventListener('click', function() {
+        if (currentAudio && currentAudio.volume > 0) {
+            currentAudio.volume = 0;
+            volumeSlider.value = 0;
+            fullscreenVolumeSlider.value = 0;
+        } else if (currentAudio) {
+            currentAudio.volume = 0.5;
+            volumeSlider.value = 0.5;
+            fullscreenVolumeSlider.value = 0.5;
+        }
+        updateVolume(currentAudio ? currentAudio.volume : 0);
     });
     
     // Show audio error
@@ -412,6 +583,9 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             notification.remove();
             audioPlayer.classList.remove('active');
+            if (isFullscreen) {
+                exitFullscreen();
+            }
         }, 5000);
     }
     
@@ -422,10 +596,19 @@ document.addEventListener('DOMContentLoaded', function() {
         switch(e.code) {
             case 'Space':
                 e.preventDefault();
-                playPauseBtn.click();
+                togglePlayPause();
                 break;
             case 'Escape':
-                closeBtn.click();
+                if (isFullscreen) {
+                    exitFullscreen();
+                } else {
+                    closeBtn.click();
+                }
+                break;
+            case 'KeyF':
+                if (currentAudio && !isFullscreen) {
+                    enterFullscreen();
+                }
                 break;
             case 'ArrowLeft':
                 if (currentAudio) {
@@ -439,19 +622,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             case 'ArrowUp':
                 e.preventDefault();
-                volumeSlider.value = Math.min(1, parseFloat(volumeSlider.value) + 0.1);
-                volumeSlider.dispatchEvent(new Event('input'));
+                const newVolumeUp = Math.min(1, parseFloat(volumeSlider.value) + 0.1);
+                volumeSlider.value = newVolumeUp;
+                fullscreenVolumeSlider.value = newVolumeUp;
+                updateVolume(newVolumeUp);
                 break;
             case 'ArrowDown':
                 e.preventDefault();
-                volumeSlider.value = Math.max(0, parseFloat(volumeSlider.value) - 0.1);
-                volumeSlider.dispatchEvent(new Event('input'));
+                const newVolumeDown = Math.max(0, parseFloat(volumeSlider.value) - 0.1);
+                volumeSlider.value = newVolumeDown;
+                fullscreenVolumeSlider.value = newVolumeDown;
+                updateVolume(newVolumeDown);
                 break;
             case 'KeyN':
-                nextBtn.click();
+                playNext();
                 break;
             case 'KeyP':
-                prevBtn.click();
+                playPrevious();
                 break;
         }
     });
@@ -460,79 +647,46 @@ document.addEventListener('DOMContentLoaded', function() {
     let touchStartX = 0;
     let touchStartY = 0;
     
-    audioPlayer.addEventListener('touchstart', function(e) {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-    });
-    
-    audioPlayer.addEventListener('touchend', function(e) {
-        const touchEndX = e.changedTouches[0].clientX;
-        const touchEndY = e.changedTouches[0].clientY;
-        const deltaX = touchEndX - touchStartX;
-        const deltaY = touchEndY - touchStartY;
+    if (fullscreenPlayer) {
+        fullscreenPlayer.addEventListener('touchstart', function(e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
         
-        // Swipe gestures (minimum 50px movement)
-        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-            if (deltaX > 0) {
-                // Swipe right - previous song
-                prevBtn.click();
-            } else {
-                // Swipe left - next song
-                nextBtn.click();
+        fullscreenPlayer.addEventListener('touchend', function(e) {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            
+            // Swipe gestures
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                if (deltaX > 0) {
+                    // Swipe right - previous song
+                    playPrevious();
+                } else {
+                    // Swipe left - next song
+                    playNext();
+                }
+            } else if (deltaY > 100) {
+                // Swipe down - exit fullscreen
+                exitFullscreen();
             }
-        }
-    });
+        });
+    }
     
     // Initialize visualizer
     startVisualizer();
     
-    // Add scroll animations for song cards
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
-    
-    // Observe song cards
-    document.querySelectorAll('.song-card').forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(50px)';
-        card.style.transition = `all 0.8s ease ${index * 0.1}s`;
-        observer.observe(card);
-    });
-    
-    // Observe band header
-    const bandHeader = document.querySelector('.band-header');
-    if (bandHeader) {
-        bandHeader.style.opacity = '0';
-        bandHeader.style.transform = 'translateY(30px)';
-        bandHeader.style.transition = 'all 1s ease';
-        observer.observe(bandHeader);
+    // Mobile-specific optimizations
+    if (window.innerWidth <= 768) {
+        // Reduce animation complexity on mobile
+        document.documentElement.style.setProperty('--animation-duration', '0.2s');
+        
+        // Optimize touch interactions
+        document.addEventListener('touchstart', function() {}, { passive: true });
+        document.addEventListener('touchmove', function() {}, { passive: false });
     }
     
-    // Add click animation to song cards
-    document.querySelectorAll('.song-card').forEach(card => {
-        card.addEventListener('click', function() {
-            this.style.transform = 'translateY(-15px) scale(1.03)';
-            setTimeout(() => {
-                this.style.transform = '';
-            }, 200);
-        });
-    });
-    
-    // Prevent context menu on audio player (for better mobile experience)
-    audioPlayer.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-    });
-    
-    console.log('Enhanced Music Player initialized successfully!');
+    console.log('Enhanced Music Player with Fullscreen Support initialized');
 });
-

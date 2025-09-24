@@ -22,66 +22,68 @@
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <!-- Arabic Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <!-- RTL Support CSS -->
   <style>
     /* RTL Support */
     [dir="rtl"] {
       font-family: 'Tajawal', 'Cairo', Arial, sans-serif;
     }
-    
+
     [dir="rtl"] .navbar {
       flex-direction: row-reverse;
     }
-    
+
     [dir="rtl"] .home-content {
       text-align: right;
     }
-    
+
     [dir="rtl"] .hero-text {
       text-align: right;
     }
-    
+
     [dir="rtl"] .social-buttons {
       flex-direction: row-reverse;
     }
-    
+
     [dir="rtl"] .cta-group {
       flex-direction: row-reverse;
     }
-    
+
     [dir="rtl"] .about-content-wrapper {
       flex-direction: row-reverse;
     }
-    
+
     [dir="rtl"] .services-container {
       direction: rtl;
     }
-    
+
     [dir="rtl"] .projects-grid {
       direction: rtl;
     }
-    
+
     [dir="rtl"] .songs-grid {
       direction: rtl;
     }
-    
+
     [dir="rtl"] .song-info {
       text-align: right;
     }
-    
+
     [dir="rtl"] .song-meta {
       flex-direction: row-reverse;
     }
-    
+
     [dir="rtl"] .contact-form {
       direction: rtl;
     }
-    
+
     [dir="rtl"] .contact-info {
       text-align: right;
     }
-    
+
     /* Preserve English text direction for song titles and artist names */
     [dir="rtl"] .song-title,
     [dir="rtl"] .song-artist,
@@ -90,13 +92,13 @@
       direction: ltr;
       text-align: left;
     }
-    
+
     /* Adjust margins and paddings for RTL */
     [dir="rtl"] .mobile-language-toggle {
       margin-right: auto;
       margin-left: 0;
     }
-    
+
     [dir="rtl"] .desktop-language {
       margin-left: auto;
       margin-right: 0;
@@ -121,7 +123,7 @@
         <i class="bx bx-x"></i>
       </button>
       <a href="#home" data-translate="nav.home">Home</a>
-      <a href="#upcoming" data-translate="nav.upcoming">Upcoming</a>
+      <!-- <a href="#upcoming" data-translate="nav.upcoming">Upcoming</a> -->
       <a href="#about" data-translate="nav.about">About</a>
       <a href="#services" data-translate="nav.skills">Skills</a>
       <a href="#projects" data-translate="nav.projects">Projects</a>
@@ -376,15 +378,15 @@
         <h4>Site Views</h4>
         <div class="counter-number" id="visitorCount">0</div>
         <div class="counter-stats" style="display: none;">
-            <div class="stat-item">
-              <i class="bx bx-calendar"></i>
-              <span id="todayViews">0 today</span>
-            </div>
-            <div class="stat-item">
-              <i class="bx bx-time"></i>
-              <span id="lastVisit">Just now</span>
-            </div>
+          <div class="stat-item">
+            <i class="bx bx-calendar"></i>
+            <span id="todayViews">0 today</span>
           </div>
+          <div class="stat-item">
+            <i class="bx bx-time"></i>
+            <span id="lastVisit">Just now</span>
+          </div>
+        </div>
       </div>
 
       <!-- Counter Animation Lines -->
@@ -404,7 +406,7 @@
           </div>
           <div class="discord-status-indicator offline"></div>
         </div>
-        
+
         <div class="discord-info">
           <div class="discord-nameplate">
             <div class="discord-display-name">Loading...</div>
@@ -427,7 +429,7 @@
   </section>
 
   <!-- Upcoming Things Section -->
-  <section class="upcoming-things" id="upcoming">
+  <!-- <section class="upcoming-things" id="upcoming">
     <div class="upcoming-particles-container">
       <div class="upcoming-particle"></div>
       <div class="upcoming-particle"></div>
@@ -456,7 +458,6 @@
         </p>
       </div>
 
-      <!-- Filter Tabs -->
       <div class="upcoming-filter">
         <button class="upcoming-filter-btn active" data-filter="all">
           All Updates
@@ -467,9 +468,9 @@
         <button class="upcoming-filter-btn" data-filter="releases">
           Releases
         </button>
-        <!-- <button class="upcoming-filter-btn" data-filter="events">
+        <button class="upcoming-filter-btn" data-filter="events">
           Events
-        </button> -->
+        </button>
       </div>
 
       <div class="upcoming-grid" id="upcomingGrid">
@@ -484,7 +485,7 @@
         </button>
       </div>
     </div>
-  </section>
+  </section> -->
 
   <!-- Discord Server Modal -->
   <div id="discordModal" class="discord-modal">
@@ -967,28 +968,6 @@
 
         <!-- Enhanced Songs Grid -->
         <div class="songs-grid">
-          <!-- <div class="song-card" data-song="apocalypse">
-            <div class="song-image">
-              <img
-                src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c267729189e29e133756_Cigarettes%2BAfter%2BSex-p-500.jpg"
-                alt="Apocalypse" />
-              <div class="play-overlay">
-                <button class="play-btn" data-preview="./assets/music/apocalypse.mp3">
-                  <i class="bx bx-play"></i>
-                </button>
-              </div>
-              <div class="song-duration">3:42</div>
-            </div>
-            <div class="song-info">
-              <h3 class="song-title">Apocalypse</h3>
-              <p class="song-preview">A dreamy song about love and loss with beautiful poetic style</p>
-              <div class="song-meta">
-                <span class="song-artist">Cigarettes After Sex</span>
-                <span class="song-year">2017</span>
-              </div>
-            </div>
-          </div> -->
-
           <div class="song-card" data-song="flash">
             <div class="song-image">
               <img
@@ -1003,7 +982,26 @@
             </div>
             <div class="song-info">
               <h3 class="song-title">Flash</h3>
-              <!-- <p class="song-preview">A dreamy song about love and loss with beautiful poetic style</p> -->
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">2017</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card" data-song="cry">
+            <div class="song-image">
+              <img src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/657046caf7ba342d201c8b82_Cry.jpg"
+                alt="cry" />
+              <div class="play-overlay">
+                <button class="play-btn" data-preview="./assets/music/Cry.mp3">
+                  <i class="bx bx-play"></i>
+                </button>
+              </div>
+              <div class="song-duration">4:16</div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Cry</h3>
               <div class="song-meta">
                 <span class="song-artist">Cigarettes After Sex</span>
                 <span class="song-year">2017</span>
@@ -1021,11 +1019,10 @@
                   <i class="bx bx-play"></i>
                 </button>
               </div>
-              <div class="song-duration">4:15</div>
+              <div class="song-duration">5:03</div>
             </div>
             <div class="song-info">
               <h3 class="song-title">Sesame Syrup</h3>
-              <!-- <p class="song-preview">A soothing and calming song that expresses protection and safety in love</p> -->
               <div class="song-meta">
                 <span class="song-artist">Cigarettes After Sex</span>
                 <span class="song-year">2019</span>
@@ -1043,11 +1040,10 @@
                   <i class="bx bx-play"></i>
                 </button>
               </div>
-              <div class="song-duration">3:28</div>
+              <div class="song-duration">3:33</div>
             </div>
             <div class="song-info">
               <h3 class="song-title">Dark Vacay</h3>
-              <!-- <p class="song-preview">A moody track that takes you to a world of calm and beauty</p> -->
               <div class="song-meta">
                 <span class="song-artist">Cigarettes After Sex</span>
                 <span class="song-year">2024</span>
@@ -1065,11 +1061,10 @@
                   <i class="bx bx-play"></i>
                 </button>
               </div>
-              <div class="song-duration">4:02</div>
+              <div class="song-duration">4:39</div>
             </div>
             <div class="song-info">
               <h3 class="song-title">Bubblegum</h3>
-              <!-- <p class="song-preview">A sweet and nostalgic song about memories and youthful romance</p> -->
               <div class="song-meta">
                 <span class="song-artist">Cigarettes After Sex</span>
                 <span class="song-year">2023</span>
@@ -1086,11 +1081,10 @@
                   <i class="bx bx-play"></i>
                 </button>
               </div>
-              <div class="song-duration">3:55</div>
+              <div class="song-duration">4:46</div>
             </div>
             <div class="song-info">
               <h3 class="song-title">Heavenly</h3>
-              <!-- <p class="song-preview">A heavenly song that transports you to a world of peace and beauty</p> -->
               <div class="song-meta">
                 <span class="song-artist">Cigarettes After Sex</span>
                 <span class="song-year">2017</span>
@@ -1108,11 +1102,10 @@
                   <i class="bx bx-play"></i>
                 </button>
               </div>
-              <div class="song-duration">4:33</div>
+              <div class="song-duration">5:17</div>
             </div>
             <div class="song-info">
               <h3 class="song-title">K.</h3>
-              <!-- <p class="song-preview">An emotional song that tells a deep love story with simple and touching words</p> -->
               <div class="song-meta">
                 <span class="song-artist">Cigarettes After Sex</span>
                 <span class="song-year">2017</span>
@@ -1130,11 +1123,10 @@
                   <i class="bx bx-play"></i>
                 </button>
               </div>
-              <div class="song-duration">3:17</div>
+              <div class="song-duration">4:51</div>
             </div>
             <div class="song-info">
               <h3 class="song-title">Sweet</h3>
-              <!-- <p class="song-preview">A sweet and tender song that expresses beautiful feelings and memories</p> -->
               <div class="song-meta">
                 <span class="song-artist">Cigarettes After Sex</span>
                 <span class="song-year">2017</span>
@@ -1145,55 +1137,129 @@
       </div>
     </section>
 
+    <!-- Enhanced Audio Player -->
     <div class="audio-player" id="audioPlayer">
-        <div class="audio-player-header">
-            <div class="audio-player-image">
-                <img src="" alt="Song Cover" />
-            </div>
-            <div class="audio-player-info">
-                <h4 class="current-song-title"></h4>
-                <p class="current-song-artist">Cigarettes After Sex</p>
-            </div>
-            <button class="close-audio">
-                <i class="bx bx-x"></i>
-            </button>
+      <div class="audio-player-header">
+        <div class="audio-player-image">
+          <img src="" alt="Song Cover" />
         </div>
-        <div class="audio-controls">
-            <button class="audio-control-btn prev-btn">
+        <div class="audio-player-info">
+          <h4 class="current-song-title"></h4>
+          <p class="current-song-artist">Cigarettes After Sex</p>
+        </div>
+        <div class="audio-player-actions">
+          <button class="fullscreen-btn" id="fullscreenBtn" title="Fullscreen">
+            <i class="bx bx-fullscreen"></i>
+          </button>
+          <button class="close-audio">
+            <i class="bx bx-x"></i>
+          </button>
+        </div>
+      </div>
+      <div class="audio-controls">
+        <button class="audio-control-btn prev-btn">
+          <i class="bx bx-skip-previous"></i>
+        </button>
+        <button class="audio-control-btn play-pause-btn">
+          <i class="bx bx-pause"></i>
+        </button>
+        <button class="audio-control-btn next-btn">
+          <i class="bx bx-skip-next"></i>
+        </button>
+        <div class="audio-progress-container">
+          <div class="audio-progress">
+            <div class="audio-progress-fill"></div>
+            <div class="audio-progress-handle"></div>
+          </div>
+          <div class="audio-time">
+            <span class="current-time">0:00</span>
+            <span class="total-time">0:00</span>
+          </div>
+        </div>
+        <div class="audio-volume">
+          <button class="volume-btn">
+            <i class="bx bx-volume-full"></i>
+          </button>
+          <div class="volume-slider-container">
+            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.5">
+          </div>
+        </div>
+      </div>
+      <div class="audio-visualizer">
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+      </div>
+    </div>
+
+    <!-- Fullscreen Audio Player -->
+    <div class="fullscreen-player" id="fullscreenPlayer">
+      <div class="fullscreen-background"></div>
+      <div class="fullscreen-content">
+        <div class="fullscreen-header">
+          <button class="fullscreen-close" id="fullscreenClose">
+            <i class="bx bx-x"></i>
+          </button>
+          <button class="fullscreen-minimize" id="fullscreenMinimize">
+            <i class="bx bx-minimize"></i>
+          </button>
+        </div>
+
+        <div class="fullscreen-main">
+          <div class="fullscreen-artwork">
+            <div class="artwork-container">
+              <img src="" alt="Song Cover" class="fullscreen-image" />
+              <div class="artwork-glow"></div>
+            </div>
+          </div>
+
+          <div class="fullscreen-info">
+            <h1 class="fullscreen-title"></h1>
+            <p class="fullscreen-artist"></p>
+          </div>
+
+          <div class="fullscreen-controls">
+            <div class="fullscreen-progress-container">
+              <div class="fullscreen-progress">
+                <div class="fullscreen-progress-fill"></div>
+                <div class="fullscreen-progress-handle"></div>
+              </div>
+              <div class="fullscreen-time">
+                <span class="fullscreen-current-time">0:00</span>
+                <span class="fullscreen-total-time">0:00</span>
+              </div>
+            </div>
+
+            <div class="fullscreen-buttons">
+              <button class="fullscreen-control-btn fullscreen-prev">
                 <i class="bx bx-skip-previous"></i>
-            </button>
-            <button class="audio-control-btn play-pause-btn">
+              </button>
+              <button class="fullscreen-control-btn fullscreen-play-pause">
                 <i class="bx bx-pause"></i>
-            </button>
-            <button class="audio-control-btn next-btn">
+              </button>
+              <button class="fullscreen-control-btn fullscreen-next">
                 <i class="bx bx-skip-next"></i>
-            </button>
-            <div class="audio-progress-container">
-                <div class="audio-progress">
-                    <div class="audio-progress-fill"></div>
-                    <div class="audio-progress-handle"></div>
-                </div>
-                <div class="audio-time">
-                    <span class="current-time">0:00</span>
-                    <span class="total-time">0:00</span>
-                </div>
+              </button>
             </div>
-            <div class="audio-volume">
-                <button class="volume-btn">
-                    <i class="bx bx-volume-full"></i>
-                </button>
-                <div class="volume-slider-container">
-                    <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.5">
-                </div>
+
+            <div class="fullscreen-volume">
+              <button class="fullscreen-volume-btn">
+                <i class="bx bx-volume-full"></i>
+              </button>
+              <div class="fullscreen-volume-slider-container">
+                <input type="range" class="fullscreen-volume-slider" min="0" max="1" step="0.1" value="0.5">
+              </div>
             </div>
+          </div>
         </div>
-        <div class="audio-visualizer">
-            <div class="visualizer-bar"></div>
-            <div class="visualizer-bar"></div>
-            <div class="visualizer-bar"></div>
-            <div class="visualizer-bar"></div>
-            <div class="visualizer-bar"></div>
-        </div>
+      </div>
     </div>
 
     <!-- Blog/Updates Section -->
@@ -1589,17 +1655,17 @@
   <script src="scripts/faq.js"></script>
   <script src="scripts/discord-activity.js"></script>
   <script src="scripts/video-thumbnail.js"></script>
-  <script src="scripts/upcoming.js"></script>
-  <script>
-    // Initialize upcoming things when DOM is loaded
+  <!-- <script src="scripts/upcoming.js"></script> -->
+  <!-- <script>
     document.addEventListener('DOMContentLoaded', () => {
       window.upcomingThings = new UpcomingThings();
     });
-  </script>
+  </script> -->
 
   <!-- hide some sections until i make it responsive for mobile -->
   <!-- <script src="scripts/hide.js"></script> -->
 
   <script type="module" src="scripts/views.js"></script>
 </body>
+
 </html>
