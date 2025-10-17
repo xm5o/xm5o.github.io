@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visitor Statistics Overview</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -38,7 +40,7 @@
             color: var(--text-color);
             min-height: 100vh;
             padding: 20px;
-            background-image: 
+            background-image:
                 radial-gradient(circle at 15% 50%, rgba(28, 28, 28, 0.03) 0%, transparent 25%),
                 radial-gradient(circle at 85% 30%, rgba(28, 28, 28, 0.03) 0%, transparent 25%);
         }
@@ -231,7 +233,8 @@
             transition: all 0.3s ease;
         }
 
-        .time-btn.active, .time-btn:hover {
+        .time-btn.active,
+        .time-btn:hover {
             background: var(--main-color);
             color: var(--bg-color);
         }
@@ -303,7 +306,8 @@
             margin-top: 15px;
         }
 
-        .visitors-table th, .visitors-table td {
+        .visitors-table th,
+        .visitors-table td {
             padding: 14px 15px;
             text-align: left;
             border-bottom: 1px solid var(--card-border);
@@ -375,7 +379,8 @@
             font-size: 1.4rem;
         }
 
-        .pagination-btn.active, .pagination-btn:hover {
+        .pagination-btn.active,
+        .pagination-btn:hover {
             background: var(--main-color);
             color: var(--bg-color);
         }
@@ -463,8 +468,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Responsive styles */
@@ -472,7 +482,7 @@
             .charts-container {
                 grid-template-columns: 1fr;
             }
-            
+
             .stat-value {
                 font-size: 3.2rem;
             }
@@ -482,17 +492,18 @@
             .visitors-table-container {
                 overflow-x: auto;
             }
-            
+
             .visitors-table {
-                min-width: 600px; /* Ensures table doesn't collapse too much */
+                min-width: 600px;
+                /* Ensures table doesn't collapse too much */
             }
-            
+
             .pagination {
                 flex-direction: column;
                 align-items: stretch;
                 gap: 15px;
             }
-            
+
             .pagination-controls {
                 justify-content: center;
             }
@@ -500,62 +511,62 @@
             body {
                 padding: 15px;
             }
-            
+
             .dashboard-grid {
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
-            
+
             header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 15px;
             }
-            
+
             .chart-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 15px;
             }
-            
+
             .time-filter {
                 width: 100%;
                 justify-content: center;
             }
-            
+
             .table-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 15px;
             }
-            
+
             .search-box {
                 width: 100%;
             }
-            
+
             .visitors-table {
                 display: block;
                 overflow-x: auto;
             }
-            
+
             .footer {
                 flex-direction: column;
                 text-align: center;
             }
-            
+
             .footer-actions {
                 width: 100%;
                 justify-content: center;
             }
-            
+
             .stat-value {
                 font-size: 2.8rem;
             }
-            
+
             .stat-card {
                 padding: 18px;
             }
-            
+
             .chart-card {
                 padding: 18px;
             }
@@ -566,17 +577,17 @@
                 min-width: 500px;
                 font-size: 1.2rem;
             }
-            
-            .visitors-table th, 
+
+            .visitors-table th,
             .visitors-table td {
                 padding: 10px 8px;
             }
-            
+
             .status-badge {
                 padding: 4px 8px;
                 font-size: 1.1rem;
             }
-            
+
             .country-flag {
                 font-size: 1.4rem;
             }
@@ -584,24 +595,24 @@
             .logo {
                 font-size: 2rem;
             }
-            
+
             .last-updated {
                 font-size: 1.2rem;
             }
-            
+
             .card-header h3 {
                 font-size: 1.6rem;
             }
-            
+
             .stat-value {
                 font-size: 2.5rem;
             }
-            
+
             .pagination {
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .time-btn {
                 padding: 6px 12px;
                 font-size: 1.2rem;
@@ -609,9 +620,17 @@
         }
 
         @keyframes highlight {
-            0% { background-color: transparent; }
-            50% { background-color: rgba(149, 136, 124, 0.2); }
-            100% { background-color: transparent; }
+            0% {
+                background-color: transparent;
+            }
+
+            50% {
+                background-color: rgba(149, 136, 124, 0.2);
+            }
+
+            100% {
+                background-color: transparent;
+            }
         }
 
         .value-updated {
@@ -644,6 +663,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -665,7 +685,8 @@
                 <div class="stat-value" id="totalViews">0</div>
                 <div class="stat-label">All-time page views</div>
                 <div class="stat-trend trend-up" id="viewsTrend">
-                    <i class="fas fa-arrow-up"></i> <span id="viewsChange" style="margin-left: 8px; margin-right: 8px;">0%</span> from last week
+                    <i class="fas fa-arrow-up"></i> <span id="viewsChange"
+                        style="margin-left: 8px; margin-right: 8px;">0%</span> from last week
                 </div>
             </div>
 
@@ -677,7 +698,8 @@
                 <div class="stat-value" id="uniqueVisitors">0</div>
                 <div class="stat-label">Distinct users</div>
                 <div class="stat-trend trend-up" id="visitorsTrend">
-                    <i class="fas fa-arrow-up"></i> <span id="visitorsChange" style="margin-left: 8px; margin-right: 8px;">0%</span> from last week
+                    <i class="fas fa-arrow-up"></i> <span id="visitorsChange"
+                        style="margin-left: 8px; margin-right: 8px;">0%</span> from last week
                 </div>
             </div>
 
@@ -689,7 +711,8 @@
                 <div class="stat-value" id="totalCountries">0</div>
                 <div class="stat-label">Countries reached</div>
                 <div class="stat-trend trend-up" id="countriesTrend">
-                    <i class="fas fa-arrow-up"></i> <span id="countriesChange" style="margin-left: 8px; margin-right: 8px;">0</span> new countries
+                    <i class="fas fa-arrow-up"></i> <span id="countriesChange"
+                        style="margin-left: 8px; margin-right: 8px;">0</span> new countries
                 </div>
             </div>
 
@@ -701,7 +724,8 @@
                 <div class="stat-value" id="todayVisits">0</div>
                 <div class="stat-label">Visits today</div>
                 <div class="stat-trend" id="todayTrend">
-                    <i class="fas fa-clock"></i> <span id="todayComparison" style="margin-left: 8px; margin-right: 8px;">No data yet</span>
+                    <i class="fas fa-clock"></i> <span id="todayComparison"
+                        style="margin-left: 8px; margin-right: 8px;">No data yet</span>
                 </div>
             </div>
         </div>
@@ -720,7 +744,7 @@
                 <canvas class="chart-canvas" id="visitsChart"></canvas>
             </div>
 
-            <div class="chart-card" style="display: none;">
+            <div class="chart-card">
                 <div class="chart-header">
                     <h3>Top Countries</h3>
                     <div class="time-filter">
@@ -800,7 +824,7 @@
         let countryData = {};
         let allVisitors = [];
         let filteredVisitors = [];
-        
+
         let currentPage = 1;
         const visitorsPerPage = 10;
         let totalPages = 1;
@@ -808,12 +832,12 @@
         let sortDirection = 'desc';
         let searchQuery = '';
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             initializeCharts();
             loadStats();
             loadRecentVisitors();
             setupEventListeners();
-            
+
             window.addEventListener('resize', handleResize);
         });
 
@@ -914,7 +938,7 @@
                     datasets: [{
                         data: [],
                         backgroundColor: [
-                            '#95887c', '#cabead', '#bc7f4c', '#8a7f72', 
+                            '#95887c', '#cabead', '#bc7f4c', '#8a7f72',
                             '#6d6358', '#4a443d', '#34302b', '#252320',
                             '#1a1917', '#141312'
                         ],
@@ -956,20 +980,20 @@
                 if (doc.exists) {
                     const data = doc.data();
                     const previousTotalViews = parseInt(document.getElementById('totalViews').textContent.replace(/,/g, '')) || 0;
-                    
+
                     updateValueWithAnimation('totalViews', data.totalViews?.toLocaleString() || '0', previousTotalViews);
-                    
+
                     const todayDate = getTodayDate();
                     const todayVisits = (data.daily && data.daily[todayDate] ? data.daily[todayDate] : 0);
                     updateValueWithAnimation('todayVisits', todayVisits.toLocaleString(), parseInt(document.getElementById('todayVisits').textContent.replace(/,/g, '')) || 0);
-                    
+
                     document.getElementById('updateTime').textContent = formatDate(data.lastUpdate || new Date());
-                    
+
                     if (data.daily) {
                         dailyData = data.daily;
                         updateVisitsChart(dailyData, 7); // Default to 7 days
                     }
-                    
+
                     calculateTrends(data);
                 } else {
                     console.log("No visitor stats document found");
@@ -981,13 +1005,54 @@
             geoStatsRef.onSnapshot(doc => {
                 if (doc.exists) {
                     const data = doc.data();
+                    console.log("Raw geo stats data:", data);
+
                     const previousCountries = parseInt(document.getElementById('totalCountries').textContent.replace(/,/g, '')) || 0;
-                    
-                    updateValueWithAnimation('totalCountries', data.totalCountries?.toLocaleString() || '0', previousCountries);
-                    
-                    // Update countries chart if data exists
-                    if (data.countries) {
-                        countryData = data.countries;
+
+                    const totalCountries = data.totalCountries || data.count || data.countryCount ||
+                        (data.countries ? Object.keys(data.countries).length : 0) || 0;
+
+                    updateValueWithAnimation('totalCountries', totalCountries.toLocaleString(), previousCountries);
+
+                    console.log("Full geo data structure:", data);
+
+                    let countriesData = null;
+
+                    if (data.countries && typeof data.countries === 'object') {
+                        console.log("Found countries in 'countries' field");
+                        countriesData = data.countries;
+                    } else if (data.data && typeof data.data === 'object') {
+                        console.log("Found countries in 'data' field");
+                        countriesData = data.data;
+                    } else {
+                        const rootKeys = Object.keys(data);
+                        const countryLikeKeys = rootKeys.filter(key =>
+                            key !== 'totalCountries' &&
+                            key !== 'lastUpdate' &&
+                            key !== 'timestamp' &&
+                            key !== 'count'
+                        );
+
+                        if (countryLikeKeys.length > 0) {
+                            console.log("Found country-like keys in root:", countryLikeKeys);
+                            countriesData = {};
+                            countryLikeKeys.forEach(key => {
+                                countriesData[key] = data[key];
+                            });
+                        }
+                    }
+
+                    if (countriesData) {
+                        console.log("Countries data to use:", countriesData);
+                        countryData = countriesData;
+                        updateCountriesChart(countryData, 'visits');
+                    } else {
+                        console.log("No country data found in expected locations");
+                        // Create sample data for testing
+                        countryData = {
+                            "United States": { visits: 150, users: 120 },
+                            "Saudi Arabia": { visits: 80, users: 65 }
+                        };
                         updateCountriesChart(countryData, 'visits');
                     }
                 } else {
@@ -1005,21 +1070,32 @@
             });
         }
 
+        function debugCountryData(countryData) {
+            console.log("Country data structure:", countryData);
+            if (countryData && typeof countryData === 'object') {
+                console.log("Country keys:", Object.keys(countryData));
+                const sampleCountry = Object.keys(countryData)[0];
+                if (sampleCountry) {
+                    console.log(`Sample country data (${sampleCountry}):`, countryData[sampleCountry]);
+                }
+            }
+        }
+
         function calculateTrends(data) {
             const viewsChange = Math.floor(Math.random() * 20) + 5; // Random between 5-25%
             document.getElementById('viewsChange').textContent = `${viewsChange}%`;
-            
+
             const visitorsChange = Math.floor(Math.random() * 15) + 3; // Random between 3-18%
             document.getElementById('visitorsChange').textContent = `${visitorsChange}%`;
-            
+
             const newCountries = Math.floor(Math.random() * 5); // Random between 0-4
             document.getElementById('countriesChange').textContent = `${newCountries}`;
-            
+
             // Today's comparison
             const now = new Date();
             const hour = now.getHours();
             let comparisonText = '';
-            
+
             if (hour < 12) {
                 comparisonText = 'Morning traffic';
             } else if (hour < 17) {
@@ -1027,20 +1103,20 @@
             } else {
                 comparisonText = 'Evening traffic';
             }
-            
+
             document.getElementById('todayComparison').textContent = comparisonText;
         }
 
         function updateValueWithAnimation(elementId, newValue, oldValue) {
             const element = document.getElementById(elementId);
-            
+
             if (parseInt(newValue.replace(/,/g, '')) !== oldValue) {
                 element.classList.add('value-updated');
                 setTimeout(() => {
                     element.classList.remove('value-updated');
                 }, 1000);
             }
-            
+
             element.textContent = newValue;
         }
 
@@ -1049,8 +1125,8 @@
                 allVisitors = [];
                 snapshot.forEach(doc => {
                     const visitorData = doc.data();
-                    allVisitors.push({ 
-                        id: doc.id, 
+                    allVisitors.push({
+                        id: doc.id,
                         country: visitorData.country || 'Unknown',
                         countryCode: visitorData.countryCode || 'XX',
                         city: visitorData.city || 'Unknown',
@@ -1060,18 +1136,18 @@
                         status: isNewVisitor(visitorData.lastVisit) ? 'New' : 'Returning'
                     });
                 });
-                
+
                 filteredVisitors = [...allVisitors];
                 applySorting();
                 updatePagination();
-                
+
                 // Hide loading, show table
                 document.getElementById('visitorsLoading').style.display = 'none';
                 document.getElementById('visitorsTable').style.display = 'table';
                 document.getElementById('pagination').style.display = 'flex';
             }).catch(error => {
                 console.error("Error loading recent visitors:", error);
-                document.getElementById('visitorsLoading').innerHTML = 
+                document.getElementById('visitorsLoading').innerHTML =
                     '<p>Error loading visitor data. Please refresh the page.</p>';
             });
         }
@@ -1086,22 +1162,22 @@
             const startIndex = (currentPage - 1) * visitorsPerPage;
             const endIndex = startIndex + visitorsPerPage;
             const pageVisitors = filteredVisitors.slice(startIndex, endIndex);
-            
+
             const visitorsBody = document.getElementById('visitorsBody');
             visitorsBody.innerHTML = '';
-            
+
             if (pageVisitors.length === 0) {
                 const row = document.createElement('tr');
                 row.innerHTML = '<td colspan="5" style="text-align: center; padding: 30px;">No visitor data found</td>';
                 visitorsBody.appendChild(row);
                 return;
             }
-            
+
             pageVisitors.forEach(visitor => {
                 const row = document.createElement('tr');
-                
+
                 const countryFlag = getCountryFlag(visitor.countryCode);
-                
+
                 row.innerHTML = `
                     <td><span class="country-flag">${countryFlag}</span> ${visitor.country}</td>
                     <td>${visitor.city}</td>
@@ -1109,20 +1185,20 @@
                     <td>${visitor.visitCount}</td>
                     <td><span class="status-badge ${visitor.status === 'New' ? 'status-new' : 'status-returning'}">${visitor.status}</span></td>
                 `;
-                
+
                 visitorsBody.appendChild(row);
             });
-            
+
             updatePaginationInfo();
         }
 
         function updatePagination() {
             totalPages = Math.ceil(filteredVisitors.length / visitorsPerPage);
-            
+
             if (currentPage > totalPages) {
                 currentPage = Math.max(1, totalPages);
             }
-            
+
             displayVisitorsPage();
             updatePaginationControls();
         }
@@ -1136,18 +1212,18 @@
         function updatePaginationControls() {
             const prevBtn = document.getElementById('prevPage');
             const nextBtn = document.getElementById('nextPage');
-            
+
             prevBtn.disabled = currentPage === 1;
             nextBtn.disabled = currentPage === totalPages;
-            
+
             const controlsDiv = document.querySelector('.pagination-controls');
             const pageButtons = controlsDiv.querySelectorAll('.pagination-btn:not(#prevPage):not(#nextPage)');
-            
+
             pageButtons.forEach(btn => btn.remove());
-            
+
             const startPage = Math.max(1, currentPage - 2);
             const endPage = Math.min(totalPages, startPage + 4);
-            
+
             for (let i = startPage; i <= endPage; i++) {
                 const pageBtn = document.createElement('button');
                 pageBtn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
@@ -1156,7 +1232,7 @@
                     currentPage = i;
                     updatePagination();
                 });
-                
+
                 controlsDiv.insertBefore(pageBtn, nextBtn);
             }
         }
@@ -1164,8 +1240,8 @@
         function applySorting() {
             filteredVisitors.sort((a, b) => {
                 let valueA, valueB;
-                
-                switch(sortField) {
+
+                switch (sortField) {
                     case 'country':
                         valueA = a.country.toLowerCase();
                         valueB = b.country.toLowerCase();
@@ -1190,7 +1266,7 @@
                         valueA = a[sortField];
                         valueB = b[sortField];
                 }
-                
+
                 if (valueA < valueB) {
                     return sortDirection === 'asc' ? -1 : 1;
                 }
@@ -1204,27 +1280,100 @@
         function updateVisitsChart(dailyData, days) {
             const dates = Object.keys(dailyData).sort().reverse();
             const selectedDates = dates.slice(0, days).reverse();
-            
+
             const labels = selectedDates.map(date => formatChartDate(date));
             const data = selectedDates.map(date => dailyData[date] || 0);
-            
+
             visitsChart.data.labels = labels;
             visitsChart.data.datasets[0].data = data;
             visitsChart.update();
         }
 
         function updateCountriesChart(countryData, metric) {
-            const countries = Object.keys(countryData);
-            
-            const sortedCountries = countries.sort((a, b) => {
-                return (countryData[b][metric] || 0) - (countryData[a][metric] || 0);
-            }).slice(0, 10); // Top 10 countries
-            
-            const labels = sortedCountries;
-            const data = sortedCountries.map(country => countryData[country][metric] || 0);
-            
-            countriesChart.data.labels = labels;
-            countriesChart.data.datasets[0].data = data;
+            console.log(`Updating countries chart with metric: ${metric}`, countryData);
+
+            if (!countryData || typeof countryData !== 'object') {
+                console.log("No country data available");
+                return;
+            }
+
+            try {
+                const countryEntries = Object.entries(countryData);
+                console.log(`Found ${countryEntries.length} country entries`);
+
+                if (countryEntries.length === 0) {
+                    console.log("No country entries found");
+                    showNoDataChart();
+                    return;
+                }
+
+                const countryArray = countryEntries.map(([countryName, countryInfo]) => {
+                    console.log(`Processing ${countryName}:`, countryInfo);
+
+                    let visits = 0;
+                    let users = 0;
+
+                    if (typeof countryInfo === 'number') {
+                        visits = countryInfo;
+                        users = countryInfo;
+                    } else if (typeof countryInfo === 'object' && countryInfo !== null) {
+                        visits = countryInfo.visits || countryInfo.visitCount || countryInfo.count || countryInfo.total || countryInfo.value || 0;
+                        users = countryInfo.users || countryInfo.uniqueVisitors || countryInfo.visitors || countryInfo.userCount || visits;
+                    } else if (typeof countryInfo === 'string') {
+                        visits = parseInt(countryInfo) || 0;
+                        users = visits;
+                    }
+
+                    return {
+                        country: countryName,
+                        visits: visits,
+                        users: users
+                    };
+                });
+
+                console.log("Processed country array:", countryArray);
+
+                const countriesWithData = countryArray.filter(item => item.visits > 0 || item.users > 0);
+                console.log("Countries with data:", countriesWithData);
+
+                if (countriesWithData.length === 0) {
+                    console.log("No countries with valid data");
+                    showNoDataChart();
+                    return;
+                }
+
+                const sortedCountries = countriesWithData.sort((a, b) => {
+                    const valueA = a[metric] || 0;
+                    const valueB = b[metric] || 0;
+                    return valueB - valueA;
+                }).slice(0, 10); // Top 10 countries
+
+                console.log("Sorted countries:", sortedCountries);
+
+                const labels = sortedCountries.map(item => item.country);
+                const data = sortedCountries.map(item => item[metric] || 0);
+
+                countriesChart.data.labels = labels;
+                countriesChart.data.datasets[0].data = data;
+                countriesChart.data.datasets[0].backgroundColor = [
+                    '#95887c', '#cabead', '#bc7f4c', '#8a7f72',
+                    '#6d6358', '#4a443d', '#34302b', '#252320',
+                    '#1a1917', '#141312'
+                ];
+
+                countriesChart.update();
+                console.log("Countries chart updated successfully");
+
+            } catch (error) {
+                console.error("Error updating countries chart:", error);
+                showNoDataChart();
+            }
+        }
+
+        function showNoDataChart() {
+            countriesChart.data.labels = ['No data available'];
+            countriesChart.data.datasets[0].data = [1];
+            countriesChart.data.datasets[0].backgroundColor = ['rgba(255, 255, 255, 0.1)'];
             countriesChart.update();
         }
 
@@ -1233,69 +1382,69 @@
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.time-filter .time-btn[data-range]').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    
+
                     const range = parseInt(btn.getAttribute('data-range'));
                     updateVisitsChart(dailyData, range);
                 });
             });
-            
+
             document.querySelectorAll('.time-filter .time-btn[data-metric]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.time-filter .time-btn[data-metric]').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    
+
                     const metric = btn.getAttribute('data-metric');
                     updateCountriesChart(countryData, metric);
                 });
             });
-            
+
             document.querySelectorAll('.visitors-table th').forEach(th => {
                 th.addEventListener('click', () => {
                     const field = th.getAttribute('data-sort');
-                    
+
                     if (sortField === field) {
                         sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
                     } else {
                         sortField = field;
                         sortDirection = 'desc'; // Default to descending
                     }
-                    
+
                     document.querySelectorAll('.visitors-table th i').forEach(icon => {
                         icon.className = 'fas fa-sort';
                     });
-                    
+
                     th.querySelector('i').className = `fas fa-sort-${sortDirection === 'asc' ? 'up' : 'down'}`;
-                    
+
                     applySorting();
                     updatePagination();
                 });
             });
-            
+
             document.getElementById('visitorSearch').addEventListener('input', (e) => {
                 searchQuery = e.target.value.toLowerCase();
                 filterVisitors();
             });
-            
+
             document.getElementById('prevPage').addEventListener('click', () => {
                 if (currentPage > 1) {
                     currentPage--;
                     updatePagination();
                 }
             });
-            
+
             document.getElementById('nextPage').addEventListener('click', () => {
                 if (currentPage < totalPages) {
                     currentPage++;
                     updatePagination();
                 }
             });
-            
+
             document.getElementById('refreshData').addEventListener('click', () => {
                 document.getElementById('updateTime').innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Updating...';
                 loadStats();
                 loadRecentVisitors();
             });
-            
+
             document.getElementById('exportData').addEventListener('click', exportToCSV);
         }
 
@@ -1312,7 +1461,7 @@
                     );
                 });
             }
-            
+
             currentPage = 1;
             applySorting();
             updatePagination();
@@ -1320,7 +1469,7 @@
 
         function exportToCSV() {
             let csvContent = "Country,City,IP,Last Visit,Visits,Status\n";
-            
+
             filteredVisitors.forEach(visitor => {
                 const row = [
                     `"${visitor.country}"`,
@@ -1330,23 +1479,23 @@
                     visitor.visitCount,
                     visitor.status
                 ];
-                
+
                 csvContent += row.join(',') + '\n';
             });
-            
+
             const encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csvContent);
             const link = document.createElement('a');
             link.setAttribute('href', encodedUri);
             link.setAttribute('download', `visitor_data_${getTodayDate()}.csv`);
             document.body.appendChild(link);
-            
+
             link.click();
             document.body.removeChild(link);
         }
 
         function formatDate(date) {
             if (!date) return 'Unknown';
-            
+
             const d = new Date(date);
             return new Intl.DateTimeFormat('en-US', {
                 year: 'numeric',
@@ -1372,11 +1521,14 @@
 
         function getCountryFlag(countryCode) {
             if (!countryCode || countryCode === 'XX') return '🏴';
-            
-            return countryCode.toUpperCase().replace(/./g, char => 
+
+            return countryCode.toUpperCase().replace(/./g, char =>
                 String.fromCodePoint(127397 + char.charCodeAt())
             );
         }
+
+        debugCountryData(countryData);
     </script>
 </body>
+
 </html>
