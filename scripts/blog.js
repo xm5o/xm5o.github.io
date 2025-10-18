@@ -23,6 +23,17 @@ class BlogManager {
     this.posts = [
       {
         id: 1,
+        title: "New Design, New Look",
+        excerpt: `A fresh, modern design is out now! <br> Discover the fresh, modern overhaul of our site! We've reimagined the design from the ground up, bringing you sleek animations, improved typography, enhanced user experience, and mobile optimization. Go and check it out by yourself!`,
+        content: "",
+        category: "development",
+        date: "2025-10-18",
+        readTime: "1 min read",
+        image: "assets/blog/minimalist_website_design.png",
+        tags: ["web design", "redesign"]
+      },
+      {
+        id: 2,
         title: "Complete Site Redesign - Celebrating 150 Views!",
         excerpt: "A fresh, modern design overhaul to celebrate reaching 150 site views. Discover what's new and improved in this major update.",
         content: `
@@ -56,7 +67,7 @@ class BlogManager {
         tags: ["web design", "milestone", "redesign", "community"]
       },
       {
-        id: 2,
+        id: 3,
         title: "The Future of Our Discord Community - Your Input Needed",
         excerpt: "Considering the future direction of our Discord server due to low activity. Your thoughts and suggestions could help shape what comes next.",
         content: `
