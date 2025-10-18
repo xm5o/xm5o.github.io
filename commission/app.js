@@ -1,5 +1,7 @@
 // Back to Home Button Functionality
 function goBackToHome() {
+    playClickSound(); // Add this line
+    
     const button = document.getElementById('backToHomeBtn');
     
     // Add click animation
@@ -63,6 +65,7 @@ function initializeBackButton() {
 // Initialize back button when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     initializeBackButton();
+    initializeSounds();
 });
 
 class AnimationUtils {
@@ -1041,5 +1044,79 @@ if ('serviceWorker' in navigator) {
     PerformanceUtils.requestIdleCallback(() => {
         navigator.serviceWorker.register('/sw.js').catch(() => {
         });
+    });
+}
+
+// Sound Effects Functionality
+function playClickSound() {
+    const clickSound = document.getElementById('clickSound');
+    if (clickSound) {
+        clickSound.volume = 0.25;
+        clickSound.currentTime = 0;
+        clickSound.play().catch(e => console.log('Click sound play failed:', e));
+    }
+}
+
+function playOpenSound() {
+    const openSound = document.getElementById('openSound');
+    if (openSound) {
+        openSound.volume = 0.25;
+        openSound.currentTime = 0;
+        openSound.play().catch(e => console.log('Open sound play failed:', e));
+    }
+}
+
+// Initialize sound system
+function initializeSounds() {
+    // Play click sound on most interactive elements
+    document.addEventListener('click', function(e) {
+        // Don't play sounds for these specific cases
+        if (e.target.closest('.favorite-btn') || 
+            e.target.closest('.back-to-home-btn') ||
+            e.target.closest('.control-toggle') ||
+            e.target.closest('#backToHomeBtn')) {
+            return;
+        }
+        
+        // Play click sound for most interactive elements
+        if (e.target.matches('button, .btn, .tab-btn, .faq-question, .showcase-item, .service, .skill, .price-card, .control-btn, .form-submit, [role="button"]')) {
+            playClickSound();
+        }
+    });
+
+    // Special handling for Discord and PayPal buttons
+    document.addEventListener('click', function(e) {
+        const discordBtn = e.target.closest('.btn-primary');
+        const paypalBtn = e.target.closest('.btn-secondary');
+        
+        if (discordBtn || paypalBtn) {
+            playOpenSound();
+            // Also trigger the button animation if it exists
+            if (discordBtn) {
+                setTimeout(() => copyDiscord(), 100);
+            }
+        }
+    });
+
+    // Special handling for favorite buttons (no sound)
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.favorite-btn')) {
+            e.preventDefault();
+            e.stopPropagation();
+            const btn = e.target.closest('.favorite-btn');
+            const itemId = btn.closest('.showcase-item')?.getAttribute('data-id');
+            if (itemId) {
+                toggleFavorite(itemId, btn);
+            }
+        }
+    });
+
+    // Special handling for back button (no sound)
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('#backToHomeBtn') || e.target.closest('.back-to-home-btn')) {
+            e.preventDefault();
+            e.stopPropagation();
+            goBackToHome();
+        }
     });
 }
