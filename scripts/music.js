@@ -49,6 +49,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Song data with enhanced information
     const songData = {
+        'the-crystal-ship': {
+            title: 'The Crystal Ship',
+            artist: 'Cigarettes After Sex',
+            image: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/68f6b976b2860d9b54f3dcd8_CAS%20Anna%20Karenina-p-500.jpg',
+            preview: './assets/music/TheCrystalShip.mp3',
+            fallback: './assets/music/TheCrystalShip.ogg',
+            duration: '3:00'
+        },
         'flash': {
             title: 'Flash',
             artist: 'Cigarettes After Sex',
