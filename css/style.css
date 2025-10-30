@@ -10664,3 +10664,360 @@ section {
   }
 }
 
+
+/* --- About Section Enhancements (Phase 2) --- */
+
+/* General About Content */
+.about-content-tabs {
+  padding: 2rem;
+  background: var(--second-bg-color);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.about-text p {
+  font-size: 1.8rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+}
+
+.about-text p strong {
+  color: var(--main-color);
+  font-weight: 700;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  border-bottom: 2px solid rgba(var(--text-color-rgb), 0.1);
+}
+
+.tab-btn {
+  padding: 1rem 2rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-color);
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.tab-btn:hover {
+  color: var(--main-color);
+}
+
+.tab-btn.active {
+  color: var(--main-color);
+  border-bottom-color: var(--main-color);
+}
+
+/* Personal Info */
+.personal-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-left: 3px solid var(--main-color);
+  background: rgba(var(--text-color-rgb), 0.03);
+  border-radius: 4px;
+}
+
+.info-item .label {
+  font-size: 1.4rem;
+  color: var(--secondary-color);
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+
+.info-item .value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.info-item .value.available {
+  color: var(--success-color);
+}
+
+/* Skill Section */
+.skill-section h3 {
+  font-size: 2.2rem;
+  color: var(--main-color);
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(var(--text-color-rgb), 0.1);
+  padding-bottom: 0.5rem;
+}
+
+.skill-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.skill-bar {
+  margin-bottom: 1rem;
+}
+
+.skill-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.skill-info span:first-child {
+  color: var(--text-color);
+}
+
+.skill-info .percent {
+  color: var(--main-color);
+  font-weight: 700;
+}
+
+.skill-progress-bg {
+  background: rgba(var(--text-color-rgb), 0.1);
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.skill-progress {
+  height: 100%;
+  background: var(--gradient);
+  width: 0; /* Initial state for animation */
+  transition: width 1.5s ease-out;
+  border-radius: 4px;
+}
+
+/* Tech Stack */
+.tech-stack {
+  margin-top: 3rem;
+}
+
+.tech-stack h3 {
+  font-size: 2.2rem;
+  color: var(--main-color);
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(var(--text-color-rgb), 0.1);
+  padding-bottom: 0.5rem;
+}
+
+.tech-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.tech-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.4rem;
+  color: var(--text-color);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.tech-icon:hover {
+  transform: translateY(-5px) scale(1.05);
+  color: var(--main-color);
+}
+
+.tech-icon i {
+  font-size: 4rem;
+  margin-bottom: 0.5rem;
+  color: var(--main-color);
+}
+
+/* Experience Tab Content (Timeline) */
+.experience-tab-content {
+  padding: 2rem 0;
+}
+
+.timeline {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.timeline::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  background-color: var(--main-color);
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -3px;
+  opacity: 0.5;
+}
+
+.timeline-item {
+  padding: 10px 40px;
+  position: relative;
+  background-color: inherit;
+  width: 50%;
+}
+
+.timeline-item::after {
+  content: '';
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  right: -14px;
+  background-color: var(--second-bg-color);
+  border: 4px solid var(--main-color);
+  top: 15px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.left {
+  left: 0;
+}
+
+.right {
+  left: 50%;
+}
+
+.right::after {
+  left: -12px;
+}
+
+.timeline-content {
+  padding: 20px 30px;
+  background-color: var(--second-bg-color);
+  position: relative;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(var(--text-color-rgb), 0.05);
+  transition: transform 0.3s ease;
+}
+
+.timeline-content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.timeline-content h4 {
+  font-size: 2rem;
+  color: var(--main-color);
+  margin-bottom: 0.5rem;
+}
+
+.timeline-content .date {
+  font-size: 1.4rem;
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.timeline-content p {
+  font-size: 1.6rem;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* Responsive adjustments for timeline */
+@media screen and (max-width: 992px) {
+  .timeline::after {
+    left: 31px;
+  }
+
+  .timeline-item {
+    width: 100%;
+    padding-left: 70px;
+    padding-right: 25px;
+  }
+
+  .timeline-item::after {
+    left: 18px;
+    margin-left: 0;
+  }
+
+  .right {
+    left: 0%;
+  }
+}
+
+/* --- Enhanced Tag Component Styles --- */
+
+.enhanced-tag {
+    /* Layout and Positioning */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    
+    /* Appearance */
+    font-size: 1.5rem; /* Slightly larger text */
+    font-weight: 800; /* Bolder text */
+    letter-spacing: 0.1em;
+    padding: 0.5rem 1.5rem;
+    margin-left: 1.5rem;
+    border-radius: 50px; /* Pill shape */
+    text-transform: uppercase;
+    line-height: 1;
+    
+    /* Color Scheme: High contrast and vibrant */
+    color: var(--text-color); /* White text */
+    background: var(--second-bg-color); /* Dark background for the tag */
+    
+    /* Gradient Border Effect */
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+    z-index: 1;
+}
+
+/* Pseudo-element for the vibrant gradient border and glow */
+.enhanced-tag::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    margin: -2px; /* Controls the thickness of the border */
+    border-radius: inherit;
+    background: linear-gradient(135deg, var(--main-color), var(--secondary-color), var(--main-color));
+    background-size: 300% 300%;
+    animation: gradientShift 4s ease infinite, tagGlowPulse 2s infinite alternate ease-in-out;
+}
+
+.enhanced-tag i {
+    font-size: 1.8rem; /* Larger icon */
+    line-height: 1;
+    color: var(--main-color); /* Use main color for the icon for a pop of color */
+}
+
+/* Keyframes for the gradient shift (reused from your site's logo animation) */
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Keyframes for the enhanced glow and pulse animation */
+@keyframes tagGlowPulse {
+    0% {
+        opacity: 0.8;
+        box-shadow: 0 0 5px rgba(var(--main-color-rgb), 0.5);
+    }
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 15px rgba(var(--main-color-rgb), 0.8), 0 0 30px rgba(var(--main-color-rgb), 0.4);
+    }
+}

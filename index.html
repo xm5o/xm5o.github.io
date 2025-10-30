@@ -108,6 +108,80 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <!-- <script src="scripts/translate.js"></script> -->
   <!-- <script src="scripts/mobile-enhancements.js" defer></script> -->
+	  <script>
+	    // About Me Tab Switching Logic
+	    document.addEventListener('DOMContentLoaded', () => {
+	      const tabButtons = document.querySelectorAll('.tab-btn');
+	      const tabContents = document.querySelectorAll('.tab-content');
+	      const aboutSection = document.getElementById('about');
+	
+	      const activateTab = (tabName) => {
+	        tabButtons.forEach(btn => btn.classList.remove('active'));
+	        tabContents.forEach(content => content.classList.remove('active'));
+	
+	        const activeBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+	        const activeContent = document.getElementById(`${tabName}-tab`);
+	
+	        if (activeBtn) activeBtn.classList.add('active');
+	        if (activeContent) activeContent.classList.add('active');
+	      };
+	
+	      tabButtons.forEach(button => {
+	        button.addEventListener('click', () => {
+	          const tabName = button.getAttribute('data-tab');
+	          activateTab(tabName);
+	          if (tabName === 'profile') {
+	            animateSkillBars();
+	          }
+	        });
+	      });
+	
+	      // Skill Bar Animation Logic
+	      const animateSkillBars = () => {
+	        const skillBars = document.querySelectorAll('.skill-progress');
+	        skillBars.forEach(bar => {
+	          const progress = bar.getAttribute('data-progress');
+	          // Only animate if the bar is visible (i.e., the 'profile' tab is active)
+	          if (document.getElementById('profile-tab').classList.contains('active')) {
+	            bar.style.width = progress + '%';
+	          } else {
+	            bar.style.width = '0%'; // Reset when not visible
+	          }
+	        });
+	      };
+	
+	      // Intersection Observer to trigger animation when section is visible
+	      const observerOptions = {
+	        root: null,
+	        rootMargin: '0px',
+	        threshold: 0.1 // Trigger when 10% of the section is visible
+	      };
+	
+	      const observer = new IntersectionObserver((entries, observer) => {
+	        entries.forEach(entry => {
+	          if (entry.isIntersecting) {
+	            // Check if the 'profile' tab is the currently active tab
+	            if (document.querySelector('.tab-btn[data-tab="profile"]').classList.contains('active')) {
+	              animateSkillBars();
+	            }
+	          } else {
+	            // Optional: reset animation when out of view
+	            // document.querySelectorAll('.skill-progress').forEach(bar => bar.style.width = '0%');
+	          }
+	        });
+	      }, observerOptions);
+	
+	      if (aboutSection) {
+	        observer.observe(aboutSection);
+	      }
+	
+	      // Initial load: ensure 'profile' is active and animated if visible
+	      activateTab('profile');
+	      if (aboutSection && aboutSection.getBoundingClientRect().top < window.innerHeight) {
+	        animateSkillBars();
+	      }
+	    });
+	  </script>
 </head>
 
 <body>
@@ -127,7 +201,7 @@
       <a href="#about" data-translate="nav.about">About</a>
       <a href="#services" data-translate="nav.skills">Skills</a>
       <a href="#projects" data-translate="nav.projects">Projects</a>
-      <a href="#music" data-translate="nav.music">Music</a>
+      <!-- <a href="#music" data-translate="nav.music">Music</a> -->
       <!-- <a href="#game-collection" data-translate="nav.game_collection">Games</a> -->
       <a href="#blog" data-translate="nav.blog">Blog</a>
       <a href="#contact" data-translate="nav.contact">Contact</a>
@@ -526,7 +600,7 @@
   </div>
 
   <!-- Loading Indicator -->
-  <div id="loadingIndicator" class="loading-indicator" style="display: none">
+  <div id="loadingIndicator" class="loading-indicator">
     <div class="spinner">
       <div class="spinner-inner"></div>
     </div>
@@ -536,12 +610,16 @@
       </div> -->
   </div>
 
-  <div id="mainContent">
+  <div id="mainContent" style="display: none">
     <!-- About Section -->
     <section class="about" id="about">
       <div class="about-container">
         <div class="about-header">
           <h2>About <span>Me</span></h2>
+          <span class="enhanced-tag">
+              <i class='bx bx-bolt-circle'></i>
+              UPDATED
+          </span>
           <div class="tab-navigation">
             <button class="tab-btn active" data-tab="profile">Profile</button>
             <button class="tab-btn" data-tab="experience">Experience</button>
@@ -563,11 +641,10 @@
             <div class="tab-content active" id="profile-tab">
               <div class="about-text">
                 <p>
-                  I'm a normal person who loves to code random things and make websites
-                  and love to play games and chill with <span>friends</span>.
-                  Always looking to make some <span>new friends</span> and
-                  love to chat with everyone <span>(maybe)</span>. My Favorite
-                  game is <span>Overwatch</span>.
+                    I am a <span>Creative Web Developer</span> with over <span>4+ years of experience</span>, specializing in transforming unique ideas into engaging and high-performance digital experiences. My passion lies at the intersection of code and creativity, where I craft dynamic websites and applications that are both aesthetically pleasing and functionally robust.
+                    <br>
+                    <br>
+	                  I thrive on building projects from the ground up, focusing on clean architecture, modern web standards, and delivering exceptional user engagement. I am currently <span>Available for Freelance</span> and open to collaborating on innovative projects. Let's build something amazing together.
                 </p>
                 <!-- <p>
                     I specialize in creating interactive web experiences, mobile
@@ -583,16 +660,16 @@
                 </div>
                 <div class="info-item">
                   <span class="label">Age:</span>
-                  <span class="value">??</span>
+                  <span class="value">17 years old</span>
                 </div>
                 <div class="info-item">
                   <span class="label">Pronouns:</span>
                   <span class="value">He/Him</span>
                 </div>
-                <div class="info-item">
+                <!-- <div class="info-item">
                   <span class="label">Location:</span>
                   <span class="value">Earth</span>
-                </div>
+                </div> -->
                 <div class="info-item">
                   <span class="label">Freelance:</span>
                   <span class="value available">Available</span>
@@ -600,47 +677,68 @@
               </div>
 
               <!-- Skill Progress Bars -->
-              <div class="skill-section">
-                <h3>Technical Skills</h3>
-                <div class="skill-bars">
-                  <div class="skill-bar">
-                    <div class="skill-info">
-                      <span>Coding</span>
-                      <span class="percent">45%</span>
-                    </div>
-                    <div class="skill-progress-bg">
-                      <div class="skill-progress" value="45"></div>
-                    </div>
-                  </div>
-                  <div class="skill-bar">
-                    <div class="skill-info">
-                      <span>Gaming</span>
-                      <span class="percent">55%</span>
-                    </div>
-                    <div class="skill-progress-bg">
-                      <div class="skill-progress" value="55"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+<div class="skill-section">
+	                <h3>Core Competencies</h3>
+	                <div class="skill-bars">
+	                  <div class="skill-bar">
+	                    <div class="skill-info">
+	                      <span>Frontend Development</span>
+	                      <span class="percent">90%</span>
+	                    </div>
+	                    <div class="skill-progress-bg">
+	                      <div class="skill-progress" style="width: 90%;" data-progress="90"></div>
+	                    </div>
+	                  </div>
+	                  <div class="skill-bar">
+	                    <div class="skill-info">
+	                      <span>Backend Development (Node.js/Firebase)</span>
+	                      <span class="percent">35%</span>
+	                    </div>
+	                    <div class="skill-progress-bg">
+	                      <div class="skill-progress" style="width: 35%;" data-progress="35"></div>
+	                    </div>
+	                  </div>
+	                  <div class="skill-bar">
+	                    <div class="skill-info">
+	                      <span>Creative Design & UI/UX</span>
+	                      <span class="percent">85%</span>
+	                    </div>
+	                    <div class="skill-progress-bg">
+	                      <div class="skill-progress" style="width: 85%;" data-progress="85"></div>
+	                    </div>
+	                  </div>
+	                </div>
+	              </div>
 
-              <div class="tech-stack">
-                <h3>Technologies I Work With</h3>
-                <div class="tech-icons">
-                  <div class="tech-icon">
-                    <i class="fab fa-html5"></i>
-                    <span>HTML5</span>
-                  </div>
-                  <div class="tech-icon">
-                    <i class="fab fa-css3-alt"></i>
-                    <span>CSS3</span>
-                  </div>
-                  <div class="tech-icon">
-                    <i class="fab fa-js"></i>
-                    <span>JavaScript</span>
-                  </div>
-                </div>
-              </div>
+<div class="tech-stack">
+	                <h3>Technologies I Work With</h3>
+	                <div class="tech-icons">
+	                  <div class="tech-icon" title="HTML5">
+	                    <i class="fab fa-html5"></i>
+	                    <span>HTML5</span>
+	                  </div>
+	                  <div class="tech-icon" title="CSS3">
+	                    <i class="fab fa-css3-alt"></i>
+	                    <span>CSS3</span>
+	                  </div>
+	                  <div class="tech-icon" title="JavaScript">
+	                    <i class="fab fa-js"></i>
+	                    <span>JavaScript</span>
+	                  </div>
+	                  <div class="tech-icon" title="Node.js">
+	                    <i class="fab fa-node-js"></i>
+	                    <span>Node.js</span>
+	                  </div>
+	                  <div class="tech-icon" title="Firebase">
+	                    <i class="fas fa-database"></i>
+	                    <span>Firebase</span>
+	                  </div>
+	                  <div class="tech-icon" title="Git">
+	                    <i class="fab fa-git-alt"></i>
+	                    <span>Git</span>
+	                  </div>
+	                </div>
+	              </div>
 
               <div class="cta-buttons">
                 <a href="#contact" class="btn">Get In Touch</a>
@@ -648,41 +746,37 @@
             </div>
 
             <!-- Experience Tab -->
-            <div class="tab-content" id="experience-tab">
-              <div class="timeline">
-                <div class="timeline-item">
-                  <div class="timeline-dot"></div>
-                  <div class="timeline-date">Present</div>
-                  <div class="timeline-content">
-                    <h3>Discord Bot Developer</h3>
-                    <p>
-                      Created and maintained "Selina" Discord bot with
-                      moderation tools, fun commands, and server management
-                      features
-                    </p>
-                  </div>
-                </div>
-                <div class="timeline-item">
-                  <div class="timeline-dot"></div>
-                  <div class="timeline-date">2024 - Present</div>
-                  <div class="timeline-content">
-                    <h3>FNF Modcharter</h3>
-                    <p>
-                      Designed and developed custom charts and game mechanics
-                      for Friday Night Funkin' mods including "Psycho Funkin"
-                    </p>
-                  </div>
-                </div>
-                <div class="timeline-item">
-                  <div class="timeline-dot"></div>
-                  <div class="timeline-date">2023 - Present</div>
-                  <div class="timeline-content">
-                    <h3>Web Developer</h3>
-                    <p>Created various web projects.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+	            <div class="tab-content" id="experience-tab">
+	              <div class="experience-tab-content">
+	                <div class="timeline">
+	
+	                  <div class="timeline-item left">
+	                    <div class="timeline-content">
+	                      <h4>Creative Web Developer (Freelance)</h4>
+	                      <span class="date">2022 - Present</span>
+	                      <p>Designing, developing, and deploying custom, high-performance websites and web applications for a diverse range of clients. Focusing on modern frontend frameworks, responsive design, and clean code architecture.</p>
+	                    </div>
+	                  </div>
+
+                    <div class="timeline-item right">
+	                    <div class="timeline-content">
+	                      <h4>Discord Bot Developer</h4>
+	                      <span class="date">Present</span>
+	                      <p>Created and maintained "Selina" Discord bot with moderation tools, fun commands, and server management features.</p>
+	                    </div>
+	                  </div>
+
+                    <div class="timeline-item left">
+	                    <div class="timeline-content">
+	                      <h4>Friday Night Funkin' Modder</h4>
+	                      <span class="date">2023 - Present</span>
+	                      <p>Designed and developed custom charts and game mechanics for Friday Night Funkin' mods including "Psycho Funkin"</p>
+	                    </div>
+	                  </div>
+	
+	                </div>
+	              </div>
+	            </div>
 
             <!-- Education Tab -->
             <!-- <div class="tab-content" id="education-tab">
@@ -934,7 +1028,7 @@
   </section> -->
 
     <!-- Cigarettes After Sex Section -->
-    <section class="music-section" id="music">
+    <section class="music-section" id="music" style="display: none;">
       <!-- Background Elements -->
       <div class="music-particles-container">
         <div class="music-particle"></div>
@@ -1747,7 +1841,7 @@
           <li><a href="#about">About</a></li>
           <li><a href="#services">Skills</a></li>
           <li><a href="#projects">Projects</a></li>
-          <li><a href="#music">Music</a></li>
+          <!-- <li><a href="#music">Music</a></li> -->
           <li><a href="#contact">Contact</a></li>
         </ul>
 
@@ -1763,11 +1857,12 @@
   <script src="scripts/discord-modal.js"></script>
   <script src="scripts/skills.js"></script>
   <script src="scripts/projects.js"></script>
-  <script src="scripts/music.js"></script>
+  <!-- <script src="scripts/music.js"></script> -->
   <script src="scripts/blog.js"></script>
   <script src="scripts/faq.js"></script>
   <script src="scripts/discord-activity.js"></script>
   <script src="scripts/video-thumbnail.js"></script>
+  <script src="scripts/backgroundSong.js"></script>
   <!-- <script src="scripts/upcoming.js"></script> -->
   <!-- <script>
     document.addEventListener('DOMContentLoaded', () => {
