@@ -27,8 +27,7 @@ class UniqueVisitorTracker {
     this.initializeFirebase();
 
     this.hasShownContent = false;
-    this.progressBar = document.querySelector('.progress');
-    this.loadingIndicator = document.getElementById('loadingIndicator');
+    this.progressBar = document.querySelector('.progress'); // Keep for progress updates if needed
     this.mainContent = document.getElementById('mainContent');
   }
 
@@ -44,9 +43,8 @@ class UniqueVisitorTracker {
       this.geoDocRef = firestoreModule.doc(this.db, 'geo_stats', 'countries');
       this.ipDocRef = firestoreModule.collection(this.db, 'unique_visitors');
 
-      if (this.loadingIndicator) {
-        this.loadingIndicator.style.display = 'flex';
-      }
+      // The new loading screen is managed by loading.js and is visible by default.
+      // We will use the loadingManager to hide it later.
       
       this.updateProgress(20);
 
@@ -74,8 +72,9 @@ class UniqueVisitorTracker {
     if (this.hasShownContent) return;
     this.hasShownContent = true;
     
-    if (this.loadingIndicator) {
-      this.loadingIndicator.style.display = 'none';
+    // Use the new LoadingScreenManager to hide the screen with a fade-out animation
+    if (window.loadingManager) {
+      window.loadingManager.hideLoadingScreen();
     }
 
     if (this.mainContent) {

@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/contact.css" />
   <link rel="stylesheet" href="css/blog.css" />
+  <link rel="stylesheet" href="css/loading.css" />
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <!-- Arabic Fonts -->
@@ -106,6 +107,7 @@
   </style>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="scripts/loading.js"></script>
   <!-- <script src="scripts/translate.js"></script> -->
   <!-- <script src="scripts/mobile-enhancements.js" defer></script> -->
 	  <script>
@@ -185,6 +187,31 @@
 </head>
 
 <body>
+  <!-- New Full-Screen Loading Screen -->
+  <div id="loading-screen">
+    <div class="bg-layer"></div>
+    <div class="particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+    <div class="loading-content">
+      <div id="welcome-text">Welcome</div>
+      <div id="loading-status">Please wait.. trying to connecting to the servers</div>
+      <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+      </div>
+    </div>
+  </div>
   <header class="header" role="banner">
     <a href="#" class="logo" aria-label="Personal Logo">Immortal</a>
 
@@ -600,15 +627,17 @@
   </div>
 
   <!-- Loading Indicator -->
-  <div id="loadingIndicator" class="loading-indicator">
+  <!-- <div id="loadingIndicator" class="loading-indicator">
     <div class="spinner">
       <div class="spinner-inner"></div>
     </div>
     <p>Please wait...</p>
-    <!-- <div class="progress-bar">
+     <div class="progress-bar">
         <div class="progress"></div>
-      </div> -->
   </div>
+  </div>
+      </div>
+  </div> -->
 
   <div id="mainContent" style="display: none">
     <!-- About Section -->
