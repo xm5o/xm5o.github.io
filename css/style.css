@@ -80,12 +80,12 @@ html {
   --bg-color: #060606;
   --second-bg-color: #0b0b0c;
   --text-color: #ffffff;
-  --main-color: #a39d97;
-  --secondary-color: #685d57;
-  --accent-color: #22283d;
+  --main-color: #625749;
+  --secondary-color: #a59280;
+  --accent-color: #39332b;
   --selina-color: #bc7f4c;
   --selina-hover-color: #fad0a3;
-  --main-color-rgb: 168, 152, 144;
+  --main-color-rgb: 98, 87, 73;
   --text-color-rgb: 255, 255, 255;
   --gradient: linear-gradient(135deg, var(--main-color), var(--secondary-color));
   --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -147,21 +147,35 @@ body {
 }
 
 .header {
-  position: fixed;
-  width: 100%;
-  height: var(--header-height);
-  background: rgba(10, 10, 10, 0.8);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  top: 0;
-  left: 0;
-  padding: 4rem 12%;
-  background: var(--header);
-  backdrop-filter: blur(10px);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 100;
+    position: fixed;
+    width: 95%;
+    max-width: 1400px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 2rem;
+    z-index: 999;
+    
+    /* Glassmorphism Effect */
+    background: rgba(10, 10, 10, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    
+    /* Floating Container Styling */
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 
+                0 2px 8px rgba(0, 0, 0, 0.2);
+    
+    /* Layout */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 4rem;
+    transition: all 0.3s ease;
+}
+
+.menu-toggle {
+    display: none;
 }
 
 #menu-icon {
@@ -192,18 +206,20 @@ span {
   color: var(--main-color);
 }
 
+.navbar {
+  display: flex;
+  gap: 2rem;
+  z-index: 1000;
+}
+
 .navbar a {
-  font-size: 1.8rem;
-  color: var(--text-color);
-  margin-left: 4rem;
-  font-weight: 500;
-  border-bottom: 3px solid transparent;
-  transition: 0.3s ease;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 .navbar a:hover {
-  border-bottom: 3px solid var(--main-color);
-  color: var(--main-color);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 section {
@@ -380,6 +396,7 @@ section {
 }
 
 .home-content {
+  margin-top: 32px;
   z-index: 2;
   position: relative;
 }
@@ -5301,30 +5318,62 @@ section {
 
 /* Show/Hide Menu for Mobile */
 @media (max-width: 1024px) {
+  .header {
+    width: 92%;
+    top: 1.5rem;
+    border-radius: 1.2rem;
+    padding: 1.5rem 3rem;
+  }
+
+  .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 1.5rem;
+        cursor: pointer;
+        z-index: 1001;
+    }
+  
   #menu-icon {
     display: block;
     /* Show hamburger menu */
   }
 
   .navbar {
-    display: none;
-    /* Hide navbar by default on mobile */
-    position: fixed;
-    top: 0;
-    right: -100%;
-    /* Move navbar off-screen */
-    width: 70%;
-    height: 100vh;
-    background: var(--bg-color);
-    backdrop-filter: blur(10px);
-    padding: 2rem;
-    z-index: 1000;
-    transition: transform 0.3s ease-in-out;
-  }
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 2.5%;
+        left: 2.5%;
+        flex-direction: column;
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        padding: 1.5rem;
+        gap: 1rem;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+    }
 
   .navbar.active {
-    display: flex;
-    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .navbar a {
+    padding: 0.8rem 1rem;
+    border-radius: 0.5rem;
+    transition: background 0.3s ease;
+  }
+  
+  .navbar a:hover {
+    background: rgba(255, 255, 255, 0.1);
   }
 
   #close-menu {
@@ -5703,6 +5752,20 @@ section {
 
 /* Enhanced Mobile Responsiveness */
 @media (max-width: 768px) {
+  .header {
+    width: 90%;
+    top: 1rem;
+    border-radius: 1rem;
+    padding: 1.2rem 2rem;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+  }
+    
+  .navbar {
+    right: 5%;
+    left: 5%;
+    padding: 1.2rem;
+  }
+
   .modal-content {
     width: min(95%, 450px);
     margin: 20px;
@@ -5767,6 +5830,25 @@ section {
 }
 
 @media (max-width: 480px) {
+  .header {
+    width: 94%;
+    top: 0.8rem;
+    border-radius: 0.8rem;
+    padding: 1rem 1.5rem;
+  }
+    
+  .navbar {
+    right: 3%;
+    left: 3%;
+    padding: 1rem;
+    gap: 0.8rem;
+  }
+    
+  .navbar a {
+    padding: 0.7rem 0.8rem;
+    font-size: 0.95rem;
+  }
+
   .modal-content {
     width: 95%;
     margin: 10px;
@@ -6386,6 +6468,7 @@ section {
 
   /* Mobile Hero Content */
   .home-content {
+    margin-top: 0px;
     width: 100%;
     max-width: none;
   }
@@ -6403,6 +6486,7 @@ section {
 
   .word-animate {
     display: block;
+    margin-top: 32px;
     margin-bottom: 1rem;
   }
 
@@ -7813,6 +7897,7 @@ section {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   animation: slideInUp 1s ease 1.4s both;
   min-width: 280px;
+  /* max-height: 100px; */
   max-width: 320px;
   overflow: hidden;
   transition: all 0.3s ease;
@@ -7995,6 +8080,16 @@ section {
   text-overflow: ellipsis;
 }
 
+.activity-timestamp {
+  font-size: 1.1rem;
+  color: rgba(var(--main-color-rgb), 0.7);
+  margin-top: 0.4rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .discord-profile.loading .discord-display-name,
 .discord-profile.loading .status-text {
   animation: loadingPulse 1.5s ease-in-out infinite;
@@ -8072,6 +8167,10 @@ section {
   .activity-details {
     font-size: 1rem;
   }
+
+  .activity-timestamp {
+    font-size: 1rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -8105,6 +8204,10 @@ section {
 
   .discord-custom-status {
     font-size: 1.1rem;
+  }
+
+  .activity-timestamp {
+      font-size: 0.95rem;
   }
 }
 
@@ -8804,6 +8907,13 @@ section {
   font-size: 1.4rem;
   color: rgba(var(--text-color-rgb), 0.8);
   margin-bottom: 0.5rem;
+}
+
+.discord-expanded-activity .activity-timestamp {
+  font-size: 1.4rem;
+  color: rgba(var(--main-color-rgb), 0.8);
+  margin-top: 0.8rem;
+  font-weight: 600;
 }
 
 /* Discord Actions */
@@ -11019,5 +11129,31 @@ section {
     100% {
         opacity: 1;
         box-shadow: 0 0 15px rgba(var(--main-color-rgb), 0.8), 0 0 30px rgba(var(--main-color-rgb), 0.4);
+    }
+}
+
+body.menu-open {
+    overflow: hidden;
+}
+
+main, .content {
+    margin-top: 8rem;
+}
+
+@media (max-width: 1024px) {
+    main, .content {
+        margin-top: 7rem;
+    }
+}
+
+@media (max-width: 768px) {
+    main, .content {
+        margin-top: 6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    main, .content {
+        margin-top: 5.5rem;
     }
 }

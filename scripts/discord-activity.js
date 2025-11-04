@@ -4,10 +4,10 @@ class DiscordActivity {
     this.apiUrl = `https://api.lanyard.rest/v1/users/${this.userId}`;
     this.retryCount = 0;
     this.maxRetries = 3;
-    this.updateInterval = 1000; // 1 seconds
+    this.updateInterval = 500; // 0.5 seconds
     this.intervalId = null;
     this.userData = null;
-    
+
     this.init();
   }
 
@@ -24,13 +24,13 @@ class DiscordActivity {
   async fetchDiscordStatus() {
     try {
       const response = await fetch(this.apiUrl);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
-      
+
       if (data.success && data.data) {
         this.updateDiscordWidget(data.data);
         this.retryCount = 0;
@@ -57,7 +57,7 @@ class DiscordActivity {
     const discriminator = userData.discord_user?.discriminator;
     const avatar = userData.discord_user?.avatar;
     const status = userData.discord_status || 'offline';
-    
+
     // Get custom status if available
     const customStatus = userData.activities?.find(activity => activity.type === 4);
     const statusText = customStatus?.state || '';
@@ -65,15 +65,18 @@ class DiscordActivity {
 
     // Get activity status (playing, listening, etc.)
     const activity = userData.activities?.find(activity => activity.type !== 4);
-    
+
+    // Extract timestamp if available
+    const timestampText = activity?.timestamps ? this.formatActivityTimestamp(activity.timestamps) : '';
+
     // Build avatar URL
     let avatarUrl;
     if (avatar) {
       avatarUrl = `https://cdn.discordapp.com/avatars/${userData.discord_user.id}/${avatar}.${avatar.startsWith('a_') ? 'gif' : 'png'}?size=128`;
     } else {
       // Use default avatar based on user ID or discriminator
-      const defaultAvatarId = discriminator && discriminator !== '0' 
-        ? parseInt(discriminator) % 5 
+      const defaultAvatarId = discriminator && discriminator !== '0'
+        ? parseInt(discriminator) % 5
         : (parseInt(userData.discord_user.id) >> 22) % 6;
       avatarUrl = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarId}.png`;
     }
@@ -115,6 +118,7 @@ class DiscordActivity {
               <div class="activity-name">${activity.name}</div>
               ${activity.details ? `<div class="activity-details">${activity.details}</div>` : ''}
               ${activity.state ? `<div class="activity-state">${activity.state}</div>` : ''}
+              ${timestampText ? `<div class="activity-timestamp">${timestampText}</div>` : ''}
             </div>
           ` : ''}
         </div>
@@ -123,11 +127,11 @@ class DiscordActivity {
     `;
 
     widget.className = `discord-widget ${status}`;
-    
+
     const profile = widget.querySelector('.discord-profile');
     if (profile) {
       profile.classList.remove('loading');
-      
+
       // Add click event listener for desktop only
       if (isDesktop) {
         profile.addEventListener('click', () => this.showExpandedView());
@@ -165,17 +169,59 @@ class DiscordActivity {
   getStatusIcon(status) {
     const statusIcons = {
       'online': '🟢',
-      'idle': '🌙', 
+      'idle': '🌙',
       'dnd': '⛔',
       'offline': '⚫'
     };
     return statusIcons[status] || '⚫';
   }
 
+  formatActivityTimestamp(timestamps) {
+    if (!timestamps || typeof timestamps !== 'object') {
+      return '';
+    }
+
+    const now = Date.now();
+    let seconds = 0;
+    let label = '';
+
+    if (timestamps.start) {
+      seconds = Math.floor((now - timestamps.start) / 1000);
+      label = 'elapsed';
+    }
+    else if (timestamps.end) {
+      seconds = Math.floor((timestamps.end - now) / 1000);
+      label = 'remaining';
+
+      if (seconds < 0) {
+        return '';
+      }
+    } else {
+      return '';
+    }
+
+    if (seconds < 0) {
+      seconds = 0;
+    }
+
+    // Format time into HH:MM:SS or MM:SS
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    let timeString = '';
+    if (hours > 0) {
+      timeString = `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    } else {
+      timeString = `${minutes}:${String(secs).padStart(2, '0')}`;
+    }
+
+    return `${timeString} ${label}`;
+  }
+
   showExpandedView() {
     if (!this.userData) return;
 
-    // Remove existing modal if present
     const existingModal = document.getElementById('discord-expanded-modal');
     if (existingModal) {
       existingModal.remove();
@@ -189,37 +235,34 @@ class DiscordActivity {
     const avatar = userData.discord_user?.avatar;
     const status = userData.discord_status || 'offline';
     const userId = userData.discord_user?.id;
-    
-    // Get custom status if available
+
     const customStatus = userData.activities?.find(activity => activity.type === 4);
     const statusText = customStatus?.state || '';
     const statusEmoji = customStatus?.emoji;
 
-    // Get activity status (playing, listening, etc.)
     const activity = userData.activities?.find(activity => activity.type !== 4);
-    
+
+    // Extract timestamp if available
+    const timestampText = activity?.timestamps ? this.formatActivityTimestamp(activity.timestamps) : '';
+
     // Build avatar URL
     let avatarUrl;
     if (avatar) {
       avatarUrl = `https://cdn.discordapp.com/avatars/${userId}/${avatar}.${avatar.startsWith('a_') ? 'gif' : 'png'}?size=256`;
     } else {
-      const defaultAvatarId = discriminator && discriminator !== '0' 
-        ? parseInt(discriminator) % 5 
+      const defaultAvatarId = discriminator && discriminator !== '0'
+        ? parseInt(discriminator) % 5
         : (parseInt(userId) >> 22) % 6;
       avatarUrl = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarId}.png`;
     }
 
-    // Determine which name to display
     const nameToDisplay = globalName || displayName || username;
     const shouldShowUsername = discriminator && discriminator !== '0';
 
-    // Get badges (mock data for now - Discord API doesn't provide badges via Lanyard)
     const badges = this.getMockBadges(userData);
-    
-    // Get clan tag (from display name if present)
+
     const clanTag = this.extractClanTag(displayName);
 
-    // Create modal
     const modal = document.createElement('div');
     modal.id = 'discord-expanded-modal';
     modal.className = 'discord-expanded-modal';
@@ -275,6 +318,7 @@ class DiscordActivity {
                 <div class="activity-name">${activity.name}</div>
                 ${activity.details ? `<div class="activity-details">${activity.details}</div>` : ''}
                 ${activity.state ? `<div class="activity-state">${activity.state}</div>` : ''}
+                ${timestampText ? `<div class="activity-timestamp">${timestampText}</div>` : ''}
               </div>
             </div>
           ` : ''}
@@ -291,10 +335,9 @@ class DiscordActivity {
 
     document.body.appendChild(modal);
 
-    // Add event listeners
     const closeBtn = modal.querySelector('.discord-modal-close');
     const overlay = modal.querySelector('.discord-modal-overlay');
-    
+
     closeBtn.addEventListener('click', () => this.closeExpandedView());
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) {
@@ -302,7 +345,6 @@ class DiscordActivity {
       }
     });
 
-    // Add escape key listener
     const escapeHandler = (e) => {
       if (e.key === 'Escape') {
         this.closeExpandedView();
@@ -311,7 +353,6 @@ class DiscordActivity {
     };
     document.addEventListener('keydown', escapeHandler);
 
-    // Animate in
     requestAnimationFrame(() => {
       modal.classList.add('show');
     });
@@ -328,31 +369,26 @@ class DiscordActivity {
   }
 
   getMockBadges(userData) {
-    // Mock badges based on user data - in a real implementation, 
-    // you'd need to use Discord's API directly or have this data from another source
     const badges = [];
-    
-    // Add some example badges based on status or activities
+
     if (userData.discord_status === 'online') {
       badges.push({ name: 'Active User', icon: 'bx bx-check-circle' });
     }
-    
+
     if (userData.activities?.some(activity => activity.type === 0)) {
       badges.push({ name: 'Gamer', icon: 'bx bx-game' });
     }
-    
+
     if (userData.activities?.some(activity => activity.type === 2)) {
       badges.push({ name: 'Music Lover', icon: 'bx bx-music' });
     }
 
-    // Add some default badges
     badges.push({ name: 'Discord User', icon: 'bx bxl-discord-alt' });
-    
+
     return badges;
   }
 
   extractClanTag(displayName) {
-    // Look for clan tags in common formats like [TAG], {TAG}, (TAG)
     const clanTagMatch = displayName?.match(/^[\[\{\(]([A-Z0-9]{2,6})[\]\}\)]/);
     return clanTagMatch ? clanTagMatch[0] : null;
   }
@@ -362,7 +398,7 @@ class DiscordActivity {
     if (!widget) return;
 
     this.retryCount++;
-    
+
     if (this.retryCount <= this.maxRetries) {
       console.log(`Retrying Discord API request (${this.retryCount}/${this.maxRetries})...`);
       setTimeout(() => {
@@ -397,7 +433,7 @@ class DiscordActivity {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
-    
+
     this.intervalId = setInterval(() => {
       this.fetchDiscordStatus();
     }, this.updateInterval);
