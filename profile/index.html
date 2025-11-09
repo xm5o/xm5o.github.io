@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Immortal - Profile Card</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link href=\'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css\' rel=\'stylesheet\'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .profile-card {
+      max-width: 420px;
+      width: 100%;
+      padding: 4rem;
+      border-radius: 2rem;
+      background: var(--second-bg-color);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 6px 12px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      animation: fadeIn 1s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-card::before {
+        content: \'\';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(var(--main-color-rgb), 0.1) 0%, transparent 40%);
+        animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .profile-image {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 2rem;
+      border: 5px solid var(--main-color);
+      box-shadow: 0 0 25px rgba(var(--main-color-rgb), 0.6);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    .profile-image:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 40px rgba(var(--main-color-rgb), 0.9);
+    }
+
+    .profile-name {
+      font-size: 3.2rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+      background: var(--gradient);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      line-height: 1.2;
+      position: relative;
+      z-index: 2;
+    }
+
+    .profile-title {
+      font-size: 1.8rem;
+      color: var(--secondary-color);
+      font-weight: 500;
+      margin-bottom: 2.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .about-me-section {
+        text-align: left;
+        margin-bottom: 2.5rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .about-me-section h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--main-color);
+        margin-bottom: 1rem;
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 0.5rem;
+    }
+
+    .profile-bio {
+      font-size: 1.5rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.7;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .social-links a {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 45px;
+      height: 45px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      color: var(--text-color);
+      font-size: 2.2rem;
+      transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: var(--main-color);
+      color: var(--bg-color);
+      transform: translateY(-6px) scale(1.1);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 1.2rem 3.2rem;
+      background: var(--main-color);
+      border-radius: 0.8rem;
+      box-shadow: 0 0 1.5rem var(--main-color);
+      font-size: 1.7rem;
+      color: var(--second-bg-color);
+      letter-spacing: 0.1rem;
+      font-weight: 700;
+      transition: 0.5s ease;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 2;
+    }
+
+    .btn:hover {
+      box-shadow: none;
+      background: var(--secondary-color);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="profile-card">
+    <img src="../assets/pfp.jpg" alt="Profile Picture" class="profile-image">
+
+    <h1 class="profile-name">Immortal</h1>
+    <p class="profile-title">Creative Full-Stack Developer</p>
+
+    <div class="about-me-section">
+        <h3>About Me</h3>
+        <p class="profile-bio">
+            I am a passionate developer and designer who enjoys creating beautiful and functional web experiences. My expertise lies in full-stack development, with a love for creative coding and bringing ideas to life.
+        </p>
+    </div>
+
+    <!-- <div class="social-links">
+      <a href="https://github.com/" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+      <a href="https://twitter.com/" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="https://discord.com/" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
+      <a href="https://www.youtube.com/" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+    </div> -->
+
+    <a href="../" class="btn">Show Full Site</a>
+  </div>
+</body>
+
+</html>

@@ -5507,6 +5507,7 @@ section {
   height: 220px;
   /* Increased height */
   background: linear-gradient(135deg, var(--main-color), var(--secondary-color));
+  /* background: url('../assets/banner.jpg'); */
   background-size: cover;
   background-position: center;
   position: relative;
