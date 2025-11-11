@@ -11158,3 +11158,210 @@ main, .content {
         margin-top: 5.5rem;
     }
 }
+/* ==========================================================================
+   Highlighted Section Styles
+   ========================================================================== */
+
+.highlighted {
+  background: var(--second-bg-color);
+  padding: 10rem 12%;
+  min-height: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.highlighted-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.highlighted .heading {
+  margin-bottom: 5rem;
+  font-size: 4rem;
+  color: var(--text-color);
+  position: relative;
+  display: inline-block;
+}
+
+.highlighted .heading::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: var(--main-color);
+  border-radius: 2px;
+}
+
+.highlighted-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--second-bg-color); /* Use second-bg-color for a subtle lift */
+  border-radius: 2rem; /* Slightly larger radius */
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6); /* Deeper shadow */
+  overflow: hidden;
+  max-width: 900px; /* Wider card */
+  margin: 0 auto;
+  border: 2px solid var(--accent-color); /* More pronounced border */
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transition */
+  position: relative;
+  z-index: 1;
+}
+
+.highlighted-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 10% 10%, rgba(var(--main-color-rgb), 0.1), transparent 50%);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.highlighted-card:hover {
+  transform: translateY(-8px) scale(1.01); /* More noticeable lift and slight scale */
+  box-shadow: 0 25px 50px rgba(var(--main-color-rgb), 0.3), 0 0 50px rgba(var(--main-color-rgb), 0.1);
+}
+
+.card-thumbnail {
+  position: relative;
+  width: 100%;
+  /* Maintain a 16:9 aspect ratio for the video thumbnail */
+  padding-top: 56.25%; /* 9 / 16 * 100 */
+  overflow: hidden;
+}
+
+.card-thumbnail img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.highlighted-card:hover .card-thumbnail img {
+  transform: scale(1.05);
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 0, 0, 0.9);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3.5rem;
+  color: var(--text-color);
+  z-index: 10;
+  transition: background 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+}
+
+.play-button:hover {
+  background: var(--youtube-color);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.play-button i {
+  /* Adjust icon position slightly for better centering */
+  margin-left: 5px;
+}
+
+.card-content {
+  padding: 3rem;
+  text-align: left;
+  width: 100%;
+}
+
+.card-title {
+  font-size: 3.2rem; /* Larger title */
+  font-weight: 800; /* Bolder title */
+  margin-bottom: 1rem;
+  background: var(--gradient); /* Use gradient for the title */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 1.2;
+  text-shadow: 0 0 5px rgba(var(--main-color-rgb), 0.3); /* Subtle text shadow */
+}
+
+.card-description {
+  font-size: 1.7rem; /* Slightly larger description text */
+  color: var(--secondary-color);
+  margin-bottom: 3rem; /* More space below description */
+  line-height: 1.7;
+}
+
+.watch-now-btn {
+  /* Inherit styles from existing enhanced-btn, but ensure it's block level for full width */
+  display: inline-flex;
+  width: auto;
+  padding: 1.2rem 3rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  border-radius: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+}
+
+.watch-now-btn .btn-text {
+  color: var(--text-color) !important; /* Ensure button text is white/text-color */
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .highlighted-card {
+    flex-direction: row;
+    max-width: 1000px;
+    text-align: left;
+  }
+
+  .card-thumbnail {
+    width: 50%;
+    padding-top: 0;
+    height: 300px; /* Fixed height for desktop view */
+  }
+
+  .card-content {
+    width: 50%;
+    padding: 4rem;
+  }
+
+  .card-title {
+    font-size: 3.8rem; /* Larger title for desktop */
+  }
+}
+
+@media (max-width: 768px) {
+  .highlighted {
+    padding: 8rem 5%;
+  }
+  
+  .card-title {
+    font-size: 2.4rem;
+  }
+
+  .card-description {
+    font-size: 1.5rem;
+  }
+
+  .play-button {
+    width: 60px;
+    height: 60px;
+    font-size: 2.5rem;
+  }
+}

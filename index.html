@@ -110,80 +110,80 @@
   <script src="scripts/loading.js"></script>
   <!-- <script src="scripts/translate.js"></script> -->
   <!-- <script src="scripts/mobile-enhancements.js" defer></script> -->
-	  <script>
-	    // About Me Tab Switching Logic
-	    document.addEventListener('DOMContentLoaded', () => {
-	      const tabButtons = document.querySelectorAll('.tab-btn');
-	      const tabContents = document.querySelectorAll('.tab-content');
-	      const aboutSection = document.getElementById('about');
-	
-	      const activateTab = (tabName) => {
-	        tabButtons.forEach(btn => btn.classList.remove('active'));
-	        tabContents.forEach(content => content.classList.remove('active'));
-	
-	        const activeBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
-	        const activeContent = document.getElementById(`${tabName}-tab`);
-	
-	        if (activeBtn) activeBtn.classList.add('active');
-	        if (activeContent) activeContent.classList.add('active');
-	      };
-	
-	      tabButtons.forEach(button => {
-	        button.addEventListener('click', () => {
-	          const tabName = button.getAttribute('data-tab');
-	          activateTab(tabName);
-	          if (tabName === 'profile') {
-	            animateSkillBars();
-	          }
-	        });
-	      });
-	
-	      // Skill Bar Animation Logic
-	      const animateSkillBars = () => {
-	        const skillBars = document.querySelectorAll('.skill-progress');
-	        skillBars.forEach(bar => {
-	          const progress = bar.getAttribute('data-progress');
-	          // Only animate if the bar is visible (i.e., the 'profile' tab is active)
-	          if (document.getElementById('profile-tab').classList.contains('active')) {
-	            bar.style.width = progress + '%';
-	          } else {
-	            bar.style.width = '0%'; // Reset when not visible
-	          }
-	        });
-	      };
-	
-	      // Intersection Observer to trigger animation when section is visible
-	      const observerOptions = {
-	        root: null,
-	        rootMargin: '0px',
-	        threshold: 0.1 // Trigger when 10% of the section is visible
-	      };
-	
-	      const observer = new IntersectionObserver((entries, observer) => {
-	        entries.forEach(entry => {
-	          if (entry.isIntersecting) {
-	            // Check if the 'profile' tab is the currently active tab
-	            if (document.querySelector('.tab-btn[data-tab="profile"]').classList.contains('active')) {
-	              animateSkillBars();
-	            }
-	          } else {
-	            // Optional: reset animation when out of view
-	            // document.querySelectorAll('.skill-progress').forEach(bar => bar.style.width = '0%');
-	          }
-	        });
-	      }, observerOptions);
-	
-	      if (aboutSection) {
-	        observer.observe(aboutSection);
-	      }
-	
-	      // Initial load: ensure 'profile' is active and animated if visible
-	      activateTab('profile');
-	      if (aboutSection && aboutSection.getBoundingClientRect().top < window.innerHeight) {
-	        animateSkillBars();
-	      }
-	    });
-	  </script>
+  <script>
+    // About Me Tab Switching Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      const aboutSection = document.getElementById('about');
+
+      const activateTab = (tabName) => {
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        const activeBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+        const activeContent = document.getElementById(`${tabName}-tab`);
+
+        if (activeBtn) activeBtn.classList.add('active');
+        if (activeContent) activeContent.classList.add('active');
+      };
+
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const tabName = button.getAttribute('data-tab');
+          activateTab(tabName);
+          if (tabName === 'profile') {
+            animateSkillBars();
+          }
+        });
+      });
+
+      // Skill Bar Animation Logic
+      const animateSkillBars = () => {
+        const skillBars = document.querySelectorAll('.skill-progress');
+        skillBars.forEach(bar => {
+          const progress = bar.getAttribute('data-progress');
+          // Only animate if the bar is visible (i.e., the 'profile' tab is active)
+          if (document.getElementById('profile-tab').classList.contains('active')) {
+            bar.style.width = progress + '%';
+          } else {
+            bar.style.width = '0%'; // Reset when not visible
+          }
+        });
+      };
+
+      // Intersection Observer to trigger animation when section is visible
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1 // Trigger when 10% of the section is visible
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Check if the 'profile' tab is the currently active tab
+            if (document.querySelector('.tab-btn[data-tab="profile"]').classList.contains('active')) {
+              animateSkillBars();
+            }
+          } else {
+            // Optional: reset animation when out of view
+            // document.querySelectorAll('.skill-progress').forEach(bar => bar.style.width = '0%');
+          }
+        });
+      }, observerOptions);
+
+      if (aboutSection) {
+        observer.observe(aboutSection);
+      }
+
+      // Initial load: ensure 'profile' is active and animated if visible
+      activateTab('profile');
+      if (aboutSection && aboutSection.getBoundingClientRect().top < window.innerHeight) {
+        animateSkillBars();
+      }
+    });
+  </script>
 </head>
 
 <body>
@@ -532,64 +532,34 @@
     </div>
   </section>
 
-  <!-- Upcoming Things Section -->
-  <!-- <section class="upcoming-things" id="upcoming">
-    <div class="upcoming-particles-container">
-      <div class="upcoming-particle"></div>
-      <div class="upcoming-particle"></div>
-      <div class="upcoming-particle"></div>
-      <div class="upcoming-particle"></div>
-      <div class="upcoming-particle"></div>
-      <div class="upcoming-particle"></div>
-    </div>
-
-    <div class="upcoming-geometric-bg">
-      <div class="upcoming-geo-shape upcoming-geo-circle"></div>
-      <div class="upcoming-geo-shape upcoming-geo-triangle"></div>
-      <div class="upcoming-geo-shape upcoming-geo-square"></div>
-      <div class="upcoming-geo-shape upcoming-geo-hexagon"></div>
-    </div>
-
-    <div class="upcoming-container">
-      <div class="upcoming-section-header">
-        <h2 class="upcoming-gradient-heading">
-          Upcoming <span>Things</span>
-          <div class="upcoming-heading-decoration"></div>
-        </h2>
-        <p class="upcoming-section-subtitle">
-          Stay tuned for <span class="upcoming-tagline-highlight">exciting projects</span>,
-          new releases, and upcoming collaborations
-        </p>
-      </div>
-
-      <div class="upcoming-filter">
-        <button class="upcoming-filter-btn active" data-filter="all">
-          All Updates
-        </button>
-        <button class="upcoming-filter-btn" data-filter="projects">
-          Projects
-        </button>
-        <button class="upcoming-filter-btn" data-filter="releases">
-          Releases
-        </button>
-        <button class="upcoming-filter-btn" data-filter="events">
-          Events
-        </button>
-      </div>
-
-      <div class="upcoming-grid" id="upcomingGrid">
-      </div>
-
-      <div class="upcoming-load-more-container">
-        <button class="upcoming-load-more-btn" id="upcomingLoadMoreBtn">
-          <div class="btn-bg-effect"></div>
-          <i class="bx bx-refresh"></i>
-          <span>Load More</span>
-          <div class="btn-shine-effect"></div>
-        </button>
+  <!-- Highlighted Section -->
+  <section class="highlighted" id="highlighted">
+    <div class="highlighted-container">
+      <h2 class="heading" data-translate="highlighted.title">Featured Content</h2>
+      <div class="highlighted-card">
+        <div class="card-thumbnail">
+          <img src="assets/thumb/IGNITION_IMMORTAL.png" alt="Thumbnail for IGNITION Fanchart" loading="lazy" />
+          <!-- <a href="https://www.youtube.com/watch?v=kcxuXk9uP84" target="_blank" class="play-button"
+            aria-label="Watch video on YouTube">
+            <i class="bx bxl-youtube"></i>
+          </a> -->
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">New FNF Fanchart: IGNITION | IMMORTAL</h3>
+          <p class="card-description"></p>
+          <a href="https://www.youtube.com/watch?v=kcxuXk9uP84" target="_blank"
+            class="cta-btn watch-now-btn enhanced-btn primary-btn">
+            <div class="btn-bg"></div>
+            <div class="btn-icon">
+              <i class="bx bx-play-circle"></i>
+            </div>
+            <span class="btn-text">Watch Now</span>
+            <div class="btn-shine"></div>
+          </a>
+        </div>
       </div>
     </div>
-  </section> -->
+  </section>
 
   <!-- Discord Server Modal -->
   <div id="discordModal" class="discord-modal">
@@ -668,10 +638,16 @@
             <div class="tab-content active" id="profile-tab">
               <div class="about-text">
                 <p>
-                    I am a <span>Creative Web Developer</span> with over <span>4+ years of experience</span>, specializing in transforming unique ideas into engaging and high-performance digital experiences. My passion lies at the intersection of code and creativity, where I craft dynamic websites and applications that are both aesthetically pleasing and functionally robust.
-                    <br>
-                    <br>
-	                  I thrive on building projects from the ground up, focusing on clean architecture, modern web standards, and delivering exceptional user engagement. I am currently <span>Available for Freelance</span> and open to collaborating on innovative projects. Let's build something amazing together.
+                  I am a <span>Creative Web Developer</span> with over <span>4+ years of experience</span>, specializing
+                  in transforming unique ideas into engaging and high-performance digital experiences. My passion lies
+                  at the intersection of code and creativity, where I craft dynamic websites and applications that are
+                  both aesthetically pleasing and functionally robust.
+                  <br>
+                  <br>
+                  I thrive on building projects from the ground up, focusing on clean architecture, modern web
+                  standards, and delivering exceptional user engagement. I am currently <span>Available for
+                    Freelance</span> and open to collaborating on innovative projects. Let's build something amazing
+                  together.
                 </p>
                 <!-- <p>
                     I specialize in creating interactive web experiences, mobile
@@ -704,68 +680,68 @@
               </div>
 
               <!-- Skill Progress Bars -->
-<div class="skill-section">
-	                <h3>Core Competencies</h3>
-	                <div class="skill-bars">
-	                  <div class="skill-bar">
-	                    <div class="skill-info">
-	                      <span>Frontend Development</span>
-	                      <span class="percent">90%</span>
-	                    </div>
-	                    <div class="skill-progress-bg">
-	                      <div class="skill-progress" style="width: 90%;" data-progress="90"></div>
-	                    </div>
-	                  </div>
-	                  <div class="skill-bar">
-	                    <div class="skill-info">
-	                      <span>Backend Development (Node.js/Firebase)</span>
-	                      <span class="percent">35%</span>
-	                    </div>
-	                    <div class="skill-progress-bg">
-	                      <div class="skill-progress" style="width: 35%;" data-progress="35"></div>
-	                    </div>
-	                  </div>
-	                  <div class="skill-bar">
-	                    <div class="skill-info">
-	                      <span>Creative Design & UI/UX</span>
-	                      <span class="percent">85%</span>
-	                    </div>
-	                    <div class="skill-progress-bg">
-	                      <div class="skill-progress" style="width: 85%;" data-progress="85"></div>
-	                    </div>
-	                  </div>
-	                </div>
-	              </div>
+              <div class="skill-section">
+                <h3>Core Competencies</h3>
+                <div class="skill-bars">
+                  <div class="skill-bar">
+                    <div class="skill-info">
+                      <span>Frontend Development</span>
+                      <span class="percent">90%</span>
+                    </div>
+                    <div class="skill-progress-bg">
+                      <div class="skill-progress" style="width: 90%;" data-progress="90"></div>
+                    </div>
+                  </div>
+                  <div class="skill-bar">
+                    <div class="skill-info">
+                      <span>Backend Development (Node.js/Firebase)</span>
+                      <span class="percent">35%</span>
+                    </div>
+                    <div class="skill-progress-bg">
+                      <div class="skill-progress" style="width: 35%;" data-progress="35"></div>
+                    </div>
+                  </div>
+                  <div class="skill-bar">
+                    <div class="skill-info">
+                      <span>Creative Design & UI/UX</span>
+                      <span class="percent">85%</span>
+                    </div>
+                    <div class="skill-progress-bg">
+                      <div class="skill-progress" style="width: 85%;" data-progress="85"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-<div class="tech-stack">
-	                <h3>Technologies I Work With</h3>
-	                <div class="tech-icons">
-	                  <div class="tech-icon" title="HTML5">
-	                    <i class="fab fa-html5"></i>
-	                    <span>HTML5</span>
-	                  </div>
-	                  <div class="tech-icon" title="CSS3">
-	                    <i class="fab fa-css3-alt"></i>
-	                    <span>CSS3</span>
-	                  </div>
-	                  <div class="tech-icon" title="JavaScript">
-	                    <i class="fab fa-js"></i>
-	                    <span>JavaScript</span>
-	                  </div>
-	                  <div class="tech-icon" title="Node.js">
-	                    <i class="fab fa-node-js"></i>
-	                    <span>Node.js</span>
-	                  </div>
-	                  <div class="tech-icon" title="Firebase">
-	                    <i class="fas fa-database"></i>
-	                    <span>Firebase</span>
-	                  </div>
-	                  <div class="tech-icon" title="Git">
-	                    <i class="fab fa-git-alt"></i>
-	                    <span>Git</span>
-	                  </div>
-	                </div>
-	              </div>
+              <div class="tech-stack">
+                <h3>Technologies I Work With</h3>
+                <div class="tech-icons">
+                  <div class="tech-icon" title="HTML5">
+                    <i class="fab fa-html5"></i>
+                    <span>HTML5</span>
+                  </div>
+                  <div class="tech-icon" title="CSS3">
+                    <i class="fab fa-css3-alt"></i>
+                    <span>CSS3</span>
+                  </div>
+                  <div class="tech-icon" title="JavaScript">
+                    <i class="fab fa-js"></i>
+                    <span>JavaScript</span>
+                  </div>
+                  <div class="tech-icon" title="Node.js">
+                    <i class="fab fa-node-js"></i>
+                    <span>Node.js</span>
+                  </div>
+                  <div class="tech-icon" title="Firebase">
+                    <i class="fas fa-database"></i>
+                    <span>Firebase</span>
+                  </div>
+                  <div class="tech-icon" title="Git">
+                    <i class="fab fa-git-alt"></i>
+                    <span>Git</span>
+                  </div>
+                </div>
+              </div>
 
               <div class="cta-buttons">
                 <a href="#contact" class="btn">Get In Touch</a>
@@ -773,37 +749,41 @@
             </div>
 
             <!-- Experience Tab -->
-	            <div class="tab-content" id="experience-tab">
-	              <div class="experience-tab-content">
-	                <div class="timeline">
-	
-	                  <div class="timeline-item left">
-	                    <div class="timeline-content">
-	                      <h4>Creative Web Developer (Freelance)</h4>
-	                      <span class="date">2022 - Present</span>
-	                      <p>Designing, developing, and deploying custom, high-performance websites and web applications for a diverse range of clients. Focusing on modern frontend frameworks, responsive design, and clean code architecture.</p>
-	                    </div>
-	                  </div>
+            <div class="tab-content" id="experience-tab">
+              <div class="experience-tab-content">
+                <div class="timeline">
 
-                    <div class="timeline-item right">
-	                    <div class="timeline-content">
-	                      <h4>Discord Bot Developer</h4>
-	                      <span class="date">Present</span>
-	                      <p>Created and maintained "Selina" Discord bot with moderation tools, fun commands, and server management features.</p>
-	                    </div>
-	                  </div>
+                  <div class="timeline-item left">
+                    <div class="timeline-content">
+                      <h4>Creative Web Developer (Freelance)</h4>
+                      <span class="date">2022 - Present</span>
+                      <p>Designing, developing, and deploying custom, high-performance websites and web applications for
+                        a diverse range of clients. Focusing on modern frontend frameworks, responsive design, and clean
+                        code architecture.</p>
+                    </div>
+                  </div>
 
-                    <div class="timeline-item left">
-	                    <div class="timeline-content">
-	                      <h4>Friday Night Funkin' Modder</h4>
-	                      <span class="date">2023 - Present</span>
-	                      <p>Designed and developed custom charts and game mechanics for Friday Night Funkin' mods including "Psycho Funkin"</p>
-	                    </div>
-	                  </div>
-	
-	                </div>
-	              </div>
-	            </div>
+                  <div class="timeline-item right">
+                    <div class="timeline-content">
+                      <h4>Discord Bot Developer</h4>
+                      <span class="date">Present</span>
+                      <p>Created and maintained "Selina" Discord bot with moderation tools, fun commands, and server
+                        management features.</p>
+                    </div>
+                  </div>
+
+                  <div class="timeline-item left">
+                    <div class="timeline-content">
+                      <h4>Friday Night Funkin' Modder</h4>
+                      <span class="date">2023 - Present</span>
+                      <p>Designed and developed custom charts and game mechanics for Friday Night Funkin' mods including
+                        "Psycho Funkin"</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
 
             <!-- Education Tab -->
             <!-- <div class="tab-content" id="education-tab">
@@ -966,91 +946,13 @@
       
       <div class="faq-container">
         <div class="faq-item">
-          <div class="faq-question">What services do you offer?</div>
+          <div class="faq-question">TBD</div>
           <div class="faq-answer">
-            We offer a comprehensive range of digital services including web design, application development, UX/UI design, 
-            e-commerce solutions, and digital marketing strategies tailored to your specific business needs.
+            TBD
           </div>
         </div>
         
-        <div class="faq-item">
-          <div class="faq-question">How much does a typical project cost?</div>
-          <div class="faq-answer">
-            Project costs vary depending on scope, complexity, and timeline. We provide detailed quotes after an initial consultation 
-            to understand your requirements. Our pricing is transparent with no hidden fees.
-          </div>
-        </div>
-        
-        <div class="faq-item">
-          <div class="faq-question">How long does it take to complete a website?</div>
-          <div class="faq-answer">
-            A standard website typically takes 4-6 weeks from concept to launch. More complex projects with custom functionality 
-            may take 8-12 weeks. We'll provide a detailed timeline during our project planning phase.
-          </div>
-        </div>
-        
-        <div class="faq-item">
-          <div class="faq-question">Do you provide ongoing support?</div>
-          <div class="faq-answer">
-            Yes, we offer various maintenance and support packages to keep your website secure, updated, and performing optimally. 
-            Our team is available for technical support, content updates, and feature enhancements as needed.
-          </div>
-        </div>
       </div>
-    </div>
-  </section> -->
-
-    <!-- <section class="discord-widget">
-    <div class="widget-container">
-      <div class="custom-widget">
-        <div class="server-header">
-          <div class="server-icon-container">
-            <img src="" alt="Server Icon" class="server-icon" id="serverIcon">
-            <div class="boost-level" id="boostLevel">Level 0</div>
-          </div>
-          <div class="server-meta">
-            <h2 class="server-name" id="serverName">Loading Server...</h2>
-            <div class="server-status" id="serverStatus">
-              <span class="status-dot"></span>
-              <span class="status-text">Connecting...</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="server-stats">
-          <div class="stat-item online">
-            <i class="fas fa-signal"></i>
-            <div class="stat-content">
-              <span class="stat-value" id="onlineCount">0</span>
-              <span class="stat-label">Online</span>
-            </div>
-          </div>
-          <div class="stat-item members">
-            <i class="fas fa-users"></i>
-            <div class="stat-content">
-              <span class="stat-value" id="memberCount">0</span>
-              <span class="stat-label">Members</span>
-            </div>
-          </div>
-          <div class="stat-item channels">
-            <i class="fas fa-hashtag"></i>
-            <div class="stat-content">
-              <span class="stat-value" id="channelCount">0</span>
-              <span class="stat-label">Channels</span>
-            </div>
-          </div>
-        </div>
-
-        <a href="#" class="join-button" target="_blank" id="joinButton">
-          <i class="fab fa-discord"></i>
-          Join Server
-        </a>
-      </div>
-
-      <iframe class="discord-frame" src="https://discord.com/widget?id=1312621353811050536&theme=dark"
-        title="Discord Server Preview"
-        sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts">
-      </iframe>
     </div>
   </section> -->
 
@@ -1110,7 +1012,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="song-card" data-song="flash">
             <div class="song-image">
               <img
@@ -1281,6 +1183,131 @@
 
     </section>
 
+    <!-- Enhanced Audio Player -->
+    <div class="audio-player" id="audioPlayer" style="display: none;">
+      <div class="audio-player-header">
+        <div class="audio-player-image">
+          <img src="" alt="Song Cover" />
+        </div>
+        <div class="audio-player-info">
+          <h4 class="current-song-title"></h4>
+          <p class="current-song-artist">Cigarettes After Sex</p>
+        </div>
+        <div class="audio-player-actions">
+          <button class="fullscreen-btn" id="fullscreenBtn" title="Fullscreen">
+            <i class="bx bx-fullscreen"></i>
+          </button>
+          <button class="close-audio">
+            <i class="bx bx-x"></i>
+          </button>
+        </div>
+      </div>
+      <div class="audio-controls">
+        <button class="audio-control-btn prev-btn">
+          <i class="bx bx-skip-previous"></i>
+        </button>
+        <button class="audio-control-btn play-pause-btn">
+          <i class="bx bx-pause"></i>
+        </button>
+        <button class="audio-control-btn next-btn">
+          <i class="bx bx-skip-next"></i>
+        </button>
+        <div class="audio-progress-container">
+          <div class="audio-progress">
+            <div class="audio-progress-fill"></div>
+            <div class="audio-progress-handle"></div>
+          </div>
+          <div class="audio-time">
+            <span class="current-time">0:00</span>
+            <span class="total-time">0:00</span>
+          </div>
+        </div>
+        <div class="audio-volume">
+          <button class="volume-btn">
+            <i class="bx bx-volume-full"></i>
+          </button>
+          <div class="volume-slider-container">
+            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.5">
+          </div>
+        </div>
+      </div>
+      <div class="audio-visualizer">
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+      </div>
+    </div>
+
+    <!-- Fullscreen Audio Player -->
+    <div class="fullscreen-player" id="fullscreenPlayer" style="display: none;">
+      <div class="fullscreen-background"></div>
+      <div class="fullscreen-content">
+        <div class="fullscreen-header">
+          <button class="fullscreen-close" id="fullscreenClose">
+            <i class="bx bx-x"></i>
+          </button>
+          <button class="fullscreen-minimize" id="fullscreenMinimize">
+            <i class="bx bx-minimize"></i>
+          </button>
+        </div>
+
+        <div class="fullscreen-main">
+          <div class="fullscreen-artwork">
+            <div class="artwork-container">
+              <img src="" alt="Song Cover" class="fullscreen-image" />
+              <div class="artwork-glow"></div>
+            </div>
+          </div>
+
+          <div class="fullscreen-info">
+            <h1 class="fullscreen-title"></h1>
+            <p class="fullscreen-artist"></p>
+          </div>
+
+          <div class="fullscreen-controls">
+            <div class="fullscreen-progress-container">
+              <div class="fullscreen-progress">
+                <div class="fullscreen-progress-fill"></div>
+                <div class="fullscreen-progress-handle"></div>
+              </div>
+              <div class="fullscreen-time">
+                <span class="fullscreen-current-time">0:00</span>
+                <span class="fullscreen-total-time">0:00</span>
+              </div>
+            </div>
+
+            <div class="fullscreen-buttons">
+              <button class="fullscreen-control-btn fullscreen-prev">
+                <i class="bx bx-skip-previous"></i>
+              </button>
+              <button class="fullscreen-control-btn fullscreen-play-pause">
+                <i class="bx bx-pause"></i>
+              </button>
+              <button class="fullscreen-control-btn fullscreen-next">
+                <i class="bx bx-skip-next"></i>
+              </button>
+            </div>
+
+            <div class="fullscreen-volume">
+              <button class="fullscreen-volume-btn">
+                <i class="bx bx-volume-full"></i>
+              </button>
+              <div class="fullscreen-volume-slider-container">
+                <input type="range" class="fullscreen-volume-slider" min="0" max="1" step="0.1" value="0.5">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Game Collection Section -->
     <!-- <section class="game-collection" id="game-collection">
       <h2 class="heading" data-translate="game.collection">Game Collection</h2>
@@ -1369,132 +1396,6 @@
         </div>
       </div>
     </section> -->
-
-
-    <!-- Enhanced Audio Player -->
-    <!-- <div class="audio-player" id="audioPlayer">
-      <div class="audio-player-header">
-        <div class="audio-player-image">
-          <img src="" alt="Song Cover" />
-        </div>
-        <div class="audio-player-info">
-          <h4 class="current-song-title"></h4>
-          <p class="current-song-artist">Cigarettes After Sex</p>
-        </div>
-        <div class="audio-player-actions">
-          <button class="fullscreen-btn" id="fullscreenBtn" title="Fullscreen">
-            <i class="bx bx-fullscreen"></i>
-          </button>
-          <button class="close-audio">
-            <i class="bx bx-x"></i>
-          </button>
-        </div>
-      </div>
-      <div class="audio-controls">
-        <button class="audio-control-btn prev-btn">
-          <i class="bx bx-skip-previous"></i>
-        </button>
-        <button class="audio-control-btn play-pause-btn">
-          <i class="bx bx-pause"></i>
-        </button>
-        <button class="audio-control-btn next-btn">
-          <i class="bx bx-skip-next"></i>
-        </button>
-        <div class="audio-progress-container">
-          <div class="audio-progress">
-            <div class="audio-progress-fill"></div>
-            <div class="audio-progress-handle"></div>
-          </div>
-          <div class="audio-time">
-            <span class="current-time">0:00</span>
-            <span class="total-time">0:00</span>
-          </div>
-        </div>
-        <div class="audio-volume">
-          <button class="volume-btn">
-            <i class="bx bx-volume-full"></i>
-          </button>
-          <div class="volume-slider-container">
-            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.5">
-          </div>
-        </div>
-      </div>
-      <div class="audio-visualizer">
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-      </div>
-    </div> -->
-
-    <!-- Fullscreen Audio Player -->
-    <!-- <div class="fullscreen-player" id="fullscreenPlayer">
-      <div class="fullscreen-background"></div>
-      <div class="fullscreen-content">
-        <div class="fullscreen-header">
-          <button class="fullscreen-close" id="fullscreenClose">
-            <i class="bx bx-x"></i>
-          </button>
-          <button class="fullscreen-minimize" id="fullscreenMinimize">
-            <i class="bx bx-minimize"></i>
-          </button>
-        </div>
-
-        <div class="fullscreen-main">
-          <div class="fullscreen-artwork">
-            <div class="artwork-container">
-              <img src="" alt="Song Cover" class="fullscreen-image" />
-              <div class="artwork-glow"></div>
-            </div>
-          </div>
-
-          <div class="fullscreen-info">
-            <h1 class="fullscreen-title"></h1>
-            <p class="fullscreen-artist"></p>
-          </div>
-
-          <div class="fullscreen-controls">
-            <div class="fullscreen-progress-container">
-              <div class="fullscreen-progress">
-                <div class="fullscreen-progress-fill"></div>
-                <div class="fullscreen-progress-handle"></div>
-              </div>
-              <div class="fullscreen-time">
-                <span class="fullscreen-current-time">0:00</span>
-                <span class="fullscreen-total-time">0:00</span>
-              </div>
-            </div>
-
-            <div class="fullscreen-buttons">
-              <button class="fullscreen-control-btn fullscreen-prev">
-                <i class="bx bx-skip-previous"></i>
-              </button>
-              <button class="fullscreen-control-btn fullscreen-play-pause">
-                <i class="bx bx-pause"></i>
-              </button>
-              <button class="fullscreen-control-btn fullscreen-next">
-                <i class="bx bx-skip-next"></i>
-              </button>
-            </div>
-
-            <div class="fullscreen-volume">
-              <button class="fullscreen-volume-btn">
-                <i class="bx bx-volume-full"></i>
-              </button>
-              <div class="fullscreen-volume-slider-container">
-                <input type="range" class="fullscreen-volume-slider" min="0" max="1" step="0.1" value="0.5">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
 
     <!-- Blog/Updates Section -->
     <section class="blog" id="blog">
@@ -1881,21 +1782,16 @@
   <script src="scripts/navbar.js"></script>
   <!-- <script src="scripts/particles.js"></script> -->
   <script src="scripts/home.js"></script>
-  <script src="scripts/discord-modal.js"></script>
+  <!-- <script src="scripts/discord-modal.js"></script> -->
   <script src="scripts/skills.js"></script>
   <script src="scripts/projects.js"></script>
   <!-- <script src="scripts/music.js"></script> -->
   <script src="scripts/blog.js"></script>
-  <script src="scripts/faq.js"></script>
+  <!-- <script src="scripts/faq.js"></script> -->
   <script src="scripts/discord-activity.js"></script>
-  <script src="scripts/video-thumbnail.js"></script>
+  <!-- <script src="scripts/video-thumbnail.js"></script> -->
   <script src="scripts/backgroundSong.js"></script>
-  <!-- <script src="scripts/upcoming.js"></script> -->
-  <!-- <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      window.upcomingThings = new UpcomingThings();
-    });
-  </script> -->
+
 
   <!-- hide some sections until i make it responsive for mobile -->
   <!-- <script src="scripts/hide.js"></script> -->

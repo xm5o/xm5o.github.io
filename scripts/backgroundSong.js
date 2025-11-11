@@ -2,7 +2,7 @@ const audioConfig = {
     source: 'music.mp3', 
     volume: 0.050, 
     loop: true, 
-    autoplay: false, 
+    autoplay: true, 
     audioElementId: 'background-music-player',
     controls: false,
 };
