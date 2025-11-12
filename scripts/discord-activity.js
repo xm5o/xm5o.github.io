@@ -7,6 +7,7 @@ class DiscordActivity {
     this.updateInterval = 500; // 0.5 seconds
     this.intervalId = null;
     this.userData = null;
+    this.progressUpdateInterval = null;
 
     this.init();
   }
@@ -43,6 +44,57 @@ class DiscordActivity {
     }
   }
 
+  getActivityImage(activity) {
+    if (!activity) return null;
+
+    // Check for asset_id in activity
+    if (activity.assets?.large_image) {
+      const imageId = activity.assets.large_image;
+      if (imageId.startsWith('spotify:')) {
+        // Spotify image
+        return `https://i.scdn.co/image/${imageId.replace('spotify:', '')}`;
+      } else if (activity.application_id) {
+        // Discord application asset
+        return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${imageId}.png`;
+      }
+    }
+
+    // Fallback for specific applications
+    if (activity.name === 'Spotify' && activity.assets?.large_image) {
+      return `https://i.scdn.co/image/${activity.assets.large_image.replace('spotify:', '')}`;
+    }
+
+    return null;
+  }
+
+  formatSongTime(milliseconds) {
+    if (!milliseconds) return '0:00';
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${String(seconds).padStart(2, '0')}`;
+  }
+
+  calculateSongProgress(activity) {
+    if (!activity || !activity.timestamps) return { percentage: 0, current: '0:00', total: '0:00' };
+
+    const now = Date.now();
+    const start = activity.timestamps.start || 0;
+    const end = activity.timestamps.end || 0;
+
+    if (!start || !end) return { percentage: 0, current: '0:00', total: '0:00' };
+
+    const elapsed = now - start;
+    const duration = end - start;
+    const percentage = Math.min(100, Math.max(0, (elapsed / duration) * 100));
+
+    return {
+      percentage,
+      current: this.formatSongTime(elapsed),
+      total: this.formatSongTime(duration)
+    };
+  }
+
   updateDiscordWidget(userData) {
     const widget = document.getElementById('discord-widget');
     if (!widget) return;
@@ -69,6 +121,12 @@ class DiscordActivity {
     // Extract timestamp if available
     const timestampText = activity?.timestamps ? this.formatActivityTimestamp(activity.timestamps) : '';
 
+    // Get activity image
+    const activityImage = activity ? this.getActivityImage(activity) : null;
+
+    // Get song progress for listening activities
+    const songProgress = activity && activity.type === 2 ? this.calculateSongProgress(activity) : null;
+
     // Build avatar URL
     let avatarUrl;
     if (avatar) {
@@ -90,9 +148,43 @@ class DiscordActivity {
     const clickableClass = isDesktop ? 'clickable' : '';
     const clickableAttr = isDesktop ? 'tabindex="0" role="button" aria-label="View Discord profile details"' : '';
 
-    // Update widget content
+    // Build activity section HTML
+    let activityHTML = '';
+    if (activity) {
+      activityHTML = `
+        <div class="discord-activity">
+          <div class="activity-type">${this.getActivityTypeText(activity.type)}</div>
+          <div class="activity-name">${activity.name}</div>
+          ${activity.details ? `<div class="activity-details">${activity.details}</div>` : ''}
+          ${activity.state ? `<div class="activity-state">${activity.state}</div>` : ''}
+          ${timestampText && activity.type !== 2 ? `<div class="activity-timestamp">${timestampText}</div>` : ''}
+          
+          ${songProgress ? `
+            <div class="song-progress-container">
+              <div class="song-progress-bar">
+                <div class="song-progress-fill" style="width: ${songProgress.percentage}%"></div>
+              </div>
+              <div class="song-time-display">
+                <span class="song-time-current">${songProgress.current}</span>
+                <span class="song-time-total">${songProgress.total}</span>
+              </div>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Update widget content with new structure
     widget.innerHTML = `
       <div class="discord-profile ${clickableClass}" ${clickableAttr}>
+        ${activityImage ? `
+          <div class="activity-image-container">
+            <img src="${activityImage}" alt="${activity?.name || 'Activity'}" class="activity-image" 
+                 onerror="this.style.display='none';" />
+            <div class="activity-image-overlay"></div>
+          </div>
+        ` : ''}
+        
         <div class="discord-avatar-container">
           <img src="${avatarUrl}" alt="${nameToDisplay}" class="discord-avatar" 
                onerror="this.onerror=null; this.src='https://cdn.discordapp.com/embed/avatars/0.png';" />
@@ -112,15 +204,7 @@ class DiscordActivity {
             </div>
           ` : ''}
           
-          ${activity ? `
-            <div class="discord-activity">
-              <div class="activity-type">${this.getActivityTypeText(activity.type)}</div>
-              <div class="activity-name">${activity.name}</div>
-              ${activity.details ? `<div class="activity-details">${activity.details}</div>` : ''}
-              ${activity.state ? `<div class="activity-state">${activity.state}</div>` : ''}
-              ${timestampText ? `<div class="activity-timestamp">${timestampText}</div>` : ''}
-            </div>
-          ` : ''}
+          ${activityHTML}
         </div>
         ${isDesktop ? '<div class="click-indicator"><i class="bx bx-expand-alt"></i></div>' : ''}
       </div>
@@ -130,7 +214,7 @@ class DiscordActivity {
 
     const profile = widget.querySelector('.discord-profile');
     if (profile) {
-      profile.classList.remove('loading');
+      // profile.classList.remove('loading'); // Removed to prevent animation restart on update
 
       // Add click event listener for desktop only
       if (isDesktop) {
@@ -142,6 +226,48 @@ class DiscordActivity {
           }
         });
       }
+    }
+
+    // Start progress update for listening activities
+    if (songProgress) {
+      this.startProgressUpdate();
+    } else {
+      this.stopProgressUpdate();
+    }
+  }
+
+  startProgressUpdate() {
+    if (this.progressUpdateInterval) {
+      clearInterval(this.progressUpdateInterval);
+    }
+
+    this.progressUpdateInterval = setInterval(() => {
+      if (!this.userData) return;
+
+      const activity = this.userData.activities?.find(activity => activity.type === 2);
+      if (!activity) {
+        this.stopProgressUpdate();
+        return;
+      }
+
+      const songProgress = this.calculateSongProgress(activity);
+      const progressFill = document.querySelector('.song-progress-fill');
+      const currentTime = document.querySelector('.song-time-current');
+
+      if (progressFill) {
+        progressFill.style.width = songProgress.percentage + '%';
+      }
+
+      if (currentTime) {
+        currentTime.textContent = songProgress.current;
+      }
+    }, 100); // Update every 100ms for smooth progress
+  }
+
+  stopProgressUpdate() {
+    if (this.progressUpdateInterval) {
+      clearInterval(this.progressUpdateInterval);
+      this.progressUpdateInterval = null;
     }
   }
 
@@ -245,6 +371,12 @@ class DiscordActivity {
     // Extract timestamp if available
     const timestampText = activity?.timestamps ? this.formatActivityTimestamp(activity.timestamps) : '';
 
+    // Get activity image
+    const activityImage = activity ? this.getActivityImage(activity) : null;
+
+    // Get song progress for listening activities
+    const songProgress = activity && activity.type === 2 ? this.calculateSongProgress(activity) : null;
+
     // Build avatar URL
     let avatarUrl;
     if (avatar) {
@@ -262,6 +394,40 @@ class DiscordActivity {
     const badges = this.getMockBadges(userData);
 
     const clanTag = this.extractClanTag(displayName);
+
+    // Build activity section for modal
+    let activityModalHTML = '';
+    if (activity) {
+      activityModalHTML = `
+        <div class="discord-activity-section">
+          <h3>Activity</h3>
+          ${activityImage ? `
+            <div class="modal-activity-image">
+              <img src="${activityImage}" alt="${activity.name}" />
+            </div>
+          ` : ''}
+          <div class="discord-expanded-activity">
+            <div class="activity-type">${this.getActivityTypeText(activity.type)}</div>
+            <div class="activity-name">${activity.name}</div>
+            ${activity.details ? `<div class="activity-details">${activity.details}</div>` : ''}
+            ${activity.state ? `<div class="activity-state">${activity.state}</div>` : ''}
+            ${timestampText && activity.type !== 2 ? `<div class="activity-timestamp">${timestampText}</div>` : ''}
+            
+            ${songProgress ? `
+              <div class="song-progress-container">
+                <div class="song-progress-bar">
+                  <div class="song-progress-fill" style="width: ${songProgress.percentage}%"></div>
+                </div>
+                <div class="song-time-display">
+                  <span class="song-time-current">${songProgress.current}</span>
+                  <span class="song-time-total">${songProgress.total}</span>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
 
     const modal = document.createElement('div');
     modal.id = 'discord-expanded-modal';
@@ -310,18 +476,7 @@ class DiscordActivity {
             </div>
           ` : ''}
 
-          ${activity ? `
-            <div class="discord-activity-section">
-              <h3>Activity</h3>
-              <div class="discord-expanded-activity">
-                <div class="activity-type">${this.getActivityTypeText(activity.type)}</div>
-                <div class="activity-name">${activity.name}</div>
-                ${activity.details ? `<div class="activity-details">${activity.details}</div>` : ''}
-                ${activity.state ? `<div class="activity-state">${activity.state}</div>` : ''}
-                ${timestampText ? `<div class="activity-timestamp">${timestampText}</div>` : ''}
-              </div>
-            </div>
-          ` : ''}
+          ${activityModalHTML}
 
           <div class="discord-actions">
             <a href="https://discord.com/users/${userId}" target="_blank" class="discord-message-btn">
@@ -443,6 +598,10 @@ class DiscordActivity {
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.intervalId = null;
+    }
+    if (this.progressUpdateInterval) {
+      clearInterval(this.progressUpdateInterval);
+      this.progressUpdateInterval = null;
     }
   }
 }
