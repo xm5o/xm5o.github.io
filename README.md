@@ -26,4 +26,10 @@ This project is not open-source. It is protected and not intended for public dis
 - Discord: [@trr0](https://discord.com/users/1282747277206884436)
 - Instagram: [@xm5o_](https://instagram.com/xm5o_)
 
+## Special thanks to
+
+- Coder.gg
+To help me with discord activity system.
+
+- Discord: [@coder.gg](https://discord.com/users/1099039269391171765)
 ---

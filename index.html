@@ -12,7 +12,7 @@
   <meta property="og:description" content="Personal portfolio of a creative developer (maybe)" />
   <meta property="og:image" content="assets/Immortal-site-banner.png" />
   <!-- <meta property="og:url" content="404.html" /> -->
-  <meta property="og:type" content="website" /> 
+  <meta property="og:type" content="website" />
 
   <!-- <link rel="preload" href="assets/pfp.jpg" as="image" type="image/jpeg" />
     <link rel="preload" href="css/style.css" as="style" /> -->
@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="css/contact.css" />
   <link rel="stylesheet" href="css/blog.css" />
   <link rel="stylesheet" href="css/loading.css" />
+  <link rel="stylesheet" href="css/discord-activity.css" />
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <!-- Arabic Fonts -->
@@ -470,6 +471,7 @@
     </div>
 
     <!-- Enhanced Visitor Counter -->
+
     <div class="visitor-counter enhanced-counter">
       <div class="counter-glow"></div>
       <div class="db-status" id="dbStatus"></div>
@@ -502,36 +504,168 @@
       </div>
     </div>
 
-    <!-- Enhanced Discord Widget -->
-    <div class="discord-widget-section">
-      <div id="discord-widget" class="discord-widget">
-        <div class="discord-profile loading">
-          <div class="discord-avatar-container">
-            <div class="discord-avatar-placeholder">
-              <i class="bx bxl-discord-alt"></i>
-            </div>
-            <div class="discord-status-indicator offline"></div>
-          </div>
-
-          <div class="discord-info">
-            <div class="discord-nameplate">
-              <div class="discord-display-name">Loading...</div>
-            </div>
-            <div class="discord-custom-status">
-              <span class="status-emoji"></span>
-              <span class="status-text">Connecting to Discord</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Scroll Indicator -->
     <div class="scroll-indicator">
       <!-- <div class="scroll-text">Scroll Down</div> -->
       <div class="scroll-arrow">
         <i class="bx bx-chevron-down"></i>
       </div>
+    </div>
+  </section>
+
+  <!-- Discord Activity Section -->
+  <section class="discord-activity" id="discord-activity">
+    <!-- Background Elements -->
+    <div class="discord-particles-container">
+      <div class="discord-particle"></div>
+      <div class="discord-particle"></div>
+      <div class="discord-particle"></div>
+      <div class="discord-particle"></div>
+      <div class="discord-particle"></div>
+      <div class="discord-particle"></div>
+    </div>
+
+    <!-- Geometric Background -->
+    <div class="discord-geometric-bg">
+      <div class="discord-geo-shape discord-geo-circle"></div>
+      <div class="discord-geo-shape discord-geo-triangle"></div>
+      <div class="discord-geo-shape discord-geo-square"></div>
+    </div>
+
+    <div class="discord-container">
+      <div class="discord-section-header">
+        <h2 class="discord-gradient-heading">
+          Discord <span>Activity</span>
+          <div class="discord-heading-decoration"></div>
+        </h2>
+        <p class="discord-section-subtitle">
+          Check out what I'm currently up to on Discord -
+          <span class="discord-tagline-highlight">music, games, and status</span>
+        </p>
+      </div>
+
+      <!-- Discord Activity Cards Container -->
+      <div class="discord-activity-cards">
+        <!-- Profile Card -->
+        <div class="discord-profile-card">
+          <div class="profile-banner-container">
+            <img id="profileBanner" class="profile-banner" src="" alt="Profile Banner" style="display: none;">
+            <img id="profileBannerGif" class="profile-banner-gif" src="" alt="Profile Banner GIF"
+              style="display: none;">
+            <div id="colorBanner" class="color-banner" style="display: none;"></div>
+          </div>
+
+          <div class="discord-profile-content">
+            <div class="avatar-status-container">
+              <div class="avatar-container">
+                <img id="avatar" class="avatar" src="" alt="Avatar" style="display: none;">
+                <img id="avatarGif" class="avatar-gif" src="" alt="Avatar GIF" style="display: none;">
+                <div id="statusIndicator" class="status-indicator"></div>
+                <img id="avatarDecoration" class="avatar-decoration" src="" alt="Decoration" style="display: none;">
+              </div>
+            </div>
+
+            <div class="profile-info">
+              <div class="name-badges-row">
+                <div class="display-name" id="displayName">Loading...</div>
+                <div class="badges-container" id="badgesContainer"></div>
+              </div>
+
+              <div class="username-status-row">
+                <div class="username" id="username">@user</div>
+                <div class="status-separator" id="statusSeparator" style="display: none;">•</div>
+                <div class="custom-status" id="customStatus"></div>
+              </div>
+
+              <div class="profile-meta">
+                <div id="tagInfo" class="tag-info"></div>
+                <div id="deviceIcons" class="device-icons"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="profile-footer">
+            <div class="discord-connection">
+              <i class='bx bxl-discord-alt'></i>
+              <span>Discord Profile</span>
+            </div>
+          </div> -->
+        </div>
+
+        <!-- Spotify Activity Card -->
+        <div class="discord-activity-card spotify-card" id="spotifyCard">
+          <div class="activity-card-header">
+            <div class="activity-icon">
+              <svg class="spotify-logo" viewBox="0 0 496 512" fill="#1db954">
+                <path
+                  d="M248 8C111.1 8 0 119.1 0 256s111.1 248 248 248 248-111.1 248-248S384.9 8 248 8zm100.7 364.9c-4.2 0-6.8-1.3-10.7-3.6-62.4-37.6-135-39.2-206.7-24.5-3.9 1-9 2.6-11.9 2.6-9.7 0-15.8-7.7-15.8-15.8 0-10.3 6.1-15.2 13.6-16.8 81.9-18.1 165.6-16.5 237 26.2 6.1 3.9 9.7 7.4 9.7 16.5s-7.1 15.4-15.2 15.4zm26.9-65.6c-5.2 0-8.7-2.3-12.3-4.2-62.5-37-155.7-51.9-238.6-29.4-4.8 1.3-7.4 2.6-11.9 2.6-10.7 0-19.4-8.7-19.4-19.4s5.2-17.8 15.5-20.7c27.8-7.8 56.2-13.6 97.8-13.6 64.9 0 127.6 16.1 177 45.5 8.1 4.8 11.3 11 11.3 19.7-.1 10.8-8.5 19.5-19.4 19.5zm31-76.2c-5.2 0-8.4-1.3-12.9-3.9-71.2-42.5-198.5-52.7-280.9-29.7-3.6 1-8.1 2.6-12.9 2.6-13.2 0-23.3-10.3-23.3-23.6 0-13.6 8.4-21.3 17.4-23.9 35.2-10.3 74.6-15.2 117.5-15.2 73 0 149.5 15.2 205.4 47.8 7.8 4.5 12.9 10.7 12.9 22.6 0 13.6-11 23.3-23.2 23.3z" />
+              </svg>
+            </div>
+            <div class="activity-title">Listening to Spotify</div>
+          </div>
+
+          <div class="activity-content">
+            <div class="album-art-container">
+              <img id="albumArt" class="album-art" src="" alt="Album Art">
+            </div>
+            <div class="track-info">
+              <div class="track-name" id="trackName">Not Playing</div>
+              <div class="track-artist" id="trackArtist">Spotify</div>
+
+              <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+              </div>
+
+              <div class="time-info">
+                <span id="currentTime">0:00</span>
+                <span id="totalTime">0:00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Game Activity Card -->
+        <div class="discord-activity-card game-card" id="activityCard">
+          <div class="activity-card-header">
+            <div class="activity-icon">
+              <svg class="activity-icon" viewBox="0 0 24 24" fill="#b9bbbe">
+                <path
+                  d="M5.79335761,5 L18.2066424,5 C19.7805584,5 21.0868816,6.21634264 21.1990185,7.78625885 L21.8575059,17.0050826 C21.9307825,18.0309548 21.1585512,18.9219909 20.132679,18.9952675 C20.088523,18.9984215 20.0442685,19 20,19 C18.8245863,19 17.8000084,18.2000338 17.5149287,17.059715 L17,15 L7,15 L6.48507125,17.059715 C6.19999155,18.2000338 5.1754137,19 4,19 C2.97151413,19 2.13776159,18.1662475 2.13776159,17.1377616 C2.13776159,17.0934931 2.1393401,17.0492386 2.1424941,17.0050826 L2.80098151,7.78625885 C2.91311838,6.21634264 4.21944161,5 5.79335761,5 Z M14.5,10 C15.3284271,10 16,9.32842712 16,8.5 C16,7.67157288 15.3284271,7 14.5,7 C13.6715729,7 13,7.67157288 13,8.5 C13,9.32842712 13.6715729,10 14.5,10 Z M18.5,13 C19.3284271,13 20,12.3284271 20,11.5 C20,10.6715729 19.3284271,10 18.5,10 C17.6715729,10 17,10.6715729 17,11.5 C17,12.3284271 17.6715729,13 18.5,13 Z M6,9 L4,9 L4,11 L6,11 L6,13 L8,13 L8,11 L10,11 L10,9 L8,9 L8,7 L6,7 L6,9 Z" />
+              </svg>
+            </div>
+            <div class="activity-title" id="activityTitle">Playing</div>
+          </div>
+
+          <div class="activity-content">
+            <div class="activity-image-container">
+              <img id="activityLargeImage" class="activity-large-image" src="" alt="Activity">
+              <img id="activitySmallImage" class="activity-small-image" src="" alt="Small Icon" style="display: none;">
+            </div>
+            <div class="activity-info">
+              <div class="activity-name" id="activityName">No Activity</div>
+              <div class="activity-details" id="activityDetails"></div>
+              <div class="activity-state" id="activityState"></div>
+
+              <div class="activity-time">
+                <svg class="time-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
+                  <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                </svg>
+                <span id="activityTimeText">0:00:00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Connection Status -->
+      <!-- <div class="discord-status">
+        <div class="status-indicator online" id="connectionStatus">
+          <div class="status-dot"></div>
+          <span>Connected to Discord</span>
+        </div>
+      </div> -->
     </div>
   </section>
 
@@ -1783,17 +1917,17 @@
 
   <script src="scripts/utils.js"></script>
   <script src="scripts/navbar.js"></script>
-  <!-- <script src="scripts/particles.js"></script> -->
   <script src="scripts/home.js"></script>
-  <!-- <script src="scripts/discord-modal.js"></script> -->
   <script src="scripts/skills.js"></script>
   <script src="scripts/projects.js"></script>
-  <!-- <script src="scripts/music.js"></script> -->
   <script src="scripts/blog.js"></script>
-  <!-- <script src="scripts/faq.js"></script> -->
   <script src="scripts/discord-activity.js"></script>
-  <!-- <script src="scripts/video-thumbnail.js"></script> -->
   <script src="scripts/backgroundSong.js"></script>
+  <!-- <script src="scripts/particles.js"></script> -->
+  <!-- <script src="scripts/discord-modal.js"></script> -->
+  <!-- <script src="scripts/music.js"></script> -->
+  <!-- <script src="scripts/faq.js"></script> -->
+  <!-- <script src="scripts/video-thumbnail.js"></script> -->
 
 
   <!-- hide some sections until i make it responsive for mobile -->
