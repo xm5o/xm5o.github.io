@@ -1,4 +1,4 @@
-const userId = '1017838899499905074';
+const userId = '1282747277206884436';
 const CdnBaseUrl = 'https://cdn.discordapp.com/';
 const DcdnUrl = `https://dcdn.dstn.to/profile/${userId}`;
 
