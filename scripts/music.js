@@ -1,4 +1,3 @@
-// Enhanced Music Player JavaScript with Fullscreen Support
 document.addEventListener('DOMContentLoaded', function() {
     let currentAudio = null;
     let audioPlayer = null;
@@ -8,11 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let isFullscreen = false;
     let playlist = [];
     
-    // Initialize audio player
     audioPlayer = document.getElementById('audioPlayer');
     fullscreenPlayer = document.getElementById('fullscreenPlayer');
     
-    // Get player elements
     const playPauseBtn = audioPlayer.querySelector('.play-pause-btn');
     const prevBtn = audioPlayer.querySelector('.prev-btn');
     const nextBtn = audioPlayer.querySelector('.next-btn');
@@ -30,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const volumeSlider = audioPlayer.querySelector('.volume-slider');
     const visualizerBars = audioPlayer.querySelectorAll('.visualizer-bar');
     
-    // Get fullscreen player elements
     const fullscreenClose = fullscreenPlayer.querySelector('.fullscreen-close');
     const fullscreenMinimize = fullscreenPlayer.querySelector('.fullscreen-minimize');
     const fullscreenImage = fullscreenPlayer.querySelector('.fullscreen-image');
@@ -47,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const fullscreenVolumeBtn = fullscreenPlayer.querySelector('.fullscreen-volume-btn');
     const fullscreenVolumeSlider = fullscreenPlayer.querySelector('.fullscreen-volume-slider');
     
-    // Song data with enhanced information
     const songData = {
         'the-crystal-ship': {
             title: 'The Crystal Ship',
@@ -123,7 +118,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
     
-    // Create playlist from song data
     playlist = Object.keys(songData);
     
     // Format time helper
@@ -134,17 +128,14 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     }
     
-    // Update progress bar and handle position
     function updateProgress() {
         if (currentAudio && currentAudio.duration) {
             const progress = (currentAudio.currentTime / currentAudio.duration) * 100;
             
-            // Update regular player
             progressFill.style.width = progress + '%';
             progressHandle.style.left = progress + '%';
             currentTimeEl.textContent = formatTime(currentAudio.currentTime);
             
-            // Update fullscreen player
             if (isFullscreen) {
                 fullscreenProgressFill.style.width = progress + '%';
                 fullscreenProgressHandle.style.left = progress + '%';
@@ -153,7 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Update visualizer bars
     function updateVisualizer() {
         if (isPlaying && visualizerBars.length > 0) {
             visualizerBars.forEach((bar, index) => {
@@ -167,20 +157,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Start visualizer animation
     function startVisualizer() {
         setInterval(updateVisualizer, 150);
     }
     
-    // Update UI for both players
     function updatePlayerUI(song) {
-        // Update regular player
         playerImage.src = song.image;
         playerTitle.textContent = song.title;
         playerArtist.textContent = song.artist;
         totalTimeEl.textContent = song.duration;
         
-        // Update fullscreen player
         if (isFullscreen) {
             fullscreenImage.src = song.image;
             fullscreenTitle.textContent = song.title;
@@ -189,7 +175,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Sync play/pause buttons
     function updatePlayPauseButtons() {
         const icon = isPlaying ? '<i class="bx bx-pause"></i>' : '<i class="bx bx-play"></i>';
         playPauseBtn.innerHTML = icon;
@@ -198,31 +183,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Load and play song
     function loadSong(songId, autoPlay = true) {
         const song = songData[songId];
         if (!song) return;
         
-        // Stop current audio if playing
         if (currentAudio) {
             currentAudio.pause();
             currentAudio = null;
         }
         
-        // Create new audio
         currentAudio = new Audio();
         currentAudio.volume = volumeSlider.value;
         
-        // Update player UI
         updatePlayerUI(song);
         
-        // Show player
         audioPlayer.classList.add('active');
         
-        // Update current song index
         currentSongIndex = playlist.indexOf(songId);
         
-        // Audio event listeners
         currentAudio.addEventListener('loadstart', function() {
             console.log('Loading audio...');
             showLoadingState();
@@ -257,7 +235,6 @@ document.addEventListener('DOMContentLoaded', function() {
         currentAudio.addEventListener('timeupdate', updateProgress);
         
         currentAudio.addEventListener('ended', function() {
-            // Auto play next song
             playNext();
         });
         
@@ -266,12 +243,10 @@ document.addEventListener('DOMContentLoaded', function() {
             tryFallbackAudio(song);
         });
         
-        // Set audio source
         currentAudio.src = song.preview;
         currentAudio.load();
     }
     
-    // Try fallback audio format
     function tryFallbackAudio(song) {
         if (song.fallback && currentAudio) {
             console.log('Trying fallback audio format...');
@@ -286,7 +261,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Show/hide loading state
     function showLoadingState() {
         playPauseBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
         playPauseBtn.disabled = true;
@@ -304,19 +278,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Play next song
     function playNext() {
         currentSongIndex = (currentSongIndex + 1) % playlist.length;
         loadSong(playlist[currentSongIndex]);
     }
     
-    // Play previous song
     function playPrevious() {
         currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
         loadSong(playlist[currentSongIndex]);
     }
     
-    // Toggle play/pause
     function togglePlayPause() {
         if (!currentAudio) return;
         
@@ -335,45 +306,35 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Enter fullscreen mode
     function enterFullscreen() {
         if (!currentAudio) return;
         
         isFullscreen = true;
         fullscreenPlayer.classList.add('active');
         
-        // Update fullscreen UI with current song data
         const currentSong = songData[playlist[currentSongIndex]];
         if (currentSong) {
             updatePlayerUI(currentSong);
         }
         
-        // Sync volume
         fullscreenVolumeSlider.value = volumeSlider.value;
         
-        // Update play/pause button
         updatePlayPauseButtons();
         
-        // Hide regular player temporarily
         audioPlayer.style.opacity = '0';
         
-        // Remove blur effects in fullscreen
         document.body.style.overflow = 'hidden';
     }
     
-    // Exit fullscreen mode
     function exitFullscreen() {
         isFullscreen = false;
         fullscreenPlayer.classList.remove('active');
         
-        // Show regular player
         audioPlayer.style.opacity = '1';
         
-        // Restore body scroll
         document.body.style.overflow = '';
     }
     
-    // Progress bar interaction helper
     function updateProgressFromEvent(e, progressBar, isFullscreenBar = false) {
         if (!currentAudio || !currentAudio.duration) return;
         
@@ -385,13 +346,11 @@ document.addEventListener('DOMContentLoaded', function() {
         currentAudio.currentTime = currentAudio.duration * percentage;
     }
     
-    // Volume control helper
     function updateVolume(value) {
         if (currentAudio) {
             currentAudio.volume = value;
         }
         
-        // Update volume icons
         const volume = parseFloat(value);
         const updateVolumeIcon = (btn) => {
             const volumeIcon = btn.querySelector('i');
@@ -412,7 +371,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Event Listeners
     
-    // Play button click handlers for song cards
     document.querySelectorAll('.play-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -425,7 +383,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Regular player controls
     playPauseBtn.addEventListener('click', togglePlayPause);
     prevBtn.addEventListener('click', playPrevious);
     nextBtn.addEventListener('click', playNext);
@@ -446,7 +403,6 @@ document.addEventListener('DOMContentLoaded', function() {
         currentTimeEl.textContent = '0:00';
     });
     
-    // Fullscreen player controls
     fullscreenPlayPause.addEventListener('click', togglePlayPause);
     fullscreenPrev.addEventListener('click', playPrevious);
     fullscreenNext.addEventListener('click', playNext);
@@ -461,7 +417,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     fullscreenMinimize.addEventListener('click', exitFullscreen);
     
-    // Progress bar interactions - Regular player
     let isDragging = false;
     
     progressBar.addEventListener('mousedown', function(e) {
@@ -474,7 +429,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateProgressFromEvent(e.touches[0], progressBar);
     });
     
-    // Progress bar interactions - Fullscreen player
     fullscreenProgressBar.addEventListener('mousedown', function(e) {
         isDragging = true;
         updateProgressFromEvent(e, fullscreenProgressBar, true);
@@ -485,7 +439,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateProgressFromEvent(e.touches[0], fullscreenProgressBar, true);
     });
     
-    // Global mouse/touch events
     document.addEventListener('mousemove', function(e) {
         if (isDragging) {
             if (isFullscreen) {
@@ -515,10 +468,8 @@ document.addEventListener('DOMContentLoaded', function() {
         isDragging = false;
     });
     
-    // Volume controls
     volumeSlider.addEventListener('input', function() {
         updateVolume(this.value);
-        // Sync fullscreen volume slider
         if (isFullscreen) {
             fullscreenVolumeSlider.value = this.value;
         }
@@ -526,7 +477,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     fullscreenVolumeSlider.addEventListener('input', function() {
         updateVolume(this.value);
-        // Sync regular volume slider
         volumeSlider.value = this.value;
     });
     
@@ -556,7 +506,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateVolume(currentAudio ? currentAudio.volume : 0);
     });
     
-    // Show audio error
     function showAudioError(message = 'Unable to load audio file') {
         const notification = document.createElement('div');
         notification.style.cssText = `
@@ -596,8 +545,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 5000);
     }
-    
-    // Keyboard shortcuts
+
     document.addEventListener('keydown', function(e) {
         if (!audioPlayer.classList.contains('active')) return;
         
@@ -651,7 +599,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Touch gestures for mobile
     let touchStartX = 0;
     let touchStartY = 0;
     
@@ -667,31 +614,23 @@ document.addEventListener('DOMContentLoaded', function() {
             const deltaX = touchEndX - touchStartX;
             const deltaY = touchEndY - touchStartY;
             
-            // Swipe gestures
             if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
                 if (deltaX > 0) {
-                    // Swipe right - previous song
                     playPrevious();
                 } else {
-                    // Swipe left - next song
                     playNext();
                 }
             } else if (deltaY > 100) {
-                // Swipe down - exit fullscreen
                 exitFullscreen();
             }
         });
     }
     
-    // Initialize visualizer
     startVisualizer();
     
-    // Mobile-specific optimizations
     if (window.innerWidth <= 768) {
-        // Reduce animation complexity on mobile
         document.documentElement.style.setProperty('--animation-duration', '0.2s');
         
-        // Optimize touch interactions
         document.addEventListener('touchstart', function() {}, { passive: true });
         document.addEventListener('touchmove', function() {}, { passive: false });
     }

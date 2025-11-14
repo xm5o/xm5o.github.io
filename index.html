@@ -9,12 +9,17 @@
   <meta name="keywords" content="developer, portfolio, web development, mobile apps, gaming, coding projects" />
 
   <meta property="og:title" content="Immortal" />
-  <meta property="og:image" content="https://cdn.discordapp.com/attachments/1344000535682089011/1438269912824020992/Immortal-site-banner.png?ex=691644bc&is=6914f33c&hm=ee634aaf7c8d67c16057388c9cddb8c5186802385b60019f99fced9779c198fd&" />
+  <!-- <meta property="og:image" content="https://cdn.discordapp.com/attachments/1344000535682089011/1438269912824020992/Immortal-site-banner.png?ex=691644bc&is=6914f33c&hm=ee634aaf7c8d67c16057388c9cddb8c5186802385b60019f99fced9779c198fd&" /> -->
   <meta property="og:description" content="Personal portfolio of a creative developer (maybe)" />
   <!-- <meta property="og:url" content="404.html" /> -->
   <meta property="og:image:width" content="1280" />
   <meta property="og:image:height" content="720" />
   <meta property="og:type" content="website" />
+
+  <meta name="twitter:card" content="immortal">
+  <meta name="twitter:title" content="Immortal">
+  <meta name="twitter:description" content="Personal portfolio of a creative developer (maybe) ">
+  <meta name="twitter:image" content="https://cdn.discordapp.com/attachments/1344000535682089011/1438269912824020992/Immortal-site-banner.png?ex=691644bc&is=6914f33c&hm=ee634aaf7c8d67c16057388c9cddb8c5186802385b60019f99fced9779c198fd&">
 
   
 
@@ -195,9 +200,12 @@
 </head>
 
 <body>
-  <!-- New Full-Screen Loading Screen -->
+  <!-- Loading Screen -->
   <div id="loading-screen">
+    <div class="loading-grid"></div>
+    
     <div class="bg-layer"></div>
+    
     <div class="particles">
       <div class="particle"></div>
       <div class="particle"></div>
@@ -212,14 +220,33 @@
       <div class="particle"></div>
       <div class="particle"></div>
     </div>
+    
     <div class="loading-content">
+      <div class="loading-logo">
+        <div class="logo-ring">
+          <div class="logo-inner">I</div>
+        </div>
+      </div>
+      
       <div id="welcome-text">Welcome</div>
-      <div id="loading-status">Please wait.. trying to connecting to the servers</div>
+      
+      <div class="loading-spinner">
+        <div class="spinner-circle"></div>
+      </div>
+      
+      <div id="loading-status">Initializing...</div>
+      
       <div id="progress-bar-container">
         <div id="progress-bar"></div>
+        <div class="progress-percentage">0%</div>
+      </div>
+      
+      <div class="loading-tips">
+        <p class="loading-tip">💡 Tip: Use keyboard shortcuts for faster navigation</p>
       </div>
     </div>
   </div>
+
   <header class="header" role="banner">
     <a href="#" class="logo" aria-label="Personal Logo">Immortal</a>
 

@@ -1,4 +1,3 @@
-// Enhanced Blog Management System
 class BlogManager {
   constructor() {
     this.posts = [];
@@ -18,7 +17,6 @@ class BlogManager {
     this.renderPosts();
   }
 
-  // Enhanced blog posts data - easily editable
   loadPosts() {
     this.posts = [
       {
@@ -554,9 +552,7 @@ class BlogManager {
     this.filteredPosts = [...this.posts];
   }
 
-  // Enhanced event listeners
   bindEventListeners() {
-    // Filter buttons
     const filterButtons = document.querySelectorAll('.blog-filter-btn');
     filterButtons.forEach(button => {
       button.addEventListener('click', (e) => {
@@ -566,7 +562,6 @@ class BlogManager {
       });
     });
 
-    // Load more button
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if (loadMoreBtn) {
       loadMoreBtn.addEventListener('click', () => {
@@ -574,14 +569,12 @@ class BlogManager {
       });
     }
 
-    // Close expanded cards when clicking outside
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.blog-card') && this.expandedCard) {
         this.collapseCard();
       }
     });
 
-    // Escape key to close expanded card
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && this.expandedCard) {
         this.collapseCard();
@@ -589,7 +582,6 @@ class BlogManager {
     });
   }
 
-  // Enhanced filter functionality with 'other' category
   filterPosts(category) {
     this.currentFilter = category;
     this.currentPage = 1;
@@ -600,7 +592,6 @@ class BlogManager {
       this.filteredPosts = this.posts.filter(post => post.category === category);
     }
     
-    // Collapse any expanded card when filtering
     if (this.expandedCard) {
       this.collapseCard();
     }
@@ -608,7 +599,6 @@ class BlogManager {
     this.renderPosts();
   }
 
-  // Update active filter button
   updateActiveFilter(activeButton) {
     const filterButtons = document.querySelectorAll('.blog-filter-btn');
     filterButtons.forEach(button => {
@@ -617,27 +607,22 @@ class BlogManager {
     activeButton.classList.add('active');
   }
 
-  // Enhanced post rendering
   renderPosts() {
     const blogGrid = document.getElementById('blogGrid');
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     
     if (!blogGrid) return;
 
-    // Clear existing posts
     blogGrid.innerHTML = '';
     
-    // Calculate posts to show
     const postsToShow = Math.min(this.maxDisplayedPosts, this.filteredPosts.length);
     const postsToRender = this.filteredPosts.slice(0, postsToShow);
     
-    // Render each post
     postsToRender.forEach((post, index) => {
       const postElement = this.createPostElement(post, index);
       blogGrid.appendChild(postElement);
     });
 
-    // Show/hide load more button
     if (loadMoreBtn) {
       if (postsToShow < this.filteredPosts.length) {
         loadMoreBtn.style.display = 'flex';
@@ -646,11 +631,9 @@ class BlogManager {
       }
     }
 
-    // Trigger animations
     this.triggerAnimations();
   }
 
-  // Enhanced post element creation
   createPostElement(post, index) {
     const postDiv = document.createElement('div');
     postDiv.className = 'blog-card';
@@ -665,7 +648,6 @@ class BlogManager {
       year: 'numeric'
     });
 
-    // Create tags HTML
     const tagsHTML = post.tags ? post.tags.map(tag => 
       `<span class="blog-tag">${tag}</span>`
     ).join('') : '';
@@ -706,9 +688,7 @@ class BlogManager {
       </div>
     `;
 
-    // Add click event for card expansion
     postDiv.addEventListener('click', (e) => {
-      // Don't expand if clicking on close button
       if (e.target.closest('.blog-close-btn')) {
         this.collapseCard();
         return;
@@ -720,14 +700,11 @@ class BlogManager {
     return postDiv;
   }
 
-  // New method to expand card with animation
   expandCard(cardElement, post) {
-    // Collapse any currently expanded card
     if (this.expandedCard && this.expandedCard !== cardElement) {
       this.collapseCard();
     }
 
-    // If clicking the same card, toggle it
     if (this.expandedCard === cardElement) {
       this.collapseCard();
       return;
@@ -737,13 +714,10 @@ class BlogManager {
     const expandedContent = cardElement.querySelector('.blog-expanded-content');
     const cardContent = cardElement.querySelector('.blog-card-content');
     
-    // Add expanded class
     cardElement.classList.add('expanded');
     
-    // Show expanded content with animation
     expandedContent.style.display = 'block';
     
-    // Animate the expansion
     requestAnimationFrame(() => {
       expandedContent.style.opacity = '1';
       expandedContent.style.transform = 'translateY(0)';
@@ -751,7 +725,6 @@ class BlogManager {
       cardElement.style.zIndex = '10';
     });
 
-    // Scroll card into view
     setTimeout(() => {
       cardElement.scrollIntoView({
         behavior: 'smooth',
@@ -760,19 +733,16 @@ class BlogManager {
     }, 300);
   }
 
-  // New method to collapse card with animation
   collapseCard() {
     if (!this.expandedCard) return;
 
     const expandedContent = this.expandedCard.querySelector('.blog-expanded-content');
     
-    // Animate collapse
     expandedContent.style.opacity = '0';
     expandedContent.style.transform = 'translateY(20px)';
     this.expandedCard.style.transform = 'scale(1)';
     this.expandedCard.style.zIndex = '1';
     
-    // Remove expanded class and hide content after animation
     setTimeout(() => {
       this.expandedCard.classList.remove('expanded');
       expandedContent.style.display = 'none';
@@ -780,7 +750,6 @@ class BlogManager {
     }, 300);
   }
 
-  // Enhanced category labels with 'other' category
   getCategoryLabel(category) {
     const labels = {
       'all': 'All Posts',
@@ -793,13 +762,11 @@ class BlogManager {
     return labels[category] || category;
   }
 
-  // Load more posts functionality
   loadMorePosts() {
     this.maxDisplayedPosts += this.postsPerPage;
     this.renderPosts();
   }
 
-  // Trigger staggered animations
   triggerAnimations() {
     const cards = document.querySelectorAll('.blog-card');
     cards.forEach((card, index) => {
@@ -814,7 +781,6 @@ class BlogManager {
     });
   }
 
-  // Search functionality (bonus feature)
   searchPosts(query) {
     if (!query.trim()) {
       this.filteredPosts = [...this.posts];
@@ -829,7 +795,6 @@ class BlogManager {
   }
 }
 
-// Initialize blog manager when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   new BlogManager();
 });
