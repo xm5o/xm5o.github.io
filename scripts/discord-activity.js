@@ -14,6 +14,7 @@ let currentStatus = '';
 let socket = null;
 let heartbeatInterval = null;
 let activityInterval = null;
+let activityIntervals = {};
 let currentActivity = null;
 
 async function fetchDcdnData() {
@@ -176,24 +177,28 @@ function initializeConnection() {
 }
 
 function handleEvent(message) {
-  switch (message.t) {
-    case 'INIT_STATE':
-    case 'PRESENCE_UPDATE':
-      const userData = message.d;
-      updateProfile(userData);
-      updateNameplateBackground(userData);
-      updateTagInfo(userData);
-      updateCustomStatus(userData.activities);
+    switch (message.t) {
+        case 'INIT_STATE':
+        case 'PRESENCE_UPDATE':
+            const userData = message.d;
+            updateProfile(userData);
+            updateNameplateBackground(userData);
+            updateTagInfo(userData);
+            updateCustomStatus(userData.activities);
 
-      if (userData.listening_to_spotify && userData.spotify) {
-        updateSpotify(userData.spotify);
-      } else {
-        hideSpotifyCard();
-      }
+            if (userData.listening_to_spotify && userData.spotify) {
+                updateSpotify(userData.spotify);
+            } else {
+                const spotifyCard = document.getElementById('spotifyCard');
+                if (spotifyCard) {
+                    spotifyCard.style.display = 'none';
+                    spotifyCard.classList.remove('spotify-active');
+                }
+            }
 
-      updateActivities(userData.activities);
-      break;
-  }
+            updateActivities(userData.activities);
+            break;
+    }
 }
 
 function updateProfile(userData) {
@@ -352,60 +357,70 @@ function updateDeviceIcons(userData) {
 }
 
 function updateSpotify(spotifyData) {
-  const spotifyCard = document.getElementById('spotifyCard');
-  
-  if (!spotifyCard) return;
-  
-  spotifyCard.style.display = 'block';
-  spotifyCard.classList.add('spotify-active');
-
-  const albumArtElement = document.getElementById('albumArt');
-  const trackNameElement = document.getElementById('trackName');
-  const trackArtistElement = document.getElementById('trackArtist');
-  
-  if (albumArtElement) albumArtElement.src = spotifyData.album_art_url;
-  if (trackNameElement) trackNameElement.textContent = spotifyData.song;
-  if (trackArtistElement) trackArtistElement.textContent = `by ${spotifyData.artist}`;
-
-  const startTime = spotifyData.timestamps.start;
-  const endTime = spotifyData.timestamps.end;
-  const duration = endTime - startTime;
-
-  if (progressInterval) {
-    clearInterval(progressInterval);
-  }
-
-  function updateProgress() {
-    const now = Date.now();
-    const elapsed = now - startTime;
-    const progress = Math.min((elapsed / duration) * 100, 100);
-
-    const progressBar = document.getElementById('progressBar');
-    const currentTimeElement = document.getElementById('currentTime');
-    const totalTimeElement = document.getElementById('totalTime');
+    const spotifyCard = document.getElementById('spotifyCard');
+    if (!spotifyCard) return;
     
-    if (progressBar) progressBar.style.width = `${progress}%`;
-
-    const currentMinutes = Math.floor(elapsed / 60000);
-    const currentSeconds = Math.floor((elapsed % 60000) / 1000);
-    const totalMinutes = Math.floor(duration / 60000);
-    const totalSeconds = Math.floor((duration % 60000) / 1000);
-
-    if (currentTimeElement) {
-      currentTimeElement.textContent = `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')}`;
+    spotifyCard.style.display = 'block';
+    spotifyCard.classList.add('spotify-active');
+    
+    document.getElementById('albumArt').src = spotifyData.album_art_url;
+    document.getElementById('trackName').textContent = spotifyData.song;
+    document.getElementById('trackArtist').textContent = `by ${spotifyData.artist}`;
+    
+    const startTime = spotifyData.timestamps.start;
+    const endTime = spotifyData.timestamps.end;
+    const duration = endTime - startTime;
+    
+    if (progressInterval) {
+        clearInterval(progressInterval);
     }
     
-    if (totalTimeElement) {
-      totalTimeElement.textContent = `${totalMinutes}:${totalSeconds.toString().padStart(2, '0')}`;
+    function updateProgress() {
+        const now = Date.now();
+        const elapsed = now - startTime;
+        const progress = Math.min((elapsed / duration) * 100, 100);
+        
+        document.getElementById('progressBar').style.width = `${progress}%`;
+        
+        const currentMinutes = Math.floor(elapsed / 60000);
+        const currentSeconds = Math.floor((elapsed % 60000) / 1000);
+        const totalMinutes = Math.floor(duration / 60000);
+        const totalSeconds = Math.floor((duration % 60000) / 1000);
+        
+        document.getElementById('currentTime').textContent = 
+            `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')}`;
+        document.getElementById('totalTime').textContent = 
+            `${totalMinutes}:${totalSeconds.toString().padStart(2, '0')}`;
+        
+        if (progress >= 100) {
+            clearInterval(progressInterval);
+        }
     }
-
-    if (progress >= 100) {
-      clearInterval(progressInterval);
-    }
-  }
-
-  updateProgress();
-  progressInterval = setInterval(updateProgress, 100);
+    
+    updateProgress();
+    progressInterval = setInterval(updateProgress, 100);
+    
+    const spotifyButtons = document.getElementById('spotifyButtons');
+    spotifyButtons.innerHTML = '';
+    
+    const spotifyButton = document.createElement('a');
+    spotifyButton.className = 'activity-button';
+    spotifyButton.href = spotifyData.track_id ? `https://open.spotify.com/track/${spotifyData.track_id}` : '#';
+    spotifyButton.target = '_blank';
+    
+    const spotifyIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    spotifyIcon.setAttribute('class', 'button-icon spotify-button-icon');
+    spotifyIcon.setAttribute('viewBox', '0 0 496 512');
+    spotifyIcon.setAttribute('fill', 'currentColor');
+    
+    const spotifyPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    spotifyPath.setAttribute('d', 'M248 8C111.1 8 0 119.1 0 256s111.1 248 248 248 248-111.1 248-248S384.9 8 248 8zm100.7 364.9c-4.2 0-6.8-1.3-10.7-3.6-62.4-37.6-135-39.2-206.7-24.5-3.9 1-9 2.6-11.9 2.6-9.7 0-15.8-7.7-15.8-15.8 0-10.3 6.1-15.2 13.6-16.8 81.9-18.1 165.6-16.5 237 26.2 6.1 3.9 9.7 7.4 9.7 16.5s-7.1 15.4-15.2 15.4zm26.9-65.6c-5.2 0-8.7-2.3-12.3-4.2-62.5-37-155.7-51.9-238.6-29.4-4.8 1.3-7.4 2.6-11.9 2.6-10.7 0-19.4-8.7-19.4-19.4s5.2-17.8 15.5-20.7c27.8-7.8 56.2-13.6 97.8-13.6 64.9 0 127.6 16.1 177 45.5 8.1 4.8 11.3 11 11.3 19.7-.1 10.8-8.5 19.5-19.4 19.5zm31-76.2c-5.2 0-8.4-1.3-12.9-3.9-71.2-42.5-198.5-52.7-280.9-29.7-3.6 1-8.1 2.6-12.9 2.6-13.2 0-23.3-10.3-23.3-23.6 0-13.6 8.4-21.3 17.4-23.9 35.2-10.3 74.6-15.2 117.5-15.2 73 0 149.5 15.2 205.4 47.8 7.8 4.5 12.9 10.7 12.9 22.6 0 13.6-11 23.3-23.2 23.3z');
+    spotifyIcon.appendChild(spotifyPath);
+    
+    spotifyButton.appendChild(spotifyIcon);
+    spotifyButton.appendChild(document.createTextNode('Play on Spotify'));
+    
+    spotifyButtons.appendChild(spotifyButton);
 }
 
 function hideSpotifyCard() {
@@ -469,156 +484,210 @@ function updateCustomStatus(activities) {
 }
 
 function updateActivities(activities) {
-  const activityCard = document.getElementById('activityCard');
-  
-  if (!activityCard) return;
-
-  const validActivities = activities ? activities.filter(activity =>
-    activity.type !== 4 && activity.name !== 'Spotify'
-  ) : [];
-
-  if (validActivities.length > 0) {
-    const activity = validActivities[0];
-    currentActivity = activity;
-    activityCard.style.display = 'block';
-    activityCard.classList.add('activity-active');
-
-    let activityTitleText = '';
-    switch (activity.type) {
-      case 0:
-        activityTitleText = 'Playing';
-        break;
-      case 1:
-        activityTitleText = 'Streaming';
-        break;
-      case 2:
-        activityTitleText = 'Listening to';
-        break;
-      case 3:
-        activityTitleText = 'Watching';
-        break;
-      case 5:
-        activityTitleText = 'Competing in';
-        break;
-      default:
-        activityTitleText = 'Active in';
-    }
-
-    const activityTitleElement = document.getElementById('activityTitle');
-    const activityNameElement = document.getElementById('activityName');
-    const activityDetailsElement = document.getElementById('activityDetails');
-    const activityStateElement = document.getElementById('activityState');
+    const activitiesContainer = document.getElementById('activitiesContainer');
+    if (!activitiesContainer) return;
     
-    if (activityTitleElement) activityTitleElement.textContent = activityTitleText;
-    if (activityNameElement) activityNameElement.textContent = activity.name;
+    activitiesContainer.innerHTML = '';
+    
+    const validActivities = activities ? activities.filter(activity => 
+        activity.type !== 4 && activity.name !== 'Spotify'
+    ) : [];
 
-    if (activityDetailsElement) {
-      if (activity.details) {
-        activityDetailsElement.textContent = activity.details;
-        activityDetailsElement.style.display = 'block';
-      } else {
-        activityDetailsElement.textContent = '';
-        activityDetailsElement.style.display = 'none';
-      }
-    }
-
-    if (activityStateElement) {
-      if (activity.state) {
-        activityStateElement.textContent = activity.state;
-        activityStateElement.style.display = 'block';
-      } else {
-        activityStateElement.textContent = '';
-        activityStateElement.style.display = 'none';
-      }
-    }
-
-    const largeImageElement = document.getElementById('activityLargeImage');
-    const smallImageElement = document.getElementById('activitySmallImage');
-
-    if (largeImageElement) {
-      if (activity.assets && activity.assets.large_image) {
-        let largeImageUrl = activity.assets.large_image;
-        if (largeImageUrl.startsWith('mp:')) {
-          largeImageUrl = `https://media.discordapp.net/${largeImageUrl.replace('mp:', '')}`;
-        } else if (largeImageUrl.startsWith('spotify:')) {
-          largeImageUrl = `https://i.scdn.co/image/${largeImageUrl.replace('spotify:', '')}`;
-        } else if (largeImageUrl.startsWith('external:')) {
-          largeImageUrl = largeImageUrl.replace('external:', '');
-        } else {
-          largeImageUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${largeImageUrl}.png?size=512`;
+    validActivities.forEach((activity, index) => {
+        const activityCard = document.createElement('div');
+        activityCard.className = 'discord-activity-card activity-active';
+        activityCard.id = `activityCard-${index}`;
+        
+        let activityTitleText = '';
+        switch (activity.type) {
+            case 0:
+                activityTitleText = 'Playing';
+                break;
+            case 1:
+                activityTitleText = 'Streaming';
+                break;
+            case 2:
+                activityTitleText = 'Listening to';
+                break;
+            case 3:
+                activityTitleText = 'Watching';
+                break;
+            case 5:
+                activityTitleText = 'Competing in';
+                break;
+            default:
+                activityTitleText = 'Active in';
         }
-        largeImageElement.src = largeImageUrl;
-      } else {
-        largeImageElement.src = `https://dcdn.dstn.to/app-icons/${activity.application_id}.png?size=512`;
-      }
-    }
-
-    if (smallImageElement) {
-      if (activity.assets && activity.assets.small_image) {
-        let smallImageUrl = activity.assets.small_image;
-        if (smallImageUrl.startsWith('mp:')) {
-          smallImageUrl = `https://media.discordapp.net/${smallImageUrl.replace('mp:', '')}`;
-        } else if (smallImageUrl.startsWith('spotify:')) {
-          smallImageUrl = `https://i.scdn.co/image/${smallImageUrl.replace('spotify:', '')}`;
-        } else if (smallImageUrl.startsWith('external:')) {
-          smallImageUrl = smallImageUrl.replace('external:', '');
-        } else {
-          smallImageUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${smallImageUrl}.png?size=128`;
+        
+        activityCard.innerHTML = `
+            <div class="activity-card-header">
+                <div class="activity-icon">
+                    <svg class="activity-icon" viewBox="0 0 24 24" fill="#b9bbbe">
+                        <path d="M5.79335761,5 L18.2066424,5 C19.7805584,5 21.0868816,6.21634264 21.1990185,7.78625885 L21.8575059,17.0050826 C21.9307825,18.0309548 21.1585512,18.9219909 20.132679,18.9952675 C20.088523,18.9984215 20.0442685,19 20,19 C18.8245863,19 17.8000084,18.2000338 17.5149287,17.059715 L17,15 L7,15 L6.48507125,17.059715 C6.19999155,18.2000338 5.1754137,19 4,19 C2.97151413,19 2.13776159,18.1662475 2.13776159,17.1377616 C2.13776159,17.0934931 2.1393401,17.0492386 2.1424941,17.0050826 L2.80098151,7.78625885 C2.91311838,6.21634264 4.21944161,5 5.79335761,5 Z M14.5,10 C15.3284271,10 16,9.32842712 16,8.5 C16,7.67157288 15.3284271,7 14.5,7 C13.6715729,7 13,7.67157288 13,8.5 C13,9.32842712 13.6715729,10 14.5,10 Z M18.5,13 C19.3284271,13 20,12.3284271 20,11.5 C20,10.6715729 19.3284271,10 18.5,10 C17.6715729,10 17,10.6715729 17,11.5 C17,12.3284271 17.6715729,13 18.5,13 Z M6,9 L4,9 L4,11 L6,11 L6,13 L8,13 L8,11 L10,11 L10,9 L8,9 L8,7 L6,7 L6,9 Z"/>
+                    </svg>
+                </div>
+                <div class="activity-title">${activityTitleText}</div>
+            </div>
+            <div class="activity-content">
+                <div class="activity-image-container">
+                    <img class="activity-large-image" src="" alt="Activity">
+                    <img class="activity-small-image" src="" alt="Small Icon" style="display: none;">
+                </div>
+                <div class="activity-info">
+                    <div class="activity-name">${activity.name}</div>
+                    <div class="activity-details">${activity.details || ''}</div>
+                    <div class="activity-state">${activity.state || ''}</div>
+                    <div class="activity-time" style="display: none;">
+                        <svg class="time-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+                            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                        </svg>
+                        <span class="activity-time-text">0:00:00</span>
+                    </div>
+                    <div class="activity-progress" style="display: none;">
+                        <div class="progress-container">
+                            <div class="progress-bar"></div>
+                        </div>
+                        <div class="time-info">
+                            <span class="activity-current-time">0:00</span>
+                            <span class="activity-end-time">0:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity-buttons"></div>
+        `;
+        
+        // Image handling code (same as in readme.js)
+        const largeImageElement = activityCard.querySelector('.activity-large-image');
+        const smallImageElement = activityCard.querySelector('.activity-small-image');
+        
+        if (activity.assets && activity.assets.large_image) {
+            let largeImageUrl = activity.assets.large_image;
+            if (largeImageUrl.startsWith('mp:')) {
+                largeImageUrl = `https://media.discordapp.net/${largeImageUrl.replace('mp:', '')}`;
+            } else if (largeImageUrl.startsWith('spotify:')) {
+                largeImageUrl = `https://i.scdn.co/image/${largeImageUrl.replace('spotify:', '')}`;
+            } else if (largeImageUrl.startsWith('external:')) {
+                largeImageUrl = largeImageUrl.replace('external:', '');
+            } else if (largeImageUrl.startsWith('https%3A%2F%2F')) {
+                largeImageUrl = decodeURIComponent(largeImageUrl);
+            } else {
+                largeImageUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${largeImageUrl}.png?size=512`;
+            }
+            largeImageElement.src = largeImageUrl;
+        } else if (activity.application_id) {
+            largeImageElement.src = `https://dcdn.dstn.to/app-icons/${activity.application_id}.png?size=512`;
         }
-        smallImageElement.src = smallImageUrl;
-        smallImageElement.style.display = 'block';
-      } else {
-        smallImageElement.src = '';
-        smallImageElement.style.display = 'none';
-      }
-    }
 
-    if (activityInterval) {
-      clearInterval(activityInterval);
-    }
-
-    function updateActivityTime() {
-      const activityTimeElement = document.getElementById('activityTimeText');
-      if (!activityTimeElement) return;
-      
-      if (currentActivity && currentActivity.created_at) {
-        const startTime = currentActivity.created_at;
-        const elapsed = Math.floor((Date.now() - startTime) / 1000);
-        const hours = Math.floor(elapsed / 3600);
-        const minutes = Math.floor((elapsed % 3600) / 60);
-        const seconds = elapsed % 60;
-
-        let timeText = '';
-        if (hours > 0) {
-          timeText = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        } else {
-          timeText = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        if (activity.assets && activity.assets.small_image) {
+            let smallImageUrl = activity.assets.small_image;
+            if (smallImageUrl.startsWith('mp:')) {
+                smallImageUrl = `https://media.discordapp.net/${smallImageUrl.replace('mp:', '')}`;
+            } else if (smallImageUrl.startsWith('spotify:')) {
+                smallImageUrl = `https://i.scdn.co/image/${smallImageUrl.replace('spotify:', '')}`;
+            } else if (smallImageUrl.startsWith('external:')) {
+                smallImageUrl = smallImageUrl.replace('external:', '');
+            } else {
+                smallImageUrl = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${smallImageUrl}.png?size=128`;
+            }
+            smallImageElement.src = smallImageUrl;
+            smallImageElement.style.display = 'block';
         }
-        activityTimeElement.textContent = timeText;
-      } else {
-        activityTimeElement.textContent = '0:00';
-      }
-    }
 
-    updateActivityTime();
-    activityInterval = setInterval(updateActivityTime, 1000);
+        // Time and progress handling
+        const activityTimeElement = activityCard.querySelector('.activity-time');
+        const activityProgressElement = activityCard.querySelector('.activity-progress');
+        
+        if (activity.timestamps && activity.timestamps.start && activity.timestamps.end) {
+            activityTimeElement.style.display = 'none';
+            activityProgressElement.style.display = 'block';
+            
+            const startTime = activity.timestamps.start;
+            const endTime = activity.timestamps.end;
+            const duration = endTime - startTime;
+            
+            function updateActivityProgress() {
+                const now = Date.now();
+                const elapsed = now - startTime;
+                const progress = Math.min((elapsed / duration) * 100, 100);
+                
+                activityProgressElement.querySelector('.progress-bar').style.width = `${progress}%`;
+                
+                const currentMinutes = Math.floor(elapsed / 60000);
+                const currentSeconds = Math.floor((elapsed % 60000) / 1000);
+                const totalMinutes = Math.floor(duration / 60000);
+                const totalSeconds = Math.floor((duration % 60000) / 1000);
+                
+                activityProgressElement.querySelector('.activity-current-time').textContent = 
+                    `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')}`;
+                activityProgressElement.querySelector('.activity-end-time').textContent = 
+                    `${totalMinutes}:${totalSeconds.toString().padStart(2, '0')}`;
+                
+                if (progress >= 100) {
+                    clearInterval(activityIntervals[activity.id]);
+                }
+            }
+            
+            if (activityIntervals[activity.id]) {
+                clearInterval(activityIntervals[activity.id]);
+            }
+            
+            updateActivityProgress();
+            activityIntervals[activity.id] = setInterval(updateActivityProgress, 100);
+            
+        } else if (activity.created_at) {
+            activityTimeElement.style.display = 'flex';
+            activityProgressElement.style.display = 'none';
+            
+            function updateActivityTime() {
+                const startTime = activity.created_at;
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                const hours = Math.floor(elapsed / 3600);
+                const minutes = Math.floor((elapsed % 3600) / 60);
+                const seconds = elapsed % 60;
+                
+                let timeText = '';
+                if (hours > 0) {
+                    timeText = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                } else {
+                    timeText = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }
+                activityCard.querySelector('.activity-time-text').textContent = timeText;
+            }
 
-  } else {
-    activityCard.style.display = 'none';
-    activityCard.classList.remove('activity-active');
-    currentActivity = null;
-    if (activityInterval) {
-      clearInterval(activityInterval);
-      activityInterval = null;
-    }
-  }
-}
+            updateActivityTime();
+            activityIntervals[activity.id] = setInterval(updateActivityTime, 1000);
+        }
 
-function showError(message) {
-  const container = document.querySelector('.discord-container');
-  if (container) {
-    container.innerHTML = `<div class="error">${message}</div>`;
-  }
+        // Button handling
+        if (activity.buttons && activity.buttons.length > 0) {
+            const buttonsContainer = activityCard.querySelector('.activity-buttons');
+            
+            activity.buttons.forEach(buttonText => {
+                const button = document.createElement('a');
+                button.className = 'activity-button';
+                
+                let buttonUrl = '#';
+                if (activity.metadata && activity.metadata.button_urls) {
+                    const buttonIndex = activity.buttons.indexOf(buttonText);
+                    if (activity.metadata.button_urls[buttonIndex]) {
+                        buttonUrl = activity.metadata.button_urls[buttonIndex];
+                    }
+                } else if (activity.details_url && buttonText.toLowerCase().includes('listen') || buttonText.toLowerCase().includes('watch')) {
+                    buttonUrl = activity.details_url;
+                }
+                
+                button.href = buttonUrl;
+                button.target = '_blank';
+                button.textContent = buttonText;
+                
+                buttonsContainer.appendChild(button);
+            });
+        }
+        
+        activitiesContainer.appendChild(activityCard);
+    });
 }
 
 // Initialize when DOM is loaded
