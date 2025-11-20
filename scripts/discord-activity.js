@@ -35,12 +35,26 @@ function updateBanner(userData) {
   const bannerElement = document.getElementById('profileBanner');
   const bannerGifElement = document.getElementById('profileBannerGif');
   const colorBannerElement = document.getElementById('colorBanner');
+  const profileCard = document.querySelector('.discord-profile-card');
 
   if (!bannerElement || !bannerGifElement || !colorBannerElement) return;
 
   bannerElement.style.display = 'none';
   bannerGifElement.style.display = 'none';
   colorBannerElement.style.display = 'none';
+
+  let themeColor = null;
+
+  // Helper to normalize color to hex format
+  const normalizeColor = (color) => {
+    if (typeof color === 'number') {
+      return `#${color.toString(16).padStart(6, '0')}`;
+    }
+    if (typeof color === 'string') {
+      return color.startsWith('#') ? color : `#${color}`;
+    }
+    return null;
+  };
 
   if (userData.banner) {
     if (userData.banner.startsWith('a_')) {
@@ -52,14 +66,87 @@ function updateBanner(userData) {
       bannerElement.src = pngUrl;
       bannerElement.style.display = 'block';
     }
+    // Get theme color from banner_color or accent_color even if banner exists
+    if (userData.banner_color) {
+      themeColor = normalizeColor(userData.banner_color);
+    } else if (userData.accent_color) {
+      themeColor = normalizeColor(userData.accent_color);
+    }
   } else if (userData.banner_color) {
-    colorBannerElement.style.backgroundColor = userData.banner_color;
+    themeColor = normalizeColor(userData.banner_color);
+    colorBannerElement.style.backgroundColor = themeColor;
     colorBannerElement.style.display = 'block';
   } else if (userData.accent_color) {
-    const color = `#${userData.accent_color.toString(16).padStart(6, '0')}`;
-    colorBannerElement.style.backgroundColor = color;
+    themeColor = normalizeColor(userData.accent_color);
+    colorBannerElement.style.backgroundColor = themeColor;
     colorBannerElement.style.display = 'block';
   }
+
+  // Apply theme color to profile card elements
+  if (themeColor && profileCard) {
+    applyThemeColors(themeColor);
+  }
+}
+
+function applyThemeColors(themeColor) {
+  const profileCard = document.querySelector('.discord-profile-card');
+  if (!profileCard) return;
+
+  // Normalize theme color to hex format
+  let hexColor = themeColor;
+  if (!hexColor.startsWith('#')) {
+    // If it's already a hex string without #, add it
+    if (/^[0-9A-Fa-f]{6}$/.test(hexColor)) {
+      hexColor = '#' + hexColor;
+    } else {
+      // If it's a number, convert to hex
+      hexColor = `#${parseInt(hexColor).toString(16).padStart(6, '0')}`;
+    }
+  }
+
+  // Convert hex color to RGB for rgba usage
+  const hexToRgb = (hex) => {
+    // Remove # if present
+    hex = hex.replace('#', '');
+    const result = /^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  };
+
+  const rgb = hexToRgb(hexColor);
+  if (!rgb) return;
+
+  // Apply theme color to profile card elements
+  const style = document.createElement('style');
+  style.id = 'discord-theme-colors';
+  
+  // Remove existing theme style if present
+  const existingStyle = document.getElementById('discord-theme-colors');
+  if (existingStyle) {
+    existingStyle.remove();
+  }
+
+  style.textContent = `
+    .discord-profile-card:hover {
+      border-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.5) !important;
+      box-shadow: 0 20px 50px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.2) !important;
+    }
+    .profile-banner-container {
+      background: linear-gradient(135deg, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.2), rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)) !important;
+    }
+    .avatar-container {
+      border-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3) !important;
+    }
+    .discord-profile-card {
+      --theme-color: ${hexColor};
+      --theme-color-rgb: ${rgb.r}, ${rgb.g}, ${rgb.b};
+    }
+  `;
+  
+  document.head.appendChild(style);
 }
 
 function updateBadges(badges) {

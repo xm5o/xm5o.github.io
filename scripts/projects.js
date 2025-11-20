@@ -63,63 +63,40 @@ class ProjectsManager {
         },
         badge: 'Coming Soon',
         badgeType: 'coming-soon',
-        releaseDate: null
-      },
-      {
-        id: 'psycho-funkin',
-        title: 'Psycho Funkin',
-        description: 'An exciting Friday Night Funkin\' mod featuring unique characters, challenging gameplay and original music tracks.',
-        category: 'game',
-        status: 'demo',
-        image: './assets/psycho.jpg',
-        features: [
-          { icon: 'fas fa-music', text: 'Psycho Songs' },
-          { icon: 'fas fa-users', text: 'Psycho Characters' },
-          { icon: 'fas fa-star', text: 'Psycho Gameplay' }
-        ],
-        links: {
-          website: null,
-          demo: 'https://gamejolt.com/games/psycho-bros/960818',
-          github: null
-        },
-        badge: 'DEMO Version',
-        badgeType: 'demo'
-      },
-      {
-        id: 'nates-secrets',
-        title: 'Nate\'s Secrets',
-        description: 'A mysterious project shrouded in secrecy. Something incredible is brewing behind the scenes...',
-        category: 'game',
-        status: 'coming-soon',
-        image: './assets/Nate.png',
-        features: [
-          { icon: 'fas fa-question', text: 'Mystery' }
-        ],
-        links: {
-          website: null,
-          demo: null,
-          github: null
-        },
-        badge: 'Coming Soon',
-        badgeType: 'coming-soon',
-        releaseDate: null
+        releaseDate: new Date('2026-12-01')
       },
       // {
-      //   id: 'selina-discord-bot',
-      //   title: 'Selina Discord Bot',
-      //   description: 'Your perfect server companion with powerful moderation tools, fun commands, and 24/7 reliability. Make your Discord server amazing!',
-      //   category: 'app',
-      //   status: 'coming-soon',
-      //   image: './assets/selina.jpg',
+      //   id: 'psycho-funkin',
+      //   title: 'Psycho Funkin',
+      //   description: 'An exciting Friday Night Funkin\' mod featuring unique characters, challenging gameplay and original music tracks.',
+      //   category: 'game',
+      //   status: 'demo',
+      //   image: './assets/psycho.jpg',
       //   features: [
-      //     { icon: 'fas fa-shield-alt', text: 'Moderation' },
-      //     { icon: 'fas fa-gamepad', text: 'Fun Games' },
-      //     { icon: 'fas fa-user-plus', text: 'Welcome' },
-      //     { icon: 'fas fa-chart-line', text: 'Levels' },
-      //     { icon: 'fas fa-map', text: 'Fortnite' }
+      //     { icon: 'fas fa-music', text: 'Psycho Songs' },
+      //     { icon: 'fas fa-users', text: 'Psycho Characters' },
+      //     { icon: 'fas fa-star', text: 'Psycho Gameplay' }
       //   ],
       //   links: {
-      //     website: 'https://xm5o.github.io/selina/',
+      //     website: null,
+      //     demo: 'https://gamejolt.com/games/psycho-bros/960818',
+      //     github: null
+      //   },
+      //   badge: 'DEMO Version',
+      //   badgeType: 'demo'
+      // },
+      // {
+      //   id: 'nates-secrets',
+      //   title: 'Nate\'s Secrets',
+      //   description: 'A mysterious project shrouded in secrecy. Something incredible is brewing behind the scenes...',
+      //   category: 'game',
+      //   status: 'coming-soon',
+      //   image: './assets/Nate.png',
+      //   features: [
+      //     { icon: 'fas fa-question', text: 'Mystery' }
+      //   ],
+      //   links: {
+      //     website: null,
       //     demo: null,
       //     github: null
       //   },
@@ -127,6 +104,28 @@ class ProjectsManager {
       //   badgeType: 'coming-soon',
       //   releaseDate: null
       // },
+      {
+        id: 'selina-discord-bot',
+        title: 'Selina Discord Bot',
+        description: 'Your perfect server companion with powerful moderation tools, fun commands, and 24/7 reliability. Make your Discord server amazing!',
+        category: 'app',
+        status: 'coming-soon',
+        image: './assets/selina.jpg',
+        features: [
+          { icon: 'fas fa-shield-alt', text: 'Moderation' },
+          { icon: 'fas fa-gamepad', text: 'Fun Games' },
+          { icon: 'fas fa-user-plus', text: 'Welcome' },
+          { icon: 'fas fa-chart-line', text: 'Levels' }
+        ],
+        links: {
+          website: 'https://xm5o.github.io/selina/',
+          demo: null,
+          github: null
+        },
+        badge: 'Coming Soon',
+        badgeType: 'coming-soon',
+        releaseDate: null
+      },
       // {
       //   id: 'fortnite-hub',
       //   title: 'Fortnite Hub',
