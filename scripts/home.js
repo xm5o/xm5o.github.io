@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initTypewriterEffect() {
     const roles = [
-        "Web Developer", "Frontend Development", "Discord Bot Designer"
+        "Web Developer", "Frontend Dev", "Discord Bot Designer"
     ];
     
     const roleElement = document.querySelector('.animated-role');
