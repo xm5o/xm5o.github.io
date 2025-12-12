@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invite selina</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow-y: none;
+        }
+
+        :root {
+            --primary-bg: #000000;
+            --surface-1: rgba(8, 8, 8, 0.95);
+            --surface-2: rgba(16, 16, 16, 0.8);
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent: rgba(255, 255, 255, 0.02);
+            --glow: rgba(255, 255, 255, 0.05);
+            --border: rgba(32, 32, 32, 0.5);
+            --gradient-1: linear-gradient(135deg, rgba(6, 6, 6, 0.8) 0%, rgba(2, 2, 2, 0.9) 100%);
+            
+            --mobile-bg: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+            --mobile-surface: rgba(20, 20, 20, 0.9);
+            --mobile-border: rgba(60, 60, 60, 0.3);
+            --mobile-accent: #333333;
+            --mobile-glow: rgba(255, 255, 255, 0.08);
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
+            background: var(--primary-bg);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-primary);
+            position: relative;
+            cursor: default;
+            font-optical-sizing: auto;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* overflow-x: hidden; */
+            overflow: hidden;
+        }
+
+        .bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bg-layer::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(1400px ellipse at var(--cursor-x, 50%) var(--cursor-y, 50%), 
+                    rgba(8, 8, 8, 0.4) 0%, 
+                    transparent 65%),
+                conic-gradient(from 45deg at 30% 30%, 
+                    transparent 0deg, 
+                    rgba(4, 4, 4, 0.6) 60deg, 
+                    transparent 120deg),
+                radial-gradient(circle at 70% 80%, 
+                    rgba(12, 12, 12, 0.5) 0%, 
+                    transparent 60%);
+            animation: backgroundFlow 30s ease-in-out infinite;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes backgroundFlow {
+            0%, 100% { 
+                opacity: 0.5;
+                filter: blur(0px) contrast(1.1);
+                transform: scale(1);
+            }
+            25% { 
+                opacity: 0.8;
+                filter: blur(2px) contrast(1.2);
+                transform: scale(1.02);
+            }
+            50% { 
+                opacity: 0.6;
+                filter: blur(1px) contrast(1.15);
+                transform: scale(0.98);
+            }
+            75% { 
+                opacity: 0.9;
+                filter: blur(3px) contrast(1.3);
+                transform: scale(1.01);
+            }
+        }
+
+        .bg-layer::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                repeating-conic-gradient(from 0deg at 2px 2px, 
+                    transparent 0deg 85deg, 
+                    rgba(255,255,255,0.004) 85deg 90deg),
+                repeating-linear-gradient(45deg, 
+                    transparent 0px 3px, 
+                    rgba(255,255,255,0.002) 3px 6px);
+            background-size: 40px 40px, 2px 2px;
+            animation: grainFlow 15s linear infinite;
+            mix-blend-mode: soft-light;
+        }
+
+        @keyframes grainFlow {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-2px, 2px) rotate(0.2deg); }
+            50% { transform: translate(2px, -2px) rotate(-0.2deg); }
+            75% { transform: translate(-2px, -2px) rotate(0.1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        .particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: particleFloat 25s linear infinite;
+        }
+
+        .particle:nth-child(1) { left: 8%; animation-delay: 0s; animation-duration: 28s; }
+        .particle:nth-child(2) { left: 18%; animation-delay: -6s; animation-duration: 32s; }
+        .particle:nth-child(3) { left: 28%; animation-delay: -12s; animation-duration: 22s; }
+        .particle:nth-child(4) { left: 38%; animation-delay: -18s; animation-duration: 38s; }
+        .particle:nth-child(5) { left: 48%; animation-delay: -24s; animation-duration: 28s; }
+        .particle:nth-child(6) { left: 58%; animation-delay: -30s; animation-duration: 35s; }
+        .particle:nth-child(7) { left: 68%; animation-delay: -36s; animation-duration: 25s; }
+        .particle:nth-child(8) { left: 78%; animation-delay: -42s; animation-duration: 30s; }
+        .particle:nth-child(9) { left: 88%; animation-delay: -48s; animation-duration: 33s; }
+
+        @keyframes particleFloat {
+            0% { 
+                transform: translateY(110vh) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            15% {
+                opacity: 1;
+                transform: translateY(85vh) scale(1) rotate(45deg);
+            }
+            85% {
+                opacity: 1;
+                transform: translateY(15vh) scale(1.2) rotate(315deg);
+            }
+            100% { 
+                transform: translateY(-15vh) scale(0) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            width: 95%;
+            padding: 0 32px;
+            animation: containerEntrance 2.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes containerEntrance {
+            0% {
+                opacity: 0;
+                transform: translateY(100px) scale(0.8) rotateX(10deg);
+                filter: blur(30px) brightness(0.3);
+            }
+            30% {
+                opacity: 0.4;
+                transform: translateY(50px) scale(0.9) rotateX(5deg);
+                filter: blur(15px) brightness(0.6);
+            }
+            60% {
+                opacity: 0.8;
+                transform: translateY(20px) scale(0.96) rotateX(2deg);
+                filter: blur(5px) brightness(0.85);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotateX(0deg);
+                filter: blur(0) brightness(1);
+            }
+        }
+
+        .robot-emoji {
+            font-size: clamp(80px, 15vw, 120px);
+            margin-bottom: 32px;
+            display: inline-block;
+            animation: robotFloat 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.1));
+        }
+
+        @keyframes robotFloat {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg);
+            }
+            50% { 
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        .main-title {
+            font-size: clamp(42px, 8vw, 64px);
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            letter-spacing: -0.05em;
+            line-height: 1.02;
+            opacity: 0.98;
+            animation: titleReveal 2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+            font-feature-settings: 'kern' 1, 'liga' 1;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.04);
+        }
+
+        @keyframes titleReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(40px) rotateX(20deg) scale(0.9);
+                filter: blur(8px);
+            }
+            100% {
+                opacity: 0.98;
+                transform: translateY(0) rotateX(0deg) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        .subtitle {
+            font-size: clamp(20px, 3.5vw, 26px);
+            color: var(--text-secondary);
+            margin-bottom: 56px;
+            line-height: 1.7;
+            font-weight: 400;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.94;
+            animation: subtitleReveal 2s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
+            font-feature-settings: 'kern' 1;
+        }
+
+        @keyframes subtitleReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 0.94;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        .invite-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            background: var(--surface-1);
+            backdrop-filter: blur(60px) saturate(1.4);
+            color: var(--text-primary);
+            padding: 24px 48px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            min-width: 200px;
+            position: relative;
+            overflow: hidden;
+            animation: buttonReveal 2s cubic-bezier(0.16, 1, 0.3, 1) 1.2s both;
+            box-shadow: 
+                0 16px 50px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            font-feature-settings: 'kern' 1;
+            cursor: pointer;
+        }
+
+        @keyframes buttonReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.9) rotateX(10deg);
+                filter: blur(4px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotateX(0deg);
+                filter: blur(0);
+            }
+        }
+
+        .invite-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.04) 40%, 
+                rgba(255, 255, 255, 0.08) 50%,
+                rgba(255, 255, 255, 0.04) 60%,
+                transparent 100%);
+            transform: translateX(-120%);
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .invite-button::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--surface-2);
+            opacity: 0;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .invite-button:hover::before {
+            transform: translateX(120%);
+        }
+
+        .invite-button:hover::after {
+            opacity: 1;
+        }
+
+        .invite-button:hover {
+            transform: translateY(-6px) scale(1.03);
+            border-color: rgba(64, 64, 64, 0.9);
+            box-shadow: 
+                0 25px 80px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .invite-button:active {
+            transform: translateY(-3px) scale(1.015);
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .button-icon {
+            width: 24px;
+            height: 24px;
+            stroke-width: 2.5;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .invite-button:hover .button-icon {
+            transform: translateX(8px) scale(1.15) rotateZ(5deg);
+        }
+
+        .troll-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: modalFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalFadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .troll-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 48px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 
+                0 30px 100px rgba(0, 0, 0, 0.7),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            animation: modalSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(100px) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .troll-emoji {
+            font-size: 80px;
+            margin-bottom: 24px;
+            display: inline-block;
+            animation: trollSpin 1s ease-in-out;
+        }
+
+        @keyframes trollSpin {
+            0% { transform: scale(0) rotate(-180deg); }
+            50% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .troll-title {
+            font-size: clamp(28px, 6vw, 36px);
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            letter-spacing: -0.03em;
+        }
+
+        .troll-message {
+            font-size: clamp(16px, 3vw, 20px);
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .close-button {
+            background: var(--surface-2);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .close-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .close-button:hover {
+            transform: translateY(-2px);
+            border-color: rgba(64, 64, 64, 0.9);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-button:hover::before {
+            transform: translateX(100%);
+        }
+
+        .close-button:active {
+            transform: translateY(0);
+        }
+
+        /* Shake animation for troll reveal */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            10% { transform: translateX(-10px) rotate(-2deg); }
+            20% { transform: translateX(10px) rotate(2deg); }
+            30% { transform: translateX(-10px) rotate(-2deg); }
+            40% { transform: translateX(10px) rotate(2deg); }
+            50% { transform: translateX(-10px) rotate(-2deg); }
+            60% { transform: translateX(10px) rotate(2deg); }
+            70% { transform: translateX(-10px) rotate(-2deg); }
+            80% { transform: translateX(10px) rotate(2deg); }
+            90% { transform: translateX(-10px) rotate(-2deg); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* MOBILE STYLES */
+        @media (max-width: 768px) {
+            body {
+                background: var(--mobile-bg);
+                overflow-y: auto;
+            }
+
+            .bg-layer::before {
+                background: 
+                    radial-gradient(800px circle at 50% 30%, 
+                        rgba(25, 25, 25, 0.6) 0%, 
+                        transparent 70%),
+                    linear-gradient(180deg, 
+                        rgba(15, 15, 15, 0.8) 0%, 
+                        rgba(5, 5, 5, 0.9) 50%,
+                        rgba(20, 20, 20, 0.7) 100%);
+                animation: mobileBackgroundFlow 20s ease-in-out infinite;
+            }
+
+            @keyframes mobileBackgroundFlow {
+                0%, 100% { 
+                    opacity: 0.8;
+                    transform: scale(1) rotate(0deg);
+                }
+                50% { 
+                    opacity: 1;
+                    transform: scale(1.05) rotate(0.5deg);
+                }
+            }
+
+            .particle {
+                width: 3px;
+                height: 3px;
+                background: radial-gradient(circle, var(--mobile-glow) 0%, transparent 60%);
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.02);
+            }
+
+            .container {
+                padding: 40px 24px;
+                max-width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                min-height: 100vh;
+            }
+
+            .robot-emoji {
+                font-size: clamp(60px, 12vw, 90px);
+                margin-bottom: 24px;
+            }
+
+            .main-title {
+                font-size: clamp(28px, 6vw, 36px);
+                margin-bottom: 20px;
+                background: linear-gradient(135deg, 
+                    var(--text-primary) 0%, 
+                    #cccccc 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            .subtitle {
+                font-size: clamp(16px, 4vw, 20px);
+                margin-bottom: 48px;
+                color: #aaaaaa;
+                line-height: 1.6;
+                max-width: 320px;
+            }
+
+            .invite-button {
+                padding: 20px 40px;
+                font-size: 16px;
+                border-radius: 16px;
+                background: var(--mobile-surface);
+                border: 1px solid var(--mobile-border);
+                gap: 12px;
+                min-width: 160px;
+            }
+
+            .button-icon {
+                width: 20px;
+                height: 20px;
+            }
+
+            .modal-content {
+                padding: 32px 24px;
+                border-radius: 20px;
+            }
+
+            .troll-emoji {
+                font-size: 60px;
+                margin-bottom: 20px;
+            }
+
+            .troll-title {
+                font-size: clamp(24px, 5vw, 30px);
+                margin-bottom: 12px;
+            }
+
+            .troll-message {
+                font-size: clamp(15px, 3.5vw, 18px);
+                margin-bottom: 28px;
+            }
+
+            .close-button {
+                padding: 14px 28px;
+                font-size: 15px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .invite-button:focus-visible,
+        .close-button:focus-visible {
+            outline: 3px solid rgba(255, 255, 255, 0.7);
+            outline-offset: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-layer"></div>
+    
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <main class="container">
+        <!-- <div class="robot-emoji">🤖</div> -->
+        <h1 class="main-title">Invite Selina to your server!</h1>
+        <p class="subtitle">
+            Join thousands of servers using the most advanced Discord bot. Click below to add it to your server instantly!
+        </p>
+        
+        <button class="invite-button" id="inviteBtn">
+            <span>Invite Bot Now</span>
+            <svg class="button-icon" 
+                 fill="none" 
+                 stroke="currentColor" 
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" 
+                      stroke-linejoin="round" 
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+        </button>
+    </main>
+
+    <div class="troll-modal" id="trollModal">
+        <div class="modal-content">
+            <!-- <div class="troll-emoji">😂</div> -->
+            <h2 class="troll-title">LOL!</h2>
+            <p class="troll-message">
+                Did you really think there was an invite link? 
+                <br><br>
+                <strong>There's no bot to invite!</strong>
+                <br><br>
+                You've been trolled!
+            </p>
+            <button class="close-button" id="closeBtn">Invite</button>
+        </div>
+    </div>
+
+    <script>
+        if (window.innerWidth > 768) {
+            let cursorX = 50;
+            let cursorY = 50;
+            let targetX = 50;
+            let targetY = 50;
+
+            function updateCursor() {
+                cursorX += (targetX - cursorX) * 0.08;
+                cursorY += (targetY - cursorY) * 0.08;
+                
+                document.documentElement.style.setProperty('--cursor-x', cursorX + '%');
+                document.documentElement.style.setProperty('--cursor-y', cursorY + '%');
+                
+                requestAnimationFrame(updateCursor);
+            }
+
+            document.addEventListener('mousemove', (e) => {
+                targetX = (e.clientX / window.innerWidth) * 100;
+                targetY = (e.clientY / window.innerHeight) * 100;
+            });
+
+            updateCursor();
+        }
+
+        const inviteBtn = document.getElementById('inviteBtn');
+        const trollModal = document.getElementById('trollModal');
+        const closeBtn = document.getElementById('closeBtn');
+        const container = document.querySelector('.container');
+
+        inviteBtn.addEventListener('click', () => {
+            container.classList.add('shake');
+            
+            setTimeout(() => {
+                container.classList.remove('shake');
+                trollModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }, 500);
+        });
+
+        closeBtn.addEventListener('click', () => {
+            // trollModal.classList.remove('active');
+            // document.body.style.overflow = '';
+            window.open('../index.html', );
+        });
+
+        trollModal.addEventListener('click', (e) => {
+            if (e.target === trollModal) {
+                trollModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && trollModal.classList.contains('active')) {
+                trollModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            if (e.key === 'Enter' && document.activeElement === inviteBtn) {
+                inviteBtn.click();
+            }
+        });
+
+        if (window.innerWidth <= 768) {
+            const isLowPowerDevice = navigator.hardwareConcurrency <= 2 || 
+                                   navigator.deviceMemory <= 2;
+            
+            if (isLowPowerDevice) {
+                document.querySelectorAll('.particle').forEach(particle => {
+                    particle.style.display = 'none';
+                });
+            }
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            const particles = document.querySelectorAll('.particle');
+            const bgLayer = document.querySelector('.bg-layer');
+            
+            if (document.hidden) {
+                particles.forEach(particle => {
+                    particle.style.animationPlayState = 'paused';
+                });
+                if (bgLayer) bgLayer.style.animationPlayState = 'paused';
+            } else {
+                particles.forEach(particle => {
+                    particle.style.animationPlayState = 'running';
+                });
+                if (bgLayer) bgLayer.style.animationPlayState = 'running';
+            }
+        });
+
+        console.log('%cYou Found the Console!', 'font-size: 24px; font-weight: bold; color: #fff;');
+        console.log('%cBut still no invite link here >:D', 'font-size: 16px; color: #888;');
+    </script>
+</body>
+</html>

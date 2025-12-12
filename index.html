@@ -1987,6 +1987,94 @@
     </footer>
   </div>
 
+  <div class="bg-music-controller" id="bgMusicController">
+    <button class="bg-music-toggle" id="bgMusicToggle" aria-label="Toggle Music Controller">
+      <i class='bx bx-music'></i>
+    </button>
+    
+    <div class="bg-music-panel" id="bgMusicPanel">
+      <div class="bg-music-header">
+        <div class="bg-music-title">
+          <i class='bx bx-music'></i>
+          <span>Background Music</span>
+        </div>
+        <span class="updated-tag">
+            <i class='bx bxs-bolt-circle'></i>
+            NEW
+        </span>
+        <button class="bg-music-close" id="bgMusicClose" aria-label="Close Panel">
+          <i class='bx bx-x'></i>
+        </button>
+      </div>
+      
+      <div class="bg-music-content">
+        <div class="bg-music-track-info">
+          <div class="bg-music-cover">
+            <img src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c267729189e29e133756_Cigarettes%2BAfter%2BSex-p-500.jpg" alt="Track Cover" id="bgMusicCover">
+            <div class="bg-music-equalizer" style="opacity: 0;">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <div class="bg-music-info">
+            <h4 id="bgMusicTrackName">Background Music</h4>
+            <p id="bgMusicArtist">Cigarettes After Sex</p>
+          </div>
+        </div>
+        
+        <div class="bg-music-progress-section">
+          <div class="bg-music-progress-bar" id="bgMusicProgressBar">
+            <div class="bg-music-progress-fill" id="bgMusicProgressFill"></div>
+            <div class="bg-music-progress-handle" id="bgMusicProgressHandle"></div>
+          </div>
+          <div class="bg-music-time">
+            <span id="bgMusicCurrentTime">0:00</span>
+            <span id="bgMusicDuration">0:00</span>
+          </div>
+        </div>
+        
+        <div class="bg-music-controls">
+          <button class="bg-music-control-btn" id="bgMusicPrev" aria-label="Previous Track">
+            <i class='bx bx-skip-previous'></i>
+          </button>
+          <button class="bg-music-control-btn bg-music-play-pause" id="bgMusicPlayPause" aria-label="Play/Pause">
+            <i class='bx bx-play'></i>
+          </button>
+          <button class="bg-music-control-btn" id="bgMusicNext" aria-label="Next Track">
+            <i class='bx bx-skip-next'></i>
+          </button>
+        </div>
+        
+        <div class="bg-music-volume-section">
+          <button class="bg-music-volume-btn" id="bgMusicVolumeBtn" aria-label="Toggle Mute">
+            <i class='bx bx-volume-full'></i>
+          </button>
+          <div class="bg-music-volume-slider-container">
+            <input type="range" class="bg-music-volume-slider" id="bgMusicVolumeSlider" min="0" max="100" value="5">
+          </div>
+          <span class="bg-music-volume-value" id="bgMusicVolumeValue">5%</span>
+        </div>
+        
+        <div class="bg-music-options">
+          <button class="bg-music-option-btn" id="bgMusicLoop" aria-label="Toggle Loop">
+            <i class='bx bx-repeat'></i>
+          </button>
+          <button class="bg-music-option-btn" id="bgMusicShuffle" aria-label="Toggle Shuffle">
+            <i class='bx bx-shuffle'></i>
+          </button>
+          <button class="bg-music-option-btn" id="bgMusicAutoplay" aria-label="Toggle Autoplay" data-active="true">
+            <i class='bx bx-play-circle'></i>
+            <span class="option-label">Autoplay</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts/bg-music-controller.js"></script>
+
   <script src="scripts/utils.js"></script>
   <script src="scripts/navbar.js"></script>
   <script src="scripts/home.js"></script>
@@ -1994,7 +2082,6 @@
   <script src="scripts/projects.js"></script>
   <script src="scripts/blog.js"></script>
   <script src="scripts/discord-activity.js"></script>
-  <script src="scripts/backgroundSong.js"></script>
   <!-- <script src="scripts/particles.js"></script> -->
   <!-- <script src="scripts/discord-modal.js"></script> -->
   <!-- <script src="scripts/music.js"></script> -->
