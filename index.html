@@ -9,7 +9,7 @@
   <meta name="keywords" content="developer, portfolio, web development, mobile apps, gaming, coding projects" />
 
   <meta property="og:title" content="Immortal" />
-  <!-- <meta property="og:image" content="https://cdn.discordapp.com/attachments/1344000535682089011/1438269912824020992/Immortal-site-banner.png?ex=691644bc&is=6914f33c&hm=ee634aaf7c8d67c16057388c9cddb8c5186802385b60019f99fced9779c198fd&" /> -->
+  <meta property="og:image" content="https://cdn.discordapp.com/attachments/1344000535682089011/1438269912824020992/Immortal-site-banner.png?ex=691644bc&is=6914f33c&hm=ee634aaf7c8d67c16057388c9cddb8c5186802385b60019f99fced9779c198fd&" />
   <meta property="og:description" content="Personal portfolio of a creative developer (maybe)" />
   <meta property="og:url" content="404.html" />
   <!-- <meta property="og:image:width" content="1280" /> -->
@@ -19,7 +19,7 @@
   <meta name="twitter:card" content="immortal">
   <meta name="twitter:title" content="Immortal">
   <meta name="twitter:description" content="Personal portfolio of a creative developer (maybe) ">
-  <!-- <meta name="twitter:image" content="https://cdn.discordapp.com/attachments/1344000535682089011/1438269912824020992/Immortal-site-banner.png?ex=691644bc&is=6914f33c&hm=ee634aaf7c8d67c16057388c9cddb8c5186802385b60019f99fced9779c198fd&"> -->
+  <meta name="twitter:image" content="https://cdn.discordapp.com/attachments/1344000535682089011/1438269912824020992/Immortal-site-banner.png?ex=691644bc&is=6914f33c&hm=ee634aaf7c8d67c16057388c9cddb8c5186802385b60019f99fced9779c198fd&">
 
   
 
@@ -242,7 +242,7 @@
       </div>
       
       <div class="loading-tips">
-        <p class="loading-tip">💡 Tip: Use keyboard shortcuts for faster navigation</p>
+        <p class="loading-tip">ðŸ’¡ Tip: Use keyboard shortcuts for faster navigation</p>
       </div>
     </div>
   </div>
@@ -535,11 +535,12 @@
       <div class="counter-icon">
         <i class="bx bx-show-alt"></i>
         <div class="icon-pulse"></div>
+        <div class="icon-pulse" style="animation-delay: 0.5s;"></div>
       </div>
 
       <div class="counter-content">
         <h4>Site Views</h4>
-        <div class="counter-number" id="visitorCount">0</div>
+        <div class="counter-number" id="visitorCount" data-value="0">0</div>
         <div class="counter-stats" style="display: none;">
           <div class="stat-item">
             <i class="bx bx-calendar"></i>
@@ -557,6 +558,14 @@
         <div class="line line-1"></div>
         <div class="line line-2"></div>
         <div class="line line-3"></div>
+        <div class="line line-4"></div>
+      </div>
+
+      <!-- Sparkle Effects -->
+      <div class="counter-sparkles">
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
       </div>
     </div>
 
@@ -629,7 +638,7 @@
 
               <div class="username-status-row">
                 <div class="username" id="username">@user</div>
-                <div class="status-separator" id="statusSeparator" style="display: none;">•</div>
+                <div class="status-separator" id="statusSeparator" style="display: none;">â€¢</div>
                 <div class="custom-status" id="customStatus"></div>
               </div>
 
@@ -807,7 +816,7 @@
       </div>
   </div> -->
 
-  <div id="mainContent" style="display: none">
+  <div id="mainContent">
     <!-- About Section -->
     <section class="about" id="about">
       <div class="about-container">
@@ -1142,6 +1151,7 @@
           <!-- <button class="filter-btn" data-filter="app">Apps</button> -->
           <button class="filter-btn" data-filter="game">Games</button>
           <button class="filter-btn" data-filter="web">Web</button>
+          <button class="filter-btn" data-filter="most-liked"><i class="fas fa-heart"></i> Most Liked</button>
         </div>
 
         <div class="projects-grid">
@@ -1730,7 +1740,7 @@
               </h3>
               <p class="primary-subtitle enhanced-primary-subtitle">
                 The fastest and most efficient way to reach me
-                <span class="subtitle-accent">⚡</span>
+                <span class="subtitle-accent">âš¡</span>
               </p>
             </div>
           </div>
@@ -1982,7 +1992,7 @@
           <li><a href="#contact">Contact</a></li>
         </ul>
 
-        <p class="copyright">© <span>Immortal </span> | All Rights Reserved</p>
+        <p class="copyright">Â© <span>Immortal </span> | All Rights Reserved</p>
       </div>
     </footer>
   </div>
