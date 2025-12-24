@@ -113,12 +113,13 @@ class ProjectsManager {
         badgeType: 'success'
       },
       {
-        id: 'immortal-collection',
-        title: 'Immortal Collection',
+        id: 'immortality-collection',
+        title: 'Immortality Collection',
         description: 'A mysterious project shrouded in secrecy. Something incredible is brewing behind the scenes...',
         category: 'game',
         status: 'coming-soon',
-        image: './assets/immortal_collection.png',
+        // status: 'active',
+        image: './assets/immortality_icon.png',
         features: [
           { icon: 'fas fa-question', text: 'Coming Soon...' }
         ],
@@ -129,7 +130,10 @@ class ProjectsManager {
         },
         badge: 'Coming Soon',
         badgeType: 'coming-soon',
-        releaseDate: new Date('2026-12-01')
+        // badge: 'Avaliable now',
+        // badgeType: 'success',
+        // releaseDate: new Date('2026-12-01')
+        releaseDate: null
       },
       // {
       //   id: 'selina-discord-bot',
@@ -576,7 +580,8 @@ class ProjectsManager {
     this.isMobileDevice = this.detectMobile();
     
     if (this.isMobileDevice) {
-      this.showMobileMessage();
+      // this.showMobileMessage();
+      this.showProjectsGrid();
     } else {
       this.showProjectsGrid();
     }
