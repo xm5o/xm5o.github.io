@@ -80,12 +80,12 @@ html {
   --bg-color: #060606;
   --second-bg-color: #0b0b0c;
   --text-color: #ffffff;
-  --main-color: #655d50;
-  --secondary-color: #3a3732;
-  --accent-color: #3e3b36;
+  --main-color: #a98d6d;
+  --secondary-color: #83684d;
+  --accent-color: #5f3e29;
   --selina-color: #bc7f4c;
   --selina-hover-color: #fad0a3;
-  --main-color-rgb: 101, 93, 80;
+  --main-color-rgb: 169, 141, 109;
   --text-color-rgb: 255, 255, 255;
   --gradient: linear-gradient(135deg, var(--main-color), var(--secondary-color));
   --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -6456,11 +6456,16 @@ section {
   height: 100%;
   border-radius: 20px;
   opacity: 0;
+  z-index: -1;
   transition: opacity 0.4s ease;
 }
 
 .social-btn:hover .social-bg {
   opacity: 1;
+}
+
+.social-buttons i:hover {
+  color: var(--text-color);
 }
 
 .social-btn.youtube .social-bg {
