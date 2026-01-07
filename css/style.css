@@ -103,6 +103,7 @@ html {
   --tiktok-color: #000000;
   --twitter-color: #1da1f2;
   --twitch-color: #8956FB;
+  --spotify-color: #1DB954;
 }
 
 @keyframes slideUpFade {
@@ -840,6 +841,12 @@ section {
 .social-btn.discord:hover {
   border-color: var(--discord-color);
   color: var(--discord-color);
+  box-shadow: 0 15px 35px rgba(88, 101, 242, 0.3);
+}
+
+.social-btn.spotify:hover {
+  border-color: var(--spotify-color);
+  color: var(--spotify-color);
   box-shadow: 0 15px 35px rgba(88, 101, 242, 0.3);
 }
 
