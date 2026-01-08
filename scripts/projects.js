@@ -109,8 +109,9 @@ class ProjectsManager {
           demo: null,
           github: null
         },
-        badge: 'NEW',
-        badgeType: 'success'
+        badge: null,
+        // badgeType: 'success'
+        badgeType: null
       },
       {
         id: 'immortality-collection',
@@ -134,6 +135,26 @@ class ProjectsManager {
         // badgeType: 'success',
         // releaseDate: new Date('2026-12-01')
         releaseDate: null
+      },
+      {
+        id: 'discord-quest',
+        title: 'Discord Quest Finisher',
+        description: 'Finish your quest without doing or even download any game!',
+        category: 'script',
+        status: 'coming-soon',
+        // status: 'active',
+        image: './assets/quest.png',
+        features: ['Open-source', 'JavaScript', 'Node.js'],
+        links: {
+          website: null,
+          demo: null,
+          github: "https://github.com/xm5o/discord-quest-finisher"
+        },
+        badgeType: 'succus',
+        badge: 'NEW',
+        // badgeType: 'success',
+        releaseDate: new Date('2026-01-09')
+        // releaseDate: null
       },
       // {
       //   id: 'selina-discord-bot',

@@ -847,7 +847,13 @@ section {
 .social-btn.spotify:hover {
   border-color: var(--spotify-color);
   color: var(--spotify-color);
-  box-shadow: 0 15px 35px rgba(88, 101, 242, 0.3);
+  box-shadow: 0 15px 35px var(--spotify-color);
+}
+
+.social-btn.github:hover {
+  border-color: #ffffff;
+  color: #ffffff;
+  box-shadow: 0 15px 35px rgba(255, 255, 255, 0.3);
 }
 
 .social-btn.tiktok:hover {
@@ -6475,7 +6481,7 @@ section {
   color: var(--text-color);
 }
 
-.social-btn.youtube .social-bg {
+/* .social-btn.youtube .social-bg {
   background: linear-gradient(135deg, var(--youtube-color), #ff4444);
 }
 
@@ -6497,7 +6503,7 @@ section {
 
 .social-btn.twitch .social-bg {
   background: linear-gradient(135deg, var(--twitch-color), #8956FB);
-}
+} */
 
 /* Enhanced CTA Buttons */
 .enhanced-cta {
