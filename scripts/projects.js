@@ -2,7 +2,7 @@ class ProjectsManager {
   constructor() {
     this.projects = [];
     this.currentFilter = 'all';
-    this.isMobileDevice = false;
+    this.isMobileDevice = true;
     this.countdownIntervals = new Map();
     this.db = null;
     this.isFirebaseInitialized = false;
@@ -141,8 +141,8 @@ class ProjectsManager {
         title: 'Discord Quest Finisher',
         description: 'Finish your quest without doing or even download any game!',
         category: 'script',
-        status: 'coming-soon',
-        // status: 'active',
+        // status: 'coming-soon',
+        status: 'active',
         image: './assets/quest.png',
         features: ['Open-source', 'JavaScript', 'Node.js'],
         links: {
@@ -150,11 +150,10 @@ class ProjectsManager {
           demo: null,
           github: "https://github.com/xm5o/discord-quest-finisher"
         },
-        badgeType: 'succus',
         badge: 'NEW',
-        // badgeType: 'success',
-        releaseDate: new Date('2026-01-09')
-        // releaseDate: null
+        badgeType: 'success',
+        // releaseDate: new Date('2026-01-09')
+        releaseDate: null
       },
       // {
       //   id: 'selina-discord-bot',
