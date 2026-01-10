@@ -6,13 +6,13 @@ class ProjectsManager {
     this.countdownIntervals = new Map();
     this.db = null;
     this.isFirebaseInitialized = false;
-    
+
     // Anti-spam tracking
     this.likeCooldown = new Map();
     this.cooldownTime = 5000; // 5 seconds cooldown between likes (per project)
     this.maxLikesPerMinute = 10; // Maximum likes per minute
     this.likeHistory = [];
-    
+
     this.init();
   }
 
@@ -22,7 +22,7 @@ class ProjectsManager {
     await this.loadProjectLikes();
     this.setupEventListeners();
     this.handleMobileView();
-    
+
     setInterval(() => this.cleanupLikeHistory(), 60000);
   }
 
@@ -46,7 +46,7 @@ class ProjectsManager {
       if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
       }
-      
+
       this.db = firebase.firestore();
       this.isFirebaseInitialized = true;
       // console.log('✅ Firebase initialized successfully');
@@ -58,32 +58,32 @@ class ProjectsManager {
 
   canUserLike(projectId) {
     const now = Date.now();
-    
+
     const lastLikeTime = this.likeCooldown.get(projectId);
     if (lastLikeTime && (now - lastLikeTime < this.cooldownTime)) {
       const timeLeft = Math.ceil((this.cooldownTime - (now - lastLikeTime)) / 1000);
       console.warn(`⏰ Please wait ${timeLeft}s before liking this project again`);
       return { allowed: false, reason: `Please wait ${timeLeft} seconds before liking again` };
     }
-    
+
     const oneMinuteAgo = now - 60000;
     const recentLikes = this.likeHistory.filter(time => time > oneMinuteAgo);
-    
+
     if (recentLikes.length >= this.maxLikesPerMinute) {
       console.warn(`🚫 Rate limit exceeded: ${recentLikes.length} likes in the last minute`);
       return { allowed: false, reason: 'Rate limit exceeded. Please wait a minute.' };
     }
-    
+
     return { allowed: true };
   }
 
   trackLike(projectId) {
     const now = Date.now();
-    
+
     this.likeCooldown.set(projectId, now);
-    
+
     this.likeHistory.push(now);
-    
+
     setTimeout(() => {
       this.likeCooldown.delete(projectId);
     }, this.cooldownTime);
@@ -115,7 +115,7 @@ class ProjectsManager {
       },
       {
         id: 'immortality-collection',
-        title: 'Immortality Collection',
+        title: "FNF': Immortality Collection",
         description: 'A mysterious project shrouded in secrecy. Something incredible is brewing behind the scenes...',
         category: 'game',
         status: 'coming-soon',
@@ -146,9 +146,28 @@ class ProjectsManager {
         image: './assets/quest.png',
         features: ['Open-source', 'JavaScript', 'Node.js'],
         links: {
-          website: null,
-          demo: null,
+          // website: 'https://github.com/xm5o/discord-quest-finisher',
+          // demo: null,
           github: "https://github.com/xm5o/discord-quest-finisher"
+        },
+        badge: 'NEW',
+        badgeType: 'success',
+        // releaseDate: new Date('2026-01-09')
+        releaseDate: null
+      },
+      {
+        id: 'fnf-chart-creator',
+        title: "Friday Night Funkin': Chart Creator",
+        description: 'Create an empty chart file without notes and events. Easy to use!',
+        category: 'script',
+        // status: 'coming-soon',
+        status: 'active',
+        image: './assets/fnf_chart_creator.png',
+        features: ['Open-source', 'Execute', 'FNF', 'Psych Engine'],
+        links: {
+          // website: 'https://github.com/xm5o/discord-quest-finisher',
+          // demo: null,
+          github: "https://github.com/xm5o/FNF-Chart-Creator"
         },
         badge: 'NEW',
         badgeType: 'success',
@@ -195,15 +214,15 @@ class ProjectsManager {
     if (this.isFirebaseInitialized && this.db) {
       try {
         // console.log('🔄 Loading like counts from Firebase...');
-        
+
         const projectsRef = this.db.collection('projects');
         const snapshot = await projectsRef.get();
-        
+
         if (!snapshot.empty) {
           snapshot.forEach(doc => {
             const data = doc.data();
             const project = this.getProject(doc.id);
-            
+
             if (project && data.likes !== undefined) {
               project.likes = data.likes;
               // console.log(`📊 ${project.title}: ${project.likes} likes`);
@@ -213,7 +232,7 @@ class ProjectsManager {
           // console.log('📝 Initializing projects in Firebase...');
           await this.initializeFirebaseProjects();
         }
-        
+
         // console.log('✅ Like counts loaded from Firebase');
       } catch (error) {
         console.warn('⚠️ Could not load likes from Firebase:', error);
@@ -223,9 +242,9 @@ class ProjectsManager {
 
   async initializeFirebaseProjects() {
     if (!this.isFirebaseInitialized || !this.db) return;
-    
+
     const batch = this.db.batch();
-    
+
     this.projects.forEach(project => {
       const projectRef = this.db.collection('projects').doc(project.id);
       batch.set(projectRef, {
@@ -236,7 +255,7 @@ class ProjectsManager {
         lastUpdated: new Date().toISOString()
       }, { merge: true });
     });
-    
+
     try {
       await batch.commit();
       // console.log('✅ All projects initialized in Firebase');
@@ -250,7 +269,7 @@ class ProjectsManager {
     try {
       const storedLikes = localStorage.getItem('project_likes');
       userLikes = storedLikes ? JSON.parse(storedLikes) : [];
-      
+
       if (!Array.isArray(userLikes)) {
         console.warn('⚠️ Invalid likes format, resetting');
         userLikes = [];
@@ -260,7 +279,7 @@ class ProjectsManager {
       console.warn('Could not get user likes:', error);
       userLikes = [];
     }
-    
+
     return userLikes;
   }
 
@@ -315,14 +334,14 @@ class ProjectsManager {
     try {
       await this.db.runTransaction(async (transaction) => {
         const doc = await transaction.get(projectRef);
-        
+
         let currentLikes = 0;
         if (doc.exists) {
           currentLikes = doc.data().likes || 0;
         }
-        
+
         const newLikes = Math.max(0, currentLikes + change);
-        
+
         transaction.set(projectRef, {
           likes: newLikes,
           lastLike: new Date().toISOString(),
@@ -330,20 +349,20 @@ class ProjectsManager {
           title: project.title,
           category: project.category
         }, { merge: true });
-        
+
         return newLikes;
       }).then(async (newLikes) => {
         project.likes = newLikes;
-        
+
         this.updateLikeCountUI(projectId, newLikes);
-        
+
         // console.log(`✅ Firebase updated: ${projectId} = ${newLikes} likes`);
-        
+
         await this.logLikeActivity(projectId, change > 0);
       });
     } catch (error) {
       console.error('❌ Error updating Firebase:', error);
-      
+
       project.likes = Math.max(0, project.likes + change);
       this.updateLikeCountUI(projectId, project.likes);
     }
@@ -351,13 +370,13 @@ class ProjectsManager {
 
   async logLikeActivity(projectId, liked) {
     if (!this.isFirebaseInitialized || !this.db) return;
-    
+
     try {
       const activityId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       const activityRef = this.db.collection('like_activity').doc(activityId);
-      
+
       const fingerprint = await this.getUserFingerprint();
-      
+
       await activityRef.set({
         projectId: projectId,
         action: liked ? 'like' : 'unlike',
@@ -366,7 +385,7 @@ class ProjectsManager {
         userAgent: navigator.userAgent,
         ipHash: await this.hashString(window.location.hostname) // Simple IP approximation
       }, { merge: true });
-      
+
     } catch (error) {
       console.warn('Could not log like activity:', error);
     }
@@ -383,7 +402,7 @@ class ProjectsManager {
         screen.colorDepth,
         localStorage.getItem('user_session_id') || 'anonymous'
       ].join('|');
-      
+
       return await this.hashString(factors);
     } catch (error) {
       return 'anonymous_' + Math.random().toString(36).substr(2, 9);
@@ -413,7 +432,7 @@ class ProjectsManager {
       `;
       document.body.appendChild(errorContainer);
     }
-    
+
     const errorMsg = document.createElement('div');
     errorMsg.className = 'like-error-message';
     errorMsg.style.cssText = `
@@ -427,9 +446,9 @@ class ProjectsManager {
       max-width: 300px;
     `;
     errorMsg.textContent = message;
-    
+
     errorContainer.appendChild(errorMsg);
-    
+
     setTimeout(() => {
       errorMsg.style.animation = 'slideOut 0.3s ease';
       setTimeout(() => {
@@ -455,7 +474,7 @@ class ProjectsManager {
         likeBtn.setAttribute('aria-label', 'Like this project');
         if (likeIcon) likeIcon.className = 'far fa-heart';
       }
-      
+
       likeBtn.disabled = true;
       setTimeout(() => {
         likeBtn.disabled = false;
@@ -589,7 +608,7 @@ class ProjectsManager {
         this.updateActiveFilter(e.target);
       });
     });
-    
+
     this.addLikeStyles();
   }
 
@@ -598,7 +617,7 @@ class ProjectsManager {
     if (!projectsSection) return;
 
     this.isMobileDevice = this.detectMobile();
-    
+
     if (this.isMobileDevice) {
       // this.showMobileMessage();
       this.showProjectsGrid();
@@ -832,36 +851,41 @@ class ProjectsManager {
   }
 
   generateActionButton(project) {
-    switch (project.status) {
-      case 'active':
-        const primaryLink = project.links.website || project.links.demo;
-        const buttonText = project.links.website ? 'Visit Website' : 'Play Now';
-        const icon = project.links.website ? 'fas fa-external-link-alt' : 'fas fa-gamepad';
-
-        return `
-                    <a href="${primaryLink}" class="add-button primary" target="_blank">
-                        <i class="${icon}"></i>
-                        <span>${buttonText}</span>
-                    </a>
-                `;
-
-      case 'demo':
-        return `
-                    <a href="${project.links.demo}" class="add-button primary" target="_blank">
-                        <i class="fas fa-gamepad"></i>
-                        <span>Play Demo</span>
-                    </a>
-                `;
-
-      case 'coming-soon':
-      default:
-        return `
-                    <a class="add-button disabled">
-                        <i class="fas fa-hourglass-half"></i>
-                        <span>Coming Soon</span>
-                    </a>
-                `;
+    if (project.status !== 'active') {
+      return `
+      <a class="add-button disabled">
+        <i class="fas fa-hourglass-half"></i>
+        <span>Coming Soon</span>
+      </a>
+    `;
     }
+
+    let primaryLink = null;
+    let buttonText = '';
+    let icon = '';
+
+    if (project.links.website) {
+      primaryLink = project.links.website;
+      buttonText = 'Visit Website';
+      icon = 'fas fa-external-link-alt';
+    } else if (project.links.github) {
+      primaryLink = project.links.github;
+      buttonText = 'View Source';
+      icon = 'fab fa-github';
+    } else if (project.links.demo) {
+      primaryLink = project.links.demo;
+      buttonText = 'Play Now';
+      icon = 'fas fa-gamepad';
+    }
+
+    if (!primaryLink) return '';
+
+    return `
+    <a href="${primaryLink}" class="add-button primary" target="_blank">
+      <i class="${icon}"></i>
+      <span>${buttonText}</span>
+    </a>
+  `;
   }
 
   generateBadge(project) {
@@ -1033,24 +1057,24 @@ class ProjectsManager {
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
   // console.log('🚀 Initializing Projects Manager with Anti-Spam...');
-  
+
   if (typeof firebase === 'undefined') {
     console.warn('⚠️ Firebase SDK not loaded. Loading dynamically...');
-    
+
     try {
       await loadScript('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js');
       // console.log('✅ Firebase App SDK loaded');
-      
+
       await loadScript('https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js');
       // console.log('✅ Firebase Firestore SDK loaded');
-      
+
     } catch (error) {
       console.error('❌ Failed to load Firebase SDK:', error);
     }
   }
-  
+
   window.projectsManager = new ProjectsManager();
-  
+
   if (!document.querySelector('link[href*="fontawesome"]')) {
     const fontAwesome = document.createElement('link');
     fontAwesome.rel = 'stylesheet';
@@ -1076,13 +1100,13 @@ window.projectsManagerAdmin = {
       // console.log('❌ Firebase not initialized');
       return;
     }
-    
+
     try {
       const snapshot = await window.projectsManager.db.collection('like_activity')
         .orderBy('timestamp', 'desc')
         .limit(limit)
         .get();
-      
+
       // console.log('📊 Recent Like Activity:');
       snapshot.forEach(doc => {
         const data = doc.data();
@@ -1092,37 +1116,37 @@ window.projectsManagerAdmin = {
       console.error('❌ Error fetching like activity:', error);
     }
   },
-  
+
   resetSpamProtection: () => {
     window.projectsManager.likeCooldown.clear();
     window.projectsManager.likeHistory = [];
     // console.log('✅ Spam protection reset');
   },
-  
+
   setSpamSettings: (cooldownTime = 5000, maxLikesPerMinute = 10) => {
     window.projectsManager.cooldownTime = cooldownTime;
     window.projectsManager.maxLikesPerMinute = maxLikesPerMinute;
     // console.log(`✅ Spam settings updated: ${cooldownTime}ms cooldown, ${maxLikesPerMinute} likes/minute`);
   },
-  
+
   updateProjectLikes: async (projectId, newCount) => {
     if (!window.projectsManager.isFirebaseInitialized) {
       // console.log('❌ Firebase not initialized');
       return;
     }
-    
+
     try {
       await window.projectsManager.db.collection('projects').doc(projectId).set({
         likes: newCount,
         lastUpdated: new Date().toISOString()
       }, { merge: true });
-      
+
       const project = window.projectsManager.getProject(projectId);
       if (project) {
         project.likes = newCount;
         window.projectsManager.updateLikeCountUI(projectId, newCount);
       }
-      
+
       // console.log(`✅ Project ${projectId} likes updated to ${newCount}`);
     } catch (error) {
       console.error('❌ Error updating project likes:', error);
