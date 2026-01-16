@@ -80,12 +80,12 @@ html {
   --bg-color: #060606;
   --second-bg-color: #0b0b0c;
   --text-color: #ffffff;
-  --main-color: #a98d6d;
-  --secondary-color: #83684d;
-  --accent-color: #5f3e29;
+  --main-color: #bbbbae;
+  --secondary-color: #b7b8ab;
+  --accent-color: #434a53;
   --selina-color: #bc7f4c;
   --selina-hover-color: #fad0a3;
-  --main-color-rgb: 169, 141, 109;
+  --main-color-rgb: 187, 187, 174;
   --text-color-rgb: 255, 255, 255;
   --gradient: linear-gradient(135deg, var(--main-color), var(--secondary-color));
   --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
