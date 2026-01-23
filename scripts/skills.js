@@ -1,38 +1,9 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const skillBars = document.querySelectorAll('.skill-progress');
-  const animateSkills = () => {
-    skillBars.forEach(bar => {
-      const value = bar.getAttribute('value');
-      bar.style.width = value + '%';
-    });
-  };
-
-  const tabButtons = document.querySelectorAll('.tab-btn');
-  const tabContents = document.querySelectorAll('.tab-content');
-
-  tabButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      tabButtons.forEach(btn => btn.classList.remove('active'));
-      tabContents.forEach(content => content.classList.remove('active'));
-
-      button.classList.add('active');
-
-      const tabId = button.getAttribute('data-tab');
-      document.getElementById(tabId + '-tab').classList.add('active');
-    });
+document.querySelectorAll('.skill-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / card.clientWidth) * 100;
+    const y = ((e.clientY - rect.top) / card.clientHeight) * 100;
+    card.style.setProperty('--x', `${x}%`);
+    card.style.setProperty('--y', `${y}%`);
   });
-
-  const skillsSection = document.querySelector('.skills-section');
-  if (skillsSection) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateSkills();
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    observer.observe(skillsSection);
-  }
 });
