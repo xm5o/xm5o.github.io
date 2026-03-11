@@ -133,8 +133,8 @@ class ProjectsManager {
         badgeType: 'coming-soon',
         // badge: 'Avaliable now',
         // badgeType: 'success',
-        releaseDate: new Date('2026-04-23')
-        // releaseDate: null
+        // releaseDate: new Date('2026-04-23')
+        releaseDate: null
       },
       {
         id: 'discord-quest',
