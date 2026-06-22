@@ -9,48 +9,48 @@ class BackgroundMusicController {
         cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/656f879c4c22fe49879310b8_Bubblegum.jpg',
         src: 'assets/cas/Bubblegum.mp3'
       },
-      {
-        name: 'Hentai',
-        artist: 'Cigarettes After Sex',
-        cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/657046caf7ba342d201c8b82_Cry.jpg',
-        src: 'assets/cas/Hentai.mp3'
-      },
-      {
-        name: "X's",
-        artist: 'Cigarettes After Sex',
-        cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/669003328c84d4ebb0e0198a_Xs_3000x%20(2)%20(1)-p-500.jpg',
-        src: 'assets/cas/x.mp3'
-      },
-      {
-        name: "Cry",
-        artist: 'Cigarettes After Sex',
-        cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/657046caf7ba342d201c8b82_Cry.jpg',
-        src: 'assets/cas/Cry.mp3'
-      },
-      {
-        name: "Dark Vacay",
-        artist: 'Cigarettes After Sex',
-        cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/669003328c84d4ebb0e0198a_Xs_3000x%20(2)%20(1)-p-500.jpg',
-        src: 'assets/cas/DarkVacay.mp3'
-      },
-      {
-        name: "Heavenly",
-        artist: 'Cigarettes After Sex',
-        cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/657046caf7ba342d201c8b82_Cry.jpg',
-        src: 'assets/cas/Heavenly.mp3'
-      },
-      {
-        name: "Apocalypse",
-        artist: 'Cigarettes After Sex',
-        cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c267729189e29e133756_Cigarettes%2BAfter%2BSex-p-500.jpg',
-        src: 'assets/cas/Apocalypse.mp3'
-      },
-      {
-        name: "The Crystal Ship",
-        artist: 'Cigarettes After Sex',
-        cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/68f6b976b2860d9b54f3dcd8_CAS%20Anna%20Karenina-p-500.jpg',
-        src: 'assets/cas/TheCrystalShip.mp3'
-      },
+      // {
+      //   name: 'Hentai',
+      //   artist: 'Cigarettes After Sex',
+      //   cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/657046caf7ba342d201c8b82_Cry.jpg',
+      //   src: 'assets/cas/Hentai.mp3'
+      // },
+      // {
+      //   name: "X's",
+      //   artist: 'Cigarettes After Sex',
+      //   cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/669003328c84d4ebb0e0198a_Xs_3000x%20(2)%20(1)-p-500.jpg',
+      //   src: 'assets/cas/x.mp3'
+      // },
+      // {
+      //   name: "Cry",
+      //   artist: 'Cigarettes After Sex',
+      //   cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/657046caf7ba342d201c8b82_Cry.jpg',
+      //   src: 'assets/cas/Cry.mp3'
+      // },
+      // {
+      //   name: "Dark Vacay",
+      //   artist: 'Cigarettes After Sex',
+      //   cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/669003328c84d4ebb0e0198a_Xs_3000x%20(2)%20(1)-p-500.jpg',
+      //   src: 'assets/cas/DarkVacay.mp3'
+      // },
+      // {
+      //   name: "Heavenly",
+      //   artist: 'Cigarettes After Sex',
+      //   cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/657046caf7ba342d201c8b82_Cry.jpg',
+      //   src: 'assets/cas/Heavenly.mp3'
+      // },
+      // {
+      //   name: "Apocalypse",
+      //   artist: 'Cigarettes After Sex',
+      //   cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c267729189e29e133756_Cigarettes%2BAfter%2BSex-p-500.jpg',
+      //   src: 'assets/cas/Apocalypse.mp3'
+      // },
+      // {
+      //   name: "The Crystal Ship",
+      //   artist: 'Cigarettes After Sex',
+      //   cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/68f6b976b2860d9b54f3dcd8_CAS%20Anna%20Karenina-p-500.jpg',
+      //   src: 'assets/cas/TheCrystalShip.mp3'
+      // },
     ];
     
     this.currentTrackIndex = 0;

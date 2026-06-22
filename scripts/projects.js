@@ -97,29 +97,12 @@ class ProjectsManager {
   loadProjects() {
     this.projects = [
       {
-        id: 'fnf-commission',
-        title: 'Friday Night Funkin\' Commission',
-        description: 'If you need a charter, modcharter, or even a coder... Check my commission page for more details.',
-        category: 'web',
-        status: 'active',
-        image: './assets/fnf_commission.png',
-        features: ['Chart', 'Modchart', 'Code', 'Free', 'Paid'],
-        links: {
-          website: 'commission/index.html',
-          demo: null,
-          github: null
-        },
-        badge: null,
-        // badgeType: 'success'
-        badgeType: null
-      },
-      {
         id: 'immortality-collection',
         title: "FNF': Immortality Collection",
-        description: 'A mysterious project shrouded in secrecy. Something incredible is brewing behind the scenes...',
+        description: 'Sooner than you think, you will be able to play this game soon.',
         category: 'game',
         status: 'coming-soon',
-        // status: 'active',
+        status: 'active',
         image: './assets/immortality_icon.png',
         features: [
           { icon: 'fas fa-question', text: 'Coming Soon...' }
@@ -133,9 +116,26 @@ class ProjectsManager {
         badgeType: 'coming-soon',
         // badge: 'Avaliable now',
         // badgeType: 'success',
-        // releaseDate: new Date('2026-04-23')
+        // releaseDate: new Date('2026-07-27')
         releaseDate: null
       },
+      // {
+      //   id: 'fnf-commission',
+      //   title: 'Friday Night Funkin\' Commission',
+      //   description: 'If you need a charter, modcharter, or even a coder... Check my commission page for more details.',
+      //   category: 'web',
+      //   status: 'active',
+      //   image: './assets/fnf_commission.png',
+      //   features: ['Chart', 'Modchart', 'Code', 'Free', 'Paid'],
+      //   links: {
+      //     website: 'commission/index.html',
+      //     demo: null,
+      //     github: null
+      //   },
+      //   badge: null,
+      //   // badgeType: 'success'
+      //   badgeType: null
+      // },
       {
         id: 'discord-quest',
         title: 'Discord Quest Finisher',

@@ -1,0 +1,781 @@
+/* ============================================================
+   HOME + NAVBAR REDESIGN — Drop this file in your css/ folder
+   and add: <link rel="stylesheet" href="css/home-redesign.css">
+   AFTER your existing style.css link.
+   ============================================================ */
+
+/* ─── Google Fonts ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+
+/* ─── Root upgrades ─────────────────────────────────────────── */
+:root {
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --nav-glow: rgba(187, 187, 174, 0.12);
+  --aurora-1: rgba(187, 187, 174, 0.08);
+  --aurora-2: rgba(100, 110, 130, 0.07);
+  --aurora-3: rgba(60, 70, 90, 0.06);
+}
+
+/* ─── NAVBAR ─────────────────────────────────────────────────── */
+
+.header {
+  top: 1.8rem;
+  padding: 1.4rem 3.2rem;
+  border-radius: 2rem;
+  background: rgba(8, 8, 8, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 20px 60px rgba(0,0,0,0.5),
+    0 0 40px var(--nav-glow);
+  backdrop-filter: blur(28px) saturate(160%);
+  animation: navbarDrop 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: box-shadow 0.4s ease, background 0.4s ease;
+}
+
+.header:hover {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.07) inset,
+    0 24px 70px rgba(0,0,0,0.6),
+    0 0 60px var(--nav-glow);
+}
+
+@keyframes navbarDrop {
+  from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #ffffff 0%, var(--main-color) 50%, #888 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: logoShimmer 6s ease infinite;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.logo:hover {
+  transform: scale(1.06);
+}
+
+@keyframes logoShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+
+.navbar {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+/* Remove old plain link styles */
+.navbar a {
+  font-family: var(--font-body);
+  font-size: 1.45rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.65);
+  padding: 0.7rem 1.4rem;
+  border-radius: 1rem;
+  border: 1px solid transparent;
+  position: relative;
+  letter-spacing: 0.01em;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.navbar a i {
+  font-size: 1.6rem;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.navbar a:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.1);
+  transform: translateY(-2px);
+}
+
+.navbar a:hover i {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.navbar a.active,
+.navbar a:focus {
+  color: var(--main-color);
+  background: rgba(187, 187, 174, 0.12);
+  border-color: rgba(187, 187, 174, 0.25);
+}
+
+/* Glowing underline dot on active */
+.navbar a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--main-color);
+  box-shadow: 0 0 6px var(--main-color);
+  animation: dotPulse 2s ease infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  50%       { opacity: 0.5; transform: translateX(-50%) scale(0.6); }
+}
+
+/* Staggered nav link entrance */
+.navbar a:nth-child(2) { animation: navLinkFade 0.6s 0.9s both; }
+.navbar a:nth-child(3) { animation: navLinkFade 0.6s 1.0s both; }
+.navbar a:nth-child(4) { animation: navLinkFade 0.6s 1.1s both; }
+.navbar a:nth-child(5) { animation: navLinkFade 0.6s 1.2s both; }
+.navbar a:nth-child(6) { animation: navLinkFade 0.6s 1.3s both; }
+.navbar a:nth-child(7) { animation: navLinkFade 0.6s 1.4s both; }
+
+@keyframes navLinkFade {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── AURORA BACKGROUND ──────────────────────────────────────── */
+
+.home {
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-body);
+}
+
+/* Layered aurora blobs */
+.home::before,
+.home::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(90px);
+}
+
+.home::before {
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(187,187,174,0.12) 0%, transparent 70%);
+  top: -10%;
+  left: -15%;
+  animation: auroraMove1 18s ease-in-out infinite alternate;
+}
+
+.home::after {
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(80,90,120,0.1) 0%, transparent 70%);
+  bottom: -10%;
+  right: -10%;
+  animation: auroraMove2 22s ease-in-out infinite alternate;
+}
+
+@keyframes auroraMove1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(8%, 12%) scale(1.15); }
+}
+
+@keyframes auroraMove2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-8%, -6%) scale(1.2); }
+}
+
+/* Third aurora orb injected via JS-free trick using a pseudo inside a new element */
+/* Add <div class="aurora-orb-3"></div> inside .home if desired; fallback is fine */
+
+/* ─── GRID NOISE OVERLAY ─────────────────────────────────────── */
+.grid-background {
+  background-image:
+    linear-gradient(rgba(187,187,174,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(187,187,174,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  mask-image: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.6) 0%, transparent 80%);
+}
+
+/* Remove old grid line divs if present */
+.grid-line { display: none; }
+
+/* ─── HOME CONTENT LAYOUT ───────────────────────────────────── */
+
+.home-content {
+  z-index: 3;
+  position: relative;
+}
+
+/* ─── HEADING ────────────────────────────────────────────────── */
+
+.gradient-heading {
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 10.5vw, 8.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  margin-bottom: 2.4rem;
+  background: linear-gradient(
+    160deg,
+    #ffffff 0%,
+    rgba(220,220,210,0.9) 30%,
+    var(--main-color) 60%,
+    rgba(140,140,130,0.8) 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: headingReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both,
+             gradientShift 12s ease infinite 1.4s;
+}
+
+@keyframes headingReveal {
+  from {
+    opacity: 0;
+    transform: translateY(40px) skewY(2deg);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) skewY(0);
+    filter: blur(0);
+  }
+}
+
+.immortal-text {
+  display: inline-block;
+  position: relative;
+  animation: immortalEntrance 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+  will-change: transform;
+}
+
+@keyframes immortalEntrance {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+    letter-spacing: 0.2em;
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+    letter-spacing: inherit;
+  }
+}
+
+/* Shine sweep on "Immortal" */
+.immortal-text::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255,255,255,0.35) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shineSweep 5s ease-in-out 2s infinite;
+  pointer-events: none;
+}
+
+@keyframes shineSweep {
+  0%   { background-position: -100% 0; opacity: 0; }
+  10%  { opacity: 1; }
+  50%  { background-position: 200% 0; }
+  55%, 100% { opacity: 0; background-position: 200% 0; }
+}
+
+.heading-decoration {
+  bottom: -8px;
+  left: 0;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--main-color), rgba(187,187,174,0.3), transparent);
+  animation: decorationGrow 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
+}
+
+@keyframes decorationGrow {
+  from { width: 0; opacity: 0; }
+  to   { width: 140px; opacity: 1; }
+}
+
+/* ─── SUBTITLE ──────────────────────────────────────────────── */
+
+.subtitle-container {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+  animation: fadeInUp 0.8s ease 0.7s both;
+}
+
+.subtitle-line {
+  height: 1px;
+  width: 3rem;
+  background: linear-gradient(90deg, var(--main-color), transparent);
+  flex-shrink: 0;
+}
+
+.subtitle-text {
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(187,187,174,0.7);
+}
+
+/* ─── TYPEWRITER ROLE ───────────────────────────────────────── */
+
+.typewriter {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 600;
+  margin: 2.5rem 0 2rem;
+  color: rgba(255,255,255,0.85);
+  animation: fadeInUp 0.8s ease 0.9s both;
+  letter-spacing: -0.02em;
+}
+
+.role-switch {
+  background: linear-gradient(90deg, #fff 0%, var(--main-color) 60%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    typewriterPulse 3s ease-in-out infinite,
+    gradientFlow 4s ease infinite;
+  font-style: italic;
+}
+
+/* ─── TAGLINE ────────────────────────────────────────────────── */
+
+.tagline {
+  font-family: var(--font-body);
+  font-size: clamp(1.45rem, 2vw, 1.75rem);
+  color: rgba(255,255,255,0.55);
+  line-height: 1.85;
+  max-width: 480px;
+  animation: fadeInUp 0.8s ease 1.1s both;
+  font-weight: 300;
+}
+
+.tagline-highlight {
+  color: rgba(187,187,174,0.9);
+  font-weight: 500;
+}
+
+.tagline-highlight::after {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(187,187,174,0.6), transparent);
+  opacity: 0.8;
+}
+
+/* ─── SOCIAL BUTTONS ─────────────────────────────────────────── */
+
+.social-links {
+  animation: fadeInUp 0.8s ease 1.3s both;
+}
+
+.social-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.social-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  font-size: 2.1rem;
+  color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.35s ease;
+}
+
+.social-btn:hover {
+  transform: translateY(-7px) scale(1.12);
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.18);
+}
+
+/* ─── CTA BUTTONS ───────────────────────────────────────────── */
+
+.cta-group {
+  display: flex;
+  gap: 1.6rem;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.8s ease 1.5s both;
+}
+
+.enhanced-btn {
+  position: relative;
+  padding: 1.5rem 2.8rem;
+  border-radius: 1.4rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.55rem;
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.35s ease,
+    background 0.25s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.primary-btn {
+  background: rgba(187,187,174,0.1);
+  color: var(--main-color) !important;
+  border: 1px solid rgba(187,187,174,0.25);
+}
+
+.primary-btn:hover {
+  transform: translateY(-5px) scale(1.04);
+  background: rgba(187,187,174,0.16);
+  box-shadow: 0 20px 50px rgba(187,187,174,0.15), 0 0 0 1px rgba(187,187,174,0.3);
+}
+
+.secondary-btn {
+  background: rgba(67,74,83,0.12);
+  color: var(--accent-color) !important;
+  border: 1px solid rgba(67,74,83,0.3);
+}
+
+.secondary-btn:hover {
+  transform: translateY(-5px) scale(1.04);
+  background: rgba(67,74,83,0.2);
+  box-shadow: 0 20px 50px rgba(67,74,83,0.2);
+}
+
+/* Shimmer sweep on buttons */
+.btn-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+  background-size: 200% 100%;
+  background-position: -100% 0;
+  transition: background-position 0.6s ease;
+  border-radius: inherit;
+}
+
+.enhanced-btn:hover .btn-shine {
+  background-position: 200% 0;
+}
+
+/* ─── HERO IMAGE CONTAINER ──────────────────────────────────── */
+
+.hero-image {
+  z-index: 3;
+  position: relative;
+  animation: heroImageEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+}
+
+@keyframes heroImageEntrance {
+  from {
+    opacity: 0;
+    transform: translateX(60px) scale(0.92);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.image-wrapper {
+  position: relative;
+  width: min(38vw, 460px);
+  height: min(38vw, 460px);
+  margin: 0 auto;
+  animation: imageFloat 7s ease-in-out infinite 1.8s;
+}
+
+@keyframes imageFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-18px); }
+}
+
+/* Multi-layer spinning border */
+.image-border {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    var(--main-color) 20%,
+    rgba(187,187,174,0.5) 40%,
+    transparent 60%,
+    var(--secondary-color) 80%,
+    transparent 100%
+  );
+  animation: rotateBorder 5s linear infinite;
+  filter: blur(1px);
+}
+
+.image-border::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  background: var(--bg-color);
+  border-radius: 50%;
+}
+
+/* Second, slower counter-rotating ring */
+.image-border::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 1px solid rgba(187,187,174,0.12);
+  animation: rotateBorderReverse 12s linear infinite;
+}
+
+@keyframes rotateBorderReverse {
+  to { transform: rotate(-360deg); }
+}
+
+.profile-img {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(15%) contrast(115%) brightness(1.05);
+  transition: filter 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  z-index: 4;
+}
+
+.profile-img:hover {
+  filter: grayscale(0%) contrast(120%) brightness(1.15);
+  transform: scale(1.04);
+}
+
+/* ─── ORBITAL RINGS ─────────────────────────────────────────── */
+
+.orbital-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 135%;
+  height: 135%;
+  border: 1px dashed rgba(187,187,174,0.18);
+  border-radius: 50%;
+  animation: orbitalRotate 25s linear infinite;
+}
+
+/* Second orbital ring */
+.hero-image::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 155%;
+  height: 155%;
+  border: 1px solid rgba(187,187,174,0.06);
+  border-radius: 50%;
+  animation: orbitalRotate 40s linear infinite reverse;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Orbiting dot on the outer ring */
+.orbital-ring::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 7px;
+  background: var(--main-color);
+  border-radius: 50%;
+  box-shadow: 0 0 14px 4px rgba(187,187,174,0.5);
+}
+
+/* ─── FLOATING ICONS ────────────────────────────────────────── */
+
+.floating-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(10,10,10,0.7);
+  border: 1px solid rgba(187,187,174,0.25);
+  border-radius: 14px;
+  font-size: 1.9rem;
+  color: rgba(187,187,174,0.8);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05) inset;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.floating-icon:hover {
+  box-shadow: 0 12px 32px rgba(0,0,0,0.5), 0 0 20px rgba(187,187,174,0.2);
+  transform: scale(1.15);
+}
+
+/* ─── GLOW EFFECTS ──────────────────────────────────────────── */
+
+.primary-glow {
+  background: radial-gradient(circle, rgba(187,187,174,0.15) 0%, transparent 65%);
+  filter: blur(50px);
+  opacity: 0.2;
+}
+
+.secondary-glow {
+  background: radial-gradient(circle, rgba(100,110,130,0.12) 0%, transparent 60%);
+  filter: blur(70px);
+  opacity: 0.15;
+}
+
+/* ─── VISITOR COUNTER ───────────────────────────────────────── */
+
+.enhanced-counter {
+  background: rgba(8,8,8,0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(187,187,174,0.15);
+  border-radius: 1.6rem;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.4),
+    0 0 0 1px rgba(255,255,255,0.03) inset;
+  animation: slideInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 1.6s both;
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── SCROLL INDICATOR ──────────────────────────────────────── */
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  animation: fadeInUp 0.8s ease 2s both;
+  z-index: 4;
+}
+
+.scroll-arrow {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(187,187,174,0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(187,187,174,0.5);
+  font-size: 1.8rem;
+  animation: scrollBounce 2s ease-in-out infinite;
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.03);
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50%       { transform: translateY(8px); opacity: 1; }
+}
+
+/* ─── PARTICLES UPGRADE ─────────────────────────────────────── */
+
+.particle {
+  width: 2px;
+  height: 2px;
+  background: rgba(187,187,174,0.5);
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(187,187,174,0.3);
+}
+
+/* Larger accent particles */
+.particle:nth-child(odd) {
+  width: 3px;
+  height: 3px;
+  background: rgba(255,255,255,0.3);
+}
+
+/* ─── CODE SNIPPETS ─────────────────────────────────────────── */
+
+.code-snippet {
+  font-family: 'Courier New', monospace;
+  font-size: 1.3rem;
+  color: rgba(187,187,174,0.35);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(187,187,174,0.08);
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.8rem;
+  backdrop-filter: blur(6px);
+  letter-spacing: 0.02em;
+}
+
+/* ─── RESPONSIVE ────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .home::before { width: 100vw; height: 100vw; }
+  .home::after  { width: 80vw;  height: 80vw; }
+
+  .gradient-heading {
+    font-size: clamp(4rem, 11vw, 6rem);
+  }
+
+  .image-wrapper {
+    width: min(72vw, 320px);
+    height: min(72vw, 320px);
+  }
+
+  .navbar a span { display: none; }
+  .navbar a { padding: 0.8rem; }
+  .navbar a i { opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 1.2rem 2rem;
+  }
+
+  .cta-group {
+    flex-direction: column;
+  }
+}
