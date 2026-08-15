@@ -80,12 +80,12 @@ html {
   --bg-color: #060606;
   --second-bg-color: #0b0b0c;
   --text-color: #ffffff;
-  --main-color: #777769;
-  --secondary-color: #979a8f;
-  --accent-color: #837960;
+  --main-color: #555555;
+  --secondary-color: #676767;
+  --accent-color: #454545;
   --selina-color: #bc7f4c;
   --selina-hover-color: #fad0a3;
-  --main-color-rgb: 119, 119, 105;
+  --main-color-rgb: 128,128,128;
   --text-color-rgb: 255, 255, 255;
   --gradient: linear-gradient(135deg, var(--main-color), var(--secondary-color));
   --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -11314,227 +11314,6 @@ main, .content {
   }
 }
 
-/* ===== PROJECT LIKE BUTTON STYLES ===== */
-
-.project-like-container {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-}
-
-.like-btn {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
-    overflow: hidden;
-}
-
-.like-btn:hover {
-    transform: scale(1.1);
-    border-color: rgba(255, 255, 255, 0.4);
-    background: rgba(0, 0, 0, 0.8);
-}
-
-.like-btn.liked {
-    background: rgba(237, 66, 69, 0.9);
-    border-color: rgba(237, 66, 69, 0.8);
-    animation: likePulse 0.5s ease;
-}
-
-.like-btn.liked:hover {
-    background: rgba(237, 66, 69, 1);
-}
-
-.like-btn i {
-    font-size: 2rem;
-    color: rgba(255, 255, 255, 0.8);
-    transition: all 0.3s ease;
-}
-
-.like-btn.liked i {
-    color: #ffffff;
-    animation: heartBeat 0.5s ease;
-}
-
-.like-count {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    background: rgba(0, 0, 0, 0.5);
-    padding: 2px 8px;
-    border-radius: 12px;
-    backdrop-filter: blur(5px);
-    min-width: 30px;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-.like-btn.liked + .like-count {
-    color: #ffffff;
-    background: rgba(237, 66, 69, 0.7);
-}
-
-.like-btn .like-sparkle {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    opacity: 0;
-}
-
-.like-btn.liked .like-sparkle {
-    animation: sparkleEffect 0.6s ease;
-}
-
-.like-popup {
-    position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(237, 66, 69, 0.9);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 1.2rem;
-    font-weight: 600;
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    z-index: 10;
-    backdrop-filter: blur(5px);
-    box-shadow: 0 4px 15px rgba(237, 66, 69, 0.3);
-}
-
-.like-popup::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid rgba(237, 66, 69, 0.9);
-}
-
-.like-popup.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(-5px);
-}
-
-/* Animations */
-@keyframes likePulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-@keyframes heartBeat {
-    0%, 100% {
-        transform: scale(1);
-    }
-    25% {
-        transform: scale(1.3);
-    }
-    50% {
-        transform: scale(1.1);
-    }
-    75% {
-        transform: scale(1.2);
-    }
-}
-
-@keyframes sparkleEffect {
-    0% {
-        opacity: 0;
-        transform: scale(0);
-    }
-    50% {
-        opacity: 1;
-        transform: scale(1.5);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(2);
-    }
-}
-
-/* Tooltip for like button */
-.like-btn::after {
-    content: 'Click to like';
-    position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%) scale(0);
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 1.2rem;
-    white-space: nowrap;
-    opacity: 0;
-    transition: all 0.3s ease;
-    pointer-events: none;
-    z-index: 10;
-}
-
-.like-btn:hover::after {
-    transform: translateX(-50%) scale(1);
-    opacity: 1;
-}
-
-.like-btn.liked::after {
-    content: 'Liked!';
-    background: rgba(237, 66, 69, 0.9);
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-    .project-like-container {
-        top: 15px;
-        left: 15px;
-    }
-    
-    .like-btn {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .like-btn i {
-        font-size: 1.8rem;
-    }
-    
-    .like-count {
-        font-size: 1.1rem;
-        padding: 2px 6px;
-        min-width: 25px;
-    }
-}
-
 /* --- Redesigned About Section --- */
 .about-modern {
   padding: 12rem 12%;
@@ -11797,5 +11576,138 @@ main, .content {
   .about-cta {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+/* ===== Projects Section Polish (post like-system removal) ===== */
+/* Appended last so it wins over the older duplicate .filter-btn/.project-card
+   rules earlier in this file without having to touch/remove them. */
+
+.projects-filter {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-bottom: 4rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  position: relative;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 1rem 2.2rem;
+  border-radius: 999px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.filter-btn i {
+  font-size: 1.2rem;
+}
+
+.filter-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gradient);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: -1;
+}
+
+.filter-btn:hover {
+  border-color: rgba(var(--main-color-rgb), 0.5);
+  color: var(--text-color);
+  transform: translateY(-3px);
+}
+
+.filter-btn.active {
+  color: #fff;
+  border-color: transparent;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(var(--main-color-rgb), 0.35);
+}
+
+.filter-btn.active::before {
+  opacity: 1;
+}
+
+/* Project cards: subtle gradient edge + smoother lift on hover */
+.project-card {
+  border-radius: 22px;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              border-color 0.5s ease;
+}
+
+.project-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(var(--main-color-rgb), 0.6), transparent 40%, transparent 60%, rgba(var(--main-color-rgb), 0.6));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.project-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+}
+
+.project-card:hover::after {
+  opacity: 1;
+}
+
+.project-img-container {
+  border-radius: 22px 22px 0 0;
+}
+
+/* Status badge: a touch more refined */
+.status-badge {
+  padding: 0.7rem 1.4rem;
+  font-size: 1.1rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.status-badge.badge-success {
+  background: rgba(var(--main-color-rgb), 0.9);
+}
+
+/* Primary action button: line up with the site's enhanced-btn language */
+.add-button.primary {
+  border-radius: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.add-button.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(var(--main-color-rgb), 0.35);
+}
+
+@media (max-width: 768px) {
+  .filter-btn {
+    padding: 0.9rem 1.6rem;
+    font-size: 1.15rem;
   }
 }

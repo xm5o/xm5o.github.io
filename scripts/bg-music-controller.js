@@ -4,11 +4,17 @@ class BackgroundMusicController {
     
     this.playlist = [
       {
-        name: "Bubblegum",
+        name: "Affection",
         artist: 'Cigarettes After Sex',
-        cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/656f879c4c22fe49879310b8_Bubblegum.jpg',
-        src: 'assets/cas/Bubblegum.mp3'
+        cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582b0a97316609209b9ac1e_Affection.jpg',
+        src: 'assets/cas/Affection.mp3'
       },
+      // {
+      //   name: "Bubblegum",
+      //   artist: 'Cigarettes After Sex',
+      //   cover: 'https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/656f879c4c22fe49879310b8_Bubblegum.jpg',
+      //   src: 'assets/cas/Bubblegum.mp3'
+      // },
       // {
       //   name: 'Hentai',
       //   artist: 'Cigarettes After Sex',

@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="css/contact.css" />
   <link rel="stylesheet" href="css/loading.css" />
   <link rel="stylesheet" href="css/discord-activity.css" />
+  <link rel="stylesheet" href="css/account-disabled-modal.css" />
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <!-- Arabic Fonts -->
@@ -511,7 +512,7 @@
 
         <!-- Profile Image with Enhanced Effects -->
         <div class="profile-container">
-          <img src="assets/pfp.jpg" alt="Profile" loading="lazy" class="profile-img" />
+          <img src="assets/pfp.png" alt="Profile" loading="lazy" class="profile-img" />
           <div class="profile-overlay"></div>
 
           <!-- Floating Icons Around Image -->
@@ -704,7 +705,7 @@
         <div id="activitiesContainer" class="activities-container"></div>
 
         <!-- Game Activity Card -->
-        <!-- <div class="discord-activity-card game-card" id="activityCard">
+        <div class="discord-activity-card game-card" id="activityCard">
           <div class="activity-card-header">
             <div class="activity-icon">
               <svg class="activity-icon" viewBox="0 0 24 24" fill="#b9bbbe">
@@ -735,7 +736,7 @@
               </div>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
 
       <!-- Connection Status -->
@@ -836,7 +837,7 @@
           <div class="about-visual">
             <div class="image-stack">
               <div class="main-image">
-                <img src="assets/pfp.jpg" alt="Immortal Profile" />
+                <img src="assets/pfp.png" alt="Immortal Profile" />
                 <div class="image-overlay"></div>
               </div>
               <div class="floating-card experience-card">
@@ -856,7 +857,7 @@
             <div class="section-header">
               <h2 class="gradient-heading">Behind the <span>Code</span></h2>
               <p class="intro-text">
-                I'm <span class="highlight">Immortal</span>, a 17-year-old Creative Developer.
+                I'm <span class="highlight">Immortal</span>, a <span data-birthday="2009-02-24">Call Me Immortal</span>-year-old Creative Developer.
               </p>
             </div>
 
@@ -1084,7 +1085,6 @@
           <button class="filter-btn" data-filter="game">Games</button>
           <button class="filter-btn" data-filter="script">Script</button>
           <!-- <button class="filter-btn" data-filter="web">Web</button> -->
-          <button class="filter-btn" data-filter="most-liked"><i class="fas fa-heart"></i> Most Liked</button>
         </div>
 
         <div class="projects-grid">
@@ -1952,6 +1952,8 @@
   <script src="scripts/skills.js"></script>
   <script src="scripts/projects.js"></script>
   <script src="scripts/discord-activity.js"></script>
+  <script src="scripts/account-disabled-modal.js"></script>
+  <script src="scripts/script.js"></script>
   <!-- <script src="scripts/particles.js"></script> -->
   <!-- <script src="scripts/discord-modal.js"></script> -->
   <!-- <script src="scripts/music.js"></script> -->
