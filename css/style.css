@@ -5539,6 +5539,8 @@ section {
   .navbar.active a:nth-child(5) { animation-delay: 0.3s; }
   .navbar.active a:nth-child(6) { animation-delay: 0.35s; }
   .navbar.active a:nth-child(7) { animation-delay: 0.4s; }
+  .navbar.active a:nth-child(8) { animation-delay: 0.45s; }
+  .navbar.active a:nth-child(9) { animation-delay: 0.5s; }
 
   .navbar a::before {
     content: '';
@@ -6694,6 +6696,8 @@ section {
   .navbar.active a:nth-child(5) { animation-delay: 0.3s; }
   .navbar.active a:nth-child(6) { animation-delay: 0.35s; }
   .navbar.active a:nth-child(7) { animation-delay: 0.4s; }
+  .navbar.active a:nth-child(8) { animation-delay: 0.45s; }
+  .navbar.active a:nth-child(9) { animation-delay: 0.5s; }
 
   .navbar a::before {
     content: '';
@@ -11709,5 +11713,215 @@ main, .content {
   .filter-btn {
     padding: 0.9rem 1.6rem;
     font-size: 1.15rem;
+  }
+}
+/* ==========================================================================
+   Now Section — "What I'm Doing Now"
+   ========================================================================== */
+.now-section {
+  position: relative;
+  padding: 10rem 12%;
+  background: var(--bg-color);
+  overflow: hidden;
+}
+
+.now-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 3rem;
+  margin-top: 5rem;
+}
+
+.now-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 3rem;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(10px);
+}
+
+.now-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--main-color);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.now-card:hover .card-glow {
+  opacity: 1;
+}
+
+.now-icon {
+  width: 60px;
+  height: 60px;
+  background: rgba(var(--main-color-rgb), 0.1);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  transition: all 0.3s;
+}
+
+.now-icon i {
+  font-size: 2.5rem;
+  color: var(--main-color);
+}
+
+.now-card:hover .now-icon {
+  background: var(--main-color);
+  transform: rotate(10deg);
+}
+
+.now-card:hover .now-icon i {
+  color: var(--bg-color);
+}
+
+.now-card h3 {
+  font-size: 2.2rem;
+  margin-bottom: 1.2rem;
+  color: var(--text-color);
+}
+
+.now-card p {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.now-status {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  border-radius: 100px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.now-status.status-progress {
+  background: rgba(var(--main-color-rgb), 0.15);
+  color: var(--main-color);
+  border: 1px solid rgba(var(--main-color-rgb), 0.3);
+}
+
+.now-status.status-ongoing {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.now-updated {
+  text-align: center;
+  margin-top: 4rem;
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+  .now-section {
+    padding: 8rem 6%;
+  }
+  .now-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+  .now-card {
+    padding: 2.4rem;
+  }
+}
+
+/* ==========================================================================
+   FAQ Section
+   ========================================================================== */
+.faq-section {
+  position: relative;
+  padding: 10rem 12%;
+  background: var(--bg-color);
+  overflow: hidden;
+}
+
+.faq-container {
+  max-width: 800px;
+  margin: 5rem auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.faq-item {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.faq-item:hover {
+  border-color: rgba(var(--main-color-rgb), 0.4);
+}
+
+.faq-item.active {
+  border-color: var(--main-color);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6rem;
+  padding: 2.2rem 2.6rem;
+  cursor: pointer;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.faq-icon {
+  font-size: 2.2rem;
+  color: var(--main-color);
+  flex-shrink: 0;
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.faq-item.active .faq-icon {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-item.active .faq-answer {
+  max-height: 200px;
+}
+
+.faq-answer p {
+  padding: 0 2.6rem 2.4rem;
+  font-size: 1.4rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .faq-section {
+    padding: 8rem 6%;
+  }
+  .faq-question {
+    padding: 1.8rem 2rem;
+    font-size: 1.4rem;
+  }
+  .faq-answer p {
+    padding: 0 2rem 2rem;
+    font-size: 1.3rem;
   }
 }
