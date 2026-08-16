@@ -19,10 +19,9 @@ class ProjectsManager {
       {
         id: 'immortality-collection',
         title: "FNF': Immortality Collection",
-        description: 'Sooner than you think, you will be able to play this game soon.',
+        description: "A Friday Night Funkin' mod I'm working on. Not out yet.",
         category: 'game',
         status: 'coming-soon',
-        status: 'active',
         image: './assets/immortality_icon.png',
         features: [
           { icon: 'fas fa-question', text: 'Coming Soon...' }
@@ -34,88 +33,76 @@ class ProjectsManager {
         },
         badge: 'Coming Soon',
         badgeType: 'coming-soon',
-        // badge: 'Avaliable now',
-        // badgeType: 'success',
-        // releaseDate: new Date('2026-07-27')
         releaseDate: null
       },
-      // {
-      //   id: 'fnf-commission',
-      //   title: 'Friday Night Funkin\' Commission',
-      //   description: 'If you need a charter, modcharter, or even a coder... Check my commission page for more details.',
-      //   category: 'web',
-      //   status: 'active',
-      //   image: './assets/fnf_commission.png',
-      //   features: ['Chart', 'Modchart', 'Code', 'Free', 'Paid'],
-      //   links: {
-      //     website: 'commission/index.html',
-      //     demo: null,
-      //     github: null
-      //   },
-      //   badge: null,
-      //   // badgeType: 'success'
-      //   badgeType: null
-      // },
+      {
+        id: 'fnf-commission',
+        title: 'FNF Commissions',
+        description: 'I make custom charts, modcharts, and code for Friday Night Funkin\'. Some for free, some paid.',
+        category: 'web',
+        status: 'active',
+        image: './assets/fnf_commission.png',
+        features: ['Chart', 'Modchart', 'Code'],
+        links: {
+          website: 'commission/index.html',
+          demo: null,
+          github: null
+        },
+        badge: null,
+        badgeType: null,
+        releaseDate: null
+      },
       {
         id: 'discord-quest',
         title: 'Discord Quest Finisher',
-        description: 'Finish your quest without doing or even download any game!',
+        description: 'A script that finishes Discord quests for you, without downloading any game.',
         category: 'script',
-        // status: 'coming-soon',
         status: 'active',
         image: './assets/quest.png',
         features: ['Open-source', 'JavaScript', 'Node.js'],
         links: {
-          // website: 'https://github.com/xm5o/discord-quest-finisher',
-          // demo: null,
           github: "https://github.com/xm5o/discord-quest-finisher"
         },
         badge: 'NEW',
         badgeType: 'success',
-        // releaseDate: new Date('2026-01-09')
         releaseDate: null
       },
       {
         id: 'fnf-chart-creator',
-        title: "Friday Night Funkin': Chart Creator",
-        description: 'Create an empty chart file without notes and events. Easy to use!',
+        title: "FNF Chart Creator",
+        description: 'A tool that makes an empty chart file for you. No notes or events, just a clean start. Easy to use.',
         category: 'script',
-        // status: 'coming-soon',
         status: 'active',
         image: './assets/fnf_chart_creator.png',
-        features: ['Open-source', 'Execute', 'FNF', 'Psych Engine'],
+        features: ['Open-source', 'FNF', 'Psych Engine'],
         links: {
-          // website: 'https://github.com/xm5o/discord-quest-finisher',
-          // demo: null,
           github: "https://github.com/xm5o/FNF-Chart-Creator"
         },
         badge: 'NEW',
         badgeType: 'success',
-        // releaseDate: new Date('2026-01-09')
         releaseDate: null
       },
-      // {
-      //   id: 'selina-discord-bot',
-      //   title: 'Selina Discord Bot',
-      //   description: 'Your perfect server companion with powerful moderation tools, fun commands, and 24/7 reliability. Make your Discord server amazing!',
-      //   category: 'app',
-      //   status: 'coming-soon',
-      //   image: './assets/selina.jpg',
-      //   features: [
-      //     { icon: 'fas fa-shield-alt', text: 'Moderation' },
-      //     { icon: 'fas fa-gamepad', text: 'Fun Games' },
-      //     { icon: 'fas fa-user-plus', text: 'Welcome' },
-      //     { icon: 'fas fa-chart-line', text: 'Levels' }
-      //   ],
-      //   links: {
-      //     website: 'https://xm5o.github.io/selina/',
-      //     demo: null,
-      //     github: null
-      //   },
-      //   badge: 'Coming Soon',
-      //   badgeType: 'coming-soon',
-      //   releaseDate: null
-      // }
+      {
+        id: 'selina-discord-bot',
+        title: 'Selina',
+        description: 'A Discord bot I\'m building for communities. It has moderation, fun commands, and AI chat. Still in progress.',
+        category: 'app',
+        status: 'coming-soon',
+        image: './assets/selina.jpg',
+        features: [
+          { icon: 'fas fa-shield-alt', text: 'Moderation' },
+          { icon: 'fas fa-gamepad', text: 'Fun Commands' },
+          { icon: 'fas fa-comment-dots', text: 'AI Chat' }
+        ],
+        links: {
+          website: 'selina/invite/index.html',
+          demo: null,
+          github: null
+        },
+        badge: 'In Progress',
+        badgeType: 'coming-soon',
+        releaseDate: null
+      }
     ];
   }
 
@@ -145,66 +132,6 @@ class ProjectsManager {
 
     this.isMobileDevice = this.detectMobile();
     this.showProjectsGrid();
-  }
-
-  showMobileMessage() {
-    const container = document.querySelector('.projects .container');
-    if (!container) return;
-
-    if (!container.hasAttribute('data-original-content')) {
-      container.setAttribute('data-original-content', container.innerHTML);
-    }
-
-    container.innerHTML = `
-            <div class="mobile-projects-message">
-                <div class="message-content">
-                    <div class="message-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                        <div class="icon-glow"></div>
-                        <div class="icon-pulse"></div>
-                    </div>
-                    <h3 class="message-title">Mobile Experience Coming Soon</h3>
-                    <p class="message-description">
-                        The projects section is being optimized for mobile devices. We're crafting an 
-                        <span class="highlight">amazing mobile portfolio experience</span> just for you!
-                    </p>
-                    <div class="progress-indicator">
-                        <div class="progress-bar">
-                            <div class="progress-fill"></div>
-                            <div class="progress-shine"></div>
-                        </div>
-                        <span class="progress-text">Development in Progress</span>
-                        <div class="progress-percentage">75%</div>
-                    </div>
-                    <div class="feature-preview">
-                        <div class="preview-item">
-                            <i class="fas fa-mobile-screen-button"></i>
-                            <span>Mobile Optimized</span>
-                        </div>
-                        <div class="preview-item">
-                            <i class="fas fa-touch"></i>
-                            <span>Touch Friendly</span>
-                        </div>
-                        <div class="preview-item">
-                            <i class="fas fa-rocket"></i>
-                            <span>Fast Loading</span>
-                        </div>
-                    </div>
-                    <div class="message-footer">
-                        <i class="fas fa-laptop"></i>
-                        <span>Best viewed on desktop for now</span>
-                    </div>
-                </div>
-                <div class="floating-elements">
-                    <div class="float-element"></div>
-                    <div class="float-element"></div>
-                    <div class="float-element"></div>
-                    <div class="float-element"></div>
-                </div>
-            </div>
-        `;
-
-    this.addMobileStyles();
   }
 
   showProjectsGrid() {
