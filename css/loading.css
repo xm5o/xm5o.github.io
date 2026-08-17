@@ -1,299 +1,82 @@
-#loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--bg-color);
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: var(--text-color);
-    transition: opacity 0.8s ease;
-    opacity: 1;
-    overflow: hidden;
+/* ==========================================================================
+   Skeleton Loading System
+   Shows shimmer placeholders directly on the real hero elements — no
+   separate full-screen overlay. Placeholders match the exact size and
+   position of the content they stand in for.
+   ========================================================================== */
+
+:root {
+  --skeleton-base: rgba(255, 255, 255, 0.06);
+  --skeleton-shine: rgba(255, 255, 255, 0.16);
 }
 
-#loading-screen.hidden {
-    opacity: 0;
-    pointer-events: none;
+body.is-loading {
+  overflow: hidden;
 }
 
-.loading-grid {
-    position: absolute;
-    inset: 0;
-    background-image: 
-        linear-gradient(rgba(98, 87, 73, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(98, 87, 73, 0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    animation: gridSlide 25s linear infinite;
-    z-index: 1;
+/* Below-the-fold content fades in once loading finishes */
+#mainContent {
+  transition: opacity 0.6s ease;
 }
 
-@keyframes gridSlide {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(60px, 60px); }
+body.is-loading #mainContent {
+  opacity: 0;
 }
 
-.bg-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 2;
+/* Elements that get the skeleton treatment while loading */
+body.is-loading .image-wrapper,
+body.is-loading .gradient-heading,
+body.is-loading .subtitle-text,
+body.is-loading .typewriter,
+body.is-loading .tagline {
+  position: relative;
+  color: transparent !important;
+  background: var(--skeleton-base);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.bg-layer::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: 
-        radial-gradient(ellipse at var(--cursor-x, 50%) var(--cursor-y, 50%), 
-            rgba(98, 87, 73, 0.08) 0%, 
-            transparent 60%);
-    transition: all 0.6s ease;
+body.is-loading .image-wrapper {
+  border-radius: 50%;
 }
 
-.particles {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    z-index: 3;
+/* Hide their real contents (icons, images, nested spans) while skeleton is up */
+body.is-loading .image-wrapper *,
+body.is-loading .gradient-heading *,
+body.is-loading .subtitle-text *,
+body.is-loading .typewriter *,
+body.is-loading .tagline * {
+  visibility: hidden !important;
 }
 
-.particle {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: rgba(98, 87, 73, 0.4);
-    border-radius: 50%;
-    animation: floatUp 20s linear infinite;
+/* The shimmer sweep */
+body.is-loading .image-wrapper::after,
+body.is-loading .gradient-heading::after,
+body.is-loading .subtitle-text::after,
+body.is-loading .typewriter::after,
+body.is-loading .tagline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--skeleton-shine), transparent);
+  transform: translateX(-100%);
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
 }
 
-.particle:nth-child(1) { left: 10%; animation-delay: 0s; }
-.particle:nth-child(2) { left: 20%; animation-delay: -4s; }
-.particle:nth-child(3) { left: 30%; animation-delay: -8s; }
-.particle:nth-child(4) { left: 40%; animation-delay: -12s; }
-.particle:nth-child(5) { left: 50%; animation-delay: -16s; }
-.particle:nth-child(6) { left: 60%; animation-delay: -2s; }
-.particle:nth-child(7) { left: 70%; animation-delay: -6s; }
-.particle:nth-child(8) { left: 80%; animation-delay: -10s; }
-.particle:nth-child(9) { left: 90%; animation-delay: -14s; }
-.particle:nth-child(10) { left: 15%; animation-delay: -18s; }
-.particle:nth-child(11) { left: 85%; animation-delay: -3s; }
-.particle:nth-child(12) { left: 5%; animation-delay: -7s; }
-
-@keyframes floatUp {
-    0% { 
-        transform: translateY(100vh);
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.4;
-    }
-    90% {
-        opacity: 0.4;
-    }
-    100% { 
-        transform: translateY(-10vh);
-        opacity: 0;
-    }
+@keyframes skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }
 
-.loading-content {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
+@media (prefers-reduced-motion: reduce) {
 
-.loading-logo {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 25px;
-    opacity: 0;
-    transform: scale(0.8);
-    animation: fadeInScale 0.6s ease forwards;
-}
-
-@keyframes fadeInScale {
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.logo-ring {
-    width: 100%;
-    height: 100%;
-    border: 2px solid var(--main-color);
-    border-radius: 50%;
-    position: relative;
-    animation: slowSpin 4s linear infinite;
-}
-
-@keyframes slowSpin {
-    to { transform: rotate(360deg); }
-}
-
-.logo-inner {
-    position: absolute;
-    inset: 12px;
-    background: linear-gradient(135deg, var(--main-color), var(--secondary-color));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    font-weight: bold;
-    color: white;
-}
-
-#welcome-text {
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    font-weight: 700;
-    margin-bottom: 12px;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    color: var(--secondary-color);
-}
-
-#welcome-text.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-#welcome-text.move-up {
-    transform: translateY(-25px);
-}
-
-.loading-spinner {
-    width: 50px;
-    height: 50px;
-    margin: 15px 0;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-
-.loading-spinner.show {
-    opacity: 1;
-}
-
-.spinner-circle {
-    width: 100%;
-    height: 100%;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-top-color: var(--secondary-color);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-#loading-status {
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
-    opacity: 0;
-    max-width: 80%;
-    color: rgba(255, 255, 255, 0.7);
-    transition: opacity 0.4s ease;
-    margin-bottom: 8px;
-}
-
-#loading-status.show {
-    opacity: 1;
-}
-
-#progress-bar-container {
-    width: 80%;
-    max-width: 350px;
-    height: 6px;
-    background-color: rgba(255, 255, 255, 0.08);
-    border-radius: 4px;
-    margin-top: 20px;
-    overflow: hidden;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    position: relative;
-}
-
-#progress-bar-container.show {
-    opacity: 1;
-}
-
-#progress-bar {
-    height: 100%;
-    width: 0%;
-    background: var(--secondary-color);
-    border-radius: 4px;
-    transition: width 0.3s ease;
-}
-
-.progress-percentage {
-    position: absolute;
-    right: -40px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #a59280;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-
-.progress-percentage.show {
-    opacity: 1;
-}
-
-.loading-tips {
-    margin-top: 25px;
-    max-width: 450px;
-    padding: 0 20px;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-
-.loading-tips.show {
-    opacity: 1;
-}
-
-.loading-tip {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.5);
-    font-style: italic;
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-    .loading-logo {
-        width: 80px;
-        height: 80px;
-    }
-    
-    #welcome-text {
-        font-size: 2rem;
-    }
-    
-    #loading-status {
-        font-size: 0.95rem;
-    }
-    
-    #progress-bar-container {
-        width: 85%;
-    }
-    
-    .loading-spinner {
-        width: 45px;
-        height: 45px;
-    }
+  body.is-loading .image-wrapper::after,
+  body.is-loading .gradient-heading::after,
+  body.is-loading .subtitle-text::after,
+  body.is-loading .typewriter::after,
+  body.is-loading .tagline::after {
+    animation: none;
+    opacity: 0.5;
+  }
 }
