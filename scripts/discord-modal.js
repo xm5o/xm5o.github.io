@@ -7,7 +7,7 @@ const serverConfig = {
   inviteCode: "WBQssXDfKJ",
   name: "Loading",
   description: "",
-  icon: "assets/avatar1.jpg",
+  icon: "assets/pfp.jpg",
   banner: "",
   fallbackMembers: 0,
   fallbackOnline: 0

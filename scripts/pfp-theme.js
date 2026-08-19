@@ -1,17 +1,22 @@
-/**
- * Auto Theme From Profile Picture
- * Reads the profile picture, finds its dominant color (like Discord/Spotify
- * do for album art / avatars), and applies it to the site's CSS variables:
- * --main-color, --secondary-color, --accent-color, and their *-rgb versions.
- *
- * Runs once per page load. Falls back silently to the default colors already
- * set in css/style.css if anything goes wrong (no image, canvas blocked, etc).
- */
+const CONFIG = {
+  useAI: true,
+
+  groqApiKey: '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',
+
+  endpoint: 'https://api.groq.com/openai/v1/chat/completions',
+
+  model: 'qwen/qwen3.6-27b',
+
+  timeoutMs: 8000,
+
+  cachePrefix: 'pfpTheme:ai:'
+};
 
 class ProfilePictureTheme {
   constructor(imageSelector = '.profile-img') {
     this.imageSelector = imageSelector;
-    this.sampleSize = 48; // downscale for fast, cheap pixel sampling
+    this.sampleSize = 48; // downscale for fast, cheap local pixel sampling
+    this.aiSampleSize = 128; // downscale for the AI image payload
     this.init();
   }
 
@@ -20,23 +25,34 @@ class ProfilePictureTheme {
     if (!img) return;
 
     if (img.complete && img.naturalWidth > 0) {
-      this.extractAndApply(img);
+      this.run(img);
     } else {
-      img.addEventListener('load', () => this.extractAndApply(img), { once: true });
+      img.addEventListener('load', () => this.run(img), { once: true });
     }
   }
 
-  extractAndApply(img) {
+  async run(img) {
+    let localPalette = null;
     try {
       const dominant = this.getDominantColor(img);
-      if (!dominant) return;
-
-      const palette = this.buildPalette(dominant);
-      this.applyPalette(palette);
+      if (dominant) {
+        localPalette = this.buildPalette(dominant);
+        this.applyPalette(localPalette);
+      }
     } catch (err) {
-      // Canvas can throw on cross-origin images, corrupted files, etc.
-      // Site already looks fine with its default colors, so just stop quietly.
-      console.warn('Profile picture theming skipped:', err);
+      console.warn('Local profile picture theming skipped:', err);
+    }
+
+    if (!CONFIG.useAI) return;
+    if (!CONFIG.groqApiKey && CONFIG.endpoint.includes('api.groq.com')) {
+      return;
+    }
+
+    try {
+      const aiPalette = await this.getAIPalette(img);
+      if (aiPalette) this.applyPalette(aiPalette, { animate: true });
+    } catch (err) {
+      console.warn('AI profile picture theming skipped:', err);
     }
   }
 
@@ -49,9 +65,6 @@ class ProfilePictureTheme {
 
     const { data } = ctx.getImageData(0, 0, this.sampleSize, this.sampleSize);
 
-    // Bucket colors together (like a mini version of what Discord/Spotify do)
-    // instead of a flat average, so one dominant hue wins instead of the
-    // whole image blending into grey-brown mush.
     const buckets = new Map();
     const bucketSize = 24; // group nearby shades together
 
@@ -62,8 +75,6 @@ class ProfilePictureTheme {
       const a = data[i + 3];
       if (a < 200) continue; // skip transparent pixels
 
-      // Skip near-white / near-black / very desaturated pixels —
-      // these are usually background, not the interesting part of the pic
       const max = Math.max(r, g, b);
       const min = Math.min(r, g, b);
       const lightness = (max + min) / 2 / 255;
@@ -76,7 +87,7 @@ class ProfilePictureTheme {
         Math.round(b / bucketSize)
       ].join(',');
 
-      const weight = 1 + saturation * 2; // favor more colorful pixels
+      const weight = 1 + saturation * 2;
       const existing = buckets.get(key);
       if (existing) {
         existing.count += weight;
@@ -105,8 +116,6 @@ class ProfilePictureTheme {
   buildPalette({ r, g, b }) {
     const hsl = this.rgbToHsl(r, g, b);
 
-    // Keep the color readable against a near-black background:
-    // not too dark (invisible), not too washed out (blinding), decent saturation.
     const main = this.hslToRgb(hsl.h, Math.max(hsl.s, 0.35), this.clamp(hsl.l, 0.42, 0.62));
     const secondary = this.hslToRgb((hsl.h + 18) % 360, Math.max(hsl.s * 0.9, 0.3), this.clamp(hsl.l + 0.12, 0.5, 0.72));
     const accent = this.hslToRgb((hsl.h - 24 + 360) % 360, Math.max(hsl.s * 0.8, 0.25), this.clamp(hsl.l - 0.16, 0.25, 0.4));
@@ -114,16 +123,178 @@ class ProfilePictureTheme {
     return { main, secondary, accent };
   }
 
-  applyPalette({ main, secondary, accent }) {
-    const root = document.documentElement.style;
+  async getAIPalette(img) {
+    const dataUrl = this.imageToDataUrl(img, this.aiSampleSize);
+    const cacheKey = CONFIG.cachePrefix + this.hashString(dataUrl);
 
-    root.setProperty('--main-color', this.toHex(main));
-    root.setProperty('--secondary-color', this.toHex(secondary));
-    root.setProperty('--accent-color', this.toHex(accent));
+    const cached = this.readCache(cacheKey);
+    if (cached) return cached;
 
-    root.setProperty('--main-color-rgb', `${main.r}, ${main.g}, ${main.b}`);
-    root.setProperty('--secondary-color-rgb', `${secondary.r}, ${secondary.g}, ${secondary.b}`);
-    root.setProperty('--accent-color-rgb', `${accent.r}, ${accent.g}, ${accent.b}`);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), CONFIG.timeoutMs);
+
+    const prompt = [
+      'Look at this profile picture and design a 3-color theme for a website',
+      'that has a near-black background (#0a0a0a) and light text.',
+      '',
+      'Return ONLY a raw JSON object, no markdown, no code fences, no',
+      'explanation, in exactly this shape:',
+      '{"main":"#rrggbb","secondary":"#rrggbb","accent":"#rrggbb"}',
+      '',
+      'Rules:',
+      '- "main" should be the color that best represents the picture\'s',
+      '  dominant, most characterful hue, adjusted to be clearly legible as',
+      '  text/UI color on a near-black background (not too dark, not neon).',
+      '- "secondary" should be a lighter, complementary variant of "main".',
+      '- "accent" should be a darker, more muted variant for subtle UI',
+      '  elements like borders or hover states.',
+      '- All three must be valid 6-digit hex colors starting with #.',
+      '- Prioritize a color a human would actually call "the picture\'s',
+      '  color", not a flat average of every pixel.'
+    ].join('\n');
+
+    let response;
+    try {
+      response = await fetch(CONFIG.endpoint, {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          ...(CONFIG.groqApiKey ? { Authorization: `Bearer ${CONFIG.groqApiKey}` } : {})
+        },
+        body: JSON.stringify({
+          model: CONFIG.model,
+          temperature: 0.3,
+          max_tokens: 300,
+          // qwen3.6-27b is a hybrid thinking model — by default it writes out
+          // a long <think>...</think> reasoning block before the actual
+          // answer, which was eating the whole max_tokens budget and cutting
+          // off before it ever got to the JSON. "none" skips straight to
+          // the answer.
+          reasoning_effort: 'none',
+          messages: [
+            {
+              role: 'user',
+              content: [
+                { type: 'text', text: prompt },
+                { type: 'image_url', image_url: { url: dataUrl } }
+              ]
+            }
+          ]
+        })
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    if (!response.ok) {
+      let detail = '';
+      try {
+        const errBody = await response.json();
+        detail = errBody?.error?.message || JSON.stringify(errBody);
+      } catch {
+        try { detail = await response.text(); } catch { /* ignore */ }
+      }
+      console.warn('Groq API error body:', detail);
+      throw new Error(`Groq API responded with ${response.status}: ${detail}`);
+    }
+
+    const data = await response.json();
+    const raw = data?.choices?.[0]?.message?.content ?? '';
+    const palette = this.parsePaletteResponse(raw);
+    if (!palette) {
+      console.warn('Raw Groq response that failed to parse:', raw);
+      throw new Error('Could not parse a valid palette from AI response');
+    }
+
+    this.writeCache(cacheKey, palette);
+    return palette;
+  }
+
+  parsePaletteResponse(raw) {
+    if (!raw || typeof raw !== 'string') return null;
+
+    const cleaned = raw
+      .replace(/<think>[\s\S]*?<\/think>/gi, '')
+      .replace(/```json|```/g, '')
+      .trim();
+    const match = cleaned.match(/\{[\s\S]*\}/);
+    if (!match) return null;
+
+    let parsed;
+    try {
+      parsed = JSON.parse(match[0]);
+    } catch {
+      return null;
+    }
+
+    const toRgb = (hex) => {
+      if (typeof hex !== 'string' || !/^#?[0-9a-fA-F]{6}$/.test(hex)) return null;
+      const clean = hex.replace('#', '');
+      return {
+        r: parseInt(clean.slice(0, 2), 16),
+        g: parseInt(clean.slice(2, 4), 16),
+        b: parseInt(clean.slice(4, 6), 16)
+      };
+    };
+
+    const main = toRgb(parsed.main);
+    const secondary = toRgb(parsed.secondary);
+    const accent = toRgb(parsed.accent);
+    if (!main || !secondary || !accent) return null;
+
+    return { main, secondary, accent };
+  }
+
+  imageToDataUrl(img, size) {
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, size, size);
+    return canvas.toDataURL('image/jpeg', 0.7);
+  }
+
+  hashString(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = (hash * 31 + str.charCodeAt(i)) | 0;
+    }
+    return (hash >>> 0).toString(36);
+  }
+
+  readCache(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  writeCache(key, palette) {
+    try {
+      localStorage.setItem(key, JSON.stringify(palette));
+    } catch {
+      // Storage full or unavailable, not worth failing over.
+    }
+  }
+
+  applyPalette({ main, secondary, accent }, { animate = false } = {}) {
+    const root = document.documentElement;
+
+    if (animate) {
+      root.style.setProperty('--pfp-theme-transition', 'background-color 1.2s ease, color .6s ease, border-color .6s ease');
+    }
+
+    const style = root.style;
+    style.setProperty('--main-color', this.toHex(main));
+    style.setProperty('--secondary-color', this.toHex(secondary));
+    style.setProperty('--accent-color', this.toHex(accent));
+
+    style.setProperty('--main-color-rgb', `${main.r}, ${main.g}, ${main.b}`);
+    style.setProperty('--secondary-color-rgb', `${secondary.r}, ${secondary.g}, ${secondary.b}`);
+    style.setProperty('--accent-color-rgb', `${accent.r}, ${accent.g}, ${accent.b}`);
   }
 
   clamp(value, min, max) {
