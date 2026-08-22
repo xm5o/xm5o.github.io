@@ -63,7 +63,7 @@ class ProjectsManager {
         links: {
           github: "https://github.com/xm5o/discord-quest-finisher"
         },
-        badge: 'NEW',
+        badge: 'Open-source',
         badgeType: 'success',
         releaseDate: null
       },
@@ -78,16 +78,16 @@ class ProjectsManager {
         links: {
           github: "https://github.com/xm5o/FNF-Chart-Creator"
         },
-        badge: 'NEW',
+        badge: 'Open-source',
         badgeType: 'success',
         releaseDate: null
       },
       {
         id: 'selina-discord-bot',
         title: 'Selina',
-        description: 'A Discord bot I\'m building for communities. It has moderation, fun commands, and AI chat. Still in progress.',
+        description: 'A Discord bot for communities. Moderation, leveling, and AI chat. Ready to invite.',
         category: 'app',
-        status: 'coming-soon',
+        status: 'active',
         image: './assets/selina.jpg',
         features: [
           { icon: 'fas fa-shield-alt', text: 'Moderation' },
@@ -95,12 +95,12 @@ class ProjectsManager {
           { icon: 'fas fa-comment-dots', text: 'AI Chat' }
         ],
         links: {
-          website: 'selina/invite/index.html',
+          website: 'selina/index.html',
           demo: null,
           github: null
         },
-        badge: 'In Progress',
-        badgeType: 'coming-soon',
+        badge: 'Live',
+        badgeType: 'success',
         releaseDate: null
       }
     ];
