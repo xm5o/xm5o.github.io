@@ -4,6 +4,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050507" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="description"
     content="Personal portfolio of a developer showcasing projects, skills, and creative coding journey" />
   <meta name="keywords" content="developer, portfolio, web development, mobile apps, gaming, coding projects" />
@@ -33,7 +37,6 @@
   <link rel="stylesheet" href="css/discord-activity.css" />
   <link rel="stylesheet" href="css/contact.css" />
   <link rel="stylesheet" href="css/loading.css" />
-  <link rel="stylesheet" href="css/discord-activity.css" />
   <link rel="stylesheet" href="css/account-disabled-modal.css" />
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -41,6 +44,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="css/apple-design.css" />
   <!-- RTL Support CSS -->
   <style>
     /* RTL Support */
@@ -203,18 +207,19 @@
 </head>
 
 <body class="is-loading">
+  <a class="skip-link" href="#home">Skip to content</a>
   <!-- Loading Screen -->
   <header class="header" role="banner">
-    <a href="#" class="logo" aria-label="Personal Logo">Immortal</a>
+    <a href="#home" class="logo" aria-label="Immortal, back to home">Immortal</a>
 
-    <a id="menu-icon" aria-label="Toggle Mobile Menu" aria-expanded="false">
+    <button id="menu-icon" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="primary-navigation">
       <i class="bx bx-menu"></i>
-    </a>
+    </button>
 
     <!-- Menu Backdrop Overlay -->
     <div class="menu-backdrop" id="menuBackdrop"></div>
 
-    <nav class="navbar" role="navigation" aria-label="Main Navigation">
+    <nav class="navbar" id="primary-navigation" aria-label="Main navigation">
       <button id="close-menu" aria-label="Close Mobile Menu">
         <i class="bx bx-x"></i>
       </button>
@@ -1870,6 +1875,7 @@
   <!-- <script src="scripts/hide.js"></script> -->
 
   <script type="module" src="scripts/views.js"></script>
+  <script src="scripts/apple-design.js"></script>
 </body>
 
 </html>
