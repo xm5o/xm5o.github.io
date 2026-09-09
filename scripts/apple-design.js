@@ -1,82 +1,50 @@
+/* Navigation follows document order; native details elements handle FAQ interaction. */
 document.addEventListener('DOMContentLoaded', () => {
-  const header = document.querySelector('.header');
-  const navLinks = [...document.querySelectorAll('.navbar > a[href^="#"]')];
-  const sections = navLinks
-    .map(link => document.querySelector(link.getAttribute('href')))
-    .filter(Boolean);
-
-  const updateHeader = () => {
-    if (header) header.classList.toggle('scrolled', window.scrollY > 24);
-  };
-
-  updateHeader();
-  window.addEventListener('scroll', updateHeader, { passive: true });
-
-  const setCurrentSection = id => {
-    navLinks.forEach(link => {
-      const isCurrent = link.getAttribute('href') === `#${id}`;
-      if (isCurrent) link.setAttribute('aria-current', 'page');
+  const links = [...document.querySelectorAll('.navbar a')];
+  const targets = links.map(link => document.querySelector(link.hash)).filter(Boolean);
+  let queued = false;
+  function updateCurrent() {
+    queued = false;
+    const marker = window.innerHeight * 0.3;
+    let current = targets[0];
+    // Read document order, not navbar order: Work comes before About.
+    [...targets].sort((a, b) => a.offsetTop - b.offsetTop).forEach(section => {
+      if (section.getBoundingClientRect().top <= marker) current = section;
+    });
+    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 24) {
+      current = document.getElementById('contact');
+    }
+    links.forEach(link => {
+      if (link.hash === '#' + current.id) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
-  };
-
-  if ('IntersectionObserver' in window) {
-    const sectionObserver = new IntersectionObserver(entries => {
-      const visible = entries
-        .filter(entry => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-      if (visible?.target?.id) setCurrentSection(visible.target.id);
-    }, {
-      rootMargin: '-24% 0px -58% 0px',
-      threshold: [0.08, 0.2, 0.45]
-    });
-
-    sections.forEach(section => sectionObserver.observe(section));
   }
-
-  document.querySelectorAll('.faq-question').forEach((question, index) => {
-    const answer = question.nextElementSibling;
-    const answerId = `faq-answer-${index + 1}`;
-
-    question.setAttribute('role', 'button');
-    question.setAttribute('tabindex', '0');
-    question.setAttribute('aria-expanded', 'false');
-    question.setAttribute('aria-controls', answerId);
-    if (answer) answer.id = answerId;
-
-    const syncState = () => {
-      question.setAttribute(
-        'aria-expanded',
-        question.closest('.faq-item')?.classList.contains('active') ? 'true' : 'false'
-      );
+  window.addEventListener('scroll', () => {
+    if (!queued) { queued = true; requestAnimationFrame(updateCurrent); }
+  }, { passive: true });
+  window.addEventListener('resize', updateCurrent);
+  updateCurrent();
+  const filters = [...document.querySelectorAll('.filter-btn')];
+  filters.forEach(button => button.addEventListener('click', () => {
+    filters.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+  }));
+  const grid = document.querySelector('.projects-grid');
+  const secureLinks = () => grid?.querySelectorAll('a[target="_blank"]').forEach(link => {
+    link.rel = 'noopener noreferrer';
+  });
+  if (grid) new MutationObserver(secureLinks).observe(grid, { childList: true, subtree: true });
+  secureLinks();
+  const indicator = document.getElementById('statusIndicator');
+  if (indicator) {
+    const label = document.createElement('p');
+    label.className = 'presence-label';
+    indicator.setAttribute('aria-hidden', 'true');
+    document.querySelector('.profile-info').appendChild(label);
+    const syncPresence = () => {
+      const states = { 'status-online': 'Online', 'status-idle': 'Idle', 'status-dnd': 'Do not disturb', 'status-offline': 'Offline' };
+      label.textContent = Object.entries(states).find(([name]) => indicator.classList.contains(name))?.[1] || 'Connecting to Discord';
     };
-
-    question.addEventListener('click', () => requestAnimationFrame(syncState));
-    question.addEventListener('keydown', event => {
-      if (event.key !== 'Enter' && event.key !== ' ') return;
-      event.preventDefault();
-      question.click();
-    });
-  });
-
-  const filterButtons = [...document.querySelectorAll('.filter-btn')];
-  const syncFilters = activeButton => {
-    filterButtons.forEach(button => {
-      button.setAttribute('aria-pressed', button === activeButton ? 'true' : 'false');
-    });
-  };
-
-  filterButtons.forEach(button => {
-    button.setAttribute('type', 'button');
-    button.addEventListener('click', () => syncFilters(button));
-  });
-  syncFilters(document.querySelector('.filter-btn.active'));
-
-  document.querySelectorAll('a[target="_blank"]').forEach(link => {
-    const rel = new Set((link.getAttribute('rel') || '').split(/\s+/).filter(Boolean));
-    rel.add('noopener');
-    rel.add('noreferrer');
-    link.setAttribute('rel', [...rel].join(' '));
-  });
+    new MutationObserver(syncPresence).observe(indicator, { attributes: true, attributeFilter: ['class'] });
+    syncPresence();
+  }
 });
