@@ -262,6 +262,7 @@ async function ensureLegacySummaryExists() {
     lastUpdate: new Date().toISOString(),
     analyticsV2: {
       schemaVersion: 2,
+      pageViews: 0,
       uniqueVisitors: 0,
       daily: {},
       dimensions: {}
@@ -304,9 +305,12 @@ async function trackPageViewLocked() {
     const cityLabel = `${locationData.city}, ${locationData.region}, ${locationData.country}`;
 
     const updates = {
-      totalViews: increment(1),
+      // Preserve the old counter meaning: one increment per deduped visitor,
+      // not one increment per refresh/page load.
+      totalViews: increment(visitorIncrement),
       lastUpdate: new Date().toISOString(),
       'analyticsV2.schemaVersion': 2,
+      'analyticsV2.pageViews': increment(1),
       'analyticsV2.uniqueVisitors': increment(visitorIncrement),
       'analyticsV2.lastUpdated': serverTimestamp(),
       [`analyticsV2.daily.${today}.date`]: today,
@@ -376,14 +380,14 @@ function bindPublicCounter() {
     }
 
     const data = snapshot.data();
-    const totalViews = Number(data?.totalViews || 0);
-    const todayViews = Number(data?.analyticsV2?.daily?.[dateKey()]?.views || 0);
+    const siteVisitors = Number(data?.totalViews || 0);
+    const todayVisitors = Number(data?.analyticsV2?.daily?.[dateKey()]?.visitors || 0);
 
     if (counter) {
-      counter.textContent = totalViews.toLocaleString();
-      counter.dataset.value = String(totalViews);
+      counter.textContent = siteVisitors.toLocaleString();
+      counter.dataset.value = String(siteVisitors);
     }
-    if (todayCounter) todayCounter.textContent = todayViews.toLocaleString();
+    if (todayCounter) todayCounter.textContent = todayVisitors.toLocaleString();
   }, error => {
     console.warn('[Analytics] Counter unavailable:', error?.message || error);
     if (counter) counter.textContent = '—';
