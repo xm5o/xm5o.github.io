@@ -1,0 +1,47 @@
+name: Performance pass once
+
+on:
+  push:
+    branches:
+      - performance-pass-2026-09-11
+    paths:
+      - '.github/workflows/performance-pass-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout performance branch
+        uses: actions/checkout@v4
+        with:
+          ref: performance-pass-2026-09-11
+          fetch-depth: 0
+
+      - name: Apply performance patch
+        run: python3 scripts/performance-pass-patch.py
+
+      - name: Validate JavaScript and resource wiring
+        run: |
+          node --check scripts/home.js
+          node --check scripts/projects.js
+          node --check scripts/discord-activity.js
+          node --check scripts/lazy-init.js
+          grep -q 'css/performance.css' index.html
+          grep -q 'scripts/lazy-init.js' index.html
+          ! grep -q 'css/discord-activity.css' index.html
+          ! grep -q 'font-awesome/6.4.0' index.html
+          ! grep -q 'scripts/projects.js' index.html
+          ! grep -q 'scripts/discord-activity.js' index.html
+          ! grep -q 'type="module" src="scripts/analytics.js"' index.html
+
+      - name: Commit performance changes and remove one-time tooling
+        run: |
+          rm -f scripts/performance-pass-patch.py .github/workflows/performance-pass-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html css/style.css scripts/discord-activity.js scripts/performance-pass-patch.py .github/workflows/performance-pass-once.yml
+          git commit -m "Reduce homepage rendering overhead"
+          git push origin HEAD:performance-pass-2026-09-11
