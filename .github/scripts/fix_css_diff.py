@@ -1,0 +1,165 @@
+from pathlib import Path
+import subprocess
+
+subprocess.run(['git', 'fetch', 'origin', 'main'], check=True)
+subprocess.run(['git', 'checkout', 'origin/main', '--', 'css/style.css', 'css/contact.css'], check=True)
+
+style_block = '''
+/* === 2026 Mobile & Performance Polish === */
+/* Keep the existing design, but avoid rendering heavy below-the-fold sections
+   until they are close to the viewport. */
+@supports (content-visibility: auto) {
+  #discord-activity,
+  #about,
+  #now,
+  #services,
+  #projects,
+  #music,
+  #faq,
+  #contact,
+  .footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 900px;
+  }
+
+  .footer {
+    contain-intrinsic-size: 1px 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    width: calc(100% - 1.5rem);
+    top: 0.75rem;
+    padding: 0.85rem 1rem;
+    border-radius: 1.4rem;
+  }
+
+  .logo {
+    font-size: clamp(1.85rem, 7vw, 2.35rem);
+  }
+
+  .home {
+    padding-top: 7rem;
+  }
+
+  .cta-group.enhanced-cta {
+    gap: 0.8rem;
+    margin-top: 1.4rem;
+  }
+
+  .cta-group.enhanced-cta .enhanced-btn {
+    min-height: 3.2rem;
+    padding: 0.85rem 1rem;
+  }
+
+  .footer {
+    padding-top: 2.25rem;
+  }
+
+  .footer-container {
+    gap: 1.25rem;
+  }
+
+  .site-views-card {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    width: calc(100% - 1rem);
+    top: 0.5rem;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .home {
+    padding-top: 6.5rem;
+  }
+
+  .cta-group.enhanced-cta {
+    width: 100%;
+  }
+
+  .cta-group.enhanced-cta .enhanced-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+'''
+
+contact_block = '''
+/* === 2026 Contact Mobile Polish === */
+@media (max-width: 768px) {
+  .contact {
+    min-height: auto;
+    padding: 4.5rem 4% 2.5rem;
+  }
+
+  .contact-container,
+  .enhanced-contact-container {
+    gap: 1.5rem;
+  }
+
+  .secondary-contact,
+  .enhanced-secondary-contact {
+    gap: 1rem;
+    margin-top: 0;
+  }
+
+  .secondary-contact > .contact-card,
+  .enhanced-secondary-contact > .enhanced-contact-card {
+    display: none;
+  }
+
+  .enhanced-response-notice {
+    width: min(100%, 38rem);
+    margin: 0 auto;
+    padding: 1rem 1.15rem;
+    gap: 0.9rem;
+    border-radius: 1.25rem;
+  }
+
+  .notice-icon-wrapper {
+    width: 3rem;
+    height: 3rem;
+    min-width: 3rem;
+  }
+
+  .notice-text,
+  .enhanced-notice-text {
+    font-size: clamp(1rem, 4vw, 1.1rem);
+    line-height: 1.45;
+  }
+
+  .floating-contact-elements {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .contact .discord-features.enhanced-features {
+    display: none;
+  }
+
+  .enhanced-discord-cta {
+    margin-top: 1rem;
+  }
+}
+'''
+
+for path_str, block, marker in [
+    ('css/style.css', style_block, '2026 Mobile & Performance Polish'),
+    ('css/contact.css', contact_block, '2026 Contact Mobile Polish'),
+]:
+    path = Path(path_str)
+    data = path.read_bytes()
+    if marker.encode() in data:
+        continue
+    newline = b'\r\n' if b'\r\n' in data else b'\n'
+    encoded = block.strip('\n').replace('\n', newline.decode()).encode()
+    if not data.endswith((b'\n', b'\r')):
+        data += newline
+    path.write_bytes(data + newline + encoded + newline)
+
+print('Restored original CSS bytes and appended focused polish blocks.')
