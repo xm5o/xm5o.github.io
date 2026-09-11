@@ -17,13 +17,7 @@
   <meta name="twitter:title" content="Immortal | Developer, Discord Bots & FNF Mods" />
   <meta name="twitter:description" content="Developer portfolio featuring web projects, Discord bots, FNF modding, and current work." />
   <meta name="twitter:image" content="https://xm5o.github.io/assets/Immortal-site-banner.png" />
-
-
-
-  <!-- <link rel="preload" href="assets/pfp.jpg" as="image" type="image/jpeg" />
-    <link rel="preload" href="css/style.css" as="style" /> -->
-
-  <link rel="canonical" href="https://xm5o.github.io/" />
+<link rel="canonical" href="https://xm5o.github.io/" />
   <meta name="theme-color" content="#0a0a0a" />
   <link rel="icon" href="assets/pfp.jpg" type="image/jpeg" />
   <title>Immortal | Developer, Discord Bots & FNF Mods</title>
@@ -38,80 +32,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <script src="scripts/loading.js"></script>
   <script src="scripts/pfp-theme.js"></script>
-  <script>
-    // About Me Tab Switching Logic
-    document.addEventListener('DOMContentLoaded', () => {
-      const tabButtons = document.querySelectorAll('.tab-btn');
-      const tabContents = document.querySelectorAll('.tab-content');
-      const aboutSection = document.getElementById('about');
-
-      const activateTab = (tabName) => {
-        tabButtons.forEach(btn => btn.classList.remove('active'));
-        tabContents.forEach(content => content.classList.remove('active'));
-
-        const activeBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
-        const activeContent = document.getElementById(`${tabName}-tab`);
-
-        if (activeBtn) activeBtn.classList.add('active');
-        if (activeContent) activeContent.classList.add('active');
-      };
-
-      tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const tabName = button.getAttribute('data-tab');
-          activateTab(tabName);
-          if (tabName === 'profile') {
-            animateSkillBars();
-          }
-        });
-      });
-
-      // Skill Bar Animation Logic
-      const animateSkillBars = () => {
-        const skillBars = document.querySelectorAll('.skill-progress');
-        skillBars.forEach(bar => {
-          const progress = bar.getAttribute('data-progress');
-          // Only animate if the bar is visible (i.e., the 'profile' tab is active)
-          if (document.getElementById('profile-tab').classList.contains('active')) {
-            bar.style.width = progress + '%';
-          } else {
-            bar.style.width = '0%'; // Reset when not visible
-          }
-        });
-      };
-
-      // Intersection Observer to trigger animation when section is visible
-      const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1 // Trigger when 10% of the section is visible
-      };
-
-      const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            // Check if the 'profile' tab is the currently active tab
-            if (document.querySelector('.tab-btn[data-tab="profile"]').classList.contains('active')) {
-              animateSkillBars();
-            }
-          } else {
-            // Optional: reset animation when out of view
-            // document.querySelectorAll('.skill-progress').forEach(bar => bar.style.width = '0%');
-          }
-        });
-      }, observerOptions);
-
-      if (aboutSection) {
-        observer.observe(aboutSection);
-      }
-
-      // Initial load: ensure 'profile' is active and animated if visible
-      activateTab('profile');
-      if (aboutSection && aboutSection.getBoundingClientRect().top < window.innerHeight) {
-        animateSkillBars();
-      }
-    });
-  </script>
 </head>
 
 <body class="is-loading">
@@ -138,8 +58,7 @@
         <i class="bx bx-home"></i>
         <span>Home</span>
       </a>
-      <!-- <a href="#upcoming" data-translate="nav.upcoming">Upcoming</a> -->
-      <a href="#about" data-translate="nav.about">
+<a href="#about" data-translate="nav.about">
         <i class="bx bx-user"></i>
         <span>About</span>
       </a>
@@ -168,18 +87,8 @@
         <i class="bx bx-envelope"></i>
         <span>Contact</span>
       </a>
-
-      <!-- <div class="mobile-language-toggle">
-        <button id="mobile-language-toggle" aria-label="Toggle Language">
-          <i class="bx bx-globe"></i> <span id="mobile-language-text">EN</span>
-        </button>
-      </div> -->
-    </nav>
-
-    <!-- <button id="desktop-language-toggle" class="desktop-language" aria-label="Toggle Language">
-      <i class="bx bx-globe"></i> <span id="desktop-language-text">EN</span>
-    </button> -->
-  </header>
+</nav>
+</header>
 
   <!-- Home Section -->
   <section class="home" id="home">
@@ -262,26 +171,7 @@
             <span class="tagline-highlight">He/Him</span> — I build websites and Discord bots,
             and I make <span class="tagline-highlight">FNF mods</span> for fun
           </p>
-
-          <!-- New Stats Section -->
-          <!-- <div class="hero-stats">
-            <div class="stat-item">
-              <div class="stat-number" data-target="4">0</div>
-              <div class="stat-label">Years Experience</div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-              <div class="stat-number" data-target="4">0</div>
-              <div class="stat-label">Projects Completed</div>
-            </div>
-            <div class="stat-divider"></div>
-              <div class="stat-item">
-                <div class="stat-number" data-target="20">0</div>
-                <div class="stat-label">Happy Clients</div>
-              </div>
-          </div> -->
-
-        </div>
+</div>
 
         <!-- Enhanced Social Links with New Design -->
         <div class="social-links enhanced-social">
@@ -355,14 +245,14 @@
               <span></span>
             </div>
           </a>
-          <!-- <a href="commission/index.html" class="cta-btn commission-cta enhanced-btn secondary-btn">
+          <a href="commission/index.html" class="cta-btn commission-cta enhanced-btn secondary-btn">
             <div class="btn-bg"></div>
             <div class="btn-icon">
               <i class="bx bx-brush"></i>
             </div>
             <span class="btn-text" style="color: var(--accent-color);">Commission</span>
             <div class="btn-shine"></div>
-          </a> -->
+          </a>
         </div>
 
         <!-- New Skills Preview -->
@@ -1342,97 +1232,7 @@
         </div>
       </div>
     </section>
-
-    <!-- Game Collection Section -->
-    <!-- <section class="game-collection" id="game-collection">
-      <h2 class="heading" data-translate="game.collection">Game Collection</h2>
-
-      <div class="game-categories">
-        <div class="game-category">
-          <h3 class="category-title" data-translate="game.favorite">Favorite Game</h3>
-          <div class="game-list">
-            <div class="game-card">
-              <div class="game-card-image-container">
-                <img src="./assets/overwatch-2.jpg" alt="Overwatch 2" class="game-card-image">
-              </div>
-              <div class="game-card-content">
-                <h4 class="game-card-title">Overwatch 2</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="game-category">
-          <h3 class="category-title" data-translate="game.like">Games I Like</h3>
-          <div class="game-list">
-            <div class="game-card">
-              <div class="game-card-image-container">
-                <img src="./assets/overwatch-2.jpg" alt="Overwatch 2" class="game-card-image">
-              </div>
-              <div class="game-card-content">
-                <h4 class="game-card-title">Overwatch 2</h4>
-              </div>
-            </div>
-            <div class="game-card">
-              <div class="game-card-image-container">
-                <img src="./assets/marvel-rivals.jpg" alt="Marvel Rivals" class="game-card-image">
-              </div>
-              <div class="game-card-content">
-                <h4 class="game-card-title">Marvel Rivals</h4>
-              </div>
-            </div>
-            <div class="game-card">
-              <div class="game-card-image-container">
-                <img src="./assets/the-last-of-us-part-1.jpg" alt="The Last of Us Part 1" class="game-card-image">
-              </div>
-              <div class="game-card-content">
-                <h4 class="game-card-title">The Last of Us Part 1</h4>
-              </div>
-            </div>
-            <div class="game-card">
-              <div class="game-card-image-container">
-                <img src="./assets/minecraft.jpg" alt="Minecraft" class="game-card-image">
-              </div>
-              <div class="game-card-content">
-                <h4 class="game-card-title">Minecraft</h4>
-              </div>
-            </div>
-            <div class="game-card">
-              <div class="game-card-image-container">
-                <img src="./assets/roblox.jpg" alt="Roblox" class="game-card-image">
-              </div>
-              <div class="game-card-content">
-                <h4 class="game-card-title">Roblox</h4>
-              </div>
-            </div>
-            <div class="game-card">
-              <div class="game-card-image-container">
-                <img src="./assets/spider-man.jpg" alt="Spider-Man: Miles Morales" class="game-card-image">
-              </div>
-              <div class="game-card-content">
-                <h4 class="game-card-title">Spider-Man: Miles Morales</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="game-category">
-          <h3 class="category-title" data-translate="game.want_to_play">Want to Play</h3>
-          <div class="game-list">
-            <div class="game-card">
-              <div class="game-card-image-container">
-                <img src="./assets/the-last-of-us-part-2-remastered.jpg" alt="The Last of Us: Part II Remastered" class="game-card-image">
-              </div>
-              <div class="game-card-content">
-                <h4 class="game-card-title">The Last of Us: Part II Remastered</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section> -->
-
-    <!-- Contact Section -->
+<!-- Contact Section -->
     <section class="contact" id="contact">
       <div class="contact-particles">
         <div class="contact-particle"></div>
@@ -1719,6 +1519,7 @@
   <script src="scripts/utils.js"></script>
   <script src="scripts/navbar.js"></script>
   <script src="scripts/home.js"></script>
+  <script src="scripts/about.js"></script>
   <script src="scripts/skills.js"></script>
   <script src="scripts/projects.js"></script>
   <script src="scripts/discord-activity.js"></script>
@@ -1726,7 +1527,6 @@
   <script src="scripts/script.js"></script>
   <script src="scripts/faq.js"></script>
   <script type="module" src="scripts/analytics.js"></script>
-
 
 
 </body>

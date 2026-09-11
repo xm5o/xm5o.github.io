@@ -2109,3 +2109,63 @@
     opacity: 0.3 !important;
   }
 }
+
+/* === 2026 Contact Mobile Polish === */
+@media (max-width: 768px) {
+  .contact {
+    min-height: auto;
+    padding: 4.5rem 4% 2.5rem;
+  }
+
+  .contact-container,
+  .enhanced-contact-container {
+    gap: 1.5rem;
+  }
+
+  .secondary-contact,
+  .enhanced-secondary-contact {
+    gap: 1rem;
+    margin-top: 0;
+  }
+
+  /* Keep the useful CTA + reply-time message on phones and remove the
+     repeated explanatory cards that made the section unnecessarily tall. */
+  .secondary-contact > .contact-card,
+  .enhanced-secondary-contact > .enhanced-contact-card {
+    display: none;
+  }
+
+  .enhanced-response-notice {
+    width: min(100%, 38rem);
+    margin: 0 auto;
+    padding: 1rem 1.15rem;
+    gap: 0.9rem;
+    border-radius: 1.25rem;
+  }
+
+  .notice-icon-wrapper {
+    width: 3rem;
+    height: 3rem;
+    min-width: 3rem;
+  }
+
+  .notice-text,
+  .enhanced-notice-text {
+    font-size: clamp(1rem, 4vw, 1.1rem);
+    line-height: 1.45;
+  }
+
+  .floating-contact-elements {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .contact .discord-features.enhanced-features {
+    display: none;
+  }
+
+  .enhanced-discord-cta {
+    margin-top: 1rem;
+  }
+}
