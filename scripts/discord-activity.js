@@ -475,6 +475,7 @@ function updateSpotify(spotifyData) {
     }
     
     function updateProgress() {
+        if (document.hidden) return;
         const now = Date.now();
         const elapsed = now - startTime;
         const progress = Math.min((elapsed / duration) * 100, 100);
@@ -497,7 +498,7 @@ function updateSpotify(spotifyData) {
     }
     
     updateProgress();
-    progressInterval = setInterval(updateProgress, 100);
+    progressInterval = setInterval(updateProgress, 1000);
     
     const spotifyButtons = document.getElementById('spotifyButtons');
     spotifyButtons.innerHTML = '';
@@ -586,6 +587,8 @@ function updateActivities(activities) {
     const activitiesContainer = document.getElementById('activitiesContainer');
     if (!activitiesContainer) return;
     
+    Object.values(activityIntervals).forEach(interval => clearInterval(interval));
+    activityIntervals = {};
     activitiesContainer.innerHTML = '';
     
     const validActivities = activities ? activities.filter(activity => 
@@ -707,6 +710,7 @@ function updateActivities(activities) {
             const duration = endTime - startTime;
             
             function updateActivityProgress() {
+                if (document.hidden) return;
                 const now = Date.now();
                 const elapsed = now - startTime;
                 const progress = Math.min((elapsed / duration) * 100, 100);
@@ -733,13 +737,14 @@ function updateActivities(activities) {
             }
             
             updateActivityProgress();
-            activityIntervals[activity.id] = setInterval(updateActivityProgress, 100);
+            activityIntervals[activity.id] = setInterval(updateActivityProgress, 1000);
             
         } else if (activity.created_at) {
             activityTimeElement.style.display = 'flex';
             activityProgressElement.style.display = 'none';
             
             function updateActivityTime() {
+                if (document.hidden) return;
                 const startTime = activity.created_at;
                 const elapsed = Math.floor((Date.now() - startTime) / 1000);
                 const hours = Math.floor(elapsed / 3600);
