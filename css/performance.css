@@ -1,0 +1,97 @@
+/* Runtime performance layer. Keeps the visual language while reducing work on
+   touch/mobile devices and while the page is in a background tab. */
+
+.page-hidden *,
+.page-hidden *::before,
+.page-hidden *::after {
+  animation-play-state: paused !important;
+}
+
+/* The loading shell should get out of the way quickly once content is ready. */
+#mainContent {
+  transition-duration: 0.25s !important;
+}
+
+/* Isolate frequently animated hero pieces from the rest of the page. */
+.profile-img,
+.image-border,
+.orbital-ring,
+.primary-glow,
+.secondary-glow {
+  contain: layout paint;
+}
+
+/* Mobile GPUs pay a large price for many simultaneous live backdrop blurs.
+   These surfaces already have opaque/translucent backgrounds, so disabling the
+   blur preserves the appearance closely while cutting compositing work. */
+.perf-lite .text-reveal-container,
+.perf-lite .animated-titles,
+.perf-lite .enhanced-social,
+.perf-lite .social-btn,
+.perf-lite .projects-cta,
+.perf-lite .commission-cta,
+.perf-lite .skill-card,
+.perf-lite .project-card,
+.perf-lite .filter-btn,
+.perf-lite .project-overlay,
+.perf-lite .feature,
+.perf-lite .song-card,
+.perf-lite .play-overlay,
+.perf-lite .now-card,
+.perf-lite .faq-item,
+.perf-lite .floating-card,
+.perf-lite .audio-player {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Decorative movement is the first thing to trim on touch devices. */
+.perf-lite .primary-glow,
+.perf-lite .secondary-glow,
+.perf-lite .orbital-ring,
+.perf-lite .image-border,
+.perf-lite .immortal-text,
+.perf-lite .role-switch,
+.perf-lite .grid-line,
+.perf-lite .music-particle,
+.perf-lite .music-geo-shape,
+.perf-lite .upcoming-particle,
+.perf-lite .upcoming-geo-shape {
+  animation: none !important;
+}
+
+.perf-lite .primary-glow,
+.perf-lite .secondary-glow {
+  filter: blur(24px);
+}
+
+.perf-lite .music-particles-container,
+.perf-lite .music-geometric-bg,
+.perf-lite .upcoming-particles-container,
+.perf-lite .upcoming-geometric-bg {
+  display: none !important;
+}
+
+/* Filters on large animated text/image layers trigger expensive repaints. */
+.perf-lite .gradient-heading,
+.perf-lite .services .gradient-heading,
+.perf-lite .profile-img {
+  filter: none !important;
+}
+
+@media (max-width: 768px) {
+  /* Fixed blurred headers are expensive during every scroll frame on mobile. */
+  .header {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(10, 10, 10, 0.94) !important;
+  }
+
+  /* Don't animate elements users cannot hover on anyway. */
+  .project-card,
+  .song-card,
+  .skill-card,
+  .now-card {
+    will-change: auto !important;
+  }
+}
