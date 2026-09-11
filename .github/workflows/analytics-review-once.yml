@@ -38,3 +38,5 @@ jobs:
           git add 404.html scripts/analytics.js
           git commit -m "Polish and verify analytics v2"
           git push origin analytics-v2-2026-09-11
+
+# Final verification rerun.
