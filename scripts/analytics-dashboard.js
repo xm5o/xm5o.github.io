@@ -1,17 +1,8 @@
-import { getAnalyticsDb, ANALYTICS_COLLECTIONS } from './analytics-config.js';
-import {
-  collection,
-  doc,
-  documentId,
-  getDoc,
-  getDocs,
-  limit,
-  orderBy,
-  query
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getAnalyticsDb, ANALYTICS_DOCS } from './analytics-config.js';
+import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 const db = getAnalyticsDb();
-
+const SUMMARY_REF = doc(db, ANALYTICS_DOCS.summary.collection, ANALYTICS_DOCS.summary.document);
 const formatNumber = value => Number(value || 0).toLocaleString();
 
 function setText(id, value) {
@@ -28,16 +19,21 @@ function escapeHtml(value) {
     .replace(/'/g, '&#039;');
 }
 
-async function fetchTop(collectionName, count = 10) {
-  const q = query(collection(db, collectionName), orderBy('views', 'desc'), limit(count));
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+function mapRows(map) {
+  return Object.entries(map || {}).map(([id, value]) => ({ id, ...(value || {}) }));
 }
 
-async function fetchDaily(count = 30) {
-  const q = query(collection(db, ANALYTICS_COLLECTIONS.daily), orderBy(documentId(), 'desc'), limit(count));
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(item => ({ id: item.id, ...item.data() })).reverse();
+function topRows(map, count = 10) {
+  return mapRows(map)
+    .sort((a, b) => Number(b.views || 0) - Number(a.views || 0))
+    .slice(0, count);
+}
+
+function dailyRows(map, count = 30) {
+  return mapRows(map)
+    .sort((a, b) => String(a.id).localeCompare(String(b.id)))
+    .slice(-count)
+    .map(row => ({ ...row, date: row.date || row.id }));
 }
 
 function renderRankedList(id, rows, labelSelector = row => row.label || row.name || row.id) {
@@ -173,25 +169,26 @@ async function loadDashboard() {
   const status = document.getElementById('dashboardStatus');
 
   try {
-    const [summarySnap, daily, countries, cities, referrers, devices, browsers, operatingSystems, pages] = await Promise.all([
-      getDoc(doc(db, ANALYTICS_COLLECTIONS.summary, 'summary')),
-      fetchDaily(30),
-      fetchTop(ANALYTICS_COLLECTIONS.countries, 10),
-      fetchTop(ANALYTICS_COLLECTIONS.cities, 10),
-      fetchTop(ANALYTICS_COLLECTIONS.referrers, 10),
-      fetchTop(ANALYTICS_COLLECTIONS.devices, 5),
-      fetchTop(ANALYTICS_COLLECTIONS.browsers, 8),
-      fetchTop(ANALYTICS_COLLECTIONS.operatingSystems, 8),
-      fetchTop(ANALYTICS_COLLECTIONS.pages, 10)
-    ]);
+    const snapshot = await getDoc(SUMMARY_REF);
+    if (!snapshot.exists()) throw new Error('Analytics summary does not exist yet.');
 
-    const summary = summarySnap.exists() ? summarySnap.data() : {};
+    const summary = snapshot.data() || {};
+    const analytics = summary.analyticsV2 || {};
+    const dimensions = analytics.dimensions || {};
+    const daily = dailyRows(analytics.daily, 30);
+    const countries = topRows(dimensions.countries, 10);
+    const cities = topRows(dimensions.cities, 10);
+    const referrers = topRows(dimensions.referrers, 10);
+    const devices = topRows(dimensions.devices, 5);
+    const browsers = topRows(dimensions.browsers, 8);
+    const operatingSystems = topRows(dimensions.operatingSystems, 8);
+    const pages = topRows(dimensions.pages, 10);
     const today = daily[daily.length - 1] || {};
     const last7 = daily.slice(-7);
     const week = getDateTotals(last7);
 
     setText('totalViews', formatNumber(summary.totalViews));
-    setText('uniqueVisitors', formatNumber(summary.uniqueVisitors));
+    setText('uniqueVisitors', formatNumber(analytics.uniqueVisitors));
     setText('todayViews', formatNumber(today.views));
     setText('weekViews', formatNumber(week.views));
     setText('todayVisitors', `${formatNumber(today.visitors)} visitors today`);
@@ -207,12 +204,12 @@ async function loadDashboard() {
     renderRankedList('osList', operatingSystems);
 
     if (status) {
-      status.textContent = 'Aggregate analytics only · no raw IP addresses or device fingerprints stored';
+      status.textContent = 'Aggregate analytics only · stored in the existing visitor_stats document · no raw IP addresses or device fingerprints';
       status.classList.add('ready');
     }
   } catch (error) {
     console.error('[Analytics dashboard]', error);
-    if (status) status.textContent = 'Analytics data could not be loaded. Check Firestore rules and console errors.';
+    if (status) status.textContent = `Analytics data could not be loaded: ${error?.message || error}`;
   }
 }
 

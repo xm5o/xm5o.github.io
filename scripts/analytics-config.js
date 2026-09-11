@@ -10,16 +10,13 @@ export const firebaseConfig = {
   appId: '1:204951222864:web:f8c2fb4e00f39896636f55'
 };
 
-export const ANALYTICS_COLLECTIONS = Object.freeze({
-  summary: 'site_analytics',
-  daily: 'analytics_daily',
-  countries: 'analytics_countries',
-  cities: 'analytics_cities',
-  referrers: 'analytics_referrers',
-  devices: 'analytics_devices',
-  browsers: 'analytics_browsers',
-  operatingSystems: 'analytics_os',
-  pages: 'analytics_pages'
+// Keep analytics inside the same Firestore document used by the original,
+// already-authorized site counter. No per-visitor documents are created.
+export const ANALYTICS_DOCS = Object.freeze({
+  summary: Object.freeze({
+    collection: 'visitor_stats',
+    document: 'main'
+  })
 });
 
 export function getAnalyticsDb() {
