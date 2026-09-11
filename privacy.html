@@ -3,18 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Privacy information for xm5o.github.io.">
+  <meta name="description" content="Privacy information and analytics controls for xm5o.github.io.">
   <link rel="canonical" href="https://xm5o.github.io/privacy.html">
+  <meta name="theme-color" content="#0a0a0a">
   <title>Privacy | Immortal</title>
   <style>
     :root { color-scheme: dark; }
     * { box-sizing: border-box; }
     body { margin: 0; background: #0a0a0a; color: #f5f5f5; font: 16px/1.7 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-    main { width: min(760px, calc(100% - 40px)); margin: 0 auto; padding: 72px 0; }
+    main { width: min(780px, calc(100% - 40px)); margin: 0 auto; padding: 72px 0; }
     a { color: #d4a574; }
     h1, h2 { line-height: 1.2; }
+    h2 { margin-top: 30px; }
+    code { padding: 2px 6px; border: 1px solid #2d2d2d; border-radius: 7px; background: #171717; color: #ddd; }
     .muted { color: #aaa; }
     .card { margin-top: 28px; padding: 24px; border: 1px solid #252525; border-radius: 18px; background: #111; }
+    .privacy-status { margin: 18px 0 0; padding: 14px 16px; border: 1px solid #2b2b2b; border-radius: 14px; background: #0d0d0d; color: #bbb; }
+    .privacy-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    button { appearance: none; border: 1px solid #363636; border-radius: 12px; padding: 10px 14px; background: #181818; color: #f5f5f5; font: inherit; cursor: pointer; }
+    button:hover { border-color: #d4a574; }
+    button.primary { background: #d4a574; border-color: #d4a574; color: #111; font-weight: 700; }
+    ul { padding-left: 20px; }
   </style>
 </head>
 <body>
@@ -22,16 +31,97 @@
     <a href="/">Back to home</a>
     <h1>Privacy</h1>
     <p class="muted">Last updated: September 11, 2026</p>
+
     <div class="card">
-      <h2>Visitor tracking</h2>
-      <p>This site does not intentionally store visitor IP addresses, device fingerprints, precise locations, or browser profiles for analytics.</p>
+      <h2>Privacy-friendly site analytics</h2>
+      <p>This site uses a lightweight analytics system to understand how the site is being used while avoiding invasive visitor profiles.</p>
+      <p>The analytics system may record aggregate information such as:</p>
+      <ul>
+        <li>Page views and approximate unique visitors</li>
+        <li>Date of the visit and page path</li>
+        <li>Country, region, and city at a coarse level</li>
+        <li>Referring site such as Google, Discord, Instagram, or direct traffic</li>
+        <li>Broad device type, browser family, and operating system</li>
+      </ul>
+
+      <h2>What is not stored</h2>
+      <p>The site does not intentionally write raw IP addresses, device fingerprints, exact coordinates, ISP information, postal codes, or a detailed per-person browsing profile to its analytics database.</p>
+
+      <h2>How unique visitors work</h2>
+      <p>Instead of fingerprinting a device, the site stores a small local flag in your browser indicating that this browser has been counted before. Clearing site data can cause the browser to be counted again, so the unique visitor total is intentionally approximate.</p>
+
+      <h2>Location lookup</h2>
+      <p>For coarse location analytics, the browser may request location information from <strong>ipapi.co</strong>. Like any internet service you connect to, that provider receives the network request and can see the public IP used for that request. The site code intentionally discards the returned IP address and writes only coarse country, region, and city fields to Firestore.</p>
+
+      <h2>Your controls</h2>
+      <p>Browser Do Not Track and Global Privacy Control signals are respected. You can also disable this site's analytics on this browser below.</p>
+      <div class="privacy-status" id="privacyStatus" aria-live="polite">Checking analytics preference…</div>
+      <div class="privacy-actions">
+        <button class="primary" id="disableAnalytics" type="button">Disable analytics on this browser</button>
+        <button id="enableAnalytics" type="button">Enable analytics</button>
+      </div>
+
       <h2>Third-party services</h2>
-      <p>Some pages load content or status information from services such as Discord, Spotify, Google Fonts, and other content delivery networks. Those services may receive normal connection information when your browser requests their resources.</p>
+      <p>Some pages load content or status information from services such as Discord, Spotify, Google Fonts, content delivery networks, Firebase, and the coarse-location provider described above. Those services may receive normal connection information when your browser requests their resources.</p>
+
       <h2>Local storage</h2>
-      <p>Site features may store small preference or interface values in your browser. These values stay on your device unless a feature clearly states otherwise.</p>
+      <p>The analytics system uses small local values to remember whether this browser has been counted, whether it has been counted for today's approximate daily visitor number, and whether you opted out. These values stay on your device.</p>
+
       <h2>Contact</h2>
       <p>For questions about this site, use the contact links on the homepage.</p>
     </div>
   </main>
+
+  <script>
+    (() => {
+      const OPT_OUT_KEY = 'xm5o_analytics_opt_out';
+      const status = document.getElementById('privacyStatus');
+      const disableButton = document.getElementById('disableAnalytics');
+      const enableButton = document.getElementById('enableAnalytics');
+
+      const storageGet = key => {
+        try { return localStorage.getItem(key); } catch { return null; }
+      };
+      const storageSet = (key, value) => {
+        try { localStorage.setItem(key, value); return true; } catch { return false; }
+      };
+      const storageRemove = key => {
+        try { localStorage.removeItem(key); return true; } catch { return false; }
+      };
+
+      function privacySignalActive() {
+        return navigator.doNotTrack === '1' || window.doNotTrack === '1' || navigator.globalPrivacyControl === true;
+      }
+
+      function render() {
+        const manualOptOut = storageGet(OPT_OUT_KEY) === '1';
+        const signal = privacySignalActive();
+        if (manualOptOut) {
+          status.textContent = 'Analytics is disabled on this browser by your site preference.';
+        } else if (signal) {
+          status.textContent = 'Analytics is disabled because your browser is sending a privacy signal (Do Not Track or Global Privacy Control).';
+        } else {
+          status.textContent = 'Analytics is currently enabled on this browser.';
+        }
+        disableButton.disabled = manualOptOut;
+        enableButton.disabled = !manualOptOut;
+      }
+
+      disableButton.addEventListener('click', () => {
+        if (!storageSet(OPT_OUT_KEY, '1')) {
+          status.textContent = 'Your browser blocked local storage, so the preference could not be saved.';
+          return;
+        }
+        render();
+      });
+
+      enableButton.addEventListener('click', () => {
+        storageRemove(OPT_OUT_KEY);
+        render();
+      });
+
+      render();
+    })();
+  </script>
 </body>
 </html>
