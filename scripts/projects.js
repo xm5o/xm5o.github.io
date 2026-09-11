@@ -22,7 +22,7 @@ class ProjectsManager {
         description: "A Friday Night Funkin' mod I'm working on. Not out yet.",
         category: 'game',
         status: 'coming-soon',
-        image: './assets/immortality_icon.png',
+        image: './assets/immortality_icon.webp',
         features: [
           { icon: 'fas fa-question', text: 'Coming Soon...' }
         ],
