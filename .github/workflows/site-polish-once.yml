@@ -1,0 +1,106 @@
+name: One-time website polish
+
+on:
+  push:
+    branches:
+      - site-cleanup-2026-09-11
+
+permissions:
+  contents: write
+
+jobs:
+  polish:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout cleanup branch
+        uses: actions/checkout@v4
+        with:
+          ref: site-cleanup-2026-09-11
+          fetch-depth: 0
+
+      - name: Patch remaining issues
+        shell: bash
+        run: |
+          set -e
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          # Homepage small cleanup.
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace('  <!-- <script src="scripts/translate.js"></script> -->\n', '')
+          text = text.replace('  <!-- <script src="scripts/mobile-enhancements.js" defer></script> -->\n', '')
+          text = text.replace('<a href="#" class="logo" aria-label="Personal Logo">Immortal</a>', '<a href="#home" class="logo" aria-label="Immortal home">Immortal</a>')
+          text = text.replace('<button id="close-menu" aria-label="Close Mobile Menu">', '<button id="close-menu" type="button" aria-label="Close Mobile Menu">')
+          text = text.replace('<img src="assets/pfp.jpg" alt="Profile" loading="lazy" class="profile-img" />', '<img src="assets/pfp.jpg" alt="Immortal profile" loading="eager" fetchpriority="high" decoding="async" class="profile-img" />')
+          text = text.replace('<img src="assets/pfp.jpg" alt="Immortal Profile" />', '<img src="assets/pfp.jpg" alt="Immortal profile" loading="lazy" decoding="async" />')
+          text = re.sub(r'\n\s*<div class="contact-success-modal" id="contactSuccessModal">.*?</div>\s*</div>\s*\n\s*</section>', '\n    </section>', text, count=1, flags=re.S)
+          text = text.replace('<p class="copyright">© <span>Immortal </span> | All Rights Reserved</p>', '<p class="copyright">© 2026 <span>Immortal</span> | All Rights Reserved</p>')
+          path.write_text(text, encoding='utf-8')
+
+          # Discord activity: prevent duplicate sockets/reconnect timers and lazy-start near the section.
+          path = Path('scripts/discord-activity.js')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace('let currentActivity = null;\n', 'let currentActivity = null;\nlet reconnectTimeout = null;\n')
+
+          marker = 'async function fetchDcdnData() {'
+          helper = '''function scheduleReconnect() {\n  if (reconnectTimeout) return;\n  reconnectTimeout = setTimeout(() => {\n    reconnectTimeout = null;\n    connectWebSocket();\n  }, 5000);\n}\n\n'''
+          if helper not in text:
+              text = text.replace(marker, helper + marker, 1)
+
+          text = text.replace("function connectWebSocket() {\n  try {", "function connectWebSocket() {\n  if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) return;\n\n  try {", 1)
+          text = text.replace('setTimeout(connectWebSocket, 5000);', 'scheduleReconnect();')
+          text = text.replace("button.target = '_blank';\n                button.textContent", "button.target = '_blank';\n                button.rel = 'noopener noreferrer';\n                button.textContent")
+          text = text.replace("} else if (activity.details_url && buttonText.toLowerCase().includes('listen') || buttonText.toLowerCase().includes('watch')) {", "} else if (activity.details_url && (buttonText.toLowerCase().includes('listen') || buttonText.toLowerCase().includes('watch'))) {")
+
+          text = re.sub(
+              r'// Initialize when DOM is loaded.*?\Z',
+              '''// Start Discord activity only when the section is close to the viewport.\nfunction initDiscordActivity() {\n  const discordSection = document.getElementById('discord-activity');\n  if (!discordSection) return;\n\n  let started = false;\n  const start = () => {\n    if (started) return;\n    started = true;\n    connectWebSocket();\n  };\n\n  if (!('IntersectionObserver' in window)) {\n    start();\n    return;\n  }\n\n  const observer = new IntersectionObserver(entries => {\n    if (entries.some(entry => entry.isIntersecting)) {\n      observer.disconnect();\n      start();\n    }\n  }, { rootMargin: '350px 0px' });\n\n  observer.observe(discordSection);\n}\n\nif (document.readyState === 'loading') {\n  document.addEventListener('DOMContentLoaded', initDiscordActivity, { once: true });\n} else {\n  initDiscordActivity();\n}\n''',
+              text,
+              count=1,
+              flags=re.S,
+          )
+          path.write_text(text, encoding='utf-8')
+
+          # Compress the 4.8 MB project icon to WebP if cwebp is available later in the job.
+          # Update the reference now; conversion happens in the next step.
+          path = Path('scripts/projects.js')
+          text = path.read_text(encoding='utf-8').replace("image: './assets/immortality_icon.png',", "image: './assets/immortality_icon.webp',")
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Compress large active project image
+        shell: bash
+        run: |
+          set -e
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq webp
+          cwebp -quiet -q 82 -m 6 assets/immortality_icon.png -o assets/immortality_icon.webp
+          rm assets/immortality_icon.png
+          test -s assets/immortality_icon.webp
+
+      - name: Verify final tree
+        shell: bash
+        run: |
+          set -e
+          ! grep -R "gsk_" -n --exclude-dir=.git .
+          ! grep -R "ipapi.co/json" -n --exclude-dir=.git .
+          ! grep -R "generateFingerprint" -n --exclude-dir=.git .
+          ! grep -R "unique_visitors" -n --exclude-dir=.git .
+          test ! -f overview.html
+          test ! -f scripts/views.js
+          test -f assets/immortality_icon.webp
+          grep -q "rootMargin: '350px 0px'" scripts/discord-activity.js
+          grep -q 'fetchpriority="high"' index.html
+
+      - name: Remove workflow and commit
+        shell: bash
+        run: |
+          rm -f .github/workflows/site-polish-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Polish performance and accessibility"
+          git push origin HEAD:site-cleanup-2026-09-11
