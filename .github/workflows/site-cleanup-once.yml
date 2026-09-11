@@ -1,0 +1,294 @@
+name: One-time website cleanup
+
+on:
+  push:
+    branches:
+      - site-cleanup-2026-09-11
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout cleanup branch
+        uses: actions/checkout@v4
+        with:
+          ref: site-cleanup-2026-09-11
+          fetch-depth: 0
+
+      - name: Apply cleanup patches
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          ROOT = Path('.')
+
+          def secure_blank_links(text: str) -> str:
+              pattern = re.compile(r'<a\b[^>]*\btarget=["\']_blank["\'][^>]*>', re.I)
+              def repl(match):
+                  tag = match.group(0)
+                  if re.search(r'\brel=', tag, re.I):
+                      return tag
+                  return tag[:-1] + ' rel="noopener noreferrer">'
+              return pattern.sub(repl, text)
+
+          def replace_meta(text: str, attr: str, key: str, value: str) -> str:
+              pattern = re.compile(rf'<meta\s+{attr}=["\']{re.escape(key)}["\'][^>]*>', re.I | re.S)
+              replacement = f'<meta {attr}="{key}" content="{value}" />'
+              if pattern.search(text):
+                  return pattern.sub(replacement, text, count=1)
+              return text
+
+          # Homepage cleanup
+          index_path = ROOT / 'index.html'
+          index = index_path.read_text(encoding='utf-8')
+
+          index = re.sub(
+              r'<meta\s+name=["\']description["\'][^>]*>',
+              '<meta name="description" content="Immortal is a developer portfolio featuring web projects, Discord bots, FNF modding, and current work." />',
+              index,
+              count=1,
+              flags=re.I | re.S,
+          )
+          index = re.sub(r'\s*<meta\s+name=["\']keywords["\'][^>]*>\s*', '\n', index, count=1, flags=re.I | re.S)
+
+          index = replace_meta(index, 'property', 'og:title', 'Immortal | Developer, Discord Bots & FNF Mods')
+          index = replace_meta(index, 'property', 'og:description', 'Developer portfolio featuring web projects, Discord bots, FNF modding, and current work.')
+          index = replace_meta(index, 'property', 'og:url', 'https://xm5o.github.io/')
+          index = replace_meta(index, 'property', 'og:image', 'https://xm5o.github.io/assets/Immortal-site-banner.png')
+          index = replace_meta(index, 'name', 'twitter:card', 'summary_large_image')
+          index = replace_meta(index, 'name', 'twitter:title', 'Immortal | Developer, Discord Bots & FNF Mods')
+          index = replace_meta(index, 'name', 'twitter:description', 'Developer portfolio featuring web projects, Discord bots, FNF modding, and current work.')
+          index = replace_meta(index, 'name', 'twitter:image', 'https://xm5o.github.io/assets/Immortal-site-banner.png')
+          index = re.sub(r'<title>.*?</title>', '<title>Immortal | Developer, Discord Bots & FNF Mods</title>', index, count=1, flags=re.I | re.S)
+
+          if 'rel="canonical"' not in index:
+              index = index.replace(
+                  '<title>Immortal | Developer, Discord Bots & FNF Mods</title>',
+                  '<link rel="canonical" href="https://xm5o.github.io/" />\n  <meta name="theme-color" content="#0a0a0a" />\n  <link rel="icon" href="assets/pfp.jpg" type="image/jpeg" />\n  <title>Immortal | Developer, Discord Bots & FNF Mods</title>',
+                  1,
+              )
+
+          # Remove duplicate stylesheet load.
+          discord_css = '  <link rel="stylesheet" href="css/discord-activity.css" />'
+          first = index.find(discord_css)
+          if first != -1:
+              second = index.find(discord_css, first + len(discord_css))
+              if second != -1:
+                  index = index[:second] + index[second + len(discord_css):]
+
+          # Language UI is disabled, so avoid loading two unused font families and a large inline RTL block.
+          index = re.sub(
+              r'\s*<!-- Arabic Fonts -->.*?</style>\s*',
+              '\n',
+              index,
+              count=1,
+              flags=re.S,
+          )
+
+          # Firebase is no longer required on the homepage after removing visitor tracking.
+          index = re.sub(r'\s*<script src="https://www\.gstatic\.com/firebasejs/8\.10\.1/firebase-app\.js"></script>\s*', '\n', index)
+          index = re.sub(r'\s*<script src="https://www\.gstatic\.com/firebasejs/8\.10\.1/firebase-firestore\.js"></script>\s*', '\n', index)
+
+          # Use a real button for the mobile menu trigger.
+          index = index.replace(
+              '<a id="menu-icon" aria-label="Toggle Mobile Menu" aria-expanded="false">\n      <i class="bx bx-menu"></i>\n    </a>',
+              '<button id="menu-icon" type="button" aria-label="Toggle Mobile Menu" aria-expanded="false">\n      <i class="bx bx-menu"></i>\n    </button>',
+              1,
+          )
+
+          # Remove the old visitor counter UI. No visitor-level tracking remains.
+          index = re.sub(
+              r'\n\s*<!-- Enhanced Visitor Counter -->.*?\n\s*<!-- Scroll Indicator -->',
+              '\n\n    <!-- Scroll Indicator -->',
+              index,
+              count=1,
+              flags=re.S,
+          )
+
+          # Lazy-load music artwork.
+          index = index.replace(
+              '<div class="song-image">\n              <img ',
+              '<div class="song-image">\n              <img loading="lazy" decoding="async" ',
+          )
+
+          index = index.replace('Last updated: <span id="nowUpdatedDate">August 2026</span>', 'Last updated: <span id="nowUpdatedDate">September 2026</span>')
+
+          # Remove stale disabled script references and the old stats script.
+          stale_script_lines = [
+              '  <!-- <script src="scripts/particles.js"></script> -->\n',
+              '  <!-- <script src="scripts/discord-modal.js"></script> -->\n',
+              '  <!-- <script src="scripts/music.js"></script> -->\n',
+              '  <!-- <script src="scripts/video-thumbnail.js"></script> -->\n',
+              '  <!-- hide some sections until i make it responsive for mobile -->\n',
+              '  <!-- <script src="scripts/hide.js"></script> -->\n',
+              '  <script type="module" src="scripts/views.js"></script>\n',
+          ]
+          for line in stale_script_lines:
+              index = index.replace(line, '')
+
+          # Add a Privacy link to the footer.
+          if 'href="privacy.html"' not in index:
+              index = index.replace(
+                  '          <li><a href="#contact">Contact</a></li>',
+                  '          <li><a href="#contact">Contact</a></li>\n          <li><a href="privacy.html">Privacy</a></li>',
+                  1,
+              )
+
+          index = secure_blank_links(index)
+          index_path.write_text(index, encoding='utf-8')
+
+          # Keep Selina status consistent with the FAQ and its current development state.
+          projects_path = ROOT / 'scripts/projects.js'
+          projects = projects_path.read_text(encoding='utf-8')
+          projects = projects.replace(
+              "description: 'A Discord bot for communities. Moderation, leveling, and AI chat. Ready to invite.',",
+              "description: 'A Discord bot for communities. Moderation, leveling, and AI chat. Public beta in development.',",
+          )
+          projects = projects.replace("badge: 'Live',\n        badgeType: 'success',", "badge: 'Public Beta',\n        badgeType: 'beta',")
+          projects = projects.replace('target="_blank" aria-label=', 'target="_blank" rel="noopener noreferrer" aria-label=')
+          projects = projects.replace('class="add-button primary" target="_blank">', 'class="add-button primary" target="_blank" rel="noopener noreferrer">')
+          projects_path.write_text(projects, encoding='utf-8')
+
+          # Commission page: remove IP/fingerprint analytics while preserving its content/design.
+          commission_path = ROOT / 'commission/index.html'
+          commission = commission_path.read_text(encoding='utf-8')
+          commission = re.sub(
+              r'\n\s*<div class="visitor-stats">\s*<div>.*?</div>\s*</div>',
+              '',
+              commission,
+              count=1,
+              flags=re.S,
+          )
+          commission = re.sub(
+              r'\n\s*<!-- Optimized Firebase Script -->\s*<script type="module">.*?</script>\s*',
+              '\n',
+              commission,
+              count=1,
+              flags=re.S,
+          )
+          commission = commission.replace('preload="metadata"', 'preload="none"')
+          commission = commission.replace('</button>\n                        </button>\n                        <div class="showcase-media">', '</button>\n                        <div class="showcase-media">', 1)
+          commission = secure_blank_links(commission)
+
+          if 'name="description"' not in commission:
+              commission = commission.replace(
+                  '<meta name="viewport" content="width=device-width, initial-scale=1.0">',
+                  '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <meta name="description" content="FNF charting, modcharting, and coding commissions by Immortal.">\n    <link rel="canonical" href="https://xm5o.github.io/commission/">',
+                  1,
+              )
+          commission_path.write_text(commission, encoding='utf-8')
+
+          # Remove scripts that are no longer active anywhere on the deployed site.
+          for relative in [
+              'scripts/bg-music-controller.js',
+              'scripts/discord-modal.js',
+              'scripts/hide.js',
+              'scripts/mobile-enhancements.js',
+              'scripts/music.js',
+              'scripts/particles.js',
+              'scripts/translate.js',
+              'scripts/upcoming.js',
+              'scripts/video-thumbnail.js',
+              'scripts/views.js',
+          ]:
+              path = ROOT / relative
+              if path.exists():
+                  path.unlink()
+
+          # Remove an unreferenced multi-megabyte banner.
+          unused_banner = ROOT / 'assets/immotality_collection_banner.png'
+          if unused_banner.exists():
+              unused_banner.unlink()
+
+          # Privacy page.
+          (ROOT / 'privacy.html').write_text('''<!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="description" content="Privacy information for xm5o.github.io.">
+            <link rel="canonical" href="https://xm5o.github.io/privacy.html">
+            <title>Privacy | Immortal</title>
+            <style>
+              :root { color-scheme: dark; }
+              * { box-sizing: border-box; }
+              body { margin: 0; background: #0a0a0a; color: #f5f5f5; font: 16px/1.7 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+              main { width: min(760px, calc(100% - 40px)); margin: 0 auto; padding: 72px 0; }
+              a { color: #d4a574; }
+              h1, h2 { line-height: 1.2; }
+              .muted { color: #aaa; }
+              .card { margin-top: 28px; padding: 24px; border: 1px solid #252525; border-radius: 18px; background: #111; }
+            </style>
+          </head>
+          <body>
+            <main>
+              <a href="/">Back to home</a>
+              <h1>Privacy</h1>
+              <p class="muted">Last updated: September 11, 2026</p>
+              <div class="card">
+                <h2>Visitor tracking</h2>
+                <p>This site does not intentionally store visitor IP addresses, device fingerprints, precise locations, or browser profiles for analytics.</p>
+                <h2>Third-party services</h2>
+                <p>Some pages load content or status information from services such as Discord, Spotify, Google Fonts, and other content delivery networks. Those services may receive normal connection information when your browser requests their resources.</p>
+                <h2>Local storage</h2>
+                <p>Site features may store small preference or interface values in your browser. These values stay on your device unless a feature clearly states otherwise.</p>
+                <h2>Contact</h2>
+                <p>For questions about this site, use the contact links on the homepage.</p>
+              </div>
+            </main>
+          </body>
+          </html>
+          ''', encoding='utf-8')
+
+          (ROOT / 'robots.txt').write_text('''User-agent: *
+          Allow: /
+
+          Sitemap: https://xm5o.github.io/sitemap.xml
+          ''', encoding='utf-8')
+
+          (ROOT / 'sitemap.xml').write_text('''<?xml version="1.0" encoding="UTF-8"?>
+          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+            <url><loc>https://xm5o.github.io/</loc></url>
+            <url><loc>https://xm5o.github.io/selina/</loc></url>
+            <url><loc>https://xm5o.github.io/commission/</loc></url>
+            <url><loc>https://xm5o.github.io/privacy.html</loc></url>
+          </urlset>
+          ''', encoding='utf-8')
+
+          # Remove this one-time workflow from the final branch state.
+          workflow = ROOT / '.github/workflows/site-cleanup-once.yml'
+          if workflow.exists():
+              workflow.unlink()
+          PY
+
+      - name: Basic verification
+        shell: bash
+        run: |
+          set -e
+          ! grep -R "gsk_" -n --exclude-dir=.git .
+          ! grep -R "ipapi.co/json" -n --exclude-dir=.git .
+          ! grep -R "generateFingerprint" -n --exclude-dir=.git .
+          ! grep -R "unique_visitors" -n --exclude-dir=.git .
+          test -f privacy.html
+          test -f robots.txt
+          test -f sitemap.xml
+          grep -q 'summary_large_image' index.html
+          grep -q 'https://xm5o.github.io/' index.html
+
+      - name: Commit cleanup result
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Harden and clean portfolio site"
+          git push origin HEAD:site-cleanup-2026-09-11
