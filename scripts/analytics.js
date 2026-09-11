@@ -1,17 +1,15 @@
-import { getAnalyticsDb, ANALYTICS_COLLECTIONS } from './analytics-config.js';
+import { getAnalyticsDb, ANALYTICS_DOCS } from './analytics-config.js';
 import {
   doc,
   getDoc,
   onSnapshot,
   setDoc,
-  writeBatch,
   increment,
   serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 const db = getAnalyticsDb();
-const SUMMARY_REF = doc(db, ANALYTICS_COLLECTIONS.summary, 'summary');
-const LEGACY_SUMMARY_REF = doc(db, 'visitor_stats', 'main');
+const SUMMARY_REF = doc(db, ANALYTICS_DOCS.summary.collection, ANALYTICS_DOCS.summary.document);
 
 const STORAGE_KEYS = Object.freeze({
   seen: 'xm5o_analytics_seen_v2',
@@ -75,6 +73,16 @@ function dimensionId(value) {
     .replace(/^-+|-+$/g, '')
     .slice(0, 44) || 'unknown';
   return `${slug}-${hashString(text)}`;
+}
+
+function metric(label, extra, visitorIncrement) {
+  return {
+    label,
+    ...extra,
+    views: increment(1),
+    visitors: increment(visitorIncrement),
+    lastUpdated: serverTimestamp()
+  };
 }
 
 function getDeviceType() {
@@ -151,7 +159,6 @@ async function getCoarseLocation() {
     const data = await response.json();
     if (data?.success === false) return { ...UNKNOWN_LOCATION };
 
-    // Intentionally ignore data.ip, coordinates, postal code, ISP/ASN and hostname.
     const coarseLocation = {
       country: data.country || 'Unknown',
       countryCode: data.country_code || 'XX',
@@ -167,39 +174,21 @@ async function getCoarseLocation() {
   }
 }
 
-async function ensureSummaryExists() {
-  const current = await getDoc(SUMMARY_REF);
-  if (current.exists()) return;
-
-  let legacyCount = 0;
-  try {
-    const legacy = await getDoc(LEGACY_SUMMARY_REF);
-    if (legacy.exists()) {
-      const value = Number(legacy.data()?.totalViews);
-      legacyCount = Number.isFinite(value) && value > 0 ? Math.floor(value) : 0;
-    }
-  } catch {
-    // The new analytics system can start clean if legacy data is not readable.
-  }
+async function ensureLegacySummaryExists() {
+  const snapshot = await getDoc(SUMMARY_REF);
+  if (snapshot.exists()) return;
 
   await setDoc(SUMMARY_REF, {
-    schemaVersion: 2,
-    totalViews: legacyCount,
-    uniqueVisitors: legacyCount,
-    legacyCount,
-    createdAt: serverTimestamp(),
-    lastUpdated: serverTimestamp()
-  }, { merge: true });
-}
-
-function queueDimension(batch, collection, label, extra = {}, visitorIncrement = 0) {
-  const ref = doc(db, collection, dimensionId(label));
-  batch.set(ref, {
-    label,
-    ...extra,
-    views: increment(1),
-    visitors: increment(visitorIncrement),
-    lastUpdated: serverTimestamp()
+    totalViews: 0,
+    createdAt: new Date().toISOString(),
+    daily: {},
+    lastUpdate: new Date().toISOString(),
+    analyticsV2: {
+      schemaVersion: 2,
+      uniqueVisitors: 0,
+      daily: {},
+      dimensions: {}
+    }
   }, { merge: true });
 }
 
@@ -207,61 +196,71 @@ async function trackPageView() {
   if (isTrackingDisabled()) return;
   if (!/^https?:$/.test(location.protocol)) return;
 
-  await ensureSummaryExists();
+  await ensureLegacySummaryExists();
 
   const today = dateKey();
   const isNewVisitor = safeStorageGet(STORAGE_KEYS.seen) !== '1';
   const isNewDailyVisitor = safeStorageGet(STORAGE_KEYS.daily) !== today;
-
-  const [locationData] = await Promise.all([getCoarseLocation()]);
+  const locationData = await getCoarseLocation();
   const referrer = getReferrer();
   const device = getDeviceType();
   const browser = getBrowser();
   const operatingSystem = getOperatingSystem();
   const page = location.pathname || '/';
   const visitorIncrement = isNewVisitor ? 1 : 0;
-
-  const batch = writeBatch(db);
-
-  batch.set(SUMMARY_REF, {
-    schemaVersion: 2,
-    totalViews: increment(1),
-    uniqueVisitors: increment(visitorIncrement),
-    lastUpdated: serverTimestamp()
-  }, { merge: true });
-
-  const dailyRef = doc(db, ANALYTICS_COLLECTIONS.daily, today);
-  batch.set(dailyRef, {
-    date: today,
-    views: increment(1),
-    visitors: increment(isNewDailyVisitor ? 1 : 0),
-    lastUpdated: serverTimestamp()
-  }, { merge: true });
-
-  queueDimension(
-    batch,
-    ANALYTICS_COLLECTIONS.countries,
-    locationData.countryCode,
-    { name: locationData.country, code: locationData.countryCode },
-    visitorIncrement
-  );
-
+  const dailyVisitorIncrement = isNewDailyVisitor ? 1 : 0;
   const cityLabel = `${locationData.city}, ${locationData.region}, ${locationData.country}`;
-  queueDimension(
-    batch,
-    ANALYTICS_COLLECTIONS.cities,
-    cityLabel,
-    { city: locationData.city, region: locationData.region, country: locationData.country },
-    visitorIncrement
-  );
 
-  queueDimension(batch, ANALYTICS_COLLECTIONS.referrers, referrer.label, { domain: referrer.domain }, visitorIncrement);
-  queueDimension(batch, ANALYTICS_COLLECTIONS.devices, device, {}, visitorIncrement);
-  queueDimension(batch, ANALYTICS_COLLECTIONS.browsers, browser, {}, visitorIncrement);
-  queueDimension(batch, ANALYTICS_COLLECTIONS.operatingSystems, operatingSystem, {}, visitorIncrement);
-  queueDimension(batch, ANALYTICS_COLLECTIONS.pages, page, { path: page }, visitorIncrement);
+  const payload = {
+    totalViews: increment(1),
+    lastUpdate: new Date().toISOString(),
+    analyticsV2: {
+      schemaVersion: 2,
+      uniqueVisitors: increment(visitorIncrement),
+      lastUpdated: serverTimestamp(),
+      daily: {
+        [today]: {
+          date: today,
+          views: increment(1),
+          visitors: increment(dailyVisitorIncrement),
+          lastUpdated: serverTimestamp()
+        }
+      },
+      dimensions: {
+        countries: {
+          [dimensionId(locationData.countryCode)]: metric(
+            locationData.country,
+            { name: locationData.country, code: locationData.countryCode },
+            visitorIncrement
+          )
+        },
+        cities: {
+          [dimensionId(cityLabel)]: metric(
+            cityLabel,
+            { city: locationData.city, region: locationData.region, country: locationData.country },
+            visitorIncrement
+          )
+        },
+        referrers: {
+          [dimensionId(referrer.label)]: metric(referrer.label, { domain: referrer.domain }, visitorIncrement)
+        },
+        devices: {
+          [dimensionId(device)]: metric(device, {}, visitorIncrement)
+        },
+        browsers: {
+          [dimensionId(browser)]: metric(browser, {}, visitorIncrement)
+        },
+        operatingSystems: {
+          [dimensionId(operatingSystem)]: metric(operatingSystem, {}, visitorIncrement)
+        },
+        pages: {
+          [dimensionId(page)]: metric(page, { path: page }, visitorIncrement)
+        }
+      }
+    }
+  };
 
-  await batch.commit();
+  await setDoc(SUMMARY_REF, payload, { merge: true });
 
   safeStorageSet(STORAGE_KEYS.seen, '1');
   safeStorageSet(STORAGE_KEYS.daily, today);
@@ -271,25 +270,29 @@ function bindPublicCounter() {
   const counter = document.getElementById('visitorCount');
   const todayCounter = document.getElementById('todayVisits');
 
-  if (counter) {
-    onSnapshot(SUMMARY_REF, snapshot => {
-      const value = snapshot.exists() ? Number(snapshot.data()?.totalViews || 0) : 0;
-      counter.textContent = value.toLocaleString();
-      counter.dataset.value = String(value);
-    }, () => {
-      counter.textContent = '—';
-    });
-  }
+  if (!counter && !todayCounter) return;
 
-  if (todayCounter) {
-    const todayRef = doc(db, ANALYTICS_COLLECTIONS.daily, dateKey());
-    onSnapshot(todayRef, snapshot => {
-      const value = snapshot.exists() ? Number(snapshot.data()?.views || 0) : 0;
-      todayCounter.textContent = value.toLocaleString();
-    }, () => {
-      todayCounter.textContent = '—';
-    });
-  }
+  onSnapshot(SUMMARY_REF, snapshot => {
+    if (!snapshot.exists()) {
+      if (counter) counter.textContent = '0';
+      if (todayCounter) todayCounter.textContent = '0';
+      return;
+    }
+
+    const data = snapshot.data();
+    const totalViews = Number(data?.totalViews || 0);
+    const todayViews = Number(data?.analyticsV2?.daily?.[dateKey()]?.views || 0);
+
+    if (counter) {
+      counter.textContent = totalViews.toLocaleString();
+      counter.dataset.value = String(totalViews);
+    }
+    if (todayCounter) todayCounter.textContent = todayViews.toLocaleString();
+  }, error => {
+    console.warn('[Analytics] Counter unavailable:', error?.message || error);
+    if (counter) counter.textContent = '—';
+    if (todayCounter) todayCounter.textContent = '—';
+  });
 }
 
 async function initAnalytics() {
