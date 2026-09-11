@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="css/discord-activity.css" />
   <link rel="stylesheet" href="css/contact.css" />
   <link rel="stylesheet" href="css/loading.css" />
+  <link rel="stylesheet" href="css/analytics.css" />
 
   <link rel="stylesheet" href="css/account-disabled-modal.css" />
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -1692,6 +1693,12 @@
           </a>
         </div>
 
+        <div class="site-views-card" aria-label="Site traffic summary">
+          <i class="bx bx-show" aria-hidden="true"></i>
+          <span>Site Views <strong id="visitorCount" data-value="0">—</strong></span>
+          <span class="today-views">Today <strong id="todayVisits">—</strong></span>
+        </div>
+
         <ul class="footer-nav">
           <li><a href="#home">Home</a></li>
           <li><a href="#about">About</a></li>
@@ -1718,6 +1725,7 @@
   <script src="scripts/account-disabled-modal.js"></script>
   <script src="scripts/script.js"></script>
   <script src="scripts/faq.js"></script>
+  <script type="module" src="scripts/analytics.js"></script>
 
 
 

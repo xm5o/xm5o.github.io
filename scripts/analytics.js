@@ -127,7 +127,7 @@ async function getCoarseLocation() {
   const timeout = setTimeout(() => controller.abort(), 3000);
 
   try {
-    const response = await fetch('https://ipapi.co/json/', {
+    const response = await fetch('https://ipwho.is/', {
       signal: controller.signal,
       headers: { Accept: 'application/json' },
       cache: 'no-store'
@@ -135,11 +135,11 @@ async function getCoarseLocation() {
 
     if (!response.ok) return { ...UNKNOWN_LOCATION };
     const data = await response.json();
-    if (data?.error) return { ...UNKNOWN_LOCATION };
+    if (data?.success === false) return { ...UNKNOWN_LOCATION };
 
     // Intentionally ignore data.ip, coordinates, postal code, ISP/ASN and hostname.
     return {
-      country: data.country_name || 'Unknown',
+      country: data.country || 'Unknown',
       countryCode: data.country_code || data.country || 'XX',
       region: data.region || 'Unknown',
       city: data.city || 'Unknown'
