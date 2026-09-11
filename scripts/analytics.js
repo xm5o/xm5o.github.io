@@ -16,8 +16,14 @@ const STORAGE_KEYS = Object.freeze({
   seen: 'xm5o_analytics_seen_v2',
   daily: 'xm5o_analytics_daily_v2',
   optOut: 'xm5o_analytics_opt_out',
-  geo: 'xm5o_analytics_geo_v2'
+  geo: 'xm5o_analytics_geo_v2',
+  seenClaim: 'xm5o_analytics_seen_claim_v3',
+  dailyClaim: 'xm5o_analytics_daily_claim_v3'
 });
+
+const LONG_COOKIE_AGE = 60 * 60 * 24 * 400;
+const DAILY_COOKIE_AGE = 60 * 60 * 48;
+const CLAIM_COOKIE_AGE = 120;
 
 const UNKNOWN_LOCATION = Object.freeze({
   country: 'Unknown',
@@ -40,6 +46,55 @@ function safeSessionGet(key) {
 
 function safeSessionSet(key, value) {
   try { sessionStorage.setItem(key, value); } catch { /* storage may be disabled */ }
+}
+
+function safeCookieGet(key) {
+  try {
+    const encodedKey = `${encodeURIComponent(key)}=`;
+    const row = document.cookie
+      .split('; ')
+      .find(cookie => cookie.startsWith(encodedKey));
+    return row ? decodeURIComponent(row.slice(encodedKey.length)) : null;
+  } catch {
+    return null;
+  }
+}
+
+function safeCookieSet(key, value, maxAge = LONG_COOKIE_AGE) {
+  try {
+    const secure = location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `${encodeURIComponent(key)}=${encodeURIComponent(value)}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`;
+  } catch {
+    /* cookies may be disabled */
+  }
+}
+
+function safeCookieDelete(key) {
+  try {
+    const secure = location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `${encodeURIComponent(key)}=; Path=/; Max-Age=0; SameSite=Lax${secure}`;
+  } catch {
+    /* cookies may be disabled */
+  }
+}
+
+function markerEquals(key, value) {
+  return safeStorageGet(key) === value
+    || safeCookieGet(key) === value
+    || safeSessionGet(key) === value;
+}
+
+function persistMarker(key, value, cookieAge = LONG_COOKIE_AGE) {
+  safeStorageSet(key, value);
+  safeSessionSet(key, value);
+  safeCookieSet(key, value, cookieAge);
+}
+
+function withAnalyticsLock(callback) {
+  if (navigator.locks?.request) {
+    return navigator.locks.request('xm5o-analytics-track-v3', { mode: 'exclusive' }, callback);
+  }
+  return callback();
 }
 
 function isTrackingDisabled() {
@@ -183,68 +238,91 @@ async function ensureLegacySummaryExists() {
   }, { merge: true });
 }
 
+async function trackPageViewLocked() {
+  await ensureLegacySummaryExists();
+
+  const today = dateKey();
+  const seenPersistently = markerEquals(STORAGE_KEYS.seen, '1');
+  const seenClaimed = safeCookieGet(STORAGE_KEYS.seenClaim) === '1';
+  const dailyPersistently = markerEquals(STORAGE_KEYS.daily, today);
+  const dailyClaimed = safeCookieGet(STORAGE_KEYS.dailyClaim) === today;
+  const isNewVisitor = !seenPersistently && !seenClaimed;
+  const isNewDailyVisitor = !dailyPersistently && !dailyClaimed;
+
+  // Short-lived claims stop two tabs/reloads from both declaring the same browser
+  // as new while the first Firestore write is still in flight. They expire quickly
+  // so a failed request does not permanently suppress a legitimate visitor.
+  if (isNewVisitor) safeCookieSet(STORAGE_KEYS.seenClaim, '1', CLAIM_COOKIE_AGE);
+  if (isNewDailyVisitor) safeCookieSet(STORAGE_KEYS.dailyClaim, today, CLAIM_COOKIE_AGE);
+
+  try {
+    const locationData = await getCoarseLocation();
+    const referrer = getReferrer();
+    const device = getDeviceType();
+    const browser = getBrowser();
+    const operatingSystem = getOperatingSystem();
+    const page = location.pathname || '/';
+    const visitorIncrement = isNewVisitor ? 1 : 0;
+    const dailyVisitorIncrement = isNewDailyVisitor ? 1 : 0;
+    const cityLabel = `${locationData.city}, ${locationData.region}, ${locationData.country}`;
+
+    const updates = {
+      totalViews: increment(1),
+      lastUpdate: new Date().toISOString(),
+      'analyticsV2.schemaVersion': 2,
+      'analyticsV2.uniqueVisitors': increment(visitorIncrement),
+      'analyticsV2.lastUpdated': serverTimestamp(),
+      [`analyticsV2.daily.${today}.date`]: today,
+      [`analyticsV2.daily.${today}.views`]: increment(1),
+      [`analyticsV2.daily.${today}.visitors`]: increment(dailyVisitorIncrement),
+      [`analyticsV2.daily.${today}.lastUpdated`]: serverTimestamp()
+    };
+
+    const addMetric = (group, label, extra = {}) => {
+      const id = dimensionId(label);
+      const prefix = `analyticsV2.dimensions.${group}.${id}`;
+      updates[`${prefix}.label`] = label;
+      updates[`${prefix}.views`] = increment(1);
+      updates[`${prefix}.visitors`] = increment(visitorIncrement);
+      updates[`${prefix}.lastUpdated`] = serverTimestamp();
+      Object.entries(extra).forEach(([key, value]) => {
+        updates[`${prefix}.${key}`] = value;
+      });
+    };
+
+    addMetric('countries', locationData.countryCode, {
+      name: locationData.country,
+      code: locationData.countryCode
+    });
+    addMetric('cities', cityLabel, {
+      city: locationData.city,
+      region: locationData.region,
+      country: locationData.country
+    });
+    addMetric('referrers', referrer.label, { domain: referrer.domain });
+    addMetric('devices', device);
+    addMetric('browsers', browser);
+    addMetric('operatingSystems', operatingSystem);
+    addMetric('pages', page, { path: page });
+
+    await updateDoc(SUMMARY_REF, updates);
+
+    // Store the dedupe marker in three first-party places. No fingerprint, raw IP,
+    // or personal identifier is stored; this only remembers that this browser has
+    // already been counted.
+    if (isNewVisitor) persistMarker(STORAGE_KEYS.seen, '1', LONG_COOKIE_AGE);
+    if (isNewDailyVisitor) persistMarker(STORAGE_KEYS.daily, today, DAILY_COOKIE_AGE);
+  } finally {
+    if (isNewVisitor) safeCookieDelete(STORAGE_KEYS.seenClaim);
+    if (isNewDailyVisitor) safeCookieDelete(STORAGE_KEYS.dailyClaim);
+  }
+}
+
 async function trackPageView() {
   if (isTrackingDisabled()) return;
   if (!/^https?:$/.test(location.protocol)) return;
 
-  await ensureLegacySummaryExists();
-
-  const today = dateKey();
-  const isNewVisitor = safeStorageGet(STORAGE_KEYS.seen) !== '1';
-  const isNewDailyVisitor = safeStorageGet(STORAGE_KEYS.daily) !== today;
-  const locationData = await getCoarseLocation();
-  const referrer = getReferrer();
-  const device = getDeviceType();
-  const browser = getBrowser();
-  const operatingSystem = getOperatingSystem();
-  const page = location.pathname || '/';
-  const visitorIncrement = isNewVisitor ? 1 : 0;
-  const dailyVisitorIncrement = isNewDailyVisitor ? 1 : 0;
-  const cityLabel = `${locationData.city}, ${locationData.region}, ${locationData.country}`;
-
-  const updates = {
-    totalViews: increment(1),
-    lastUpdate: new Date().toISOString(),
-    'analyticsV2.schemaVersion': 2,
-    'analyticsV2.uniqueVisitors': increment(visitorIncrement),
-    'analyticsV2.lastUpdated': serverTimestamp(),
-    [`analyticsV2.daily.${today}.date`]: today,
-    [`analyticsV2.daily.${today}.views`]: increment(1),
-    [`analyticsV2.daily.${today}.visitors`]: increment(dailyVisitorIncrement),
-    [`analyticsV2.daily.${today}.lastUpdated`]: serverTimestamp()
-  };
-
-  const addMetric = (group, label, extra = {}) => {
-    const id = dimensionId(label);
-    const prefix = `analyticsV2.dimensions.${group}.${id}`;
-    updates[`${prefix}.label`] = label;
-    updates[`${prefix}.views`] = increment(1);
-    updates[`${prefix}.visitors`] = increment(visitorIncrement);
-    updates[`${prefix}.lastUpdated`] = serverTimestamp();
-    Object.entries(extra).forEach(([key, value]) => {
-      updates[`${prefix}.${key}`] = value;
-    });
-  };
-
-  addMetric('countries', locationData.countryCode, {
-    name: locationData.country,
-    code: locationData.countryCode
-  });
-  addMetric('cities', cityLabel, {
-    city: locationData.city,
-    region: locationData.region,
-    country: locationData.country
-  });
-  addMetric('referrers', referrer.label, { domain: referrer.domain });
-  addMetric('devices', device);
-  addMetric('browsers', browser);
-  addMetric('operatingSystems', operatingSystem);
-  addMetric('pages', page, { path: page });
-
-  await updateDoc(SUMMARY_REF, updates);
-
-  safeStorageSet(STORAGE_KEYS.seen, '1');
-  safeStorageSet(STORAGE_KEYS.daily, today);
+  await withAnalyticsLock(trackPageViewLocked);
 }
 
 function bindPublicCounter() {
