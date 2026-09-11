@@ -1,94 +1,126 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initHome() {
   initTypewriterEffect();
 
   const profileImg = document.querySelector('.profile-img');
-  profileImg.addEventListener('mousemove', (e) => {
-    const rect = profileImg.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    profileImg.style.transform = `
-      perspective(1000px)
-      rotateX(${(y - rect.height / 2) / 8}deg)
-      rotateY(${-(x - rect.width / 2) / 8}deg)
-    `;
-  });
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  profileImg.addEventListener('mouseleave', () => {
-    profileImg.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
-  });
+  // Keep the desktop tilt effect, but update it at most once per animation frame.
+  // The previous version did layout reads + style writes for every mousemove event.
+  if (profileImg && finePointer && !reduceMotion) {
+    let frame = null;
+    let pointerX = 0;
+    let pointerY = 0;
 
-  const socialLinks = document.querySelectorAll('.social-btn');
-  socialLinks.forEach(link => {
-    link.addEventListener('mousemove', (e) => {
-      const particles = document.createElement('div');
-      particles.className = 'particle';
-      particles.style.left = `${e.offsetX}px`;
-      particles.style.top = `${e.offsetY}px`;
-      link.appendChild(particles);
+    profileImg.addEventListener('pointermove', (event) => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      if (frame) return;
 
-      setTimeout(() => particles.remove(), 1000);
-    });
-  });
+      frame = requestAnimationFrame(() => {
+        const rect = profileImg.getBoundingClientRect();
+        const x = pointerX - rect.left;
+        const y = pointerY - rect.top;
+        profileImg.style.transform = `perspective(1000px) rotateX(${(y - rect.height / 2) / 8}deg) rotateY(${-(x - rect.width / 2) / 8}deg)`;
+        frame = null;
+      });
+    }, { passive: true });
 
-  document.querySelector('.projects-cta').addEventListener('click', (e) => {
-    e.preventDefault();
-    const projectsSection = document.querySelector('#projects');
-    projectsSection.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-  });
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate');
+    profileImg.addEventListener('pointerleave', () => {
+      if (frame) {
+        cancelAnimationFrame(frame);
+        frame = null;
       }
-    });
-  }, { threshold: 0.1 });
+      profileImg.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+    }, { passive: true });
+  }
 
-  document.querySelectorAll('.home-content > *').forEach(el => observer.observe(el));
-});
+  // Social buttons already have CSS hover effects. Avoid creating a new DOM
+  // particle on every pointer movement; that caused needless allocations and GC.
+
+  const projectsCta = document.querySelector('.projects-cta');
+  const projectsSection = document.querySelector('#projects');
+  if (projectsCta && projectsSection) {
+    projectsCta.addEventListener('click', (event) => {
+      event.preventDefault();
+      projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.home-content > *').forEach(el => observer.observe(el));
+  }
+}
 
 function initTypewriterEffect() {
-    const roles = [
-        "Web Developer", "Frontend Dev", "Discord Bot Dev", "Open-Source Contributor"
-    ];
-    
-    const roleElement = document.querySelector('.animated-role');
-    if (!roleElement) return;
-    
-    let currentRoleIndex = 0;
-    let currentCharIndex = 0;
-    let isDeleting = false;
-    let typeSpeed = 150;
-    
-    function typeRole() {
-        const currentRole = roles[currentRoleIndex];
-        
-        if (isDeleting) {
-            roleElement.textContent = currentRole.substring(0, currentCharIndex - 1);
-            currentCharIndex--;
-            typeSpeed = 75;
-        } else {
-            roleElement.textContent = currentRole.substring(0, currentCharIndex + 1);
-            currentCharIndex++;
-            typeSpeed = 150;
-        }
-        
-        // If word is complete
-        if (!isDeleting && currentCharIndex === currentRole.length) {
-            typeSpeed = 2000; // Pause at end
-            isDeleting = true;
-        } else if (isDeleting && currentCharIndex === 0) {
-            isDeleting = false;
-            currentRoleIndex = (currentRoleIndex + 1) % roles.length;
-            typeSpeed = 500;
-        }
-        
-        setTimeout(typeRole, typeSpeed);
+  const roles = [
+    'Web Developer', 'Frontend Dev', 'Discord Bot Dev', 'Open-Source Contributor'
+  ];
+
+  const roleElement = document.querySelector('.animated-role');
+  if (!roleElement) return;
+
+  let currentRoleIndex = 0;
+  let currentCharIndex = 0;
+  let isDeleting = false;
+  let timer = null;
+
+  function schedule(delay) {
+    clearTimeout(timer);
+    timer = setTimeout(typeRole, delay);
+  }
+
+  function typeRole() {
+    // Don't keep waking the page while the tab is hidden.
+    if (document.hidden) return;
+
+    const currentRole = roles[currentRoleIndex];
+    let typeSpeed;
+
+    if (isDeleting) {
+      roleElement.textContent = currentRole.substring(0, currentCharIndex - 1);
+      currentCharIndex -= 1;
+      typeSpeed = 75;
+    } else {
+      roleElement.textContent = currentRole.substring(0, currentCharIndex + 1);
+      currentCharIndex += 1;
+      typeSpeed = 150;
     }
-    
-    // Start typewriter effect
-    setTimeout(typeRole, 1000);
+
+    if (!isDeleting && currentCharIndex === currentRole.length) {
+      typeSpeed = 2000;
+      isDeleting = true;
+    } else if (isDeleting && currentCharIndex === 0) {
+      isDeleting = false;
+      currentRoleIndex = (currentRoleIndex + 1) % roles.length;
+      typeSpeed = 500;
+    }
+
+    schedule(typeSpeed);
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      clearTimeout(timer);
+    } else {
+      schedule(250);
+    }
+  });
+
+  schedule(1000);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHome, { once: true });
+} else {
+  initHome();
 }
