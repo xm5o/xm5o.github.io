@@ -22,7 +22,7 @@ class ProjectsManager {
         description: "A Friday Night Funkin' mod I'm working on. Not out yet.",
         category: 'game',
         status: 'coming-soon',
-        image: './assets/immortality_icon.png',
+        image: './assets/immortality_icon.webp',
         features: [
           { icon: 'fas fa-question', text: 'Coming Soon...' }
         ],
@@ -85,7 +85,7 @@ class ProjectsManager {
       {
         id: 'selina-discord-bot',
         title: 'Selina',
-        description: 'A Discord bot for communities. Moderation, leveling, and AI chat. Ready to invite.',
+        description: 'A Discord bot for communities. Moderation, leveling, and AI chat. Public beta in development.',
         category: 'app',
         status: 'active',
         image: './assets/selina.jpg',
@@ -99,8 +99,8 @@ class ProjectsManager {
           demo: null,
           github: null
         },
-        badge: 'Live',
-        badgeType: 'success',
+        badge: 'Public Beta',
+        badgeType: 'beta',
         releaseDate: null
       }
     ];
@@ -239,7 +239,7 @@ class ProjectsManager {
 
     if (project.links.website) {
       actions.push(`
-                <a href="${project.links.website}" class="quick-action-btn" target="_blank" aria-label="Visit Website">
+                <a href="${project.links.website}" class="quick-action-btn" target="_blank" rel="noopener noreferrer" aria-label="Visit Website">
                     <i class="fas fa-globe"></i>
                 </a>
             `);
@@ -247,7 +247,7 @@ class ProjectsManager {
 
     if (project.links.demo && project.links.demo !== project.links.website) {
       actions.push(`
-                <a href="${project.links.demo}" class="quick-action-btn" target="_blank" aria-label="Play Demo">
+                <a href="${project.links.demo}" class="quick-action-btn" target="_blank" rel="noopener noreferrer" aria-label="Play Demo">
                     <i class="fas fa-gamepad"></i>
                 </a>
             `);
@@ -255,7 +255,7 @@ class ProjectsManager {
 
     if (project.links.github) {
       actions.push(`
-                <a href="${project.links.github}" class="quick-action-btn" target="_blank" aria-label="View Code">
+                <a href="${project.links.github}" class="quick-action-btn" target="_blank" rel="noopener noreferrer" aria-label="View Code">
                     <i class="fab fa-github"></i>
                 </a>
             `);
@@ -318,7 +318,7 @@ class ProjectsManager {
     if (!primaryLink) return '';
 
     return `
-    <a href="${primaryLink}" class="add-button primary" target="_blank">
+    <a href="${primaryLink}" class="add-button primary" target="_blank" rel="noopener noreferrer">
       <i class="${icon}"></i>
       <span>${buttonText}</span>
     </a>

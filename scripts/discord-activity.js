@@ -17,6 +17,15 @@ let heartbeatInterval = null;
 let activityInterval = null;
 let activityIntervals = {};
 let currentActivity = null;
+let reconnectTimeout = null;
+
+function scheduleReconnect() {
+  if (reconnectTimeout) return;
+  reconnectTimeout = setTimeout(() => {
+    reconnectTimeout = null;
+    connectWebSocket();
+  }, 5000);
+}
 
 async function fetchDcdnData() {
   try {
@@ -171,6 +180,8 @@ function updateBadges(badges) {
 }
 
 function connectWebSocket() {
+  if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) return;
+
   try {
     updateConnectionStatus('Connecting to Discord...', 'connecting');
     
@@ -204,19 +215,19 @@ function connectWebSocket() {
         heartbeatInterval = null;
       }
 
-      setTimeout(connectWebSocket, 5000);
+      scheduleReconnect();
     });
 
     socket.addEventListener('error', function (error) {
       console.error('WebSocket error:', error);
       updateConnectionStatus('Connection error', 'offline');
-      setTimeout(connectWebSocket, 5000);
+      scheduleReconnect();
     });
 
   } catch (error) {
     console.error('Failed to connect WebSocket:', error);
     updateConnectionStatus('Failed to connect', 'offline');
-    setTimeout(connectWebSocket, 5000);
+    scheduleReconnect();
   }
 }
 
@@ -762,12 +773,13 @@ function updateActivities(activities) {
                     if (activity.metadata.button_urls[buttonIndex]) {
                         buttonUrl = activity.metadata.button_urls[buttonIndex];
                     }
-                } else if (activity.details_url && buttonText.toLowerCase().includes('listen') || buttonText.toLowerCase().includes('watch')) {
+                } else if (activity.details_url && (buttonText.toLowerCase().includes('listen') || buttonText.toLowerCase().includes('watch'))) {
                     buttonUrl = activity.details_url;
                 }
                 
                 button.href = buttonUrl;
                 button.target = '_blank';
+                button.rel = 'noopener noreferrer';
                 button.textContent = buttonText;
                 
                 buttonsContainer.appendChild(button);
@@ -778,17 +790,35 @@ function updateActivities(activities) {
     });
 }
 
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+// Start Discord activity only when the section is close to the viewport.
+function initDiscordActivity() {
   const discordSection = document.getElementById('discord-activity');
-  if (discordSection) {
-    connectWebSocket();
-  }
-});
+  if (!discordSection) return;
 
-// Fallback initialization
+  let started = false;
+  const start = () => {
+    if (started) return;
+    started = true;
+    connectWebSocket();
+  };
+
+  if (!('IntersectionObserver' in window)) {
+    start();
+    return;
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    if (entries.some(entry => entry.isIntersecting)) {
+      observer.disconnect();
+      start();
+    }
+  }, { rootMargin: '350px 0px' });
+
+  observer.observe(discordSection);
+}
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', connectWebSocket);
+  document.addEventListener('DOMContentLoaded', initDiscordActivity, { once: true });
 } else {
-  connectWebSocket();
+  initDiscordActivity();
 }
