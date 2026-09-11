@@ -11925,3 +11925,85 @@ main, .content {
     font-size: 1.3rem;
   }
 }
+
+/* === 2026 Mobile & Performance Polish === */
+/* Keep the existing design, but avoid rendering heavy below-the-fold sections
+   until they are close to the viewport. */
+@supports (content-visibility: auto) {
+  #discord-activity,
+  #about,
+  #now,
+  #services,
+  #projects,
+  #music,
+  #faq,
+  #contact,
+  .footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 900px;
+  }
+
+  .footer {
+    contain-intrinsic-size: 1px 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    width: calc(100% - 1.5rem);
+    top: 0.75rem;
+    padding: 0.85rem 1rem;
+    border-radius: 1.4rem;
+  }
+
+  .logo {
+    font-size: clamp(1.85rem, 7vw, 2.35rem);
+  }
+
+  .home {
+    padding-top: 7rem;
+  }
+
+  .cta-group.enhanced-cta {
+    gap: 0.8rem;
+    margin-top: 1.4rem;
+  }
+
+  .cta-group.enhanced-cta .enhanced-btn {
+    min-height: 3.2rem;
+    padding: 0.85rem 1rem;
+  }
+
+  .footer {
+    padding-top: 2.25rem;
+  }
+
+  .footer-container {
+    gap: 1.25rem;
+  }
+
+  .site-views-card {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    width: calc(100% - 1rem);
+    top: 0.5rem;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .home {
+    padding-top: 6.5rem;
+  }
+
+  .cta-group.enhanced-cta {
+    width: 100%;
+  }
+
+  .cta-group.enhanced-cta .enhanced-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
