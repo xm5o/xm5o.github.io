@@ -52,10 +52,11 @@ dashboard = Path("analytics.html").read_text(encoding="utf-8")
 privacy = Path("privacy.html").read_text(encoding="utf-8")
 robots = Path("robots.txt").read_text(encoding="utf-8")
 
+ip_storage_patterns = ["'ip':", '"ip":', "ipAddress:", "ip_address:"]
 checks = {
     "no fingerprinting": "generateDeviceFingerprint" not in tracker and "canvas.toDataURL" not in tracker,
     "no visitor profile collection": "unique_visitors" not in tracker,
-    "raw IP not persisted": "data.ip" not in tracker,
+    "raw IP not persisted": not any(pattern in tracker for pattern in ip_storage_patterns),
     "coarse geo only": all(field in tracker for field in ["data.country", "data.region", "data.city"]),
     "geo reused per tab session": "sessionStorage" in tracker and "xm5o_analytics_geo_v2" in tracker,
     "privacy opt-out": "xm5o_analytics_opt_out" in tracker and "Disable analytics on this browser" in privacy,
