@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://xm5o.github.io/sitemap.xml
