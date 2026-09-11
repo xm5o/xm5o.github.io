@@ -2128,8 +2128,6 @@
     margin-top: 0;
   }
 
-  /* Keep the useful CTA + reply-time message on phones and remove the
-     repeated explanatory cards that made the section unnecessarily tall. */
   .secondary-contact > .contact-card,
   .enhanced-secondary-contact > .enhanced-contact-card {
     display: none;
