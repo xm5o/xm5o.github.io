@@ -1,0 +1,147 @@
+from pathlib import Path
+
+path = Path('scripts/analytics.js')
+text = path.read_text()
+
+old = """function safeStorageSet(key, value) {
+  try { localStorage.setItem(key, value); } catch { /* storage may be disabled */ }
+}
+"""
+new = """function safeStorageSet(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return localStorage.getItem(key) === value;
+  } catch {
+    return false;
+  }
+}
+
+function safeStorageDelete(key) {
+  try { localStorage.removeItem(key); } catch { /* storage may be disabled */ }
+}
+"""
+assert old in text
+text = text.replace(old, new, 1)
+
+old = """function safeSessionSet(key, value) {
+  try { sessionStorage.setItem(key, value); } catch { /* storage may be disabled */ }
+}
+"""
+new = """function safeSessionSet(key, value) {
+  try {
+    sessionStorage.setItem(key, value);
+    return sessionStorage.getItem(key) === value;
+  } catch {
+    return false;
+  }
+}
+
+function safeSessionDelete(key) {
+  try { sessionStorage.removeItem(key); } catch { /* storage may be disabled */ }
+}
+"""
+assert old in text
+text = text.replace(old, new, 1)
+
+old = """function safeCookieSet(key, value, maxAge = LONG_COOKIE_AGE) {
+  try {
+    const secure = location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `${encodeURIComponent(key)}=${encodeURIComponent(value)}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`;
+  } catch {
+    /* cookies may be disabled */
+  }
+}
+"""
+new = """function safeCookieSet(key, value, maxAge = LONG_COOKIE_AGE) {
+  try {
+    const secure = location.protocol === 'https:' ? '; Secure' : '';
+    const expires = new Date(Date.now() + (maxAge * 1000)).toUTCString();
+    document.cookie = `${encodeURIComponent(key)}=${encodeURIComponent(value)}; Path=/; Max-Age=${maxAge}; Expires=${expires}; SameSite=Lax${secure}`;
+    return safeCookieGet(key) === value;
+  } catch {
+    return false;
+  }
+}
+"""
+assert old in text
+text = text.replace(old, new, 1)
+
+old = """function persistMarker(key, value, cookieAge = LONG_COOKIE_AGE) {
+  safeStorageSet(key, value);
+  safeSessionSet(key, value);
+  safeCookieSet(key, value, cookieAge);
+}
+"""
+new = """function persistMarker(key, value, cookieAge = LONG_COOKIE_AGE) {
+  const storageOk = safeStorageSet(key, value);
+  const cookieOk = safeCookieSet(key, value, cookieAge);
+  safeSessionSet(key, value);
+
+  // Only treat a browser as a new unique visitor when at least one durable
+  // first-party marker can actually be written and read back. If durable
+  // storage is blocked, page views still count but unique visitors do not.
+  return storageOk || cookieOk;
+}
+
+function clearMarker(key) {
+  safeStorageDelete(key);
+  safeSessionDelete(key);
+  safeCookieDelete(key);
+}
+"""
+assert old in text
+text = text.replace(old, new, 1)
+
+old = """  const isNewVisitor = !seenPersistently && !seenClaimed;
+  const isNewDailyVisitor = !dailyPersistently && !dailyClaimed;
+
+  // Short-lived claims stop two tabs/reloads from both declaring the same browser
+  // as new while the first Firestore write is still in flight. They expire quickly
+  // so a failed request does not permanently suppress a legitimate visitor.
+  if (isNewVisitor) safeCookieSet(STORAGE_KEYS.seenClaim, '1', CLAIM_COOKIE_AGE);
+  if (isNewDailyVisitor) safeCookieSet(STORAGE_KEYS.dailyClaim, today, CLAIM_COOKIE_AGE);
+
+  try {
+"""
+new = """  let isNewVisitor = !seenPersistently && !seenClaimed;
+  let isNewDailyVisitor = !dailyPersistently && !dailyClaimed;
+
+  // Claim and persist BEFORE incrementing Firestore. If this browser cannot
+  // retain a durable first-party marker, it is safer to skip the unique count
+  // than to falsely call the same person new on every visit.
+  if (isNewVisitor) {
+    safeCookieSet(STORAGE_KEYS.seenClaim, '1', CLAIM_COOKIE_AGE);
+    isNewVisitor = persistMarker(STORAGE_KEYS.seen, '1', LONG_COOKIE_AGE);
+  }
+  if (isNewDailyVisitor) {
+    safeCookieSet(STORAGE_KEYS.dailyClaim, today, CLAIM_COOKIE_AGE);
+    isNewDailyVisitor = persistMarker(STORAGE_KEYS.daily, today, DAILY_COOKIE_AGE);
+  }
+
+  try {
+"""
+assert old in text
+text = text.replace(old, new, 1)
+
+old = """    await updateDoc(SUMMARY_REF, updates);
+
+    // Store the dedupe marker in three first-party places. No fingerprint, raw IP,
+    // or personal identifier is stored; this only remembers that this browser has
+    // already been counted.
+    if (isNewVisitor) persistMarker(STORAGE_KEYS.seen, '1', LONG_COOKIE_AGE);
+    if (isNewDailyVisitor) persistMarker(STORAGE_KEYS.daily, today, DAILY_COOKIE_AGE);
+  } finally {
+"""
+new = """    await updateDoc(SUMMARY_REF, updates);
+  } catch (error) {
+    // Roll back markers if Firestore did not accept this visit so a later
+    // successful request can count it exactly once.
+    if (isNewVisitor) clearMarker(STORAGE_KEYS.seen);
+    if (isNewDailyVisitor) clearMarker(STORAGE_KEYS.daily);
+    throw error;
+  } finally {
+"""
+assert old in text
+text = text.replace(old, new, 1)
+
+path.write_text(text)
