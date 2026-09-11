@@ -4,6 +4,7 @@ import {
   getDoc,
   onSnapshot,
   setDoc,
+  updateDoc,
   increment,
   serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
@@ -73,16 +74,6 @@ function dimensionId(value) {
     .replace(/^-+|-+$/g, '')
     .slice(0, 44) || 'unknown';
   return `${slug}-${hashString(text)}`;
-}
-
-function metric(label, extra, visitorIncrement) {
-  return {
-    label,
-    ...extra,
-    views: increment(1),
-    visitors: increment(visitorIncrement),
-    lastUpdated: serverTimestamp()
-  };
 }
 
 function getDeviceType() {
@@ -211,56 +202,46 @@ async function trackPageView() {
   const dailyVisitorIncrement = isNewDailyVisitor ? 1 : 0;
   const cityLabel = `${locationData.city}, ${locationData.region}, ${locationData.country}`;
 
-  const payload = {
+  const updates = {
     totalViews: increment(1),
     lastUpdate: new Date().toISOString(),
-    analyticsV2: {
-      schemaVersion: 2,
-      uniqueVisitors: increment(visitorIncrement),
-      lastUpdated: serverTimestamp(),
-      daily: {
-        [today]: {
-          date: today,
-          views: increment(1),
-          visitors: increment(dailyVisitorIncrement),
-          lastUpdated: serverTimestamp()
-        }
-      },
-      dimensions: {
-        countries: {
-          [dimensionId(locationData.countryCode)]: metric(
-            locationData.country,
-            { name: locationData.country, code: locationData.countryCode },
-            visitorIncrement
-          )
-        },
-        cities: {
-          [dimensionId(cityLabel)]: metric(
-            cityLabel,
-            { city: locationData.city, region: locationData.region, country: locationData.country },
-            visitorIncrement
-          )
-        },
-        referrers: {
-          [dimensionId(referrer.label)]: metric(referrer.label, { domain: referrer.domain }, visitorIncrement)
-        },
-        devices: {
-          [dimensionId(device)]: metric(device, {}, visitorIncrement)
-        },
-        browsers: {
-          [dimensionId(browser)]: metric(browser, {}, visitorIncrement)
-        },
-        operatingSystems: {
-          [dimensionId(operatingSystem)]: metric(operatingSystem, {}, visitorIncrement)
-        },
-        pages: {
-          [dimensionId(page)]: metric(page, { path: page }, visitorIncrement)
-        }
-      }
-    }
+    'analyticsV2.schemaVersion': 2,
+    'analyticsV2.uniqueVisitors': increment(visitorIncrement),
+    'analyticsV2.lastUpdated': serverTimestamp(),
+    [`analyticsV2.daily.${today}.date`]: today,
+    [`analyticsV2.daily.${today}.views`]: increment(1),
+    [`analyticsV2.daily.${today}.visitors`]: increment(dailyVisitorIncrement),
+    [`analyticsV2.daily.${today}.lastUpdated`]: serverTimestamp()
   };
 
-  await setDoc(SUMMARY_REF, payload, { merge: true });
+  const addMetric = (group, label, extra = {}) => {
+    const id = dimensionId(label);
+    const prefix = `analyticsV2.dimensions.${group}.${id}`;
+    updates[`${prefix}.label`] = label;
+    updates[`${prefix}.views`] = increment(1);
+    updates[`${prefix}.visitors`] = increment(visitorIncrement);
+    updates[`${prefix}.lastUpdated`] = serverTimestamp();
+    Object.entries(extra).forEach(([key, value]) => {
+      updates[`${prefix}.${key}`] = value;
+    });
+  };
+
+  addMetric('countries', locationData.countryCode, {
+    name: locationData.country,
+    code: locationData.countryCode
+  });
+  addMetric('cities', cityLabel, {
+    city: locationData.city,
+    region: locationData.region,
+    country: locationData.country
+  });
+  addMetric('referrers', referrer.label, { domain: referrer.domain });
+  addMetric('devices', device);
+  addMetric('browsers', browser);
+  addMetric('operatingSystems', operatingSystem);
+  addMetric('pages', page, { path: page });
+
+  await updateDoc(SUMMARY_REF, updates);
 
   safeStorageSet(STORAGE_KEYS.seen, '1');
   safeStorageSet(STORAGE_KEYS.daily, today);
