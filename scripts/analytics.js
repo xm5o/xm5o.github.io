@@ -16,7 +16,8 @@ const LEGACY_SUMMARY_REF = doc(db, 'visitor_stats', 'main');
 const STORAGE_KEYS = Object.freeze({
   seen: 'xm5o_analytics_seen_v2',
   daily: 'xm5o_analytics_daily_v2',
-  optOut: 'xm5o_analytics_opt_out'
+  optOut: 'xm5o_analytics_opt_out',
+  geo: 'xm5o_analytics_geo_v2'
 });
 
 const UNKNOWN_LOCATION = Object.freeze({
@@ -32,6 +33,14 @@ function safeStorageGet(key) {
 
 function safeStorageSet(key, value) {
   try { localStorage.setItem(key, value); } catch { /* storage may be disabled */ }
+}
+
+function safeSessionGet(key) {
+  try { return sessionStorage.getItem(key); } catch { return null; }
+}
+
+function safeSessionSet(key, value) {
+  try { sessionStorage.setItem(key, value); } catch { /* storage may be disabled */ }
 }
 
 function isTrackingDisabled() {
@@ -123,6 +132,11 @@ function getReferrer() {
 }
 
 async function getCoarseLocation() {
+  const cached = safeSessionGet(STORAGE_KEYS.geo);
+  if (cached) {
+    try { return { ...UNKNOWN_LOCATION, ...JSON.parse(cached) }; } catch { /* ignore invalid cache */ }
+  }
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 3000);
 
@@ -138,12 +152,14 @@ async function getCoarseLocation() {
     if (data?.success === false) return { ...UNKNOWN_LOCATION };
 
     // Intentionally ignore data.ip, coordinates, postal code, ISP/ASN and hostname.
-    return {
+    const coarseLocation = {
       country: data.country || 'Unknown',
-      countryCode: data.country_code || data.country || 'XX',
+      countryCode: data.country_code || 'XX',
       region: data.region || 'Unknown',
       city: data.city || 'Unknown'
     };
+    safeSessionSet(STORAGE_KEYS.geo, JSON.stringify(coarseLocation));
+    return coarseLocation;
   } catch {
     return { ...UNKNOWN_LOCATION };
   } finally {
