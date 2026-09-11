@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#090909">
+  <title>Site Analytics | Immortal</title>
+  <link rel="icon" href="assets/pfp.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="css/analytics.css">
+</head>
+<body class="analytics-page">
+  <main class="analytics-shell">
+    <div class="analytics-topbar">
+      <a class="analytics-back" href="/">← Back to site</a>
+      <span class="analytics-pill">Analytics v2 · aggregate only</span>
+    </div>
+
+    <header class="analytics-hero">
+      <p class="analytics-kicker">Immortal · Site Analytics</p>
+      <h1>Traffic overview</h1>
+      <p>Views, approximate unique visitors, traffic sources, pages, devices, and coarse location. This dashboard intentionally does not use raw IP storage or device fingerprinting.</p>
+      <div class="analytics-status" id="dashboardStatus">Loading analytics…</div>
+    </header>
+
+    <section class="analytics-grid" aria-label="Analytics summary">
+      <article class="analytics-card">
+        <span class="label">Total views</span>
+        <strong class="value" id="totalViews">—</strong>
+        <span class="subvalue">Includes the legacy counter baseline</span>
+      </article>
+
+      <article class="analytics-card">
+        <span class="label">Approx. unique visitors</span>
+        <strong class="value" id="uniqueVisitors">—</strong>
+        <span class="subvalue">Browser-local, no fingerprinting</span>
+      </article>
+
+      <article class="analytics-card">
+        <span class="label">Today</span>
+        <strong class="value" id="todayViews">—</strong>
+        <span class="subvalue" id="todayVisitors">— visitors today</span>
+      </article>
+
+      <article class="analytics-card">
+        <span class="label">Last 7 days</span>
+        <strong class="value" id="weekViews">—</strong>
+        <span class="subvalue" id="weekVisitors">— daily uniques in 7 days</span>
+      </article>
+
+      <article class="analytics-panel wide">
+        <h2>Views · last 30 days</h2>
+        <div class="analytics-chart-wrap"><canvas id="viewsChart" aria-label="Views over the last 30 days"></canvas></div>
+      </article>
+
+      <article class="analytics-panel">
+        <h2>Top countries</h2>
+        <div class="analytics-list" id="countryList"><div class="analytics-empty">Loading…</div></div>
+      </article>
+
+      <article class="analytics-panel">
+        <h2>Top cities / regions</h2>
+        <div class="analytics-list" id="cityList"><div class="analytics-empty">Loading…</div></div>
+      </article>
+
+      <article class="analytics-panel">
+        <h2>Traffic sources</h2>
+        <div class="analytics-list" id="referrerList"><div class="analytics-empty">Loading…</div></div>
+      </article>
+
+      <article class="analytics-panel">
+        <h2>Top pages</h2>
+        <div class="analytics-list" id="pageList"><div class="analytics-empty">Loading…</div></div>
+      </article>
+
+      <article class="analytics-panel">
+        <h2>Devices</h2>
+        <div class="analytics-list" id="deviceList"><div class="analytics-empty">Loading…</div></div>
+      </article>
+
+      <article class="analytics-panel">
+        <h2>Browsers</h2>
+        <div class="analytics-list" id="browserList"><div class="analytics-empty">Loading…</div></div>
+      </article>
+
+      <article class="analytics-panel">
+        <h2>Operating systems</h2>
+        <div class="analytics-list" id="osList"><div class="analytics-empty">Loading…</div></div>
+      </article>
+    </section>
+
+    <div class="analytics-privacy-note">
+      Location is derived only to a coarse country/region/city level and the returned IP address is discarded instead of being written to Firestore. Visitors can disable analytics from the <a href="privacy.html">privacy page</a>, and browser Do Not Track / Global Privacy Control signals are respected.
+    </div>
+  </main>
+
+  <script type="module" src="scripts/analytics-dashboard.js"></script>
+</body>
+</html>
