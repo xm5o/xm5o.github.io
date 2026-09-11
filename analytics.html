@@ -19,38 +19,38 @@
     <header class="analytics-hero">
       <p class="analytics-kicker">Immortal · Site Analytics</p>
       <h1>Traffic overview</h1>
-      <p>Views, approximate unique visitors, traffic sources, pages, devices, and coarse location. This dashboard intentionally does not use raw IP storage or device fingerprinting.</p>
+      <p>Page views, approximate unique visitors, traffic sources, pages, devices, and coarse location. This dashboard intentionally does not use raw IP storage or device fingerprinting.</p>
       <div class="analytics-status" id="dashboardStatus">Loading analytics…</div>
     </header>
 
     <section class="analytics-grid" aria-label="Analytics summary">
       <article class="analytics-card">
-        <span class="label">Total views</span>
+        <span class="label">Visitor counter</span>
         <strong class="value" id="totalViews">—</strong>
-        <span class="subvalue">Includes the legacy counter baseline</span>
+        <span class="subvalue">Legacy baseline + deduped visitors</span>
       </article>
 
       <article class="analytics-card">
-        <span class="label">Approx. unique visitors</span>
+        <span class="label">Approx. unique visitors · v2</span>
         <strong class="value" id="uniqueVisitors">—</strong>
         <span class="subvalue">Browser-local, no fingerprinting</span>
       </article>
 
       <article class="analytics-card">
-        <span class="label">Today</span>
+        <span class="label">Today · page views</span>
         <strong class="value" id="todayViews">—</strong>
         <span class="subvalue" id="todayVisitors">— visitors today</span>
       </article>
 
       <article class="analytics-card">
-        <span class="label">Last 7 days</span>
+        <span class="label">Last 7 days · page views</span>
         <strong class="value" id="weekViews">—</strong>
         <span class="subvalue" id="weekVisitors">— daily uniques in 7 days</span>
       </article>
 
       <article class="analytics-panel wide">
-        <h2>Views · last 30 days</h2>
-        <div class="analytics-chart-wrap"><canvas id="viewsChart" aria-label="Views over the last 30 days"></canvas></div>
+        <h2>Page views · last 30 days</h2>
+        <div class="analytics-chart-wrap"><canvas id="viewsChart" aria-label="Page views over the last 30 days"></canvas></div>
       </article>
 
       <article class="analytics-panel">
