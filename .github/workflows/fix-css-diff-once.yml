@@ -1,0 +1,44 @@
+name: Fix CSS diff once
+
+on:
+  push:
+    branches:
+      - mobile-performance-polish-2026-09-11
+    paths:
+      - '.github/workflows/fix-css-diff-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout polish branch
+        uses: actions/checkout@v4
+        with:
+          ref: mobile-performance-polish-2026-09-11
+          fetch-depth: 0
+
+      - name: Restore clean CSS diff
+        run: python3 .github/scripts/fix_css_diff.py
+
+      - name: Validate focused diff
+        run: |
+          STYLE_CHANGES=$(git diff --numstat origin/main -- css/style.css | awk '{print $1+$2}')
+          CONTACT_CHANGES=$(git diff --numstat origin/main -- css/contact.css | awk '{print $1+$2}')
+          echo "style.css changed lines: ${STYLE_CHANGES}"
+          echo "contact.css changed lines: ${CONTACT_CHANGES}"
+          test "${STYLE_CHANGES:-99999}" -lt 200
+          test "${CONTACT_CHANGES:-99999}" -lt 160
+
+      - name: Remove one-time tooling and commit
+        run: |
+          rm -f .github/workflows/fix-css-diff-once.yml
+          rm -f .github/scripts/fix_css_diff.py
+          rmdir .github/scripts 2>/dev/null || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Keep mobile polish CSS diff focused"
+          git push origin HEAD:mobile-performance-polish-2026-09-11
