@@ -1,20 +1,19 @@
 class SkeletonLoader {
   constructor() {
     this.body = document.body;
-    this.minDisplayTime = 500;
     this.revealed = false;
     this.init();
   }
 
   init() {
-    const fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
     const heroImageReady = this.waitForImage(document.querySelector('.profile-img'));
-    const minTime = this.wait(this.minDisplayTime);
 
-    Promise.all([fontsReady, heroImageReady, minTime]).then(() => this.reveal());
+    // Reveal as soon as the important hero image is ready, but never make the
+    // visitor wait on web fonts or an artificial minimum loading time.
+    Promise.race([heroImageReady, this.wait(180)]).then(() => this.reveal());
 
-    // Safety net so the page never gets stuck behind the skeleton
-    setTimeout(() => this.reveal(), 5000);
+    // Short safety net for unusual browsers/network failures.
+    setTimeout(() => this.reveal(), 800);
   }
 
   wait(ms) {
@@ -23,7 +22,8 @@ class SkeletonLoader {
 
   waitForImage(img) {
     if (!img) return Promise.resolve();
-    if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+    if (img.complete) return Promise.resolve();
+
     return new Promise((resolve) => {
       img.addEventListener('load', resolve, { once: true });
       img.addEventListener('error', resolve, { once: true });
@@ -36,13 +36,17 @@ class SkeletonLoader {
     this.body.classList.remove('is-loading');
   }
 
-  // Kept for compatibility — scripts/views.js calls window.loadingManager.hideLoadingScreen()
-  // once the visitor tracker finishes.
   hideLoadingScreen() {
     this.reveal();
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function initSkeletonLoader() {
   window.loadingManager = new SkeletonLoader();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initSkeletonLoader, { once: true });
+} else {
+  initSkeletonLoader();
+}
