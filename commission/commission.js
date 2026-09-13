@@ -1,5 +1,8 @@
 (() => {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DISCORD_PROFILE_URL = 'https://discord.com/users/1282747277206884436';
+  const DRAFT_STORAGE_KEY = 'immortal-commission-draft-v2';
+
   const filterButtons = [...document.querySelectorAll('.filter-button')];
   const workCards = [...document.querySelectorAll('.work-card')];
   const filterLinks = [...document.querySelectorAll('[data-filter-link]')];
@@ -18,6 +21,7 @@
   const builder = document.getElementById('commissionBuilder');
   const requestPreview = document.getElementById('requestPreview');
   const copyRequest = document.getElementById('copyRequest');
+  const sendDiscordRequest = document.getElementById('sendDiscordRequest');
   const builderStatus = document.getElementById('builderStatus');
   let lastFocusedElement = null;
 
@@ -68,7 +72,7 @@
       });
     });
 
-    if (heroVideo) {
+    if (heroVideo && 'IntersectionObserver' in window) {
       const heroObserver = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -250,6 +254,41 @@
     return value || fallback;
   }
 
+  function saveDraft() {
+    if (!builder) return;
+
+    try {
+      const data = new FormData(builder);
+      const draft = {};
+      data.forEach((value, key) => {
+        draft[key] = String(value);
+      });
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+    } catch {}
+  }
+
+  function restoreDraft() {
+    if (!builder) return;
+
+    try {
+      const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
+      if (!raw) return;
+      const draft = JSON.parse(raw);
+      if (!draft || typeof draft !== 'object') return;
+
+      builder.querySelectorAll('[name]').forEach(field => {
+        const value = draft[field.name];
+        if (typeof value !== 'string') return;
+
+        if (field.type === 'radio') {
+          field.checked = field.value === value;
+        } else {
+          field.value = value;
+        }
+      });
+    } catch {}
+  }
+
   function buildRequest() {
     if (!builder || !requestPreview) return '';
 
@@ -280,15 +319,37 @@
     return request;
   }
 
-  builder?.addEventListener('input', () => {
-    buildRequest();
-    if (builderStatus) builderStatus.textContent = 'Nothing is sent automatically.';
-  });
+  function validateBuilder() {
+    if (!builder) return false;
 
-  builder?.addEventListener('change', () => {
+    const projectInput = builder.elements.namedItem('project');
+    const engineInput = builder.elements.namedItem('engine');
+
+    if (projectInput instanceof HTMLInputElement && !projectInput.value.trim()) {
+      builderStatus.textContent = 'Add the song or project name first.';
+      projectInput.focus();
+      return false;
+    }
+
+    if (engineInput instanceof HTMLInputElement && !engineInput.value.trim()) {
+      builderStatus.textContent = 'Add the engine and version first, for example Psych Engine 0.6.3 or Codename Engine.';
+      engineInput.focus();
+      return false;
+    }
+
+    return true;
+  }
+
+  function updateBuilder() {
+    saveDraft();
     buildRequest();
-    if (builderStatus) builderStatus.textContent = 'Nothing is sent automatically.';
-  });
+    if (builderStatus) {
+      builderStatus.textContent = 'Draft saved in this browser. Nothing is sent automatically.';
+    }
+  }
+
+  builder?.addEventListener('input', updateBuilder);
+  builder?.addEventListener('change', updateBuilder);
 
   copyRequest?.addEventListener('click', async () => {
     const request = buildRequest();
@@ -301,5 +362,30 @@
     }
   });
 
+  sendDiscordRequest?.addEventListener('click', async () => {
+    if (!validateBuilder()) return;
+
+    const request = buildRequest();
+    saveDraft();
+
+    const discordTab = window.open(DISCORD_PROFILE_URL, '_blank');
+    if (discordTab) discordTab.opener = null;
+
+    const copied = await copyText(request);
+
+    if (builderStatus) {
+      if (copied && discordTab) {
+        builderStatus.textContent = 'Request copied and Discord opened. Paste the request into the DM and send it.';
+      } else if (copied) {
+        builderStatus.textContent = 'Request copied. Open Discord and paste it into the DM.';
+      } else if (discordTab) {
+        builderStatus.textContent = 'Discord opened, but copying failed. Copy the generated request manually.';
+      } else {
+        builderStatus.textContent = 'Your browser blocked Discord and clipboard access. Copy the request manually, then open @trr0.';
+      }
+    }
+  });
+
+  restoreDraft();
   buildRequest();
 })();
