@@ -389,3 +389,7 @@
   restoreDraft();
   buildRequest();
 })();
+
+import('./enhancements.js').catch(error => {
+  console.warn('[Commission] Enhancements unavailable:', error?.message || error);
+});
