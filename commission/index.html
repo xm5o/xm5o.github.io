@@ -3,55 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="FNF charting and custom coding commissions by Immortal, with a growing modchart practice portfolio.">
+  <meta name="description" content="FNF charting and custom coding commissions by Immortal, with an evolving modchart practice portfolio.">
   <meta name="theme-color" content="#060606">
-  <meta property="og:title" content="Immortal — FNF Commissions">
-  <meta property="og:description" content="Charting, custom coding, and a growing modchart practice portfolio for Friday Night Funkin' projects.">
+  <meta property="og:title" content="Immortal | FNF Commissions">
+  <meta property="og:description" content="Charting, custom coding, and an evolving modchart practice portfolio for Friday Night Funkin' projects.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://xm5o.github.io/commission/">
   <meta property="og:image" content="https://xm5o.github.io/assets/pfp.jpg">
   <link rel="canonical" href="https://xm5o.github.io/commission/">
   <link rel="icon" href="../assets/pfp.jpg" type="image/jpeg">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <title>FNF Commissions | Immortal</title>
 </head>
 <body>
-  <div class="ambient ambient-one" aria-hidden="true"></div>
-  <div class="ambient ambient-two" aria-hidden="true"></div>
-  <div class="grid-overlay" aria-hidden="true"></div>
+  <div class="page-bg" aria-hidden="true">
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="grid-overlay"></div>
+    <div class="particles">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+  </div>
 
   <header class="site-header" id="top">
     <a class="brand" href="../" aria-label="Back to Immortal homepage">
-      <img src="../assets/pfp.jpg" alt="" width="38" height="38">
+      <span class="brand-mark">I</span>
       <span class="brand-copy">
-        <strong>IMMORTAL</strong>
-        <small>COMMISSIONS</small>
+        <strong>Immortal</strong>
+        <small>Commissions</small>
       </span>
     </a>
 
-    <nav class="site-nav" aria-label="Commission navigation">
-      <a href="#work">Work</a>
-      <a href="#services">Services</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#faq">FAQ</a>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Toggle commission navigation" aria-expanded="false">
+      <i class="bx bx-menu"></i>
+    </button>
+
+    <nav class="site-nav" id="siteNav" aria-label="Commission navigation">
+      <a href="#work"><i class="bx bx-grid-alt"></i><span>Work</span></a>
+      <a href="#services"><i class="bx bx-layer"></i><span>Services</span></a>
+      <a href="#pricing"><i class="bx bx-dollar-circle"></i><span>Pricing</span></a>
+      <a href="#builder"><i class="bx bx-edit-alt"></i><span>Builder</span></a>
+      <a href="#faq"><i class="bx bx-help-circle"></i><span>FAQ</span></a>
     </nav>
 
-    <a class="header-cta" href="https://discord.com/users/1282747277206884436" target="_blank" rel="noopener noreferrer">
-      Message me
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h12m-5-5 5 5-5 5"/></svg>
-    </a>
+    <div class="header-actions">
+      <a class="main-site-link" href="../"><i class="bx bx-left-arrow-alt"></i><span>Main site</span></a>
+      <a class="header-cta" href="#builder"><span>Start a commission</span><i class="bx bx-right-arrow-alt"></i></a>
+    </div>
   </header>
 
   <main>
     <section class="hero shell">
       <div class="hero-copy">
-        <div class="eyebrow"><span></span> FNF commissions</div>
-        <h1>Make the song feel<br><span>worth playing.</span></h1>
-        <p class="hero-lead">Charting and custom Psych Engine work built around the rhythm, difficulty, and feel of your project — with direct communication from start to finish.</p>
+        <div class="eyebrow"><span></span> Friday Night Funkin' commissions</div>
+        <h1>Build a song people <span>remember playing.</span></h1>
+        <p class="hero-lead">Charting and custom Psych Engine work built around rhythm, difficulty, readability, and the feel of your project.</p>
 
         <div class="hero-actions">
-          <a class="button button-primary" href="#work">Explore my work</a>
-          <a class="button button-secondary" href="https://discord.com/users/1282747277206884436" target="_blank" rel="noopener noreferrer">Contact on Discord</a>
+          <a class="button button-primary" href="#work"><i class="bx bx-play-circle"></i> Explore my work</a>
+          <a class="button button-secondary" href="#builder"><i class="bx bx-edit-alt"></i> Build your request</a>
         </div>
 
         <div class="availability-strip" aria-label="Current service status">
@@ -65,90 +77,107 @@
           </div>
           <div class="availability-item">
             <span class="status-dot training"></span>
-            <div><small>Modcharts</small><strong>Training</strong></div>
+            <div><small>Modcharts</small><strong>Learning peak quality</strong></div>
           </div>
         </div>
       </div>
 
-      <div class="hero-visual" aria-hidden="true">
-        <div class="profile-orbit orbit-one"></div>
-        <div class="profile-orbit orbit-two"></div>
-        <div class="profile-card">
-          <img src="../assets/pfp.jpg" alt="">
-          <div class="profile-glow"></div>
+      <div class="hero-showcase">
+        <button class="hero-work" type="button" data-hero-preview aria-label="Open Astral Calamity portfolio preview">
+          <video src="assets/Astral Calamity.mp4" muted loop playsinline preload="metadata"></video>
+          <span class="hero-work-shade"></span>
+          <span class="hero-work-top"><small>Featured chart</small><b>01</b></span>
+          <span class="hero-work-copy">
+            <small>Charting · Advanced</small>
+            <strong>Astral Calamity</strong>
+            <em><i class="bx bx-play"></i> Open preview</em>
+          </span>
+        </button>
+
+        <div class="creator-chip">
+          <img class="profile-img" src="../assets/pfp.jpg" alt="Immortal" width="52" height="52">
+          <div><small>Made by</small><strong>Immortal</strong></div>
+          <span class="creator-status" title="Available"></span>
         </div>
+
         <div class="floating-chip chip-one"><span>01</span> Charting</div>
         <div class="floating-chip chip-two"><span>02</span> Lua / Source</div>
-        <div class="floating-chip chip-three"><span>03</span> Psych 0.6.3</div>
+        <div class="floating-chip chip-three"><span>03</span> Psych Engine</div>
       </div>
     </section>
 
     <section class="training-notice shell" aria-labelledby="training-title">
-      <div class="notice-icon">M</div>
+      <div class="notice-icon"><i class="bx bx-trending-up"></i></div>
       <div class="notice-copy">
-        <span class="notice-label">Service status</span>
-        <h2 id="training-title">Modchart service is currently in training.</h2>
-        <p>I’m actively practicing and improving my modchart work so I can offer something I’m genuinely confident in. You can still view my current practice examples below, but I’m not treating modcharts as a full commission service yet.</p>
+        <span class="notice-label">Modchart status</span>
+        <h2 id="training-title">I’m learning how to build peak modcharts.</h2>
+        <p>I’m currently training on cleaner note movement, stronger beat sync, better camera work, and more polished visual ideas. Practice work is visible below, but I’m not treating modcharts as a normal paid service until the quality is where I want it.</p>
       </div>
-      <a href="#work" data-filter-link="modchart">See training work</a>
+      <a href="#work" data-filter-link="modchart">See the progress <i class="bx bx-right-arrow-alt"></i></a>
     </section>
 
     <section class="section shell" id="services">
       <div class="section-heading split-heading">
         <div>
-          <span class="section-kicker">What I can do</span>
-          <h2>Services with a clear scope.</h2>
+          <span class="section-kicker">What I work on</span>
+          <h2>Three services. One clear scope.</h2>
         </div>
-        <p>No giant package list. Tell me what your song or mod needs, and I’ll tell you what I can realistically deliver.</p>
+        <p>Tell me what the song or mod needs. I’ll tell you what fits, what needs a custom quote, and what is still in training.</p>
       </div>
 
       <div class="service-grid">
         <article class="service-card featured">
-          <div class="service-topline"><span>01</span><span class="pill">Most requested</span></div>
+          <div class="service-icon"><i class="bx bx-pulse"></i></div>
+          <div class="service-topline"><span>01 / Charting</span><span class="pill">Most requested</span></div>
           <h3>Charting</h3>
-          <p>Charts built around the song instead of just filling every beat. Difficulty, readability, and flow are adjusted to match the experience you want.</p>
+          <p>Charts shaped around the song instead of filling every beat. I focus on flow, readability, difficulty, and keeping the chart fun to play.</p>
           <ul>
             <li>Psych Engine charting</li>
             <li>Difficulty balancing</li>
             <li>Timing and flow cleanup</li>
             <li>Reasonable revisions included</li>
           </ul>
-          <div class="service-footer"><strong>Free – $4/min</strong><a href="#pricing">See pricing</a></div>
+          <div class="service-footer"><strong>Free to $4/min</strong><a href="#pricing">Pricing <i class="bx bx-right-arrow-alt"></i></a></div>
         </article>
 
         <article class="service-card">
-          <div class="service-topline"><span>02</span><span class="pill subtle">Custom</span></div>
-          <h3>Coding</h3>
-          <p>Lua scripts, gameplay mechanics, in-song events, and selected source-code changes for Psych Engine projects.</p>
+          <div class="service-icon"><i class="bx bx-code-alt"></i></div>
+          <div class="service-topline"><span>02 / Coding</span><span class="pill subtle">Custom quote</span></div>
+          <h3>Custom coding</h3>
+          <p>Lua scripts, gameplay mechanics, events, and selected source-code changes for Psych Engine projects.</p>
           <ul>
             <li>Lua scripting</li>
             <li>Song mechanics</li>
             <li>Custom events</li>
             <li>Selected source modifications</li>
           </ul>
-          <div class="service-footer"><strong>Custom quote</strong><a href="#contact">Ask about it</a></div>
+          <div class="service-footer"><strong>Quote based</strong><a href="#builder">Describe it <i class="bx bx-right-arrow-alt"></i></a></div>
         </article>
 
         <article class="service-card training-card">
-          <div class="service-topline"><span>03</span><span class="pill training-pill">Training</span></div>
+          <div class="service-icon"><i class="bx bx-shape-triangle"></i></div>
+          <div class="service-topline"><span>03 / Modcharts</span><span class="pill training-pill">Training</span></div>
           <h3>Modcharts</h3>
-          <p>I’m learning how to make stronger, cleaner modcharts before opening this as a normal paid service. Current examples are practice work.</p>
+          <p>I’m learning how to make peak modcharts before opening this as a full service. The goal is movement and effects that feel intentional, synced, and polished.</p>
           <ul>
-            <li>Note movement practice</li>
-            <li>Camera and visual timing</li>
+            <li>Cleaner note movement</li>
             <li>Beat-synced effects</li>
-            <li>Ongoing quality improvement</li>
+            <li>Camera and visual timing</li>
+            <li>More advanced visual ideas</li>
           </ul>
-          <div class="service-footer"><strong>Not fully open yet</strong><a href="#work" data-filter-link="modchart">View progress</a></div>
+          <div class="service-footer"><strong>Not fully open yet</strong><a href="#work" data-filter-link="modchart">View progress <i class="bx bx-right-arrow-alt"></i></a></div>
         </article>
       </div>
     </section>
 
-    <section class="section shell" id="work">
-      <div class="section-heading">
-        <span class="section-kicker">Selected work</span>
-        <h2>See the work before you commission it.</h2>
-        <p>Filter between charting, coding, and modchart training pieces. Video projects open in a focused preview instead of loading every full clip at once.</p>
+    <section class="section shell work-section" id="work">
+      <div class="section-heading work-heading">
+        <div>
+          <span class="section-kicker">Selected work</span>
+          <h2>The work should speak first.</h2>
+          <p>Filter the portfolio and open any project for a focused preview.</p>
+        </div>
+        <div class="work-count"><strong>06</strong><span>selected<br>projects</span></div>
       </div>
 
       <div class="work-toolbar" role="tablist" aria-label="Work filters">
@@ -159,42 +188,48 @@
       </div>
 
       <div class="work-grid">
-        <button class="work-card wide" type="button" data-category="charting" data-media="video" data-src="assets/Astral Calamity.mp4" data-title="Astral Calamity">
+        <button class="work-card work-card-large" type="button" data-category="charting" data-media="video" data-src="assets/Astral Calamity.mp4" data-title="Astral Calamity">
           <video src="assets/Astral Calamity.mp4" muted playsinline preload="metadata"></video>
           <span class="media-shade"></span>
-          <span class="work-card-copy"><small>Charting · Advanced</small><strong>Astral Calamity</strong><em>Open preview</em></span>
+          <span class="work-index">01</span>
+          <span class="work-card-copy"><small>Charting · Advanced</small><strong>Astral Calamity</strong><em>Open preview <i class="bx bx-right-arrow-alt"></i></em></span>
         </button>
 
         <button class="work-card" type="button" data-category="coding" data-media="image" data-src="assets/bullets mechanic.png" data-title="Custom gameplay mechanic">
           <img src="assets/bullets mechanic.png" alt="Preview of a custom FNF gameplay mechanic" loading="lazy">
           <span class="media-shade"></span>
-          <span class="work-card-copy"><small>Coding · Gameplay</small><strong>Custom Mechanic</strong><em>Open preview</em></span>
+          <span class="work-index">02</span>
+          <span class="work-card-copy"><small>Coding · Gameplay</small><strong>Custom Mechanic</strong><em>Open preview <i class="bx bx-right-arrow-alt"></i></em></span>
         </button>
 
         <button class="work-card" type="button" data-category="coding" data-media="image" data-src="assets/lua1.png" data-title="Lua scripting">
           <img src="assets/lua1.png" alt="Preview of Lua scripting work" loading="lazy">
           <span class="media-shade"></span>
-          <span class="work-card-copy"><small>Coding · Lua</small><strong>Lua Scripting</strong><em>Open preview</em></span>
+          <span class="work-index">03</span>
+          <span class="work-card-copy"><small>Coding · Lua</small><strong>Lua Scripting</strong><em>Open preview <i class="bx bx-right-arrow-alt"></i></em></span>
         </button>
 
         <button class="work-card" type="button" data-category="charting" data-media="video" data-src="assets/Tutorial_v2.mp4" data-title="Tutorial chart">
           <video src="assets/Tutorial_v2.mp4" muted playsinline preload="metadata"></video>
           <span class="media-shade"></span>
-          <span class="work-card-copy"><small>Charting · Clean flow</small><strong>Tutorial</strong><em>Open preview</em></span>
+          <span class="work-index">04</span>
+          <span class="work-card-copy"><small>Charting · Clean flow</small><strong>Tutorial</strong><em>Open preview <i class="bx bx-right-arrow-alt"></i></em></span>
         </button>
 
         <button class="work-card" type="button" data-category="modchart" data-media="video" data-src="assets/Bloodline.mp4" data-title="Bloodline modchart practice">
           <video src="assets/Bloodline.mp4" muted playsinline preload="metadata"></video>
           <span class="media-shade"></span>
           <span class="training-badge">Training work</span>
-          <span class="work-card-copy"><small>Modchart · Practice</small><strong>Bloodline</strong><em>Open preview</em></span>
+          <span class="work-index">05</span>
+          <span class="work-card-copy"><small>Modchart · Practice</small><strong>Bloodline</strong><em>Open preview <i class="bx bx-right-arrow-alt"></i></em></span>
         </button>
 
-        <button class="work-card wide" type="button" data-category="modchart" data-media="video" data-src="assets/Ignition.mp4" data-title="Ignition modchart practice">
+        <button class="work-card work-card-wide" type="button" data-category="modchart" data-media="video" data-src="assets/Ignition.mp4" data-title="Ignition modchart practice">
           <video src="assets/Ignition.mp4" muted playsinline preload="metadata"></video>
           <span class="media-shade"></span>
           <span class="training-badge">Training work</span>
-          <span class="work-card-copy"><small>Modchart · Practice</small><strong>Ignition</strong><em>Open preview</em></span>
+          <span class="work-index">06</span>
+          <span class="work-card-copy"><small>Modchart · Practice</small><strong>Ignition</strong><em>Open preview <i class="bx bx-right-arrow-alt"></i></em></span>
         </button>
       </div>
     </section>
@@ -203,85 +238,104 @@
       <div class="section-heading split-heading">
         <div>
           <span class="section-kicker">How it works</span>
-          <h2>A commission shouldn’t feel confusing.</h2>
+          <h2>From idea to delivery.</h2>
         </div>
-        <p>Send the useful details first, agree on scope and price, then I work from that plan. No mystery middle step.</p>
+        <p>Scope comes first. You know what I’m making, what it costs, and what to expect before the work starts.</p>
       </div>
 
       <div class="process-grid">
-        <article><span>01</span><h3>Send the project</h3><p>Song, engine/version, desired service, difficulty, references, deadline, and anything unusual I should know.</p></article>
-        <article><span>02</span><h3>Scope + quote</h3><p>I confirm what I can do, the expected turnaround, revision expectations, and the price before work starts.</p></article>
-        <article><span>03</span><h3>Build + update</h3><p>I work on the chart or code and can share progress when it makes sense for the request.</p></article>
-        <article><span>04</span><h3>Review + delivery</h3><p>You test the result, request reasonable fixes if needed, and receive the final project files.</p></article>
-      </div>
-    </section>
-
-    <section class="section shell brief-section">
-      <div class="brief-card">
-        <div class="brief-copy">
-          <span class="section-kicker">Before you message</span>
-          <h2>Send a useful brief and we’ll get to the answer faster.</h2>
-          <p>You do not need a giant document. These six things are enough for me to understand most requests.</p>
-        </div>
-        <div class="brief-list">
-          <span><b>01</b> Song / audio</span>
-          <span><b>02</b> Psych Engine version</span>
-          <span><b>03</b> Service you need</span>
-          <span><b>04</b> Difficulty / style</span>
-          <span><b>05</b> References if you have them</span>
-          <span><b>06</b> Deadline or flexible timing</span>
-        </div>
+        <article><span>01</span><i class="bx bx-message-square-detail"></i><h3>Send the project</h3><p>Song, engine version, service, difficulty, references, deadline, and anything unusual.</p></article>
+        <article><span>02</span><i class="bx bx-list-check"></i><h3>Scope + quote</h3><p>I confirm what fits, expected turnaround, revisions, and price before starting.</p></article>
+        <article><span>03</span><i class="bx bx-code-curly"></i><h3>Build + update</h3><p>I work on the chart or code and share progress when it makes sense.</p></article>
+        <article><span>04</span><i class="bx bx-check-circle"></i><h3>Review + delivery</h3><p>You test the result, request reasonable fixes, and receive the final files.</p></article>
       </div>
     </section>
 
     <section class="section shell" id="pricing">
-      <div class="section-heading">
-        <span class="section-kicker">Pricing</span>
-        <h2>Simple where it can be. Custom where it has to be.</h2>
-        <p>These are starting rules, not a promise that every unusual request fits one box. I confirm the final quote with you before starting.</p>
+      <div class="section-heading pricing-heading">
+        <div>
+          <span class="section-kicker">Pricing</span>
+          <h2>Simple where it fits. Custom where it matters.</h2>
+        </div>
+        <p>I confirm the final scope and quote before work starts.</p>
       </div>
 
-      <div class="pricing-grid">
-        <article class="pricing-card primary-pricing">
-          <div class="pricing-head"><span>Charting</span><strong>FREE – $4/min</strong></div>
-          <p>Best for complete song charts, cleanup, or a fresh chart built to a target difficulty.</p>
+      <div class="pricing-layout">
+        <article class="pricing-card pricing-featured">
+          <div class="pricing-badge">Charting</div>
+          <div class="pricing-value"><small>from</small><strong>FREE</strong><span>up to $4/min</span></div>
+          <p>For fresh charts, cleanup, or a complete song built around a target difficulty.</p>
           <div class="pricing-lines">
-            <div><span>1–3 minute chart</span><strong>Free</strong></div>
+            <div><span>1 to 3 minute chart</span><strong>Free</strong></div>
             <div><span>Over 3 minutes</span><strong>$4 / minute</strong></div>
             <div><span>Extra song</span><strong>$4 / song</strong></div>
             <div><span>Reasonable revisions</span><strong>Included</strong></div>
           </div>
-          <a class="pricing-action" href="https://discord.com/users/1282747277206884436" target="_blank" rel="noopener noreferrer">Ask for a chart</a>
+          <a class="pricing-action" href="#builder">Build a chart request <i class="bx bx-right-arrow-alt"></i></a>
         </article>
 
-        <article class="pricing-card">
-          <div class="pricing-head"><span>Custom coding</span><strong>Custom quote</strong></div>
-          <p>Pricing depends on how much logic, testing, compatibility work, and engine modification your request needs.</p>
-          <div class="pricing-lines">
-            <div><span>Lua scripts</span><strong>Quote</strong></div>
-            <div><span>Song mechanics</span><strong>Quote</strong></div>
-            <div><span>Custom events</span><strong>Quote</strong></div>
-            <div><span>Source changes</span><strong>Selected requests</strong></div>
-          </div>
-          <a class="pricing-action secondary-action" href="https://discord.com/users/1282747277206884436" target="_blank" rel="noopener noreferrer">Describe your idea</a>
-        </article>
+        <div class="pricing-stack">
+          <article class="pricing-card compact-pricing">
+            <div class="pricing-badge">Custom coding</div>
+            <h3>Custom quote</h3>
+            <p>Price depends on logic, testing, compatibility work, and engine modifications.</p>
+            <div class="compact-tags"><span>Lua</span><span>Mechanics</span><span>Events</span><span>Source</span></div>
+            <a class="pricing-action secondary-action" href="#builder">Describe your idea <i class="bx bx-right-arrow-alt"></i></a>
+          </article>
 
-        <article class="pricing-card paused-pricing">
-          <div class="pricing-head"><span>Modchart</span><strong>Training mode</strong></div>
-          <p>This service is intentionally paused while I train and improve. I’d rather open it later at a quality level I’m confident charging for.</p>
-          <div class="pricing-lines">
-            <div><span>Practice portfolio</span><strong>Visible</strong></div>
-            <div><span>Paid bookings</span><strong>Not fully open</strong></div>
-            <div><span>Current focus</span><strong>Quality + consistency</strong></div>
-          </div>
-          <a class="pricing-action disabled-action" href="#work" data-filter-link="modchart">View training work</a>
-        </article>
+          <article class="pricing-card compact-pricing training-pricing">
+            <div class="pricing-badge">Modcharts · Training</div>
+            <h3>Building toward peak quality.</h3>
+            <p>Paid bookings stay limited while I train movement, sync, camera work, effects, and overall consistency.</p>
+            <a class="pricing-action secondary-action" href="#work" data-filter-link="modchart">View training work <i class="bx bx-right-arrow-alt"></i></a>
+          </article>
+        </div>
       </div>
 
       <div class="terms-row">
-        <div><small>Payment</small><strong>PayPal</strong><span>Only after scope and price are agreed.</span></div>
-        <div><small>Typical turnaround</small><strong>1–14 days</strong><span>Complexity and queue can change this.</span></div>
-        <div><small>Revisions</small><strong>Reasonable fixes</strong><span>Large redesigns can require a new quote.</span></div>
+        <div><small>Payment</small><strong>PayPal</strong><span>After scope and price are agreed.</span></div>
+        <div><small>Typical turnaround</small><strong>1 to 14 days</strong><span>Complexity and queue affect timing.</span></div>
+        <div><small>Revisions</small><strong>Reasonable fixes</strong><span>Large changes need a new scope.</span></div>
+      </div>
+    </section>
+
+    <section class="section shell builder-section" id="builder">
+      <div class="section-heading split-heading">
+        <div>
+          <span class="section-kicker">Commission builder</span>
+          <h2>Prepare the useful details before you DM.</h2>
+        </div>
+        <p>Fill out what you know. The builder turns it into a clean request you can copy and send on Discord.</p>
+      </div>
+
+      <div class="builder-grid">
+        <form class="builder-form" id="commissionBuilder">
+          <fieldset class="service-picker">
+            <legend>Service</legend>
+            <label><input type="radio" name="service" value="Charting" checked><span><i class="bx bx-pulse"></i><b>Charting</b><small>Open</small></span></label>
+            <label><input type="radio" name="service" value="Custom coding"><span><i class="bx bx-code-alt"></i><b>Coding</b><small>Quote</small></span></label>
+            <label><input type="radio" name="service" value="Modchart practice / inquiry"><span><i class="bx bx-shape-triangle"></i><b>Modchart</b><small>Training</small></span></label>
+          </fieldset>
+
+          <div class="field-grid">
+            <label class="field"><span>Song / project</span><input type="text" name="project" placeholder="Song name or project"></label>
+            <label class="field"><span>Engine version</span><input type="text" name="engine" placeholder="Example: Psych Engine 0.6.3"></label>
+            <label class="field"><span>Song length</span><input type="text" name="length" placeholder="Example: 3:24"></label>
+            <label class="field"><span>Difficulty / style</span><input type="text" name="difficulty" placeholder="Easy, hard, dense, readable..."></label>
+            <label class="field field-wide"><span>Deadline</span><input type="text" name="deadline" placeholder="Date, flexible, or no deadline"></label>
+            <label class="field field-wide"><span>Extra details</span><textarea name="details" rows="5" placeholder="Mechanics, references, special requests, or anything I should know"></textarea></label>
+          </div>
+        </form>
+
+        <aside class="request-preview">
+          <div class="preview-topline"><div><small>Generated request</small><strong>Ready for Discord</strong></div><span class="preview-dot"></span></div>
+          <pre id="requestPreview" aria-live="polite"></pre>
+          <div class="preview-actions">
+            <button class="button button-primary" type="button" id="copyRequest"><i class="bx bx-copy"></i> Copy request</button>
+            <a class="button button-secondary" href="https://discord.com/users/1282747277206884436" target="_blank" rel="noopener noreferrer"><i class="bx bxl-discord-alt"></i> Open Discord</a>
+          </div>
+          <p id="builderStatus" aria-live="polite">Nothing is sent automatically.</p>
+        </aside>
       </div>
     </section>
 
@@ -291,29 +345,29 @@
           <span class="section-kicker">FAQ</span>
           <h2>Useful answers before you DM.</h2>
         </div>
-        <p>If your request is unusual, just send it. I’d rather tell you clearly whether I can do it than make you guess from a list.</p>
+        <p>If your request is unusual, send the details. I’ll tell you clearly whether it fits my current work.</p>
       </div>
 
       <div class="faq-list">
         <article class="faq-item">
-          <button type="button" aria-expanded="false"><span>What services are actually open right now?</span><b>+</b></button>
-          <div class="faq-answer"><p>Charting is available, custom coding is handled by quote, and modchart commissions are currently in training rather than being offered as a normal full service.</p></div>
+          <button type="button" aria-expanded="false"><span>What services are open right now?</span><b>+</b></button>
+          <div class="faq-answer"><p>Charting is available, custom coding is handled by quote, and modchart work is still in training while I learn how to build peak-quality modcharts.</p></div>
         </article>
         <article class="faq-item">
           <button type="button" aria-expanded="false"><span>How long will my commission take?</span><b>+</b></button>
-          <div class="faq-answer"><p>Most requests fall somewhere between 1 and 14 days. Small charts can be much quicker; larger code work or a busy queue can take longer. I’ll give you a realistic estimate before starting.</p></div>
+          <div class="faq-answer"><p>Most requests fall between 1 and 14 days. Small charts are often quicker. Larger coding work or a busy queue can take longer.</p></div>
         </article>
         <article class="faq-item">
           <button type="button" aria-expanded="false"><span>Do you include revisions?</span><b>+</b></button>
-          <div class="faq-answer"><p>Yes. Reasonable fixes and adjustments are included. If the request changes into a substantially different project after work has started, I may need to re-scope it.</p></div>
+          <div class="faq-answer"><p>Yes. Reasonable fixes and adjustments are included. A major change to the original request can require a new scope.</p></div>
         </article>
         <article class="faq-item">
           <button type="button" aria-expanded="false"><span>What engine do you mainly work with?</span><b>+</b></button>
-          <div class="faq-answer"><p>My main FNF workflow is Psych Engine, especially the 0.6.3-era setup I’ve worked with extensively. If your project uses something different, mention it before I quote the job.</p></div>
+          <div class="faq-answer"><p>My main FNF workflow is Psych Engine, especially the 0.6.3-era setup. Mention your engine and version before I quote the work.</p></div>
         </article>
         <article class="faq-item">
           <button type="button" aria-expanded="false"><span>How do payments work?</span><b>+</b></button>
-          <div class="faq-answer"><p>PayPal is the current payment method. Please do not send money before we have agreed on the exact request and final price.</p></div>
+          <div class="faq-answer"><p>PayPal is the current payment method. Do not send payment until we agree on the request and final price.</p></div>
         </article>
       </div>
     </section>
@@ -322,13 +376,13 @@
       <div class="contact-panel">
         <div class="contact-avatar"><img src="../assets/pfp.jpg" alt="Immortal" loading="lazy"></div>
         <div class="contact-copy">
-          <span class="section-kicker">Start a commission</span>
-          <h2>Have the song or idea ready?</h2>
-          <p>Send me the project details on Discord. I’ll tell you what I can do, what it should cost, and roughly how long it should take.</p>
+          <span class="section-kicker">Ready?</span>
+          <h2>Send the project when you’re ready.</h2>
+          <p>Use the builder or message me directly. I’ll confirm what fits, the price, and the expected turnaround.</p>
         </div>
         <div class="contact-actions">
-          <a class="button button-primary" href="https://discord.com/users/1282747277206884436" target="_blank" rel="noopener noreferrer">Open Discord</a>
-          <button class="button button-secondary" type="button" id="copyDiscord" data-username="trr0">Copy @trr0</button>
+          <a class="button button-primary" href="https://discord.com/users/1282747277206884436" target="_blank" rel="noopener noreferrer"><i class="bx bxl-discord-alt"></i> Open Discord</a>
+          <button class="button button-secondary" type="button" id="copyDiscord" data-username="trr0"><i class="bx bx-copy"></i> Copy @trr0</button>
         </div>
       </div>
       <p class="contact-note" id="copyStatus" aria-live="polite">Typical reply target: within 24 hours.</p>
@@ -336,19 +390,20 @@
   </main>
 
   <footer class="footer shell">
-    <div><strong>IMMORTAL</strong><span>FNF commissions</span></div>
+    <div class="footer-brand"><strong>IMMORTAL</strong><span>FNF commissions</span></div>
     <nav aria-label="Footer navigation"><a href="../">Main site</a><a href="../privacy.html">Privacy</a><a href="#top">Back to top</a></nav>
-    <span>Built for xm5o.github.io</span>
+    <span>xm5o.github.io</span>
   </footer>
 
   <div class="media-modal" id="mediaModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="mediaTitle">
     <button class="modal-backdrop" type="button" data-close-modal aria-label="Close preview"></button>
     <div class="modal-card">
-      <div class="modal-topbar"><div><small>Portfolio preview</small><strong id="mediaTitle">Project</strong></div><button type="button" data-close-modal aria-label="Close preview">×</button></div>
+      <div class="modal-topbar"><div><small>Portfolio preview</small><strong id="mediaTitle">Project</strong></div><button type="button" data-close-modal aria-label="Close preview"><i class="bx bx-x"></i></button></div>
       <div class="modal-media" id="modalMedia"></div>
     </div>
   </div>
 
+  <script src="../scripts/pfp-theme.js"></script>
   <script src="commission.js"></script>
   <script type="module" src="../scripts/analytics.js"></script>
 </body>
