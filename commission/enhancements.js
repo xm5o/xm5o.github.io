@@ -55,9 +55,9 @@ function injectTrafficPanel() {
     onSnapshot(summaryRef, snapshot => {
       if (!snapshot.exists()) return;
       const data = snapshot.data();
-      const path = location.pathname || '/commission/';
-      const pageId = dimensionId(path);
-      const pageViews = Number(data?.analyticsV2?.dimensions?.pages?.[pageId]?.views || 0);
+      const pages = data?.analyticsV2?.dimensions?.pages || {};
+      const paths = [...new Set([location.pathname || '/commission/', '/commission/', '/commission/index.html'])];
+      const pageViews = paths.reduce((total, path) => total + Number(pages?.[dimensionId(path)]?.views || 0), 0);
       const siteVisitors = Number(data?.totalViews || 0);
       const todayVisitors = Number(data?.analyticsV2?.daily?.[dateKey()]?.visitors || 0);
       document.getElementById('commissionSiteVisitors').textContent = siteVisitors.toLocaleString();
@@ -82,6 +82,23 @@ function safeSessionSet(key, value) {
   try { sessionStorage.setItem(key, value); } catch {}
 }
 
+async function fetchUsdRate(currency) {
+  if (!currency || currency === 'USD') return 1;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 2500);
+  try {
+    const response = await fetch('https://open.er-api.com/v6/latest/USD', { signal: controller.signal, cache: 'no-store' });
+    if (!response.ok) return null;
+    const data = await response.json();
+    const rate = Number(data?.rates?.[currency]);
+    return Number.isFinite(rate) && rate > 0 ? rate : null;
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 async function detectLocale() {
   const cached = safeSessionGet(LOCALE_CACHE_KEY);
   if (cached) {
@@ -96,14 +113,19 @@ async function detectLocale() {
     const data = await response.json();
     if (data?.success === false) return localeInfo;
 
-    const rate = Number(data?.currency?.exchange_rate);
+    const currency = data?.currency?.code || 'USD';
+    let rate = Number(data?.currency?.exchange_rate);
+    if (!Number.isFinite(rate) || rate <= 0) {
+      rate = await fetchUsdRate(currency) || 1;
+    }
+
     const detected = {
       country: data?.country || 'International',
       countryCode: data?.country_code || 'XX',
       flag: data?.flag?.emoji || '🌐',
-      currency: data?.currency?.code || 'USD',
-      symbol: data?.currency?.symbol || '$',
-      rate: Number.isFinite(rate) && rate > 0 ? rate : 1
+      currency,
+      symbol: data?.currency?.symbol || currency,
+      rate
     };
     safeSessionSet(LOCALE_CACHE_KEY, JSON.stringify(detected));
     return detected;
@@ -210,9 +232,10 @@ function injectBuilderExtras() {
     readinessLabel.textContent = complete === fields.length ? 'Ready to send' : complete >= 3 ? 'Almost ready' : complete >= 1 ? 'Keep adding details' : 'Getting started';
 
     const service = String(data.get('service') || 'Charting');
+    const normalizedService = service.toLowerCase();
     if (service !== 'Charting') {
-      chartEstimate.textContent = service.includes('Modchart') ? 'Training inquiry' : 'Custom quote';
-      chartEstimateNote.textContent = service.includes('Modchart') ? 'Modcharting is still in Codename Engine training.' : 'Coding prices depend on scope, logic, compatibility, and testing.';
+      chartEstimate.textContent = normalizedService.includes('modchart') ? 'Training inquiry' : 'Custom quote';
+      chartEstimateNote.textContent = normalizedService.includes('modchart') ? 'Modcharting is still in Codename Engine training.' : 'Coding prices depend on scope, logic, compatibility, and testing.';
       return;
     }
 
