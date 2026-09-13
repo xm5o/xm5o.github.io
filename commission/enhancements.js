@@ -2,6 +2,7 @@ import { getAnalyticsDb, ANALYTICS_DOCS } from '../scripts/analytics-config.js';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 const USD_RATE = 4;
+const FREE_CHART_SECONDS = 3 * 60;
 const LOCALE_CACHE_KEY = 'immortal-commission-locale-v1';
 let localeInfo = { country: 'International', countryCode: 'XX', flag: '🌐', currency: 'USD', symbol: '$', rate: 1 };
 
@@ -177,6 +178,39 @@ function setPriceText(element, suffix = '') {
   }
 }
 
+function applyPricingRulesText() {
+  const pricingCard = document.querySelector('#pricing .pricing-featured');
+  if (!pricingCard) return;
+
+  const priceRows = [...pricingCard.querySelectorAll('.pricing-lines > div')];
+  if (priceRows[0]) {
+    const label = priceRows[0].querySelector('span');
+    const price = priceRows[0].querySelector('strong');
+    if (label) label.textContent = 'First 3:00 of the song';
+    if (price) price.textContent = 'Free';
+  }
+
+  if (priceRows[1]) {
+    const label = priceRows[1].querySelector('span');
+    if (label) label.textContent = 'Each started minute after 3:00';
+  }
+
+  if (priceRows[2]) {
+    const label = priceRows[2].querySelector('span');
+    if (label) label.textContent = 'Extra song';
+  }
+
+  if (!pricingCard.querySelector('.pricing-examples')) {
+    const examples = document.createElement('div');
+    examples.className = 'pricing-examples';
+    examples.setAttribute('aria-label', 'Chart pricing examples');
+    examples.innerHTML = `
+      <small>Examples</small>
+      <div><span><b>3:00</b> Free</span><span><b>3:01</b> $4</span><span><b>4:00</b> $4</span><span><b>4:01</b> $8</span><span><b>5:20</b> $12</span></div>`;
+    pricingCard.querySelector('.pricing-lines')?.insertAdjacentElement('afterend', examples);
+  }
+}
+
 function injectCurrencyUI() {
   const pricingLayout = document.querySelector('#pricing .pricing-layout');
   if (!pricingLayout || document.querySelector('.currency-localizer')) return;
@@ -192,32 +226,51 @@ function injectCurrencyUI() {
   if (servicePrice) {
     const local = formatMoney(USD_RATE);
     servicePrice.innerHTML = localeInfo.currency === 'USD'
-      ? `Free to ${local}/min`
-      : `Free to <span class="local-price">${local}/min</span><span class="usd-base">$4 USD/min</span>`;
+      ? `First 3 min free · then ${local}/extra min`
+      : `First 3 min free · then <span class="local-price">${local}/extra min</span><span class="usd-base">$4 USD / started extra minute</span>`;
   }
 
   const priceSpan = document.querySelector('#pricing .pricing-featured .pricing-value span');
-  if (priceSpan) priceSpan.textContent = `then ${formatMoney(USD_RATE)}/min`;
+  if (priceSpan) {
+    const local = formatMoney(USD_RATE);
+    priceSpan.innerHTML = localeInfo.currency === 'USD'
+      ? `then ${local} / started extra minute`
+      : `then <span class="local-price">${local} / started extra minute</span><span class="usd-base">$4 USD / started extra minute</span>`;
+  }
 
   const priceRows = [...document.querySelectorAll('#pricing .pricing-featured .pricing-lines > div')];
-  setPriceText(priceRows[1]?.querySelector('strong'), ' / minute');
+  setPriceText(priceRows[1]?.querySelector('strong'));
   setPriceText(priceRows[2]?.querySelector('strong'), ' / song');
 
   const note = document.createElement('p');
   note.className = 'currency-note';
-  note.textContent = `Local prices are estimates for ${localeInfo.country}. The final quote still uses the USD base price.`;
+  note.textContent = `Only the time after the first 3:00 is charged. Local prices are estimates for ${localeInfo.country}; the final quote still uses the USD base price.`;
   pricingLayout.after(note);
 }
 
-function parseMinutes(value) {
+function parseSongLengthSeconds(value) {
   const text = String(value || '').trim().toLowerCase();
   if (!text) return null;
 
   const colon = text.match(/^(\d{1,3}):([0-5]?\d)$/);
-  if (colon) return Number(colon[1]) + Number(colon[2]) / 60;
+  if (colon) {
+    return (Number(colon[1]) * 60) + Number(colon[2]);
+  }
 
   const decimal = text.match(/(\d+(?:\.\d+)?)/);
-  return decimal ? Number(decimal[1]) : null;
+  if (!decimal) return null;
+
+  const minutes = Number(decimal[1]);
+  return Number.isFinite(minutes) && minutes > 0 ? Math.round(minutes * 60) : null;
+}
+
+function getChartPriceUsd(totalSeconds) {
+  if (!Number.isFinite(totalSeconds) || totalSeconds <= 0) return null;
+  if (totalSeconds <= FREE_CHART_SECONDS) return 0;
+
+  const extraSeconds = totalSeconds - FREE_CHART_SECONDS;
+  const startedExtraMinutes = Math.ceil(extraSeconds / 60);
+  return startedExtraMinutes * USD_RATE;
 }
 
 function injectBuilderExtras() {
@@ -237,7 +290,7 @@ function injectBuilderExtras() {
   estimate.className = 'estimate-card';
   estimate.innerHTML = `
     <div class="estimate-top"><div class="estimate-copy"><small>Chart price estimate</small><strong id="chartEstimate">Add a song length</strong></div><span class="estimate-badge">Estimate</span></div>
-    <p id="chartEstimateNote">For charting only. I confirm the final price after I check the request.</p>`;
+    <p id="chartEstimateNote">The first 3:00 is free. Each started extra minute adds $4.</p>`;
 
   top.insertAdjacentElement('afterend', health);
   health.insertAdjacentElement('afterend', estimate);
@@ -273,25 +326,26 @@ function injectBuilderExtras() {
       return;
     }
 
-    const minutes = parseMinutes(data.get('length'));
-    if (!minutes || minutes <= 0) {
+    const totalSeconds = parseSongLengthSeconds(data.get('length'));
+    if (!totalSeconds) {
       chartEstimate.textContent = 'Add a song length';
       chartEstimateNote.textContent = 'Use a format like 3:24 or 3.5 minutes.';
       return;
     }
 
-    if (minutes <= 3) {
+    const usdEstimate = getChartPriceUsd(totalSeconds);
+    if (usdEstimate === 0) {
       chartEstimate.textContent = 'Free';
-      chartEstimateNote.textContent = 'Charts from 1 to 3 minutes are listed as free.';
+      chartEstimateNote.textContent = 'The first 3:00 of the song is free.';
       return;
     }
 
-    const usdEstimate = minutes * USD_RATE;
+    const extraMinutes = Math.ceil((totalSeconds - FREE_CHART_SECONDS) / 60);
     const local = formatMoney(usdEstimate);
     chartEstimate.textContent = localeInfo.currency === 'USD'
       ? local
       : `${local} · about $${usdEstimate.toFixed(2)} USD`;
-    chartEstimateNote.textContent = 'This estimate only uses song length. I confirm the final price after I check the request.';
+    chartEstimateNote.textContent = `${extraMinutes} started extra ${extraMinutes === 1 ? 'minute' : 'minutes'} after 3:00 × $4. Final price is confirmed before work starts.`;
   }
 
   builder.addEventListener('input', updateExtras);
@@ -302,6 +356,7 @@ function injectBuilderExtras() {
 
 async function init() {
   ensureStyles();
+  applyPricingRulesText();
   injectTrafficPanel();
   injectBuilderExtras();
   localeInfo = await detectLocale();
