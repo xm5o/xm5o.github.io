@@ -400,6 +400,10 @@
   buildRequest();
 })();
 
-import('./enhancements.js').catch(error => {
+import('./enhancements.js?v=20260914-2').catch(error => {
   console.warn('[Commission] Enhancements unavailable:', error?.message || error);
+});
+
+import('./features.js?v=20260914-1').catch(error => {
+  console.warn('[Commission] Extra features unavailable:', error?.message || error);
 });
