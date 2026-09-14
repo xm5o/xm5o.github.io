@@ -300,21 +300,30 @@
     const difficulty = valueOrFallback(data, 'difficulty');
     const deadline = valueOrFallback(data, 'deadline', 'Flexible / not provided');
     const details = valueOrFallback(data, 'details', 'No extra details yet');
+    const estimate = String(builder.dataset.chartEstimate || '').trim();
 
-    const request = [
+    const requestLines = [
       "Hey, I'd like to ask about an FNF commission.",
       '',
       `Service: ${service}`,
       `Song / project: ${project}`,
       `Engine version: ${engine}`,
-      `Song length: ${length}`,
+      `Song length: ${length}`
+    ];
+
+    if (service === 'Charting' && estimate) {
+      requestLines.push(`Estimated chart price: ${estimate}`);
+    }
+
+    requestLines.push(
       `Difficulty / style: ${difficulty}`,
       `Deadline: ${deadline}`,
       '',
       'Extra details:',
       details
-    ].join('\n');
+    );
 
+    const request = requestLines.join('\n');
     requestPreview.textContent = request;
     return request;
   }
@@ -326,13 +335,13 @@
     const engineInput = builder.elements.namedItem('engine');
 
     if (projectInput instanceof HTMLInputElement && !projectInput.value.trim()) {
-      builderStatus.textContent = 'Add the song or project name first.';
+      if (builderStatus) builderStatus.textContent = 'Add the song or project name first.';
       projectInput.focus();
       return false;
     }
 
     if (engineInput instanceof HTMLInputElement && !engineInput.value.trim()) {
-      builderStatus.textContent = 'Add the engine and version first, for example Psych Engine 0.6.3 or Codename Engine.';
+      if (builderStatus) builderStatus.textContent = 'Add the engine and version first, for example Psych Engine 0.6.3 or Codename Engine.';
       engineInput.focus();
       return false;
     }
@@ -350,6 +359,7 @@
 
   builder?.addEventListener('input', updateBuilder);
   builder?.addEventListener('change', updateBuilder);
+  window.addEventListener('commission-estimate-updated', buildRequest);
 
   copyRequest?.addEventListener('click', async () => {
     const request = buildRequest();
