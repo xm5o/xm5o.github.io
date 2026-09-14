@@ -3,14 +3,51 @@ import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/fireb
 
 const USD_RATE = 4;
 const FREE_CHART_SECONDS = 3 * 60;
-const LOCALE_CACHE_KEY = 'immortal-commission-locale-v1';
-let localeInfo = { country: 'International', countryCode: 'XX', flag: '🌐', currency: 'USD', symbol: '$', rate: 1 };
+const GEO_CACHE_KEY = 'immortal-commission-geo-v2';
+const CURRENCY_OVERRIDE_KEY = 'immortal-commission-currency-v1';
+const RATES_CACHE_KEY = 'immortal-commission-usd-rates-v1';
+const RATES_CACHE_TTL = 12 * 60 * 60 * 1000;
+
+const COMMON_CURRENCIES = [
+  'USD', 'SAR', 'EUR', 'GBP', 'AED', 'KWD', 'QAR', 'BHD', 'OMR', 'JOD',
+  'CAD', 'AUD', 'NZD', 'JPY', 'CNY', 'KRW', 'INR', 'TRY', 'EGP', 'CHF',
+  'SEK', 'NOK', 'DKK', 'PLN', 'BRL', 'MXN', 'SGD', 'MYR', 'IDR', 'PHP', 'THB'
+];
+
+const REGION_CURRENCY = Object.freeze({
+  US: 'USD', SA: 'SAR', GB: 'GBP', AE: 'AED', KW: 'KWD', QA: 'QAR', BH: 'BHD', OM: 'OMR', JO: 'JOD',
+  CA: 'CAD', AU: 'AUD', NZ: 'NZD', JP: 'JPY', CN: 'CNY', KR: 'KRW', IN: 'INR', TR: 'TRY', EG: 'EGP', CH: 'CHF',
+  SE: 'SEK', NO: 'NOK', DK: 'DKK', PL: 'PLN', BR: 'BRL', MX: 'MXN', SG: 'SGD', MY: 'MYR', ID: 'IDR', PH: 'PHP', TH: 'THB',
+  DE: 'EUR', FR: 'EUR', ES: 'EUR', IT: 'EUR', IE: 'EUR', NL: 'EUR', BE: 'EUR', AT: 'EUR', PT: 'EUR', FI: 'EUR', GR: 'EUR',
+  LU: 'EUR', CY: 'EUR', MT: 'EUR', SK: 'EUR', SI: 'EUR', EE: 'EUR', LV: 'EUR', LT: 'EUR', HR: 'EUR'
+});
+
+const FALLBACK_RATES = Object.freeze({
+  USD: 1,
+  SAR: 3.75,
+  AED: 3.6725,
+  QAR: 3.64,
+  BHD: 0.376,
+  OMR: 0.3845,
+  JOD: 0.709
+});
+
+let localeInfo = {
+  country: 'International',
+  countryCode: 'XX',
+  flag: '🌐',
+  currency: 'USD',
+  autoCurrency: 'USD',
+  rate: 1,
+  manualCurrency: false,
+  rateFallback: false
+};
 
 function ensureStyles() {
   if (document.querySelector('link[data-commission-enhancements]')) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = 'enhancements.css';
+  link.href = 'enhancements.css?v=20260914-2';
   link.dataset.commissionEnhancements = 'true';
   document.head.append(link);
 }
@@ -67,9 +104,12 @@ function injectTrafficPanel() {
       const siteVisitors = Number(data?.totalViews || 0);
       const todayVisitors = Number(data?.analyticsV2?.daily?.[dateKey()]?.visitors || 0);
 
-      document.getElementById('commissionSiteVisitors').textContent = siteVisitors.toLocaleString();
-      document.getElementById('commissionPageViews').textContent = pageViews.toLocaleString();
-      document.getElementById('commissionTodayVisitors').textContent = todayVisitors.toLocaleString();
+      const siteEl = document.getElementById('commissionSiteVisitors');
+      const pageEl = document.getElementById('commissionPageViews');
+      const todayEl = document.getElementById('commissionTodayVisitors');
+      if (siteEl) siteEl.textContent = siteVisitors.toLocaleString();
+      if (pageEl) pageEl.textContent = pageViews.toLocaleString();
+      if (todayEl) todayEl.textContent = todayVisitors.toLocaleString();
     }, () => {
       ['commissionSiteVisitors', 'commissionPageViews', 'commissionTodayVisitors'].forEach(id => {
         const el = document.getElementById(id);
@@ -89,69 +129,160 @@ function safeSessionSet(key, value) {
   try { sessionStorage.setItem(key, value); } catch {}
 }
 
-async function fetchUsdRate(currency) {
-  if (!currency || currency === 'USD') return 1;
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 2500);
+function safeLocalGet(key) {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
 
+function safeLocalSet(key, value) {
+  try { localStorage.setItem(key, value); } catch {}
+}
+
+function safeLocalDelete(key) {
+  try { localStorage.removeItem(key); } catch {}
+}
+
+function flagFromCountryCode(code) {
+  if (!/^[A-Z]{2}$/.test(code || '')) return '🌐';
+  return String.fromCodePoint(...[...code].map(letter => 127397 + letter.charCodeAt(0)));
+}
+
+function getBrowserRegion() {
+  const locale = navigator.languages?.[0] || navigator.language || '';
   try {
-    const response = await fetch('https://open.er-api.com/v6/latest/USD', {
-      signal: controller.signal,
-      cache: 'no-store'
-    });
-    if (!response.ok) return null;
-    const data = await response.json();
-    const rate = Number(data?.rates?.[currency]);
-    return Number.isFinite(rate) && rate > 0 ? rate : null;
+    if (typeof Intl.Locale === 'function') {
+      return new Intl.Locale(locale).maximize().region || 'XX';
+    }
+  } catch {}
+  const match = locale.match(/[-_]([A-Za-z]{2})\b/);
+  return match ? match[1].toUpperCase() : 'XX';
+}
+
+function getCountryName(code) {
+  if (!code || code === 'XX') return 'International';
+  try {
+    return new Intl.DisplayNames([navigator.language || 'en'], { type: 'region' }).of(code) || code;
   } catch {
-    return null;
+    return code;
+  }
+}
+
+async function fetchJson(url, timeoutMs = 4000) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(url, {
+      signal: controller.signal,
+      cache: 'no-store',
+      headers: { Accept: 'application/json' }
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return await response.json();
   } finally {
     clearTimeout(timeout);
   }
 }
 
-async function detectLocale() {
-  const cached = safeSessionGet(LOCALE_CACHE_KEY);
+async function getUsdRates() {
+  const cached = safeLocalGet(RATES_CACHE_KEY);
   if (cached) {
-    try { return { ...localeInfo, ...JSON.parse(cached) }; } catch {}
+    try {
+      const parsed = JSON.parse(cached);
+      if (parsed?.rates && Date.now() - Number(parsed.timestamp || 0) < RATES_CACHE_TTL) {
+        return parsed.rates;
+      }
+    } catch {}
   }
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 3500);
+  const sources = [
+    'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json',
+    'https://latest.currency-api.pages.dev/v1/currencies/usd.min.json'
+  ];
+
+  for (const source of sources) {
+    try {
+      const data = await fetchJson(source, 4500);
+      const rates = data?.usd;
+      if (rates && typeof rates === 'object' && Number(rates.eur) > 0) {
+        safeLocalSet(RATES_CACHE_KEY, JSON.stringify({ timestamp: Date.now(), rates }));
+        return rates;
+      }
+    } catch {}
+  }
+
+  return null;
+}
+
+async function fetchUsdRate(currency) {
+  const code = String(currency || 'USD').toUpperCase();
+  if (code === 'USD') return { rate: 1, fallback: false };
+
+  const rates = await getUsdRates();
+  const liveRate = Number(rates?.[code.toLowerCase()]);
+  if (Number.isFinite(liveRate) && liveRate > 0) {
+    return { rate: liveRate, fallback: false };
+  }
+
+  const fallbackRate = Number(FALLBACK_RATES[code]);
+  if (Number.isFinite(fallbackRate) && fallbackRate > 0) {
+    return { rate: fallbackRate, fallback: true };
+  }
+
+  return null;
+}
+
+async function detectGeo() {
+  const cached = safeSessionGet(GEO_CACHE_KEY);
+  if (cached) {
+    try { return JSON.parse(cached); } catch {}
+  }
+
+  const browserRegion = getBrowserRegion();
+  const browserFallback = {
+    country: getCountryName(browserRegion),
+    countryCode: browserRegion,
+    flag: flagFromCountryCode(browserRegion),
+    currency: REGION_CURRENCY[browserRegion] || 'USD'
+  };
 
   try {
-    const response = await fetch('https://ipwho.is/', {
-      signal: controller.signal,
-      cache: 'no-store',
-      headers: { Accept: 'application/json' }
-    });
-    if (!response.ok) return localeInfo;
+    const data = await fetchJson('https://ipwho.is/', 3500);
+    if (data?.success === false) return browserFallback;
 
-    const data = await response.json();
-    if (data?.success === false) return localeInfo;
-
-    const currency = data?.currency?.code || 'USD';
-    let rate = Number(data?.currency?.exchange_rate);
-    if (!Number.isFinite(rate) || rate <= 0) {
-      rate = await fetchUsdRate(currency) || 1;
-    }
-
-    const detected = {
-      country: data?.country || 'International',
-      countryCode: data?.country_code || 'XX',
-      flag: data?.flag?.emoji || '🌐',
-      currency,
-      symbol: data?.currency?.symbol || currency,
-      rate
+    const result = {
+      country: data?.country || browserFallback.country,
+      countryCode: data?.country_code || browserFallback.countryCode,
+      flag: data?.flag?.emoji || flagFromCountryCode(data?.country_code) || browserFallback.flag,
+      currency: String(data?.currency?.code || REGION_CURRENCY[data?.country_code] || browserFallback.currency || 'USD').toUpperCase()
     };
-
-    safeSessionSet(LOCALE_CACHE_KEY, JSON.stringify(detected));
-    return detected;
+    safeSessionSet(GEO_CACHE_KEY, JSON.stringify(result));
+    return result;
   } catch {
-    return localeInfo;
-  } finally {
-    clearTimeout(timeout);
+    return browserFallback;
   }
+}
+
+async function detectLocale() {
+  const geo = await detectGeo();
+  const override = String(safeLocalGet(CURRENCY_OVERRIDE_KEY) || '').toUpperCase();
+  const autoCurrency = String(geo.currency || 'USD').toUpperCase();
+  let currency = /^[A-Z]{3}$/.test(override) ? override : autoCurrency;
+  let rateResult = await fetchUsdRate(currency);
+
+  if (!rateResult) {
+    currency = 'USD';
+    rateResult = { rate: 1, fallback: true };
+  }
+
+  return {
+    country: geo.country || 'International',
+    countryCode: geo.countryCode || 'XX',
+    flag: geo.flag || '🌐',
+    currency,
+    autoCurrency,
+    rate: rateResult.rate,
+    manualCurrency: Boolean(override),
+    rateFallback: rateResult.fallback
+  };
 }
 
 function formatMoney(usd, info = localeInfo) {
@@ -163,7 +294,7 @@ function formatMoney(usd, info = localeInfo) {
       maximumFractionDigits: converted >= 100 ? 0 : 2
     }).format(converted);
   } catch {
-    return `${info.symbol || info.currency} ${converted.toFixed(converted >= 100 ? 0 : 2)}`;
+    return `${info.currency} ${converted.toFixed(converted >= 100 ? 0 : 2)}`;
   }
 }
 
@@ -211,17 +342,14 @@ function applyPricingRulesText() {
   }
 }
 
-function injectCurrencyUI() {
-  const pricingLayout = document.querySelector('#pricing .pricing-layout');
-  if (!pricingLayout || document.querySelector('.currency-localizer')) return;
+function getCurrencyOptions() {
+  const currencies = new Set(COMMON_CURRENCIES);
+  currencies.add(localeInfo.autoCurrency);
+  currencies.add(localeInfo.currency);
+  return [...currencies].filter(code => /^[A-Z]{3}$/.test(code));
+}
 
-  const bar = document.createElement('div');
-  bar.className = 'currency-localizer';
-  bar.innerHTML = `
-    <div class="currency-location"><span class="currency-flag">${localeInfo.flag}</span><div><small>Your currency</small><strong>${localeInfo.country} · ${localeInfo.currency}</strong></div></div>
-    <div class="currency-rate">Prices are converted from USD.</div>`;
-  pricingLayout.before(bar);
-
+function renderCurrencyPrices() {
   const servicePrice = document.querySelector('#services .service-card.featured .service-footer strong');
   if (servicePrice) {
     const local = formatMoney(USD_RATE);
@@ -242,10 +370,92 @@ function injectCurrencyUI() {
   setPriceText(priceRows[1]?.querySelector('strong'));
   setPriceText(priceRows[2]?.querySelector('strong'), ' / song');
 
+  const countryLabel = document.getElementById('currencyCountryLabel');
+  if (countryLabel) countryLabel.textContent = `${localeInfo.country} · ${localeInfo.currency}`;
+
+  const rateLabel = document.getElementById('currencyRateLabel');
+  if (rateLabel) {
+    if (localeInfo.rateFallback) {
+      rateLabel.textContent = 'Using a safe fallback rate. USD is still the base price.';
+    } else if (localeInfo.currency === 'USD') {
+      rateLabel.textContent = 'Showing the USD base price.';
+    } else {
+      rateLabel.textContent = `1 USD ≈ ${formatMoney(1)}. Local prices are estimates.`;
+    }
+  }
+
+  const note = document.querySelector('.currency-note');
+  if (note) {
+    note.textContent = `Only the time after the first 3:00 is charged. ${localeInfo.manualCurrency ? `Display currency set to ${localeInfo.currency}.` : `Currency detected for ${localeInfo.country}.`} The final quote still uses USD as the base price.`;
+  }
+}
+
+async function changeCurrency(currency) {
+  const selected = String(currency || '').toUpperCase();
+  const targetCurrency = selected || localeInfo.autoCurrency || 'USD';
+  const rateResult = await fetchUsdRate(targetCurrency);
+
+  if (!rateResult) {
+    const rateLabel = document.getElementById('currencyRateLabel');
+    if (rateLabel) rateLabel.textContent = `Could not load ${targetCurrency}. Keeping ${localeInfo.currency}.`;
+    return;
+  }
+
+  if (selected) safeLocalSet(CURRENCY_OVERRIDE_KEY, selected);
+  else safeLocalDelete(CURRENCY_OVERRIDE_KEY);
+
+  localeInfo.currency = targetCurrency;
+  localeInfo.rate = rateResult.rate;
+  localeInfo.rateFallback = rateResult.fallback;
+  localeInfo.manualCurrency = Boolean(selected);
+  renderCurrencyPrices();
+  window.dispatchEvent(new CustomEvent('commission-currency-ready'));
+}
+
+function injectCurrencyUI() {
+  const pricingLayout = document.querySelector('#pricing .pricing-layout');
+  if (!pricingLayout || document.querySelector('.currency-localizer')) return;
+
+  const bar = document.createElement('div');
+  bar.className = 'currency-localizer';
+  bar.innerHTML = `
+    <div class="currency-location">
+      <span class="currency-flag">${localeInfo.flag}</span>
+      <div><small>Your currency</small><strong id="currencyCountryLabel">${localeInfo.country} · ${localeInfo.currency}</strong></div>
+    </div>
+    <div class="currency-controls">
+      <select id="currencySelect" aria-label="Display currency"></select>
+      <small class="currency-rate" id="currencyRateLabel">Loading exchange rate…</small>
+    </div>`;
+  pricingLayout.before(bar);
+
+  const select = document.getElementById('currencySelect');
+  if (select) {
+    const autoOption = document.createElement('option');
+    autoOption.value = '';
+    autoOption.textContent = `Auto (${localeInfo.autoCurrency})`;
+    select.append(autoOption);
+
+    getCurrencyOptions().forEach(code => {
+      const option = document.createElement('option');
+      option.value = code;
+      option.textContent = code;
+      select.append(option);
+    });
+
+    select.value = localeInfo.manualCurrency ? localeInfo.currency : '';
+    select.addEventListener('change', async () => {
+      select.disabled = true;
+      await changeCurrency(select.value);
+      select.disabled = false;
+      select.value = localeInfo.manualCurrency ? localeInfo.currency : '';
+    });
+  }
+
   const note = document.createElement('p');
   note.className = 'currency-note';
-  note.textContent = `Only the time after the first 3:00 is charged. Local prices are estimates for ${localeInfo.country}; the final quote still uses the USD base price.`;
   pricingLayout.after(note);
+  renderCurrencyPrices();
 }
 
 function parseSongLengthSeconds(value) {
@@ -271,6 +481,12 @@ function getChartPriceUsd(totalSeconds) {
   const extraSeconds = totalSeconds - FREE_CHART_SECONDS;
   const startedExtraMinutes = Math.ceil(extraSeconds / 60);
   return startedExtraMinutes * USD_RATE;
+}
+
+function publishEstimate(builder, estimateText = '') {
+  if (!builder) return;
+  builder.dataset.chartEstimate = estimateText;
+  window.dispatchEvent(new CustomEvent('commission-estimate-updated', { detail: { estimate: estimateText } }));
 }
 
 function injectBuilderExtras() {
@@ -323,6 +539,7 @@ function injectBuilderExtras() {
       chartEstimateNote.textContent = service.includes('Modchart')
         ? 'Modcharting is still in Codename Engine practice.'
         : 'Coding prices depend on the amount of work and testing needed.';
+      publishEstimate(builder, '');
       return;
     }
 
@@ -330,6 +547,7 @@ function injectBuilderExtras() {
     if (!totalSeconds) {
       chartEstimate.textContent = 'Add a song length';
       chartEstimateNote.textContent = 'Use a format like 3:24 or 3.5 minutes.';
+      publishEstimate(builder, '');
       return;
     }
 
@@ -337,15 +555,21 @@ function injectBuilderExtras() {
     if (usdEstimate === 0) {
       chartEstimate.textContent = 'Free';
       chartEstimateNote.textContent = 'The first 3:00 of the song is free.';
+      publishEstimate(builder, 'Free');
       return;
     }
 
     const extraMinutes = Math.ceil((totalSeconds - FREE_CHART_SECONDS) / 60);
     const local = formatMoney(usdEstimate);
+    const displayEstimate = localeInfo.currency === 'USD'
+      ? `$${usdEstimate.toFixed(2)} USD`
+      : `${local} (about $${usdEstimate.toFixed(2)} USD)`;
+
     chartEstimate.textContent = localeInfo.currency === 'USD'
-      ? local
+      ? `$${usdEstimate.toFixed(2)}`
       : `${local} · about $${usdEstimate.toFixed(2)} USD`;
     chartEstimateNote.textContent = `${extraMinutes} started extra ${extraMinutes === 1 ? 'minute' : 'minutes'} after 3:00 × $4. Final price is confirmed before work starts.`;
+    publishEstimate(builder, displayEstimate);
   }
 
   builder.addEventListener('input', updateExtras);
