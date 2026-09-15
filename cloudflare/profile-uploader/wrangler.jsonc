@@ -10,6 +10,6 @@
     "PROFILE_PATH": "assets/pfp.jpg"
   },
   "secrets": {
-    "required": ["GITHUB_TOKEN", "ADMIN_KEY"]
+    "required": ["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", "iLoveCigarettesAfterSex"]
   }
 }
