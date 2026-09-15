@@ -16,12 +16,22 @@ const sitePreview = $('sitePreview');
 const previewProfile = $('previewProfile');
 const publishStatus = $('publishStatus');
 const refreshCurrent = $('refreshCurrent');
-const downloadButton = $('downloadButton');
-const openPublisherButton = $('openPublisherButton');
+const publishButton = $('publishButton');
+const publisherSetup = $('publisherSetup');
+const publisherConnected = $('publisherConnected');
+const publisherUrl = $('publisherUrl');
+const publisherKey = $('publisherKey');
+const savePublisherButton = $('savePublisherButton');
+const forgetPublisherButton = $('forgetPublisherButton');
+const publisherHost = $('publisherHost');
+const setupStatus = $('setupStatus');
+const connectionState = $('connectionState');
+const commitLink = $('commitLink');
 
 const CANVAS_SIZE = 720;
 const MAX_SOURCE_SIZE = 18 * 1024 * 1024;
-const PUBLISHER_URL = 'https://github.com/xm5o/xm5o.github.io/issues/new?template=profile-picture-update.md&title=%5Bprofile-update%5D%20Update%20profile%20picture';
+const PUBLISHER_URL_KEY = 'immortalProfilePublisherUrl';
+const PUBLISHER_KEY_KEY = 'immortalProfilePublisherKey';
 const allowedTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
 
 const themeEngine = window.ProfilePictureTheme
@@ -43,14 +53,167 @@ const state = {
   dragOffsetY: 0,
   palette: null,
   currentPalette: null,
-  previewTimer: null
+  previewTimer: null,
+  publisherReady: false
 };
+
+function safeGet(key) {
+  try { return localStorage.getItem(key) || ''; } catch { return ''; }
+}
+
+function safeSet(key, value) {
+  try {
+    if (value) localStorage.setItem(key, value);
+    else localStorage.removeItem(key);
+  } catch {}
+}
+
+function normalizePublisherUrl(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+
+  try {
+    const url = new URL(raw);
+    if (url.protocol !== 'https:') return '';
+    url.search = '';
+    url.hash = '';
+    return url.href.replace(/\/+$/, '');
+  } catch {
+    return '';
+  }
+}
+
+function storedPublisher() {
+  return {
+    url: normalizePublisherUrl(safeGet(PUBLISHER_URL_KEY)),
+    key: String(safeGet(PUBLISHER_KEY_KEY)).trim()
+  };
+}
+
+function setConnectionState(ready, host = '') {
+  state.publisherReady = ready;
+  connectionState.dataset.state = ready ? 'online' : 'offline';
+  connectionState.querySelector('strong').textContent = ready
+    ? 'Direct publisher ready'
+    : 'Publisher not configured';
+
+  publisherSetup.hidden = ready;
+  publisherConnected.hidden = !ready;
+  publisherHost.textContent = ready ? host : '';
+  updatePublishState();
+}
 
 function setPublishStatus(message, type = '') {
   publishStatus.textContent = message;
   publishStatus.classList.remove('success', 'error');
   if (type) publishStatus.classList.add(type);
 }
+
+function setSetupStatus(message, type = '') {
+  setupStatus.textContent = message;
+  setupStatus.classList.remove('success', 'error');
+  if (type) setupStatus.classList.add(type);
+}
+
+async function publisherRequest(path, options = {}) {
+  const config = storedPublisher();
+  if (!config.url || !config.key) throw new Error('Publisher connection is not configured.');
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), options.timeout || 15000);
+
+  try {
+    const response = await fetch(`${config.url}${path}`, {
+      method: options.method || 'GET',
+      headers: {
+        Authorization: `Bearer ${config.key}`,
+        ...(options.headers || {})
+      },
+      body: options.body,
+      cache: 'no-store',
+      signal: controller.signal
+    });
+
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(payload.error || `${response.status} ${response.statusText}`);
+    return payload;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function verifyPublisherConnection() {
+  const config = storedPublisher();
+  if (!config.url || !config.key) {
+    setConnectionState(false);
+    return false;
+  }
+
+  try {
+    await publisherRequest('/auth-check');
+    const host = new URL(config.url).host;
+    setConnectionState(true, host);
+    return true;
+  } catch (error) {
+    setConnectionState(false);
+    publisherUrl.value = config.url;
+    publisherKey.value = config.key;
+    setSetupStatus(
+      error.name === 'AbortError'
+        ? 'The publisher did not answer in time.'
+        : error.message || 'Could not verify the publisher.',
+      'error'
+    );
+    return false;
+  }
+}
+
+savePublisherButton.addEventListener('click', async () => {
+  const url = normalizePublisherUrl(publisherUrl.value);
+  const key = String(publisherKey.value || '').trim();
+
+  if (!url) {
+    setSetupStatus('Enter a valid HTTPS Cloudflare Worker URL.', 'error');
+    publisherUrl.focus();
+    return;
+  }
+
+  if (key.length < 16) {
+    setSetupStatus('Enter your private publisher key.', 'error');
+    publisherKey.focus();
+    return;
+  }
+
+  savePublisherButton.disabled = true;
+  savePublisherButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Checking...';
+  setSetupStatus('Checking the private publisher...');
+
+  safeSet(PUBLISHER_URL_KEY, url);
+  safeSet(PUBLISHER_KEY_KEY, key);
+
+  const ok = await verifyPublisherConnection();
+  if (ok) {
+    publisherUrl.value = '';
+    publisherKey.value = '';
+    setSetupStatus('');
+    setPublishStatus(state.sourceImage
+      ? 'Publisher ready. Click Update profile picture when the preview looks right.'
+      : 'Publisher ready. Choose a new image to continue.', 'success');
+  }
+
+  savePublisherButton.disabled = false;
+  savePublisherButton.innerHTML = '<i class="bx bx-link"></i> Save publisher connection';
+});
+
+forgetPublisherButton.addEventListener('click', () => {
+  safeSet(PUBLISHER_URL_KEY, '');
+  safeSet(PUBLISHER_KEY_KEY, '');
+  setConnectionState(false);
+  publisherUrl.value = '';
+  publisherKey.value = '';
+  setSetupStatus('Publisher connection removed from this device.');
+  setPublishStatus('Publisher setup is required before updating the live site.');
+});
 
 function rgbText(color) {
   return `${color.r}, ${color.g}, ${color.b}`;
@@ -214,7 +377,9 @@ async function loadSelectedFile(file) {
     emptyEditor.hidden = true;
     cropEditor.hidden = false;
     resetCropState();
-    setPublishStatus('Preview ready. Adjust the crop, then download the prepared image.');
+    setPublishStatus(state.publisherReady
+      ? 'Preview ready. Click Update profile picture when it looks right.'
+      : 'Preview ready. Finish the one-time publisher setup before updating the live site.');
   };
 
   image.onerror = () => {
@@ -270,9 +435,7 @@ cropStage.addEventListener('pointerup', finishDrag);
 cropStage.addEventListener('pointercancel', finishDrag);
 
 function updatePublishState() {
-  const ready = Boolean(state.sourceImage && state.palette);
-  downloadButton.disabled = !ready;
-  openPublisherButton.disabled = !ready;
+  publishButton.disabled = !(state.publisherReady && state.sourceImage && state.palette);
 }
 
 function exportBlob() {
@@ -284,42 +447,59 @@ function exportBlob() {
   });
 }
 
-downloadButton.addEventListener('click', async () => {
-  if (!state.sourceImage || !state.palette) return;
+publishButton.addEventListener('click', async () => {
+  if (!state.publisherReady || !state.sourceImage || !state.palette) return;
 
-  downloadButton.disabled = true;
-  downloadButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Preparing...';
+  publishButton.disabled = true;
+  publishButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Updating...';
+  commitLink.hidden = true;
+  setPublishStatus('Publishing the new profile picture directly to GitHub...');
 
   try {
     const blob = await exportBlob();
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'prepared-profile.jpg';
-    document.body.append(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1500);
+    const result = await publisherRequest('/profile', {
+      method: 'POST',
+      timeout: 30000,
+      headers: { 'Content-Type': 'image/jpeg' },
+      body: blob
+    });
 
-    const colors = paletteHex(state.palette);
-    setPublishStatus(
-      `prepared-profile.jpg is ready. Theme: ${colors.main} / ${colors.secondary} / ${colors.accent}. Open GitHub and attach the file.`,
-      'success'
-    );
+    const localPreview = cropCanvas.toDataURL('image/jpeg', 0.9);
+    currentImage.src = localPreview;
+    state.currentPalette = state.palette;
+    renderPalette(currentPalette, state.currentPalette);
+
+    setPublishStatus('Profile picture updated on GitHub. The live site will refresh after GitHub Pages deploys the commit.', 'success');
+
+    if (result.commitUrl) {
+      commitLink.href = result.commitUrl;
+      commitLink.hidden = false;
+    }
+
+    setTimeout(loadCurrentImage, 12000);
   } catch (error) {
-    setPublishStatus(error.message || 'Could not prepare the image.', 'error');
+    if (error.name === 'AbortError') {
+      setPublishStatus('The publisher timed out. Check the Worker and try again.', 'error');
+    } else {
+      setPublishStatus(error.message || 'Could not update the profile picture.', 'error');
+    }
+
+    if (/publisher key|401/i.test(error.message || '')) {
+      setConnectionState(false);
+      const config = storedPublisher();
+      publisherUrl.value = config.url;
+      publisherKey.value = config.key;
+      setSetupStatus('The saved publisher key was rejected. Save the connection again.', 'error');
+    }
   } finally {
-    downloadButton.innerHTML = '<i class="bx bx-download"></i> Download prepared-profile.jpg';
+    publishButton.innerHTML = '<i class="bx bx-upload"></i> Update profile picture';
     updatePublishState();
   }
 });
 
-openPublisherButton.addEventListener('click', () => {
-  if (!state.sourceImage || !state.palette) return;
-  window.open(PUBLISHER_URL, '_blank', 'noopener,noreferrer');
-  setPublishStatus('GitHub publisher opened. Attach prepared-profile.jpg, then submit the issue.', 'success');
-});
-
 renderPalette(newPalette, null);
+const existing = storedPublisher();
+if (existing.url) publisherUrl.value = existing.url;
+verifyPublisherConnection();
 updatePublishState();
 window.addEventListener('beforeunload', clearSourceUrl);
