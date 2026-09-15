@@ -30,6 +30,7 @@ const commitLink = $('commitLink');
 
 const CANVAS_SIZE = 720;
 const MAX_SOURCE_SIZE = 18 * 1024 * 1024;
+const DEFAULT_PUBLISHER_URL = 'https://xm5o-github-io.eminem13981398.workers.dev';
 const PUBLISHER_URL_KEY = 'immortalProfilePublisherUrl';
 const PUBLISHER_KEY_KEY = 'immortalProfilePublisherKey';
 const allowedTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
@@ -85,7 +86,7 @@ function normalizePublisherUrl(value) {
 
 function storedPublisher() {
   return {
-    url: normalizePublisherUrl(safeGet(PUBLISHER_URL_KEY)),
+    url: normalizePublisherUrl(safeGet(PUBLISHER_URL_KEY) || DEFAULT_PUBLISHER_URL),
     key: String(safeGet(PUBLISHER_KEY_KEY)).trim()
   };
 }
@@ -169,12 +170,11 @@ async function verifyPublisherConnection() {
 }
 
 savePublisherButton.addEventListener('click', async () => {
-  const url = normalizePublisherUrl(publisherUrl.value);
+  const url = normalizePublisherUrl(publisherUrl.value || DEFAULT_PUBLISHER_URL);
   const key = String(publisherKey.value || '').trim();
 
   if (!url) {
-    setSetupStatus('Enter a valid HTTPS Cloudflare Worker URL.', 'error');
-    publisherUrl.focus();
+    setSetupStatus('The Cloudflare publisher URL is invalid.', 'error');
     return;
   }
 
@@ -193,7 +193,7 @@ savePublisherButton.addEventListener('click', async () => {
 
   const ok = await verifyPublisherConnection();
   if (ok) {
-    publisherUrl.value = '';
+    publisherUrl.value = DEFAULT_PUBLISHER_URL;
     publisherKey.value = '';
     setSetupStatus('');
     setPublishStatus(state.sourceImage
@@ -209,7 +209,7 @@ forgetPublisherButton.addEventListener('click', () => {
   safeSet(PUBLISHER_URL_KEY, '');
   safeSet(PUBLISHER_KEY_KEY, '');
   setConnectionState(false);
-  publisherUrl.value = '';
+  publisherUrl.value = DEFAULT_PUBLISHER_URL;
   publisherKey.value = '';
   setSetupStatus('Publisher connection removed from this device.');
   setPublishStatus('Publisher setup is required before updating the live site.');
@@ -499,7 +499,7 @@ publishButton.addEventListener('click', async () => {
 
 renderPalette(newPalette, null);
 const existing = storedPublisher();
-if (existing.url) publisherUrl.value = existing.url;
+publisherUrl.value = existing.url || DEFAULT_PUBLISHER_URL;
 verifyPublisherConnection();
 updatePublishState();
 window.addEventListener('beforeunload', clearSourceUrl);
