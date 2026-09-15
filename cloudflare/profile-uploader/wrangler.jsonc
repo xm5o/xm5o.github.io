@@ -7,7 +7,11 @@
     "ALLOWED_ORIGIN": "https://xm5o.github.io",
     "GITHUB_REPO": "xm5o/xm5o.github.io",
     "GITHUB_BRANCH": "main",
-    "PROFILE_PATH": "assets/pfp.jpg"
+    "PROFILE_PATH": "assets/pfp.jpg",
+    "GITHUB_ALLOWED_LOGIN": "xm5o"
+  },
+  "triggers": {
+    "crons": ["*/5 * * * *"]
   },
   "secrets": {
     "required": ["GITHUB_TOKEN", "ADMIN_KEY"]
