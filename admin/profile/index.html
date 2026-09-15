@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="theme-color" content="#080808">
-  <title>Profile Manager | Immortal</title>
+  <title>Site Manager | Immortal</title>
   <link rel="icon" href="../../assets/pfp.jpg" type="image/jpeg">
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=20260915-4">
-  <link rel="stylesheet" href="publisher.css?v=20260915-1">
+  <link rel="stylesheet" href="publisher.css?v=20260915-2">
   <script src="../../scripts/pfp-theme.js?v=20260915-1"></script>
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="../../" aria-label="Back to Immortal website">
       <span class="brand-mark">I</span>
-      <span><strong>Immortal</strong><small>Profile manager</small></span>
+      <span><strong>Immortal</strong><small>Site manager</small></span>
     </a>
     <a class="back-link" href="../../"><i class="bx bx-left-arrow-alt"></i> Main site</a>
   </header>
@@ -24,14 +24,11 @@
   <main class="shell">
     <section class="intro">
       <div>
-        <span class="eyebrow">Site profile picture</span>
-        <h1>Upload. Preview. Update.</h1>
-        <p>Choose an image, crop it, check the generated site colors, then publish it directly to GitHub with one button.</p>
+        <span class="eyebrow">Private site controls</span>
+        <h1>Preview it. Publish it. Undo it.</h1>
+        <p>Manage your profile picture, site appearance, status, bio, commission availability, and visual assets from one place.</p>
       </div>
-      <div class="connection-state" id="connectionState" data-state="offline">
-        <span></span>
-        <strong>Publisher not configured</strong>
-      </div>
+      <div class="connection-state" id="connectionState" data-state="offline"><span></span><strong>Publisher not configured</strong></div>
     </section>
 
     <section class="manager" id="manager">
@@ -44,12 +41,9 @@
             </div>
             <div class="current-row">
               <img id="currentImage" class="profile-img current-image" src="../../assets/pfp.jpg" alt="Current site profile picture">
-              <div>
-                <strong>assets/pfp.jpg</strong>
-                <p>This picture is used by the main site and other pages that share your profile theme.</p>
-              </div>
+              <div><strong>assets/pfp.jpg</strong><p>This image also drives the automatic site color theme.</p></div>
             </div>
-            <div class="palette-row" id="currentPalette" aria-label="Current site colors"></div>
+            <div class="palette-row" id="currentPalette"></div>
           </section>
 
           <section class="card upload-card">
@@ -58,27 +52,29 @@
               <label class="upload-button" for="imageInput"><i class="bx bx-image-add"></i> Choose photo</label>
               <input id="imageInput" type="file" accept="image/jpeg,image/png,image/webp" hidden>
             </div>
-
-            <div class="empty-editor" id="emptyEditor">
-              <i class="bx bx-image"></i>
-              <strong>No image selected</strong>
-              <p>Choose a JPG, PNG, or WebP image from Photos or Files.</p>
-            </div>
-
+            <div class="empty-editor" id="emptyEditor"><i class="bx bx-image"></i><strong>No image selected</strong><p>Choose a JPG, PNG, or WebP image from Photos or Files.</p></div>
             <div class="crop-editor" id="cropEditor" hidden>
               <div class="crop-stage" id="cropStage">
                 <canvas id="cropCanvas" width="720" height="720" aria-label="Profile picture crop preview"></canvas>
                 <div class="crop-ring" aria-hidden="true"></div>
-                <span class="drag-tip"><i class="bx bx-move"></i> Drag to move</span>
+                <span class="drag-tip"><i class="bx bx-move"></i> Drag · pinch to zoom</span>
               </div>
               <div class="crop-controls">
-                <label>
-                  <span>Zoom</span>
-                  <input id="zoomRange" type="range" min="1" max="3" step="0.01" value="1">
-                </label>
-                <button class="text-button" id="resetCrop" type="button"><i class="bx bx-reset"></i> Reset crop</button>
+                <label><span>Zoom</span><input id="zoomRange" type="range" min="1" max="3" step="0.01" value="1"></label>
+                <div class="crop-shortcuts">
+                  <button class="text-button" id="centerCrop" type="button"><i class="bx bx-crosshair"></i> Center</button>
+                  <button class="text-button" id="resetCrop" type="button"><i class="bx bx-reset"></i> Original framing</button>
+                </div>
               </div>
             </div>
+          </section>
+
+          <section class="card history-card">
+            <div class="card-heading">
+              <div><small>History</small><h2>Previous profile pictures</h2></div>
+              <button class="text-button" id="refreshHistory" type="button"><i class="bx bx-refresh"></i> Refresh</button>
+            </div>
+            <div class="history-list" id="historyList"><div class="history-empty">Connect the publisher to load profile history.</div></div>
           </section>
         </div>
 
@@ -88,85 +84,77 @@
               <div><small>Live preview</small><h2>How the site will look</h2></div>
               <span class="preview-status" id="previewStatus">Waiting for image</span>
             </div>
+            <div class="palette-compare"><div><small>New colors</small><div class="palette-row" id="newPalette"></div></div></div>
 
-            <div class="palette-compare">
-              <div>
-                <small>New colors</small>
-                <div class="palette-row" id="newPalette"></div>
-              </div>
+            <div class="compare-grid" id="compareGrid">
+              <article><small>Before</small><img id="beforeImage" src="../../assets/pfp.jpg" alt="Current profile picture"></article>
+              <article><small>After</small><img id="afterImage" src="../../assets/pfp.jpg" alt="New profile picture preview"></article>
             </div>
 
             <div class="site-preview" id="sitePreview">
               <div class="preview-glow"></div>
-              <div class="preview-header">
-                <strong>Immortal</strong>
-                <nav><span>Home</span><span>About</span><span>Projects</span></nav>
-              </div>
+              <div class="preview-header"><strong>Immortal</strong><nav><span>Home</span><span>About</span><span>Projects</span></nav></div>
               <div class="preview-hero">
                 <div class="preview-copy">
                   <small>Developer · FNF modder</small>
                   <h3>Building things I actually enjoy.</h3>
-                  <p>The preview uses the same palette engine as the live website.</p>
-                  <div class="preview-actions">
-                    <button type="button">Main action</button>
-                    <span>Secondary</span>
-                  </div>
+                  <p id="previewBio">The preview uses the same palette engine as the live website.</p>
+                  <div class="preview-actions"><button type="button">Main action</button><span>Secondary</span></div>
                 </div>
-                <div class="preview-profile-wrap">
-                  <img id="previewProfile" src="../../assets/pfp.jpg" alt="New profile preview">
-                </div>
+                <div class="preview-profile-wrap"><img id="previewProfile" src="../../assets/pfp.jpg" alt="New profile preview"></div>
               </div>
               <div class="preview-mini-cards">
                 <article><small>Project</small><strong>Selina</strong></article>
-                <article><small>Commission</small><strong>Charting</strong></article>
-                <article><small>Status</small><strong>Available</strong></article>
+                <article><small>Commission</small><strong id="previewCommission">Open</strong></article>
+                <article><small>Status</small><strong id="previewSiteStatus">Available</strong></article>
               </div>
             </div>
           </section>
 
           <section class="card publish-card">
-            <div class="card-heading">
-              <div><small>Publish</small><h2>Direct website update</h2></div>
-              <i class="bx bx-cloud-upload"></i>
-            </div>
+            <div class="card-heading"><div><small>Publish</small><h2>Direct website update</h2></div><i class="bx bx-cloud-upload"></i></div>
             <p>Your GitHub write token stays inside Cloudflare. This page only remembers a separate publisher key on this device.</p>
-
             <div class="publisher-setup" id="publisherSetup">
               <div class="publisher-fields">
-                <label class="publisher-field">
-                  <span>Cloudflare Worker URL</span>
-                  <input id="publisherUrl" type="url" inputmode="url" placeholder="https://immortal-profile-uploader.example.workers.dev" autocomplete="url">
-                </label>
-                <label class="publisher-field">
-                  <span>Publisher key</span>
-                  <input id="publisherKey" type="password" placeholder="Your private ADMIN_KEY" autocomplete="current-password">
-                </label>
+                <label class="publisher-field"><span>Cloudflare Worker URL</span><input id="publisherUrl" type="url" inputmode="url" autocomplete="url"></label>
+                <label class="publisher-field"><span>Publisher key</span><input id="publisherKey" type="password" placeholder="Your private ADMIN_KEY" autocomplete="current-password"></label>
               </div>
               <button class="button secondary" id="savePublisherButton" type="button"><i class="bx bx-link"></i> Save publisher connection</button>
               <p class="publisher-help">One-time setup on each device. After this, publishing is one click.</p>
               <div class="setup-status" id="setupStatus" aria-live="polite"></div>
             </div>
-
             <div class="publisher-connected" id="publisherConnected" hidden>
-              <div class="publisher-connected-info">
-                <span class="publisher-connected-dot"></span>
-                <div><strong>Direct publisher ready</strong><small id="publisherHost"></small></div>
-              </div>
+              <div class="publisher-connected-info"><span class="publisher-connected-dot"></span><div><strong>Direct publisher ready</strong><small id="publisherHost"></small></div></div>
               <button class="publisher-forget" id="forgetPublisherButton" type="button">Forget</button>
             </div>
-
-            <div class="publish-main-action">
-              <button class="button primary" id="publishButton" type="button" disabled><i class="bx bx-upload"></i> Update profile picture</button>
-            </div>
-
+            <div class="publish-main-action"><button class="button primary" id="publishButton" type="button" disabled><i class="bx bx-upload"></i> Update profile picture</button></div>
+            <div class="deploy-state" id="deployState" data-state="idle"><span></span><strong>Not published yet</strong><small id="deployDetail">GitHub Pages status will appear here.</small></div>
             <div class="publish-status" id="publishStatus" aria-live="polite">Choose a new image to continue.</div>
             <a class="publish-result-link" id="commitLink" href="#" target="_blank" rel="noopener noreferrer" hidden>Open GitHub commit</a>
+          </section>
+
+          <section class="card settings-card">
+            <div class="card-heading"><div><small>Site controls</small><h2>Content & availability</h2></div><i class="bx bx-slider-alt"></i></div>
+            <div class="settings-grid">
+              <label class="wide"><span>Bio</span><textarea id="bioInput" maxlength="220" rows="3"></textarea></label>
+              <label class="wide"><span>Status text</span><input id="statusInput" maxlength="72" type="text"></label>
+              <label><span>Commission slots</span><input id="commissionTotal" type="number" min="1" max="12"></label>
+              <label><span>Slots used</span><input id="commissionUsed" type="number" min="0" max="12"></label>
+            </div>
+            <label class="toggle-row"><input id="commissionOpen" type="checkbox"><span>Commissions open</span></label>
+            <div class="managed-assets">
+              <article><div><strong>Favicon</strong><small>Browser tab icon</small></div><label class="asset-button">Upload<input id="faviconInput" data-asset="favicon" type="file" accept="image/jpeg,image/png,image/webp" hidden></label><label class="mini-toggle"><input id="faviconEnabled" type="checkbox"> Enabled</label></article>
+              <article><div><strong>Background</strong><small>Homepage hero background</small></div><label class="asset-button">Upload<input id="backgroundInput" data-asset="background" type="file" accept="image/jpeg,image/png,image/webp" hidden></label><label class="mini-toggle"><input id="backgroundEnabled" type="checkbox"> Enabled</label></article>
+              <article><div><strong>Banner</strong><small>Soft hero banner layer</small></div><label class="asset-button">Upload<input id="bannerInput" data-asset="banner" type="file" accept="image/jpeg,image/png,image/webp" hidden></label><label class="mini-toggle"><input id="bannerEnabled" type="checkbox"> Enabled</label></article>
+            </div>
+            <button class="button primary" id="saveSettingsButton" type="button" disabled><i class="bx bx-save"></i> Save site settings</button>
+            <div class="settings-status" id="settingsStatus" aria-live="polite"></div>
           </section>
         </div>
       </div>
     </section>
   </main>
 
-  <script type="module" src="app.js?v=20260915-5"></script>
+  <script type="module" src="app.js?v=20260915-6"></script>
 </body>
 </html>
