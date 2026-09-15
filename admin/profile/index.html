@@ -37,19 +37,19 @@
       <div class="panel-heading">
         <div>
           <small>Private access</small>
-          <h2>Sign in through Selina</h2>
+          <h2>Use your Selina Control Center login</h2>
         </div>
         <i class="bx bxl-discord-alt"></i>
       </div>
       <div class="login-grid single-field">
         <label class="field">
-          <span>Selina dashboard URL</span>
-          <input id="apiUrl" type="url" inputmode="url" placeholder="https://your-selina-dashboard.com" autocomplete="url">
+          <span>Control Center backend URL</span>
+          <input id="apiUrl" type="url" inputmode="url" placeholder="https://...trycloudflare.com" autocomplete="url">
         </label>
       </div>
       <div class="login-actions">
         <button class="button primary" id="connectButton" type="button"><i class="bx bxl-discord-alt"></i> Sign in with Discord</button>
-        <p id="loginStatus" aria-live="polite">Your dashboard URL is saved on this device. Discord verifies that the account is yours.</p>
+        <p id="loginStatus" aria-live="polite">If you already signed in to Control Center on this browser, this page can reuse that session.</p>
       </div>
     </section>
 
@@ -148,7 +148,7 @@
               <div><small>Publish</small><h2>Update the website</h2></div>
               <i class="bx bx-cloud-upload"></i>
             </div>
-            <p>Selina updates the main profile picture through the dashboard. Your GitHub token stays on the server.</p>
+            <p>Selina updates the main profile picture through the Control Center backend. Your GitHub token stays on the server.</p>
             <div class="publish-actions">
               <button class="button primary" id="publishButton" type="button" disabled><i class="bx bx-upload"></i> Update profile picture</button>
               <button class="button secondary" id="restoreButton" type="button"><i class="bx bx-undo"></i> Restore previous</button>
@@ -160,6 +160,6 @@
     </section>
   </main>
 
-  <script type="module" src="app.js?v=20260915-2"></script>
+  <script type="module" src="app.js?v=20260915-3"></script>
 </body>
 </html>
