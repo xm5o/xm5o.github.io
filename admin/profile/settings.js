@@ -1,5 +1,5 @@
 export default Object.freeze({
-  // Add Selina's public HTTPS base URL here when the API is exposed.
-  // Example: https://selina-api.example.com
+  // Optional: put Selina's public dashboard HTTPS URL here to skip entering it once.
+  // Example: https://dashboard.example.com
   apiBase: ''
 });
