@@ -9,7 +9,7 @@
   <link rel="icon" href="../../assets/pfp.jpg" type="image/jpeg">
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=20260915-4">
-  <link rel="stylesheet" href="github-publish.css?v=20260915-1">
+  <link rel="stylesheet" href="publisher.css?v=20260915-1">
   <script src="../../scripts/pfp-theme.js?v=20260915-1"></script>
 </head>
 <body>
@@ -25,12 +25,12 @@
     <section class="intro">
       <div>
         <span class="eyebrow">Site profile picture</span>
-        <h1>Change the site picture from your phone or PC.</h1>
-        <p>Choose an image, crop it, preview the site colors, then publish it through GitHub. No Selina server or private API is required.</p>
+        <h1>Upload. Preview. Update.</h1>
+        <p>Choose an image, crop it, check the generated site colors, then publish it directly to GitHub with one button.</p>
       </div>
-      <div class="connection-state" id="connectionState" data-state="online">
+      <div class="connection-state" id="connectionState" data-state="offline">
         <span></span>
-        <strong>GitHub publisher</strong>
+        <strong>Publisher not configured</strong>
       </div>
     </section>
 
@@ -126,37 +126,47 @@
 
           <section class="card publish-card">
             <div class="card-heading">
-              <div><small>Publish</small><h2>Update through GitHub</h2></div>
-              <i class="bx bxl-github"></i>
+              <div><small>Publish</small><h2>Direct website update</h2></div>
+              <i class="bx bx-cloud-upload"></i>
             </div>
-            <p>The image stays on your device until you choose to publish it. GitHub Actions handles the final replacement of <strong>assets/pfp.jpg</strong>.</p>
+            <p>Your GitHub write token stays inside Cloudflare. This page only remembers a separate publisher key on this device.</p>
 
-            <div class="publish-flow">
-              <div class="publish-step">
-                <span class="step-number">1</span>
-                <div><strong>Download the prepared image</strong><small>720×720 JPEG, already cropped for the site.</small></div>
+            <div class="publisher-setup" id="publisherSetup">
+              <div class="publisher-fields">
+                <label class="publisher-field">
+                  <span>Cloudflare Worker URL</span>
+                  <input id="publisherUrl" type="url" inputmode="url" placeholder="https://immortal-profile-uploader.example.workers.dev" autocomplete="url">
+                </label>
+                <label class="publisher-field">
+                  <span>Publisher key</span>
+                  <input id="publisherKey" type="password" placeholder="Your private ADMIN_KEY" autocomplete="current-password">
+                </label>
               </div>
-              <button class="button primary" id="downloadButton" type="button" disabled><i class="bx bx-download"></i> Download prepared-profile.jpg</button>
+              <button class="button secondary" id="savePublisherButton" type="button"><i class="bx bx-link"></i> Save publisher connection</button>
+              <p class="publisher-help">One-time setup on each device. After this, publishing is one click.</p>
+              <div class="setup-status" id="setupStatus" aria-live="polite"></div>
+            </div>
 
-              <div class="publish-step">
-                <span class="step-number">2</span>
-                <div><strong>Open the GitHub publisher</strong><small>Attach prepared-profile.jpg to the pre-filled issue and submit it.</small></div>
+            <div class="publisher-connected" id="publisherConnected" hidden>
+              <div class="publisher-connected-info">
+                <span class="publisher-connected-dot"></span>
+                <div><strong>Direct publisher ready</strong><small id="publisherHost"></small></div>
               </div>
-              <button class="button github-button" id="openPublisherButton" type="button" disabled><i class="bx bxl-github"></i> Open GitHub publisher</button>
+              <button class="publisher-forget" id="forgetPublisherButton" type="button">Forget</button>
             </div>
 
-            <div class="publish-links">
-              <a href="https://github.com/xm5o/xm5o.github.io/commits/main/assets/pfp.jpg" target="_blank" rel="noopener noreferrer">Profile history</a>
-              <a href="https://github.com/xm5o/xm5o.github.io/actions" target="_blank" rel="noopener noreferrer">GitHub Actions</a>
+            <div class="publish-main-action">
+              <button class="button primary" id="publishButton" type="button" disabled><i class="bx bx-upload"></i> Update profile picture</button>
             </div>
 
-            <div class="publish-status" id="publishStatus" aria-live="polite">Choose a new image to prepare it for GitHub.</div>
+            <div class="publish-status" id="publishStatus" aria-live="polite">Choose a new image to continue.</div>
+            <a class="publish-result-link" id="commitLink" href="#" target="_blank" rel="noopener noreferrer" hidden>Open GitHub commit</a>
           </section>
         </div>
       </div>
     </section>
   </main>
 
-  <script type="module" src="app.js?v=20260915-4"></script>
+  <script type="module" src="app.js?v=20260915-5"></script>
 </body>
 </html>
