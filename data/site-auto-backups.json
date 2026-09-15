@@ -1,5 +1,12 @@
 [
   {
+    "id": "48b6bacd-37e3-4cc5-9f3f-d45c6aac50b6",
+    "createdAt": "2026-09-15T19:50:04.340Z",
+    "baseCommit": "c3bd36a819720ccbb979eb2aa997fa376fad8fda",
+    "label": "Automatic pre-publish backup",
+    "undoneAt": null
+  },
+  {
     "id": "4f75366b-2daf-4c91-8d21-08e5d403bf63",
     "createdAt": "2026-09-15T19:49:48.955Z",
     "baseCommit": "0d229544ee367506ad832cde91304a5b9c23b4a8",
