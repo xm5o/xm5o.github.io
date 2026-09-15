@@ -8,7 +8,7 @@
   <title>Profile Manager | Immortal</title>
   <link rel="icon" href="../../assets/pfp.jpg" type="image/jpeg">
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260915-1">
+  <link rel="stylesheet" href="style.css?v=20260915-2">
   <script src="../../scripts/pfp-theme.js?v=20260915-1"></script>
 </head>
 <body>
@@ -29,7 +29,7 @@
       </div>
       <div class="connection-state" id="connectionState" data-state="offline">
         <span></span>
-        <strong>Not connected</strong>
+        <strong>Not signed in</strong>
       </div>
     </section>
 
@@ -37,23 +37,19 @@
       <div class="panel-heading">
         <div>
           <small>Private access</small>
-          <h2>Connect to Selina</h2>
+          <h2>Sign in through Selina</h2>
         </div>
-        <i class="bx bx-lock-alt"></i>
+        <i class="bx bxl-discord-alt"></i>
       </div>
-      <div class="login-grid">
+      <div class="login-grid single-field">
         <label class="field">
-          <span>Selina API URL</span>
-          <input id="apiUrl" type="url" inputmode="url" placeholder="https://your-selina-api.com" autocomplete="url">
-        </label>
-        <label class="field">
-          <span>Admin key</span>
-          <input id="adminKey" type="password" placeholder="Private admin key" autocomplete="current-password">
+          <span>Selina dashboard URL</span>
+          <input id="apiUrl" type="url" inputmode="url" placeholder="https://your-selina-dashboard.com" autocomplete="url">
         </label>
       </div>
       <div class="login-actions">
-        <button class="button primary" id="connectButton" type="button"><i class="bx bx-plug"></i> Connect</button>
-        <p id="loginStatus" aria-live="polite">The key stays in this browser tab only.</p>
+        <button class="button primary" id="connectButton" type="button"><i class="bx bxl-discord-alt"></i> Sign in with Discord</button>
+        <p id="loginStatus" aria-live="polite">Your dashboard URL is saved on this device. Discord verifies that the account is yours.</p>
       </div>
     </section>
 
@@ -152,7 +148,7 @@
               <div><small>Publish</small><h2>Update the website</h2></div>
               <i class="bx bx-cloud-upload"></i>
             </div>
-            <p>Publishing replaces the main profile picture on GitHub. Restore uses the previous version from GitHub history.</p>
+            <p>Selina updates the main profile picture through the dashboard. Your GitHub token stays on the server.</p>
             <div class="publish-actions">
               <button class="button primary" id="publishButton" type="button" disabled><i class="bx bx-upload"></i> Update profile picture</button>
               <button class="button secondary" id="restoreButton" type="button"><i class="bx bx-undo"></i> Restore previous</button>
@@ -164,6 +160,6 @@
     </section>
   </main>
 
-  <script type="module" src="app.js?v=20260915-1"></script>
+  <script type="module" src="app.js?v=20260915-2"></script>
 </body>
 </html>
