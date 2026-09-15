@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#080808">
+  <title>Profile Manager | Immortal</title>
+  <link rel="icon" href="../../assets/pfp.jpg" type="image/jpeg">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260915-1">
+  <script src="../../scripts/pfp-theme.js?v=20260915-1"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../../" aria-label="Back to Immortal website">
+      <span class="brand-mark">I</span>
+      <span><strong>Immortal</strong><small>Profile manager</small></span>
+    </a>
+    <a class="back-link" href="../../"><i class="bx bx-left-arrow-alt"></i> Main site</a>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <div>
+        <span class="eyebrow">Site profile picture</span>
+        <h1>Change your picture without editing files.</h1>
+        <p>Choose an image, crop it, check the site colors, then update the live website.</p>
+      </div>
+      <div class="connection-state" id="connectionState" data-state="offline">
+        <span></span>
+        <strong>Not connected</strong>
+      </div>
+    </section>
+
+    <section class="login-panel" id="loginPanel">
+      <div class="panel-heading">
+        <div>
+          <small>Private access</small>
+          <h2>Connect to Selina</h2>
+        </div>
+        <i class="bx bx-lock-alt"></i>
+      </div>
+      <div class="login-grid">
+        <label class="field">
+          <span>Selina API URL</span>
+          <input id="apiUrl" type="url" inputmode="url" placeholder="https://your-selina-api.com" autocomplete="url">
+        </label>
+        <label class="field">
+          <span>Admin key</span>
+          <input id="adminKey" type="password" placeholder="Private admin key" autocomplete="current-password">
+        </label>
+      </div>
+      <div class="login-actions">
+        <button class="button primary" id="connectButton" type="button"><i class="bx bx-plug"></i> Connect</button>
+        <p id="loginStatus" aria-live="polite">The key stays in this browser tab only.</p>
+      </div>
+    </section>
+
+    <section class="manager" id="manager" hidden>
+      <div class="manager-grid">
+        <div class="left-column">
+          <section class="card current-card">
+            <div class="card-heading">
+              <div><small>Current</small><h2>Live profile picture</h2></div>
+              <button class="text-button" id="refreshCurrent" type="button"><i class="bx bx-refresh"></i> Refresh</button>
+            </div>
+            <div class="current-row">
+              <img id="currentImage" class="profile-img current-image" src="../../assets/pfp.jpg" alt="Current site profile picture">
+              <div>
+                <strong>assets/pfp.jpg</strong>
+                <p>This picture is used by the main site and Commission page.</p>
+              </div>
+            </div>
+            <div class="palette-row" id="currentPalette" aria-label="Current site colors"></div>
+          </section>
+
+          <section class="card upload-card">
+            <div class="card-heading">
+              <div><small>New picture</small><h2>Choose and crop</h2></div>
+              <label class="upload-button" for="imageInput"><i class="bx bx-image-add"></i> Choose photo</label>
+              <input id="imageInput" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+            </div>
+
+            <div class="empty-editor" id="emptyEditor">
+              <i class="bx bx-image"></i>
+              <strong>No image selected</strong>
+              <p>Choose a JPG, PNG, or WebP image from Photos or Files.</p>
+            </div>
+
+            <div class="crop-editor" id="cropEditor" hidden>
+              <div class="crop-stage" id="cropStage">
+                <canvas id="cropCanvas" width="720" height="720" aria-label="Profile picture crop preview"></canvas>
+                <div class="crop-ring" aria-hidden="true"></div>
+                <span class="drag-tip"><i class="bx bx-move"></i> Drag to move</span>
+              </div>
+              <div class="crop-controls">
+                <label>
+                  <span>Zoom</span>
+                  <input id="zoomRange" type="range" min="1" max="3" step="0.01" value="1">
+                </label>
+                <button class="text-button" id="resetCrop" type="button"><i class="bx bx-reset"></i> Reset crop</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="right-column">
+          <section class="card preview-card">
+            <div class="card-heading">
+              <div><small>Live preview</small><h2>How the site will look</h2></div>
+              <span class="preview-status" id="previewStatus">Waiting for image</span>
+            </div>
+
+            <div class="palette-compare">
+              <div>
+                <small>New colors</small>
+                <div class="palette-row" id="newPalette"></div>
+              </div>
+            </div>
+
+            <div class="site-preview" id="sitePreview">
+              <div class="preview-glow"></div>
+              <div class="preview-header">
+                <strong>Immortal</strong>
+                <nav><span>Home</span><span>About</span><span>Projects</span></nav>
+              </div>
+              <div class="preview-hero">
+                <div class="preview-copy">
+                  <small>Developer · FNF modder</small>
+                  <h3>Building things I actually enjoy.</h3>
+                  <p>The same colors shown here will be used by the real profile theme system.</p>
+                  <div class="preview-actions">
+                    <button type="button">Main action</button>
+                    <span>Secondary</span>
+                  </div>
+                </div>
+                <div class="preview-profile-wrap">
+                  <img id="previewProfile" src="../../assets/pfp.jpg" alt="New profile preview">
+                </div>
+              </div>
+              <div class="preview-mini-cards">
+                <article><small>Project</small><strong>Selina</strong></article>
+                <article><small>Commission</small><strong>Charting</strong></article>
+                <article><small>Status</small><strong>Available</strong></article>
+              </div>
+            </div>
+          </section>
+
+          <section class="card publish-card">
+            <div class="card-heading">
+              <div><small>Publish</small><h2>Update the website</h2></div>
+              <i class="bx bx-cloud-upload"></i>
+            </div>
+            <p>The manager saves a backup first, then replaces the main profile picture on GitHub.</p>
+            <div class="publish-actions">
+              <button class="button primary" id="publishButton" type="button" disabled><i class="bx bx-upload"></i> Update profile picture</button>
+              <button class="button secondary" id="restoreButton" type="button"><i class="bx bx-undo"></i> Restore previous</button>
+            </div>
+            <div class="publish-status" id="publishStatus" aria-live="polite">Choose a new image to continue.</div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="app.js?v=20260915-1"></script>
+</body>
+</html>
