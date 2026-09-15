@@ -1,15 +1,21 @@
-import {initAuth,onAuthChange} from './auth.js';
-import {initSiteControls,loadAllSiteData} from './site-controls.js';
-import {initProfileEditor,loadHistory} from './profile-editor.js';
-import {initAssetEditor} from './asset-editor.js';
-import {initPwa} from './pwa.js';
+import{initAuth,onAuthChange}from'./auth.js';
+import{initDraftState}from'./draft.js';
+import{initSiteControls,loadAllSiteData}from'./site-controls.js';
+import{initProfileEditor,loadHistory}from'./profile-editor.js';
+import{initAssetEditor}from'./asset-editor.js';
+import{initCmsUi,loadCmsData}from'./cms-ui.js';
+import{initCommandPalette}from'./command-palette.js';
+import{initPwa}from'./pwa.js';
 
 async function init(){
+  initDraftState();
   initSiteControls();
   initProfileEditor();
   initAssetEditor();
+  initCmsUi();
+  initCommandPalette();
   initPwa();
-  onAuthChange(ready=>{if(ready){loadAllSiteData();loadHistory();}});
+  onAuthChange(ready=>{if(ready){loadAllSiteData();loadHistory();loadCmsData();}});
   await initAuth();
 }
 
