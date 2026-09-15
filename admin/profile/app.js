@@ -1,10 +1,9 @@
-import settings from './settings.js?v=20260915-1';
+import settings from './settings.js?v=20260915-2';
 
 const $ = id => document.getElementById(id);
 const manager = $('manager');
 const loginPanel = $('loginPanel');
 const apiUrlInput = $('apiUrl');
-const adminKeyInput = $('adminKey');
 const connectButton = $('connectButton');
 const loginStatus = $('loginStatus');
 const connectionState = $('connectionState');
@@ -27,8 +26,8 @@ const restoreButton = $('restoreButton');
 const publishStatus = $('publishStatus');
 const refreshCurrent = $('refreshCurrent');
 
-const API_URL_KEY = 'immortal-site-manager-api-url';
-const ADMIN_KEY_SESSION = 'immortal-site-manager-key';
+const DASHBOARD_URL_KEY = 'immortal-site-manager-dashboard-url';
+const ACCESS_TOKEN_SESSION = 'immortal-site-manager-access-token';
 const CANVAS_SIZE = 720;
 const MAX_SOURCE_SIZE = 18 * 1024 * 1024;
 const allowedTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
@@ -39,6 +38,7 @@ const themeEngine = window.ProfilePictureTheme
 
 const state = {
   connected: false,
+  user: null,
   sourceImage: null,
   sourceUrl: '',
   baseScale: 1,
@@ -63,34 +63,40 @@ function normalizeBaseUrl(value) {
   return String(value || '').trim().replace(/\/+$/, '');
 }
 
-function storedApiUrl() {
+function storedDashboardUrl() {
   try {
-    return normalizeBaseUrl(localStorage.getItem(API_URL_KEY) || '');
+    return normalizeBaseUrl(localStorage.getItem(DASHBOARD_URL_KEY) || '');
   } catch {
     return '';
   }
 }
 
-function storedAdminKey() {
+function storedAccessToken() {
   try {
-    return String(sessionStorage.getItem(ADMIN_KEY_SESSION) || '');
+    return String(sessionStorage.getItem(ACCESS_TOKEN_SESSION) || '');
   } catch {
     return '';
   }
 }
 
-function getApiUrl() {
-  return normalizeBaseUrl(apiUrlInput.value || settings.apiBase || storedApiUrl());
+function saveAccessToken(token) {
+  try {
+    if (token) sessionStorage.setItem(ACCESS_TOKEN_SESSION, token);
+    else sessionStorage.removeItem(ACCESS_TOKEN_SESSION);
+  } catch {}
 }
 
-function getAdminKey() {
-  return String(adminKeyInput.value || storedAdminKey()).trim();
+function getDashboardUrl() {
+  return normalizeBaseUrl(apiUrlInput.value || settings.apiBase || storedDashboardUrl());
 }
 
-function setConnection(connected) {
+function setConnection(connected, user = null) {
   state.connected = connected;
+  state.user = connected ? user : null;
   connectionState.dataset.state = connected ? 'online' : 'offline';
-  connectionState.querySelector('strong').textContent = connected ? 'Connected to Selina' : 'Not connected';
+  connectionState.querySelector('strong').textContent = connected
+    ? `Signed in${user?.username ? ` · ${user.username}` : ''}`
+    : 'Not signed in';
   restoreButton.disabled = !connected;
   updatePublishState();
 }
@@ -101,19 +107,43 @@ function setPublishStatus(message, type = '') {
   if (type) publishStatus.classList.add(type);
 }
 
+function clearAuth(message = '') {
+  saveAccessToken('');
+  setConnection(false);
+  loginPanel.hidden = false;
+  if (message) loginStatus.textContent = message;
+}
+
+function consumeOAuthResult() {
+  if (!location.hash) return;
+  const params = new URLSearchParams(location.hash.slice(1));
+  const token = params.get('site_token');
+  const error = params.get('site_error');
+
+  if (token) saveAccessToken(token);
+  if (error === 'not_owner') {
+    loginStatus.textContent = 'That Discord account is not allowed to manage this site.';
+  }
+
+  if (token || error) {
+    history.replaceState(null, '', `${location.pathname}${location.search}`);
+  }
+}
+
 async function api(path, options = {}) {
-  const base = getApiUrl();
-  const key = getAdminKey();
-  if (!base || !/^https:\/\//i.test(base)) throw new Error('Add a valid HTTPS API URL.');
-  if (!key) throw new Error('Add your admin key.');
+  const base = getDashboardUrl();
+  const token = storedAccessToken();
+  if (!base || !/^https:\/\//i.test(base)) throw new Error('Add a valid HTTPS dashboard URL.');
+  if (!token) throw new Error('Sign in with Discord first.');
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), options.timeout || 15000);
+
   try {
     const response = await fetch(`${base}${path}`, {
       method: options.method || 'GET',
       headers: {
-        'X-Site-Key': key,
+        Authorization: `Bearer ${token}`,
         ...(options.body ? { 'Content-Type': 'application/json' } : {})
       },
       body: options.body ? JSON.stringify(options.body) : undefined,
@@ -123,8 +153,8 @@ async function api(path, options = {}) {
 
     const payload = await response.json().catch(() => ({}));
     if (response.status === 401 || response.status === 403) {
-      setConnection(false);
-      throw new Error(payload.error || 'The admin key was not accepted.');
+      clearAuth(payload.error || 'Your sign-in expired. Sign in again.');
+      throw new Error(payload.error || 'Your sign-in expired. Sign in again.');
     }
     if (!response.ok) throw new Error(payload.error || `Request failed (${response.status}).`);
     return payload;
@@ -133,47 +163,49 @@ async function api(path, options = {}) {
   }
 }
 
-async function connect() {
-  const base = getApiUrl();
-  const key = getAdminKey();
-
+function startDiscordLogin() {
+  const base = getDashboardUrl();
   if (!/^https:\/\//i.test(base)) {
-    loginStatus.textContent = 'Add Selina’s public HTTPS API URL first.';
+    loginStatus.textContent = 'Add your Selina dashboard HTTPS URL first.';
+    apiUrlInput.focus();
     return;
   }
-  if (!key) {
-    loginStatus.textContent = 'Enter your private admin key.';
-    adminKeyInput.focus();
-    return;
-  }
+
+  try { localStorage.setItem(DASHBOARD_URL_KEY, base); } catch {}
+
+  const returnUrl = `${location.origin}${location.pathname}`;
+  const loginUrl = `${base}/auth/login?return=${encodeURIComponent(returnUrl)}`;
+  loginStatus.textContent = 'Opening Discord sign in...';
+  window.location.assign(loginUrl);
+}
+
+async function checkSession() {
+  const base = getDashboardUrl();
+  const token = storedAccessToken();
+  if (!base || !token) return;
 
   connectButton.disabled = true;
-  connectButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Connecting...';
-  loginStatus.textContent = 'Checking the private connection...';
+  connectButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Checking...';
+  loginStatus.textContent = 'Checking your Discord sign in...';
 
   try {
-    await api('/api/profile/status');
-    try {
-      localStorage.setItem(API_URL_KEY, base);
-      sessionStorage.setItem(ADMIN_KEY_SESSION, key);
-    } catch {}
-
-    setConnection(true);
-    loginStatus.textContent = 'Connected.';
+    const result = await api('/api/site/profile/status');
+    setConnection(true, result.user || null);
     loginPanel.hidden = true;
-    setPublishStatus(state.sourceImage ? 'Preview ready. You can publish this picture.' : 'Choose a new image to continue.');
+    setPublishStatus(state.sourceImage
+      ? 'Preview ready. You can publish this picture.'
+      : 'Choose a new image to continue.');
   } catch (error) {
-    setConnection(false);
-    loginStatus.textContent = error.name === 'AbortError' ? 'Connection timed out.' : error.message;
+    if (error.name === 'AbortError') loginStatus.textContent = 'The dashboard did not answer in time.';
   } finally {
     connectButton.disabled = false;
-    connectButton.innerHTML = '<i class="bx bx-plug"></i> Connect';
+    connectButton.innerHTML = '<i class="bx bxl-discord-alt"></i> Sign in with Discord';
   }
 }
 
-connectButton.addEventListener('click', connect);
-adminKeyInput.addEventListener('keydown', event => {
-  if (event.key === 'Enter') connect();
+connectButton.addEventListener('click', startDiscordLogin);
+apiUrlInput.addEventListener('keydown', event => {
+  if (event.key === 'Enter') startDiscordLogin();
 });
 
 function rgbText(color) {
@@ -331,7 +363,7 @@ async function loadSelectedFile(file) {
     resetCropState();
     setPublishStatus(state.connected
       ? 'Preview ready. Drag or zoom the picture, then publish it.'
-      : 'Preview ready. Connect to Selina before publishing.');
+      : 'Preview ready. Sign in with Discord before publishing.');
   };
 
   image.onerror = () => {
@@ -397,10 +429,10 @@ publishButton.addEventListener('click', async () => {
   publishButton.disabled = true;
   restoreButton.disabled = true;
   publishButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Updating...';
-  setPublishStatus('Saving a backup and updating GitHub...');
+  setPublishStatus('Updating the profile picture through Selina...');
 
   try {
-    const result = await api('/api/profile', {
+    const result = await api('/api/site/profile', {
       method: 'POST',
       timeout: 30000,
       body: { imageData: exportImage() }
@@ -431,7 +463,7 @@ restoreButton.addEventListener('click', async () => {
   setPublishStatus('Restoring the previous picture...');
 
   try {
-    await api('/api/profile/restore', { method: 'POST', timeout: 30000, body: {} });
+    await api('/api/site/profile/restore', { method: 'POST', timeout: 30000, body: {} });
     setPublishStatus('Previous profile picture restored.', 'success');
     currentImage.src = `../../assets/pfp.jpg?v=${Date.now()}`;
     previewProfile.src = currentImage.src;
@@ -451,15 +483,13 @@ restoreButton.addEventListener('click', async () => {
   }
 });
 
-function preloadConnectionFields() {
-  const base = normalizeBaseUrl(settings.apiBase || storedApiUrl());
+function preloadAuth() {
+  consumeOAuthResult();
+  const base = normalizeBaseUrl(settings.apiBase || storedDashboardUrl());
   if (base) apiUrlInput.value = base;
-  const key = storedAdminKey();
-  if (key) adminKeyInput.value = key;
-
-  if (base && key) connect();
+  if (base && storedAccessToken()) checkSession();
 }
 
 renderPalette(newPalette, null);
-preloadConnectionFields();
+preloadAuth();
 window.addEventListener('beforeunload', clearSourceUrl);
