@@ -8,5 +8,8 @@
     "GITHUB_REPO": "xm5o/xm5o.github.io",
     "GITHUB_BRANCH": "main",
     "PROFILE_PATH": "assets/pfp.jpg"
+  },
+  "secrets": {
+    "required": ["GITHUB_TOKEN", "ADMIN_KEY"]
   }
 }
