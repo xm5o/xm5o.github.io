@@ -101,4 +101,8 @@ export async function loadManagedSiteSettings() {
   }
 }
 
-loadManagedSiteSettings();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => loadManagedSiteSettings(), { once: true });
+} else {
+  loadManagedSiteSettings();
+}
