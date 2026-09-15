@@ -187,6 +187,9 @@ class ProfilePictureTheme {
   }
 }
 
+// Reuse the exact same palette engine in private site tools such as the profile manager.
+window.ProfilePictureTheme = ProfilePictureTheme;
+
 document.addEventListener('DOMContentLoaded', () => {
   new ProfilePictureTheme();
 });
