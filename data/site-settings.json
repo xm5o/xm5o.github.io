@@ -4,8 +4,8 @@
   "commissionOpen": true,
   "commissionTotal": 4,
   "commissionUsed": 0,
-  "backgroundEnabled": true,
-  "bannerEnabled": false,
+  "backgroundEnabled": false,
+  "bannerEnabled": true,
   "faviconEnabled": false,
-  "updatedAt": "2026-09-15T18:36:20.212Z"
+  "updatedAt": "2026-09-15T18:37:35.148Z"
 }
