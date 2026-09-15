@@ -7,7 +7,9 @@ import{initCmsUi,loadCmsData}from'./cms-ui.js';
 import{initCommandPalette}from'./command-palette.js';
 import{initPwa}from'./pwa.js';
 
+function loadCmsStyle(){if(document.querySelector('link[data-cms-style]'))return;const link=document.createElement('link');link.rel='stylesheet';link.href='cms.css?v=20260915-1';link.dataset.cmsStyle='true';document.head.append(link)}
 async function init(){
+  loadCmsStyle();
   initDraftState();
   initSiteControls();
   initProfileEditor();
