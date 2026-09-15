@@ -8,8 +8,5 @@
     "GITHUB_REPO": "xm5o/xm5o.github.io",
     "GITHUB_BRANCH": "main",
     "PROFILE_PATH": "assets/pfp.jpg"
-  },
-  "secrets": {
-    "required": ["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", "iLoveCigarettesAfterSex"]
   }
 }
