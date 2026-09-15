@@ -1,0 +1,3 @@
+import{getCurrentHead,multiCommit,readJsonFile}from'./cms-github.js';
+const PATH='data/site-auto-backups.json';
+export async function createLegacyBackup(env,label='Before instant update'){const parent=await getCurrentHead(env);const existing=await readJsonFile(env,PATH,env.GITHUB_BRANCH,[]);const list=Array.isArray(existing)?existing:[];const item={id:crypto.randomUUID(),createdAt:new Date().toISOString(),baseCommit:parent,label:String(label||'Before instant update').slice(0,70),undoneAt:null};await multiCommit(env,[{path:PATH,content:`${JSON.stringify([item,...list].slice(0,20),null,2)}\n`,encoding:'utf-8'}],`Create automatic backup: ${item.label}`,{parentSha:parent});return item}
