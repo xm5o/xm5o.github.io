@@ -1,0 +1,129 @@
+name: Publish profile picture
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: site-profile-picture-publisher
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.event.issue.user.login == 'xm5o' && startsWith(github.event.issue.title, '[profile-update]')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out website
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Find attached image
+        id: attachment
+        shell: bash
+        run: |
+          python <<'PY'
+          import json
+          import os
+          import re
+
+          with open(os.environ['GITHUB_EVENT_PATH'], encoding='utf-8') as handle:
+              event = json.load(handle)
+
+          body = event.get('issue', {}).get('body') or ''
+          patterns = [
+              r'https://github\.com/user-attachments/assets/[A-Za-z0-9-]+',
+              r'https://user-images\.githubusercontent\.com/[^\s)>"\']+'
+          ]
+
+          url = ''
+          for pattern in patterns:
+              match = re.search(pattern, body)
+              if match:
+                  url = match.group(0)
+                  break
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
+              output.write(f'url={url}\n')
+          PY
+
+      - name: Explain missing attachment
+        if: steps.attachment.outputs.url == '' && github.event.action == 'opened'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          gh issue comment "$ISSUE_NUMBER" --body "Attach the prepared-profile.jpg file to this issue, then save the issue again. The publisher will run automatically after the edit."
+
+      - name: Download prepared image
+        if: steps.attachment.outputs.url != ''
+        env:
+          ATTACHMENT_URL: ${{ steps.attachment.outputs.url }}
+        run: |
+          curl --fail --location --retry 2 --max-time 45 "$ATTACHMENT_URL" --output prepared-profile.jpg
+
+      - name: Validate prepared image
+        if: steps.attachment.outputs.url != ''
+        run: |
+          python <<'PY'
+          from pathlib import Path
+
+          path = Path('prepared-profile.jpg')
+          data = path.read_bytes()
+          max_bytes = int(2.5 * 1024 * 1024)
+
+          if not data:
+              raise SystemExit('The attachment is empty.')
+          if len(data) > max_bytes:
+              raise SystemExit('The prepared image is larger than 2.5 MB.')
+          if len(data) < 3 or data[:3] != b'\xff\xd8\xff':
+              raise SystemExit('The attachment is not a JPEG image. Use the file downloaded by the Profile Manager.')
+
+          print(f'Validated JPEG: {len(data):,} bytes')
+          PY
+
+      - name: Replace live profile picture
+        if: steps.attachment.outputs.url != ''
+        id: replace
+        run: |
+          if cmp -s prepared-profile.jpg assets/pfp.jpg; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "The uploaded image already matches the live profile picture."
+          else
+            cp prepared-profile.jpg assets/pfp.jpg
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit website update
+        if: steps.attachment.outputs.url != '' && steps.replace.outputs.changed == 'true'
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/pfp.jpg
+          git commit -m "Update site profile picture"
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Finish publisher issue
+        if: steps.attachment.outputs.url != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          CHANGED: ${{ steps.replace.outputs.changed }}
+          COMMIT_SHA: ${{ steps.commit.outputs.sha }}
+        run: |
+          if [ "$CHANGED" = "true" ]; then
+            SHORT_SHA="${COMMIT_SHA:0:7}"
+            gh issue comment "$ISSUE_NUMBER" --body "Published successfully. assets/pfp.jpg was updated in commit ${SHORT_SHA}. GitHub Pages will pick up the new image automatically."
+          else
+            gh issue comment "$ISSUE_NUMBER" --body "Nothing changed because the uploaded image already matches assets/pfp.jpg."
+          fi
+          gh issue close "$ISSUE_NUMBER" --reason completed
