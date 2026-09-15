@@ -1,4 +1,4 @@
-const $=id=>document.getElementById(id);
+const $=value=>String(value).startsWith('#')?document.querySelector(value):document.getElementById(value);
 const commands=[
   {label:'Publish all staged changes',icon:'bx-cloud-upload',run:()=>$('#publishAllButton')?.click()},
   {label:'Undo last publish',icon:'bx-undo',run:()=>$('#undoLastButton')?.click()},
