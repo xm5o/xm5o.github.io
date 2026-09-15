@@ -9,9 +9,9 @@ The public GitHub Pages site never receives the GitHub token. The browser sends 
 1. In Cloudflare, open **Workers & Pages** and choose **Create application**.
 2. Choose **Import a repository**, connect GitHub, and select `xm5o/xm5o.github.io`.
 3. Use `cloudflare/profile-uploader` as the project/root directory.
-4. Keep the Worker name as `immortal-profile-uploader` so it matches `wrangler.jsonc`.
-5. Deploy the Worker.
-6. In the Worker settings, add these two encrypted secrets:
+4. The Worker project name is `xm5o-github-io`, matching `wrangler.jsonc`.
+5. Deploy the Worker from the latest `main` commit. Do not retry an older failed build after changing the repository config, because a retry stays tied to that older commit.
+6. In the deployed Worker's **Settings → Variables and Secrets**, add these two encrypted runtime secrets:
    - `GITHUB_TOKEN`
    - `ADMIN_KEY`
 7. Redeploy after the secrets are saved.
@@ -19,7 +19,7 @@ The public GitHub Pages site never receives the GitHub token. The browser sends 
 Cloudflare will give the Worker a URL similar to:
 
 ```text
-https://immortal-profile-uploader.<your-subdomain>.workers.dev
+https://xm5o-github-io.<your-subdomain>.workers.dev
 ```
 
 Open the website Profile Manager and save that URL plus the same `ADMIN_KEY` once. The browser remembers the publisher connection on that device.
@@ -38,7 +38,7 @@ Required repository permission:
 Contents: Read and write
 ```
 
-Store the token only as the Cloudflare `GITHUB_TOKEN` secret. Never put it in the website files, browser settings, or commits.
+Store the token only as the Cloudflare `GITHUB_TOKEN` runtime secret. Never put it in the website files, browser settings, build-variable names, Wrangler config, or commits.
 
 ## Publisher key
 
