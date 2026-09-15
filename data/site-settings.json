@@ -2,7 +2,7 @@
   "bio": "He/Him — I build websites and Discord bots, and I make FNF mods for fun",
   "statusText": "Available for Freelance",
   "commissionOpen": false,
-  "commissionTotal": 6,
+  "commissionTotal": 4,
   "commissionUsed": 0,
   "backgroundEnabled": false,
   "bannerEnabled": false,
@@ -11,8 +11,8 @@
   "mainColor": "#ffffff",
   "secondaryColor": "#9f9f9f",
   "accentColor": "#d7d7d7",
-  "maintenanceEnabled": false,
+  "maintenanceEnabled": true,
   "maintenanceTitle": "Back soon",
   "maintenanceMessage": "The site is being updated right now.",
-  "updatedAt": "2026-09-15T19:25:39.265Z"
+  "updatedAt": "2026-09-15T19:49:49.169Z"
 }
