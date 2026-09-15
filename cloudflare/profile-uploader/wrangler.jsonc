@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/config-schema.json",
+  "name": "immortal-profile-uploader",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-15",
+  "vars": {
+    "ALLOWED_ORIGIN": "https://xm5o.github.io",
+    "GITHUB_REPO": "xm5o/xm5o.github.io",
+    "GITHUB_BRANCH": "main",
+    "PROFILE_PATH": "assets/pfp.jpg"
+  },
+  "secrets": {
+    "required": ["GITHUB_TOKEN", "ADMIN_KEY"]
+  }
+}
