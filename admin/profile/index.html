@@ -8,7 +8,8 @@
   <title>Profile Manager | Immortal</title>
   <link rel="icon" href="../../assets/pfp.jpg" type="image/jpeg">
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260915-2">
+  <link rel="stylesheet" href="style.css?v=20260915-4">
+  <link rel="stylesheet" href="github-publish.css?v=20260915-1">
   <script src="../../scripts/pfp-theme.js?v=20260915-1"></script>
 </head>
 <body>
@@ -24,36 +25,16 @@
     <section class="intro">
       <div>
         <span class="eyebrow">Site profile picture</span>
-        <h1>Change your picture without editing files.</h1>
-        <p>Choose an image, crop it, check the site colors, then update the live website.</p>
+        <h1>Change the site picture from your phone or PC.</h1>
+        <p>Choose an image, crop it, preview the site colors, then publish it through GitHub. No Selina server or private API is required.</p>
       </div>
-      <div class="connection-state" id="connectionState" data-state="offline">
+      <div class="connection-state" id="connectionState" data-state="online">
         <span></span>
-        <strong>Not signed in</strong>
+        <strong>GitHub publisher</strong>
       </div>
     </section>
 
-    <section class="login-panel" id="loginPanel">
-      <div class="panel-heading">
-        <div>
-          <small>Private access</small>
-          <h2>Use your Selina Control Center login</h2>
-        </div>
-        <i class="bx bxl-discord-alt"></i>
-      </div>
-      <div class="login-grid single-field">
-        <label class="field">
-          <span>Control Center backend URL</span>
-          <input id="apiUrl" type="url" inputmode="url" placeholder="https://...trycloudflare.com" autocomplete="url">
-        </label>
-      </div>
-      <div class="login-actions">
-        <button class="button primary" id="connectButton" type="button"><i class="bx bxl-discord-alt"></i> Sign in with Discord</button>
-        <p id="loginStatus" aria-live="polite">If you already signed in to Control Center on this browser, this page can reuse that session.</p>
-      </div>
-    </section>
-
-    <section class="manager" id="manager" hidden>
+    <section class="manager" id="manager">
       <div class="manager-grid">
         <div class="left-column">
           <section class="card current-card">
@@ -65,7 +46,7 @@
               <img id="currentImage" class="profile-img current-image" src="../../assets/pfp.jpg" alt="Current site profile picture">
               <div>
                 <strong>assets/pfp.jpg</strong>
-                <p>This picture is used by the main site and Commission page.</p>
+                <p>This picture is used by the main site and other pages that share your profile theme.</p>
               </div>
             </div>
             <div class="palette-row" id="currentPalette" aria-label="Current site colors"></div>
@@ -125,7 +106,7 @@
                 <div class="preview-copy">
                   <small>Developer · FNF modder</small>
                   <h3>Building things I actually enjoy.</h3>
-                  <p>The same colors shown here will be used by the real profile theme system.</p>
+                  <p>The preview uses the same palette engine as the live website.</p>
                   <div class="preview-actions">
                     <button type="button">Main action</button>
                     <span>Secondary</span>
@@ -145,21 +126,37 @@
 
           <section class="card publish-card">
             <div class="card-heading">
-              <div><small>Publish</small><h2>Update the website</h2></div>
-              <i class="bx bx-cloud-upload"></i>
+              <div><small>Publish</small><h2>Update through GitHub</h2></div>
+              <i class="bx bxl-github"></i>
             </div>
-            <p>Selina updates the main profile picture through the Control Center backend. Your GitHub token stays on the server.</p>
-            <div class="publish-actions">
-              <button class="button primary" id="publishButton" type="button" disabled><i class="bx bx-upload"></i> Update profile picture</button>
-              <button class="button secondary" id="restoreButton" type="button"><i class="bx bx-undo"></i> Restore previous</button>
+            <p>The image stays on your device until you choose to publish it. GitHub Actions handles the final replacement of <strong>assets/pfp.jpg</strong>.</p>
+
+            <div class="publish-flow">
+              <div class="publish-step">
+                <span class="step-number">1</span>
+                <div><strong>Download the prepared image</strong><small>720×720 JPEG, already cropped for the site.</small></div>
+              </div>
+              <button class="button primary" id="downloadButton" type="button" disabled><i class="bx bx-download"></i> Download prepared-profile.jpg</button>
+
+              <div class="publish-step">
+                <span class="step-number">2</span>
+                <div><strong>Open the GitHub publisher</strong><small>Attach prepared-profile.jpg to the pre-filled issue and submit it.</small></div>
+              </div>
+              <button class="button github-button" id="openPublisherButton" type="button" disabled><i class="bx bxl-github"></i> Open GitHub publisher</button>
             </div>
-            <div class="publish-status" id="publishStatus" aria-live="polite">Choose a new image to continue.</div>
+
+            <div class="publish-links">
+              <a href="https://github.com/xm5o/xm5o.github.io/commits/main/assets/pfp.jpg" target="_blank" rel="noopener noreferrer">Profile history</a>
+              <a href="https://github.com/xm5o/xm5o.github.io/actions" target="_blank" rel="noopener noreferrer">GitHub Actions</a>
+            </div>
+
+            <div class="publish-status" id="publishStatus" aria-live="polite">Choose a new image to prepare it for GitHub.</div>
           </section>
         </div>
       </div>
     </section>
   </main>
 
-  <script type="module" src="app.js?v=20260915-3"></script>
+  <script type="module" src="app.js?v=20260915-4"></script>
 </body>
 </html>
