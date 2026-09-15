@@ -1,55 +1,120 @@
-# Immortal Profile Uploader
+# Immortal Admin Worker
 
-This Worker is the private write bridge for the website Profile Manager.
+This Cloudflare Worker is the private write bridge for `https://xm5o.github.io/admin/profile/`.
 
-The public GitHub Pages site never receives the GitHub token. The browser sends only the prepared JPEG plus a separate publisher key to this Worker. The Worker validates the request and updates only the configured profile-picture path through GitHub's Contents API.
+The public GitHub Pages site never receives the GitHub write token. The Worker owns repository writes and restricts the browser to the fixed Immortal site-management features implemented in `src/`.
 
-## One-time Cloudflare setup
+## Required Cloudflare setup
 
-1. In Cloudflare, open **Workers & Pages** and choose **Create application**.
-2. Choose **Import a repository**, connect GitHub, and select `xm5o/xm5o.github.io`.
-3. Use `cloudflare/profile-uploader` as the project/root directory.
-4. The Worker project name is `xm5o-github-io`, matching `wrangler.jsonc`.
-5. Deploy the Worker from the latest `main` commit. Do not retry an older failed build after changing the repository config, because a retry stays tied to that older commit.
-6. In the deployed Worker's **Settings → Variables and Secrets**, add these two encrypted runtime secrets:
-   - `GITHUB_TOKEN`
-   - `ADMIN_KEY`
-7. Redeploy after the secrets are saved.
-
-Cloudflare will give the Worker a URL similar to:
+The Worker is deployed from this repository with root directory:
 
 ```text
-https://xm5o-github-io.<your-subdomain>.workers.dev
+cloudflare/profile-uploader
 ```
 
-Open the website Profile Manager and save that URL plus the same `ADMIN_KEY` once. The browser remembers the publisher connection on that device.
-
-## GitHub token
-
-Create a fine-grained GitHub token restricted to only:
+Project/Worker name:
 
 ```text
-xm5o/xm5o.github.io
+xm5o-github-io
 ```
 
-Required repository permission:
+Required encrypted runtime secrets under **Worker → Settings → Variables and Secrets**:
+
+- `GITHUB_TOKEN`
+- `ADMIN_KEY`
+
+`GITHUB_TOKEN` should be a fine-grained token restricted to `xm5o/xm5o.github.io` with **Contents: Read and write** only.
+
+`ADMIN_KEY` is the fallback site-manager login secret. Use a long random value. Never put either secret in Wrangler config, build-variable names, website JavaScript, or Git commits.
+
+The Worker URL is currently used by the admin app as its default publisher origin.
+
+## Optional GitHub account login
+
+The CMS supports GitHub OAuth in addition to the fallback `ADMIN_KEY`.
+
+To enable it, create a GitHub OAuth App owned by the `xm5o` account and use this callback URL:
 
 ```text
-Contents: Read and write
+https://xm5o-github-io.eminem13981398.workers.dev/auth/github/callback
 ```
 
-Store the token only as the Cloudflare `GITHUB_TOKEN` runtime secret. Never put it in the website files, browser settings, build-variable names, Wrangler config, or commits.
+Then add these as encrypted Worker runtime secrets:
 
-## Publisher key
+- `GITHUB_OAUTH_CLIENT_ID`
+- `GITHUB_OAUTH_CLIENT_SECRET`
 
-`ADMIN_KEY` is separate from the GitHub token. Use a long random value. This is the only credential the Profile Manager needs after setup.
+`GITHUB_ALLOWED_LOGIN` is already fixed to `xm5o` in `wrangler.jsonc`. The OAuth callback rejects any other GitHub account. Successful login creates a signed, temporary admin session using the Worker-side `ADMIN_KEY`; the browser does not receive the GitHub OAuth access token.
 
-If the publisher key is changed in Cloudflare, use **Forget connection** on the Profile Manager and save the new key.
+If OAuth is not configured, Immortal Admin automatically keeps the private-key login available.
 
-## Routes
+## CMS features
 
-- `GET /health` checks Worker configuration.
-- `GET /auth-check` verifies the publisher key.
-- `POST /profile` accepts a JPEG and replaces `assets/pfp.jpg`.
+The Worker now supports:
 
-The Worker accepts browser requests from `https://xm5o.github.io` and does not accept a client-selected repository, branch, or file path.
+- Profile picture upload, history and restore
+- Managed favicon, background and banner
+- Content, commission status, manual theme colors and maintenance mode
+- Static SEO / Open Graph / Twitter metadata
+- Draft **Publish All** transactions using one Git commit
+- Automatic pre-publish restore points and **Undo last publish**
+- Whole-site snapshots
+- Image library
+- Theme presets
+- Scheduled preset changes
+- Portable JSON export/import
+- Health checks and admin logs
+- Optional GitHub OAuth admin login
+
+## Scheduled changes
+
+`wrangler.jsonc` includes a five-minute Cron Trigger:
+
+```text
+*/5 * * * *
+```
+
+Immortal Admin stores scheduled preset changes in `data/site-schedule.json`. The scheduled Worker handler applies due presets and records their result.
+
+## Safety model
+
+The browser cannot select an arbitrary repository. The repository and branch are fixed by Worker environment variables.
+
+The transactional publisher accepts only the managed site files and known CMS data files. Images are prepared as JPEGs in the admin UI, and the Worker validates managed image payloads before committing them.
+
+Automatic backup metadata is stored in `data/site-auto-backups.json`, so managed publishes can be reversed without rolling back unrelated repository code.
+
+## Main routes
+
+Authentication and diagnostics:
+
+- `GET /health`
+- `GET /health/full`
+- `GET /auth-check`
+- `GET /auth/config`
+- `GET /auth/github/start`
+- `GET /auth/github/callback`
+
+Publishing and history:
+
+- `POST /profile`
+- `GET /profile/history`
+- `POST /profile/restore`
+- `POST /cms/publish`
+- `POST /cms/undo`
+
+CMS data:
+
+- `GET|POST /settings`
+- `GET|POST /seo`
+- `GET /activity`
+- `GET|POST /snapshots`
+- `POST /snapshots/restore`
+- `GET|POST /presets`
+- `GET|POST /schedule`
+- `GET|POST /library`
+- `GET /logs`
+- `GET /backup/export`
+- `POST /backup/import`
+
+Browser CORS is restricted to `https://xm5o.github.io`.
