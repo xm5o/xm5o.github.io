@@ -88,10 +88,18 @@ function installPerformanceStyles() {
   style.id = 'commissionMediaPerformanceStyles';
   style.textContent = `
     .work-card video,.hero-work video{background:#0b0b0c}
+    .work-card{contain:paint}
     .modal-media video{width:100%;height:auto;background:#000}
     @media (max-width:800px),(pointer:coarse){
-      .work-card video{filter:none!important;transform:none!important}
-      .hero-work video{filter:none!important;transform:none!important}
+      .particles{display:none!important}
+      .orbit-two{animation:none!important}
+      .work-card video,.hero-work video{filter:none!important;transform:none!important}
+      .site-header,.site-nav,.floating-chip,.hero-work-top small,.work-index,.training-badge,.modal-backdrop{
+        backdrop-filter:none!important;
+        -webkit-backdrop-filter:none!important;
+      }
+      .site-header,.site-nav{background:rgba(8,8,8,.96)!important}
+      .modal-backdrop{background:rgba(0,0,0,.9)!important}
       .modal-card{width:calc(100% - 16px);max-height:90dvh;border-radius:16px}
       .modal-media{max-height:calc(90dvh - 60px)}
       .modal-media video,.modal-media img{max-height:calc(90dvh - 60px)}
@@ -178,9 +186,7 @@ function setupHero() {
   const declared = video.getAttribute('src') || 'assets/reactor.mp4';
   stopAndDetach(video);
 
-  let resolved = sourceParts(declared);
   resolveMedia(declared).then(media => {
-    resolved = media;
     video.dataset.previewSrc = media.preview;
     if (media.poster) video.poster = media.poster;
 
@@ -213,12 +219,13 @@ function setupHero() {
 
 function setupModalSafety() {
   const modal = document.getElementById('mediaModal');
-  if (!modal) return;
+  const modalMedia = document.getElementById('modalMedia');
+  if (!modal || !modalMedia) return;
 
   const observer = new MutationObserver(() => {
-    tuneModalVideo(document.querySelector('#modalMedia video'));
+    tuneModalVideo(modalMedia.querySelector('video'));
   });
-  observer.observe(document.getElementById('modalMedia'), { childList: true });
+  observer.observe(modalMedia, { childList: true });
 
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) return;
