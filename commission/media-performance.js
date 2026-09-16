@@ -24,10 +24,11 @@ function sourceParts(value) {
   const decoded = decodeURIComponent(filename);
   const rawStem = decoded.replace(/\.[^.]+$/, '');
   const stem = STEM_CASE[rawStem.toLowerCase()] || rawStem;
+  const full = `assets/optimized/${stem}.mp4`;
   return {
     original: `assets/${stem}${/anti-dote/i.test(stem) ? '.mov' : '.mp4'}`,
-    full: `assets/optimized/${stem}.mp4`,
-    preview: `assets/optimized/${stem}-preview.mp4`,
+    full,
+    preview: full,
     poster: `assets/optimized/posters/${stem}.jpg`
   };
 }
@@ -176,8 +177,6 @@ function setupHero() {
   const originalButton = document.querySelector('[data-hero-preview]');
   if (!originalButton) return;
 
-  // commission.js attached the old featured-video behavior before this module loads.
-  // Replacing only this button cleanly removes that old handler without disturbing filters/cards.
   const button = originalButton.cloneNode(true);
   originalButton.replaceWith(button);
   const video = button.querySelector('video');
@@ -190,7 +189,6 @@ function setupHero() {
     video.dataset.previewSrc = media.preview;
     if (media.poster) video.poster = media.poster;
 
-    // The featured clip is the only preview that may autoplay, and it uses the tiny preview encode.
     ensurePreview(video);
     if (!reduceMotion) video.play().catch(() => {});
   });
