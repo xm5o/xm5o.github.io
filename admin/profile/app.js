@@ -9,12 +9,18 @@ import{initCommandPalette}from'./command-palette.js';
 import{initPwa}from'./pwa.js';
 import{initUx,showToast,friendlyError}from'./ux.js';
 import{initWorkspaceLoader}from'./workspace-loader.js';
+import{initReleaseUi}from'./release.js';
+import{initAdminPreferences}from'./preferences.js';
+import{initAdminInsights}from'./insights.js';
 
-function loadPolishStyle(){if(document.querySelector('link[data-admin-polish]'))return;const link=document.createElement('link');link.rel='stylesheet';link.href='polish.css?v=20260916-1';link.dataset.adminPolish='true';document.head.append(link)}
+function loadPolishStyle(){if(document.querySelector('link[data-admin-polish]'))return;const link=document.createElement('link');link.rel='stylesheet';link.href='polish.css?v=20260916-2';link.dataset.adminPolish='true';document.head.append(link)}
 async function init(){
   loadPolishStyle();
-  initDraftState();
+  const restoredDraft=await initDraftState();
   initUx();
+  initAdminPreferences();
+  initReleaseUi();
+  initAdminInsights();
   initWorkspaceLoader();
   initAdminLayout();
   initSiteControls();
@@ -23,6 +29,7 @@ async function init(){
   initCmsUi();
   initCommandPalette();
   initPwa();
+  if(restoredDraft?.hasChanges)showToast(`Recovered ${restoredDraft.count} staged change${restoredDraft.count===1?'':'s'} from your previous session.`,{title:'Draft recovered',type:'success',duration:6500});
   await initAuth();
 }
 
