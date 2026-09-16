@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-16T14:10:41.740Z",
+  "assets": {
+    "assets/pfp.jpg": {
+      "source": "assets/pfp.jpg",
+      "sha256": "eb546484f1e9dc948f6e09752c9f48ff08d97b405998c9c4a6644c315ea1ff7c",
+      "width": 720,
+      "height": 720,
+      "webp": [
+        {
+          "width": 256,
+          "height": 256,
+          "path": "/assets/optimized/pfp-256.webp",
+          "bytes": 7424
+        },
+        {
+          "width": 512,
+          "height": 512,
+          "path": "/assets/optimized/pfp-512.webp",
+          "bytes": 22608
+        },
+        {
+          "width": 720,
+          "height": 720,
+          "path": "/assets/optimized/pfp-720.webp",
+          "bytes": 37332
+        }
+      ],
+      "avif": [
+        {
+          "width": 256,
+          "height": 256,
+          "path": "/assets/optimized/pfp-256.avif",
+          "bytes": 5963
+        },
+        {
+          "width": 512,
+          "height": 512,
+          "path": "/assets/optimized/pfp-512.avif",
+          "bytes": 16692
+        },
+        {
+          "width": 720,
+          "height": 720,
+          "path": "/assets/optimized/pfp-720.avif",
+          "bytes": 26722
+        }
+      ]
+    },
+    "assets/site-background.jpg": {
+      "source": "assets/site-background.jpg",
+      "sha256": "6c3a88a44dc2ee54fa3bc6210efc2fda2223d2bf4f7d028db4d1ad8c1d36bceb",
+      "width": 563,
+      "height": 1000,
+      "webp": [
+        {
+          "width": 480,
+          "height": 853,
+          "path": "/assets/optimized/site-background-480.webp",
+          "bytes": 42392
+        },
+        {
+          "width": 563,
+          "height": 1000,
+          "path": "/assets/optimized/site-background-563.webp",
+          "bytes": 57694
+        }
+      ],
+      "avif": [
+        {
+          "width": 480,
+          "height": 853,
+          "path": "/assets/optimized/site-background-480.avif",
+          "bytes": 24891
+        },
+        {
+          "width": 563,
+          "height": 1000,
+          "path": "/assets/optimized/site-background-563.avif",
+          "bytes": 34832
+        }
+      ]
+    },
+    "assets/site-banner.jpg": {
+      "source": "assets/site-banner.jpg",
+      "sha256": "0a5b24ff4783212af4789cc87349358aa5ffa5b81aa28eff1876cde162f8d6f1",
+      "width": 1200,
+      "height": 400,
+      "webp": [
+        {
+          "width": 480,
+          "height": 160,
+          "path": "/assets/optimized/site-banner-480.webp",
+          "bytes": 1414
+        },
+        {
+          "width": 960,
+          "height": 320,
+          "path": "/assets/optimized/site-banner-960.webp",
+          "bytes": 3504
+        },
+        {
+          "width": 1200,
+          "height": 400,
+          "path": "/assets/optimized/site-banner-1200.webp",
+          "bytes": 4532
+        }
+      ],
+      "avif": [
+        {
+          "width": 480,
+          "height": 160,
+          "path": "/assets/optimized/site-banner-480.avif",
+          "bytes": 1251
+        },
+        {
+          "width": 960,
+          "height": 320,
+          "path": "/assets/optimized/site-banner-960.avif",
+          "bytes": 2475
+        },
+        {
+          "width": 1200,
+          "height": 400,
+          "path": "/assets/optimized/site-banner-1200.avif",
+          "bytes": 2873
+        }
+      ]
+    }
+  }
+}
