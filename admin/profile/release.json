@@ -1,0 +1,11 @@
+{
+  "version": "1.2.0",
+  "name": "Advanced Hardening",
+  "releasedAt": "2026-09-16T12:00:00.000Z",
+  "highlights": [
+    "Drafts now survive reloads and temporary connection loss.",
+    "Added local staging preview, admin insights, and appearance preferences.",
+    "Strengthened Worker security and backup retention rules.",
+    "Added browser smoke tests and visual screenshot artifacts for future changes."
+  ]
+}
