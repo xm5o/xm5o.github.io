@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="theme-color" content="#080808">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Immortal Admin">
@@ -12,159 +13,264 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="../../assets/pfp.jpg" type="image/jpeg">
   <link rel="apple-touch-icon" href="../../assets/pfp.jpg">
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=20260915-4">
   <link rel="stylesheet" href="publisher.css?v=20260915-4">
+  <link rel="stylesheet" href="cms.css?v=20260916-1">
+  <link rel="stylesheet" href="layout.css?v=20260916-1">
   <script src="../../scripts/pfp-theme.js?v=20260915-1"></script>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="../../" aria-label="Back to Immortal website"><span class="brand-mark">I</span><span><strong>Immortal</strong><small>Admin</small></span></a>
-    <div class="topbar-actions">
-      <button class="back-link" id="openCommandPalette" type="button"><i class="bx bx-command"></i> Commands</button>
-      <button class="back-link install-button" id="installAppButton" type="button" hidden><i class="bx bx-download"></i> Install</button>
-      <a class="back-link" href="../../"><i class="bx bx-left-arrow-alt"></i> Main site</a>
-    </div>
-  </header>
+  <div class="admin-app">
+    <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
+      <a class="sidebar-brand" href="../../" aria-label="Open Immortal website">
+        <span class="brand-mark">I</span>
+        <span class="sidebar-brand-copy"><strong>Immortal</strong><small>Admin Console</small></span>
+        <button class="sidebar-close" id="sidebarCloseButton" type="button" aria-label="Close menu"><i class="bx bx-x"></i></button>
+      </a>
 
-  <main class="shell">
-    <section class="intro">
-      <div><span class="eyebrow">Private site controls</span><h1>Draft it. Preview it. Publish once.</h1><p>Manage your profile, theme, content, SEO, assets, presets, schedules, backups, maintenance mode, and deployment health without opening GitHub.</p></div>
-      <div class="connection-state" id="connectionState" data-state="offline"><span></span><strong>Publisher locked</strong></div>
-    </section>
+      <nav class="sidebar-nav">
+        <span class="sidebar-group">Workspace</span>
+        <button class="sidebar-link active" data-workspace-target="overview" type="button"><i class="bx bx-grid-alt"></i><span>Overview</span></button>
+        <button class="sidebar-link" data-workspace-target="profile" type="button"><i class="bx bx-user-circle"></i><span>Profile</span></button>
+        <button class="sidebar-link" data-workspace-target="appearance" type="button"><i class="bx bx-palette"></i><span>Appearance</span></button>
+        <button class="sidebar-link" data-workspace-target="content" type="button"><i class="bx bx-edit-alt"></i><span>Content</span></button>
+        <button class="sidebar-link" data-workspace-target="seo" type="button"><i class="bx bx-search-alt"></i><span>SEO & Sharing</span></button>
+        <button class="sidebar-link" data-workspace-target="publish" type="button"><i class="bx bx-cloud-upload"></i><span>Publish</span></button>
 
-    <section class="manager"><div class="manager-grid">
-      <div class="left-column">
-        <section class="card health-card">
-          <div class="card-heading"><div><small>System</small><h2>Health dashboard</h2></div><button class="text-button" id="refreshHealth" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
-          <div class="health-grid" id="healthGrid"><span>Unlock the publisher to run checks.</span></div><small class="health-updated" id="healthUpdated"></small>
-        </section>
+        <span class="sidebar-group">Manage</span>
+        <button class="sidebar-link" data-workspace-target="library" type="button"><i class="bx bx-images"></i><span>Library</span></button>
+        <button class="sidebar-link" data-workspace-target="backups" type="button"><i class="bx bx-archive"></i><span>Backups</span></button>
+        <button class="sidebar-link" data-workspace-target="automation" type="button"><i class="bx bx-time-five"></i><span>Automation</span></button>
+        <button class="sidebar-link" data-workspace-target="system" type="button"><i class="bx bx-cog"></i><span>System</span></button>
+      </nav>
 
-        <section class="card current-card">
-          <div class="card-heading"><div><small>Current</small><h2>Live profile picture</h2></div><button class="text-button" id="refreshCurrent" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
-          <div class="current-row"><img id="currentImage" class="profile-img current-image" src="../../assets/pfp.jpg" alt="Current site profile picture"><div><strong>assets/pfp.jpg</strong><p>This image also drives the automatic site color theme.</p></div></div>
-          <div class="palette-row" id="currentPalette"></div>
-        </section>
+      <div class="sidebar-footer">
+        <button id="installAppButton" class="install-button" type="button" hidden><i class="bx bx-download"></i><span>Install admin app</span></button>
+        <a href="../../"><i class="bx bx-link-external"></i><span>Open main website</span></a>
+      </div>
+    </aside>
+    <div class="admin-sidebar-backdrop" id="sidebarBackdrop"></div>
 
-        <section class="card upload-card" id="uploadDropZone">
-          <div class="card-heading"><div><small>Profile draft</small><h2>Choose and crop</h2></div><label class="upload-button" for="imageInput"><i class="bx bx-image-add"></i> Choose photo</label><input id="imageInput" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" hidden></div>
-          <div class="empty-editor" id="emptyEditor"><i class="bx bx-image"></i><strong>Drop, paste, or choose an image</strong><p>JPG, PNG, WebP, HEIC/HEIF when your browser can decode it.</p></div>
-          <div class="source-info" id="sourceInfo" hidden></div>
-          <div class="crop-editor" id="cropEditor" hidden>
-            <div class="crop-stage" id="cropStage"><canvas id="cropCanvas" width="720" height="720"></canvas><div class="crop-ring" aria-hidden="true"></div><span class="drag-tip"><i class="bx bx-move"></i> Drag · pinch to zoom</span></div>
-            <div class="crop-controls"><label><span>Zoom</span><input id="zoomRange" type="range" min="1" max="3" step="0.01" value="1"></label><div class="crop-shortcuts"><button class="text-button" id="centerCrop" type="button"><i class="bx bx-crosshair"></i> Center</button><button class="text-button" id="resetCrop" type="button"><i class="bx bx-reset"></i> Original framing</button></div></div>
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div class="admin-topbar-left">
+          <button class="mobile-menu-button" id="mobileMenuButton" type="button" aria-label="Open menu"><i class="bx bx-menu"></i></button>
+          <div class="workspace-heading"><h1 id="workspaceTitle">Overview</h1><p id="workspaceDescription">Status, recent activity, and the fastest paths into your site.</p></div>
+        </div>
+        <div class="admin-topbar-actions">
+          <div class="connection-state" id="connectionState" data-state="offline"><span></span><strong>Publisher locked</strong></div>
+          <button class="admin-tool icon-only" id="openCommandPalette" type="button" aria-label="Open command palette"><i class="bx bx-command"></i></button>
+          <a class="admin-tool" href="../../"><i class="bx bx-globe"></i><span>View site</span></a>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <section class="workspace workspace-stack" data-workspace="overview">
+          <div class="workspace-lead">
+            <div class="workspace-lead-copy"><small>Immortal Admin</small><h2>Your site, without the clutter.</h2><p>Jump straight to the thing you want to change. Draft Mode keeps edits local until you publish them together.</p></div>
+            <button class="button secondary" data-workspace-target="publish" type="button"><i class="bx bx-cloud-upload"></i> Review draft</button>
+          </div>
+
+          <div class="quick-actions">
+            <button class="quick-action" data-workspace-target="profile" type="button"><i class="bx bx-user-circle"></i><span><strong>Profile picture</strong><small>Crop, preview, restore</small></span></button>
+            <button class="quick-action" data-workspace-target="appearance" type="button"><i class="bx bx-palette"></i><span><strong>Appearance</strong><small>Theme, assets, preview</small></span></button>
+            <button class="quick-action" data-workspace-target="content" type="button"><i class="bx bx-edit-alt"></i><span><strong>Site content</strong><small>Bio, status, commissions</small></span></button>
+            <button class="quick-action" data-workspace-target="automation" type="button"><i class="bx bx-time-five"></i><span><strong>Automation</strong><small>Presets and schedules</small></span></button>
+          </div>
+
+          <div class="overview-split">
+            <section class="card health-card">
+              <div class="card-heading"><div><small>System health</small><h2>Live status</h2></div><button class="text-button" id="refreshHealth" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
+              <div class="health-grid" id="healthGrid"><span>Unlock the publisher to run checks.</span></div><small class="health-updated" id="healthUpdated"></small>
+            </section>
+            <section class="card activity-card">
+              <div class="card-heading"><div><small>Recent activity</small><h2>Latest managed changes</h2></div><button class="text-button" id="refreshActivity" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
+              <div class="activity-list" id="activityList"><div class="history-empty">Recent managed changes will appear here.</div></div>
+            </section>
           </div>
         </section>
 
-        <section class="card history-card">
-          <div class="card-heading"><div><small>Profile history</small><h2>Previous pictures</h2></div><button class="text-button" id="refreshHistory" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
-          <div class="history-list" id="historyList"><div class="history-empty">Unlock the publisher to load history.</div></div>
+        <section class="workspace workspace-stack" data-workspace="profile" hidden>
+          <div class="profile-editor-layout">
+            <section class="card upload-card" id="uploadDropZone">
+              <div class="card-heading"><div><small>Profile editor</small><h2>Choose and crop</h2></div><label class="upload-button" for="imageInput"><i class="bx bx-image-add"></i> Choose photo</label><input id="imageInput" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" hidden></div>
+              <div class="empty-editor" id="emptyEditor"><i class="bx bx-image"></i><strong>Drop, paste, or choose an image</strong><p>JPG, PNG, WebP, HEIC/HEIF when your browser can decode it.</p></div>
+              <div class="source-info" id="sourceInfo" hidden></div>
+              <div class="crop-editor" id="cropEditor" hidden>
+                <div class="crop-stage" id="cropStage"><canvas id="cropCanvas" width="720" height="720"></canvas><div class="crop-ring" aria-hidden="true"></div><span class="drag-tip"><i class="bx bx-move"></i> Drag · pinch to zoom</span></div>
+                <div class="crop-controls"><label><span>Zoom</span><input id="zoomRange" type="range" min="1" max="3" step="0.01" value="1"></label><div class="crop-shortcuts"><button class="text-button" id="centerCrop" type="button"><i class="bx bx-crosshair"></i> Center</button><button class="text-button" id="resetCrop" type="button"><i class="bx bx-reset"></i> Original framing</button></div></div>
+              </div>
+            </section>
+
+            <div class="profile-actions-panel">
+              <section class="card current-card">
+                <div class="card-heading"><div><small>Current</small><h2>Live profile</h2></div><button class="text-button" id="refreshCurrent" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
+                <div class="current-row"><img id="currentImage" class="profile-img current-image" src="../../assets/pfp.jpg" alt="Current site profile picture"><div><strong>assets/pfp.jpg</strong><p>This image drives the automatic site palette.</p></div></div>
+                <div class="palette-row" id="currentPalette"></div>
+              </section>
+              <section class="card">
+                <div class="card-heading"><div><small>Draft preview</small><h2>Before & after</h2></div><span class="preview-status" id="previewStatus">Live site loaded</span></div>
+                <div class="compare-grid"><article><small>Before</small><img id="beforeImage" src="../../assets/pfp.jpg" alt="Current profile picture"></article><article><small>After</small><img id="afterImage" src="../../assets/pfp.jpg" alt="New profile picture preview"></article></div>
+                <div class="palette-compare"><small>Draft colors</small><div class="palette-row" id="newPalette"></div></div>
+                <div class="publish-main-action"><button class="button primary" id="publishButton" type="button" disabled><i class="bx bx-layer-plus"></i> Stage profile picture</button></div>
+                <div class="deploy-state" id="deployState" data-state="idle"><span></span><strong>Nothing published yet</strong><small id="deployDetail">Publish status will appear here.</small></div>
+                <div class="publish-status" id="publishStatus">Choose a new image to continue.</div><a class="publish-result-link" id="commitLink" href="#" target="_blank" rel="noopener noreferrer" hidden>Open GitHub commit</a>
+              </section>
+            </div>
+          </div>
+
+          <section class="card history-card">
+            <div class="card-heading"><div><small>Profile history</small><h2>Previous pictures</h2></div><button class="text-button" id="refreshHistory" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
+            <div class="history-list" id="historyList"><div class="history-empty">Unlock the publisher to load history.</div></div>
+          </section>
         </section>
 
-        <section class="card" id="libraryCard">
-          <div class="card-heading"><div><small>Media</small><h2>Image library</h2></div><button class="text-button" id="refreshLibrary" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
-          <p class="card-copy">Published images can be kept here and reused as profile pictures, favicons, backgrounds, or banners.</p>
-          <div class="library-list" id="libraryList"><div class="history-empty">Unlock the publisher to load the library.</div></div>
+        <section class="workspace workspace-stack" data-workspace="appearance" hidden>
+          <div class="appearance-layout">
+            <section class="card preview-card">
+              <div class="card-heading"><div><small>Actual homepage</small><h2>Real site preview</h2></div><button class="text-button" id="refreshRealPreview" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
+              <div class="preview-device-bar"><button class="active" data-preview-size-button="desktop" type="button"><i class="bx bx-desktop"></i> Desktop</button><button data-preview-size-button="tablet" type="button"><i class="bx bx-tab"></i> Tablet</button><button data-preview-size-button="phone" type="button"><i class="bx bx-mobile-alt"></i> Phone</button></div>
+              <div class="real-preview-shell" data-preview-size="desktop"><div class="real-preview-toolbar"><span><i class="bx bx-globe"></i> xm5o.github.io</span><span>Draft preview</span></div><iframe id="realPreviewFrame" title="Real homepage draft preview" src="../../?siteManagerPreview=1" loading="eager"></iframe></div>
+            </section>
+
+            <div class="appearance-controls">
+              <section class="card settings-card">
+                <div class="card-heading"><div><small>Theme</small><h2>Color system</h2></div><i class="bx bx-palette"></i></div>
+                <div class="settings-subsection"><div><small>Source</small><strong>Choose how colors are generated</strong></div><select id="themeMode"><option value="auto">Automatic from profile picture</option><option value="manual">Manual color override</option></select></div>
+                <div class="manual-theme-fields" id="manualThemeFields" hidden><label><span>Main</span><input id="mainColorInput" type="color" value="#ffffff"></label><label><span>Secondary</span><input id="secondaryColorInput" type="color" value="#9f9f9f"></label><label><span>Accent</span><input id="accentColorInput" type="color" value="#d7d7d7"></label></div>
+              </section>
+
+              <section class="card settings-card">
+                <div class="card-heading"><div><small>Visual assets</small><h2>Favicon, background & banner</h2></div><i class="bx bx-image"></i></div>
+                <div class="managed-assets">
+                  <article data-kind="favicon"><div><strong>Favicon</strong><small>1:1 · 512×512</small></div><label class="asset-button">Replace<input id="faviconInput" data-asset="favicon" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" hidden></label><button class="asset-reset" data-reset-asset="favicon" type="button">Reset</button><label class="mini-toggle"><input id="faviconEnabled" type="checkbox"> Enabled</label></article>
+                  <article data-kind="background"><div><strong>Background</strong><small>16:9 · 1920×1080</small></div><label class="asset-button">Replace<input id="backgroundInput" data-asset="background" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" hidden></label><button class="asset-reset" data-reset-asset="background" type="button">Reset</button><label class="mini-toggle"><input id="backgroundEnabled" type="checkbox"> Enabled</label></article>
+                  <article data-kind="banner"><div><strong>Banner</strong><small>16:9 · 1600×900</small></div><label class="asset-button">Replace<input id="bannerInput" data-asset="banner" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" hidden></label><button class="asset-reset" data-reset-asset="banner" type="button">Reset</button><label class="mini-toggle"><input id="bannerEnabled" type="checkbox"> Enabled</label></article>
+                </div>
+                <button class="button secondary" type="button" data-save-settings data-auth-required><i class="bx bx-save"></i> Save appearance changes</button>
+                <p class="card-copy">In Draft Mode these controls auto-stage while you edit.</p>
+              </section>
+            </div>
+          </div>
         </section>
 
-        <section class="card activity-card">
-          <div class="card-heading"><div><small>Activity</small><h2>Site change timeline</h2></div><button class="text-button" id="refreshActivity" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
-          <div class="activity-list" id="activityList"><div class="history-empty">Recent managed changes will appear here.</div></div>
+        <section class="workspace workspace-stack" data-workspace="content" hidden>
+          <div class="content-grid">
+            <section class="card settings-card">
+              <div class="card-heading"><div><small>Public content</small><h2>Bio & availability</h2></div><i class="bx bx-edit-alt"></i></div>
+              <div class="settings-grid"><label class="wide"><span>Bio</span><textarea id="bioInput" maxlength="220" rows="4"></textarea></label><label class="wide"><span>Status text</span><input id="statusInput" maxlength="72" type="text"></label><label><span>Commission slots</span><input id="commissionTotal" type="number" min="1" max="12"></label><label><span>Slots used</span><input id="commissionUsed" type="number" min="0" max="12"></label></div>
+              <label class="toggle-row"><input id="commissionOpen" type="checkbox"><span>Commissions open</span></label>
+              <button class="button primary" id="saveSettingsButton" data-save-settings data-auth-required type="button" disabled><i class="bx bx-save"></i> Save content changes</button>
+              <p class="card-copy">In Draft Mode edits are staged automatically. This button is mainly useful in Instant Mode.</p>
+            </section>
+
+            <section class="card settings-card">
+              <div class="card-heading"><div><small>Maintenance</small><h2>Temporary site screen</h2></div><i class="bx bx-wrench"></i></div>
+              <div class="settings-subsection maintenance-settings"><div><small>Visibility</small><strong>Maintenance mode</strong></div><label class="mini-toggle"><input id="maintenanceEnabled" type="checkbox"> Enabled</label></div>
+              <div class="settings-grid"><label class="wide"><span>Maintenance title</span><input id="maintenanceTitle" maxlength="80" type="text" value="Back soon"></label><label class="wide"><span>Maintenance message</span><textarea id="maintenanceMessage" maxlength="240" rows="4">The site is being updated right now.</textarea></label></div>
+              <p class="card-copy">Use the Appearance preview to see the maintenance screen before publishing it.</p>
+            </section>
+          </div>
         </section>
 
-        <section class="card snapshots-card">
-          <div class="card-heading"><div><small>Snapshots</small><h2>Whole-site restore points</h2></div><i class="bx bx-archive"></i></div>
-          <div class="snapshot-create"><input id="snapshotLabel" type="text" maxlength="60" placeholder="Before redesign, favorite setup…"><button class="button secondary" id="createSnapshotButton" type="button" disabled><i class="bx bx-camera"></i> Save snapshot</button></div>
-          <div class="snapshot-list" id="snapshotList"><div class="history-empty">Unlock the publisher to load snapshots.</div></div>
+        <section class="workspace workspace-stack" data-workspace="seo" hidden>
+          <section class="card seo-card">
+            <div class="card-heading"><div><small>SEO & sharing</small><h2>Search and social metadata</h2></div><i class="bx bx-search-alt"></i></div>
+            <div class="settings-grid"><label class="wide"><span>Page title</span><input id="seoTitleInput" maxlength="90" type="text"></label><label class="wide"><span>Description</span><textarea id="seoDescriptionInput" maxlength="180" rows="4"></textarea></label><label><span>Theme color</span><input id="seoThemeColorInput" type="color" value="#0a0a0a"></label><label class="wide"><span>Social image URL</span><input id="seoImageInput" type="url" inputmode="url"></label></div>
+            <button class="text-button use-banner-button" id="useBannerSeoButton" type="button"><i class="bx bx-image"></i> Use managed banner as social image</button>
+            <div class="social-preview"><img id="socialPreviewImage" src="../../assets/Immortal-site-banner.png" alt="Social sharing preview"><div><strong id="socialPreviewTitle">Immortal</strong><p id="socialPreviewDescription"></p><small>xm5o.github.io</small></div></div>
+            <button class="button primary" id="saveSeoButton" data-auth-required type="button" disabled><i class="bx bx-save"></i> Save SEO metadata</button><div class="settings-status" id="seoStatus"></div>
+            <p class="card-copy">Draft Mode auto-stages metadata while you type. The actual static tags are updated when you publish.</p>
+          </section>
         </section>
 
-        <section class="card" id="presetsCard">
-          <div class="card-heading"><div><small>Looks</small><h2>Theme presets</h2></div><button class="text-button" id="refreshPresets" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
-          <div class="snapshot-create"><input id="presetName" type="text" maxlength="60" placeholder="Dark CAS, Default, Winter…"><button class="button secondary" id="savePresetButton" type="button"><i class="bx bx-palette"></i> Save current look</button></div>
-          <div class="preset-list" id="presetList"><div class="history-empty">No presets loaded.</div></div>
+        <section class="workspace workspace-stack" data-workspace="publish" hidden>
+          <section class="card publish-workspace-card">
+            <div class="card-heading"><div><small>Release workspace</small><h2>Review before publishing</h2></div><span class="draft-badge"><i class="bx bx-layer"></i> Draft Mode</span></div>
+            <div class="draft-options"><label class="toggle-row"><input id="draftModeToggle" type="checkbox" checked><span>Stage changes instead of publishing instantly</span></label><label class="toggle-row"><input id="saveLibraryToggle" type="checkbox" checked><span>Save published images to the reusable library</span></label></div>
+            <div class="form-section-title"><div><strong>Staged changes</strong><small>Everything below will be sent in one commit.</small></div></div>
+            <div class="draft-summary" id="draftSummary"><span class="muted">No staged changes.</span></div>
+            <div class="publish-secondary-actions"><button class="button secondary" id="undoLastButton" type="button"><i class="bx bx-undo"></i> Undo last publish</button><button class="button secondary" data-workspace-target="backups" type="button"><i class="bx bx-archive"></i> Open backups</button></div>
+          </section>
+          <section class="workspace-lead">
+            <div class="workspace-lead-copy"><small>Automatic safety</small><h2>Every managed publish keeps a restore point.</h2><p>Publish All combines staged settings, SEO, and images into one Git commit. Undo restores the previous managed state without rolling back unrelated code.</p></div>
+          </section>
         </section>
 
-        <section class="card" id="scheduleCard">
-          <div class="card-heading"><div><small>Automation</small><h2>Scheduled site changes</h2></div><button class="text-button" id="refreshSchedule" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
-          <div class="schedule-create"><select id="schedulePreset"><option value="">Choose preset…</option></select><input id="scheduleTime" type="datetime-local"><button class="button secondary" id="addScheduleButton" type="button"><i class="bx bx-time-five"></i> Schedule</button></div>
-          <p class="card-copy">The Worker checks every five minutes and applies the selected preset when its time arrives.</p>
-          <div class="schedule-list" id="scheduleList"><div class="history-empty">No scheduled changes.</div></div>
+        <section class="workspace workspace-stack" data-workspace="library" hidden>
+          <section class="card" id="libraryCard">
+            <div class="card-heading"><div><small>Media library</small><h2>Reusable site images</h2></div><button class="text-button" id="refreshLibrary" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
+            <p class="card-copy">Published images can be reused as profile pictures, favicons, backgrounds, or banners without uploading them again.</p>
+            <div class="library-list" id="libraryList"><div class="history-empty">Unlock the publisher to load the library.</div></div>
+          </section>
+        </section>
+
+        <section class="workspace workspace-stack" data-workspace="backups" hidden>
+          <div class="backup-layout">
+            <section class="card snapshots-card">
+              <div class="card-heading"><div><small>Snapshots</small><h2>Whole-site restore points</h2></div><i class="bx bx-archive"></i></div>
+              <div class="snapshot-create"><input id="snapshotLabel" type="text" maxlength="60" placeholder="Before redesign, favorite setup…"><button class="button secondary" id="createSnapshotButton" data-auth-required type="button" disabled><i class="bx bx-camera"></i> Save snapshot</button></div>
+              <div class="snapshot-list" id="snapshotList"><div class="history-empty">Unlock the publisher to load snapshots.</div></div>
+            </section>
+            <section class="card backup-card">
+              <div class="card-heading"><div><small>Portable backup</small><h2>Export / Import</h2></div><i class="bx bx-package"></i></div><p class="card-copy">Export the managed site state as one JSON file, including profile assets and presets.</p>
+              <div class="backup-actions"><button class="button secondary" id="exportBackupButton" type="button"><i class="bx bx-download"></i> Export backup</button><label class="button secondary"><i class="bx bx-upload"></i> Import backup<input id="importBackupInput" type="file" accept="application/json,.json" hidden></label></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="workspace workspace-stack" data-workspace="automation" hidden>
+          <div class="automation-layout">
+            <section class="card" id="presetsCard">
+              <div class="card-heading"><div><small>Looks</small><h2>Theme presets</h2></div><button class="text-button" id="refreshPresets" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
+              <p class="card-copy">Save the current managed look, then reuse it instantly or schedule it for later.</p>
+              <div class="snapshot-create"><input id="presetName" type="text" maxlength="60" placeholder="Dark CAS, Default, Winter…"><button class="button secondary" id="savePresetButton" type="button"><i class="bx bx-palette"></i> Save current look</button></div>
+              <div class="preset-list" id="presetList"><div class="history-empty">No presets loaded.</div></div>
+            </section>
+            <section class="card" id="scheduleCard">
+              <div class="card-heading"><div><small>Automation</small><h2>Scheduled site changes</h2></div><button class="text-button" id="refreshSchedule" type="button"><i class="bx bx-refresh"></i> Refresh</button></div>
+              <div class="schedule-create"><select id="schedulePreset"><option value="">Choose preset…</option></select><input id="scheduleTime" type="datetime-local"><button class="button secondary" id="addScheduleButton" type="button"><i class="bx bx-time-five"></i> Schedule</button></div>
+              <p class="card-copy">The Worker checks every five minutes and applies the selected preset when its time arrives.</p>
+              <div class="schedule-list" id="scheduleList"><div class="history-empty">No scheduled changes.</div></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="workspace workspace-stack" data-workspace="system" hidden>
+          <div class="system-layout">
+            <section class="card publish-card">
+              <div class="card-heading"><div><small>Authentication</small><h2>Private publisher</h2></div><i class="bx bx-shield-quarter"></i></div>
+              <p>Your GitHub write token stays inside Cloudflare. Use GitHub account login when OAuth is configured, or keep the private publisher key as fallback.</p>
+              <div class="publisher-setup" id="publisherSetup">
+                <button class="button github-login" id="githubLoginButton" type="button" hidden><i class="bx bxl-github"></i> Sign in with GitHub</button><p class="publisher-help" id="oauthHint"></p><div class="auth-divider"><span>or use private key</span></div>
+                <div class="publisher-fields"><label class="publisher-field"><span>Cloudflare Worker URL</span><input id="publisherUrl" type="url" inputmode="url" autocomplete="url"></label><label class="publisher-field"><span>Publisher key</span><input id="publisherKey" type="password" placeholder="Your private ADMIN_KEY" autocomplete="current-password"></label></div>
+                <label class="remember-row"><input id="rememberPublisher" type="checkbox"> Remember this device</label><button class="button secondary" id="savePublisherButton" type="button"><i class="bx bx-lock-open-alt"></i> Unlock publisher</button><p class="publisher-help">Auto-locks after 15 minutes without activity. GitHub OAuth sessions stay in session storage.</p><div class="setup-status" id="setupStatus" aria-live="polite"></div>
+              </div>
+              <div class="publisher-connected" id="publisherConnected" hidden><div class="publisher-connected-info"><span class="publisher-connected-dot"></span><div><strong>Publisher ready</strong><small id="publisherHost"></small><small id="authModeLabel"></small></div></div><button class="publisher-forget" id="forgetPublisherButton" type="button">Lock</button></div>
+            </section>
+
+            <section class="card logs-card">
+              <div class="card-heading"><div><small>Diagnostics</small><h2>Admin logs</h2></div><button class="text-button" id="refreshLogs" type="button"><i class="bx bx-refresh"></i> Refresh</button></div><div class="cms-logs" id="cmsLogs"><div class="history-empty">No logs loaded.</div></div>
+            </section>
+          </div>
         </section>
       </div>
+    </main>
+  </div>
 
-      <div class="right-column">
-        <section class="card draft-card">
-          <div class="card-heading"><div><small>Workspace</small><h2>Draft & Publish All</h2></div><span class="draft-badge"><strong id="draftCount">0</strong> staged</span></div>
-          <label class="toggle-row"><input id="draftModeToggle" type="checkbox" checked><span>Draft Mode: stage changes instead of publishing instantly</span></label>
-          <label class="toggle-row"><input id="saveLibraryToggle" type="checkbox" checked><span>Save published images to the reusable image library</span></label>
-          <div class="draft-summary" id="draftSummary"><span class="muted">No staged changes.</span></div>
-          <div class="draft-actions"><button class="button primary" id="publishAllButton" type="button" disabled><i class="bx bx-cloud-upload"></i> Publish all changes</button><button class="button secondary" id="discardDraftButton" type="button" disabled><i class="bx bx-trash"></i> Discard</button><button class="button secondary" id="undoLastButton" type="button"><i class="bx bx-undo"></i> Undo last publish</button></div>
-          <div class="settings-status" id="globalPublishStatus"></div>
-        </section>
+  <div class="global-operation-status settings-status" id="settingsStatus" aria-live="polite"></div>
 
-        <section class="card preview-card">
-          <div class="card-heading"><div><small>Actual homepage</small><h2>Real site preview</h2></div><span class="preview-status" id="previewStatus">Live site loaded</span></div>
-          <div class="preview-device-bar"><button class="active" data-preview-size-button="desktop" type="button"><i class="bx bx-desktop"></i> Desktop</button><button data-preview-size-button="tablet" type="button"><i class="bx bx-tab"></i> Tablet</button><button data-preview-size-button="phone" type="button"><i class="bx bx-mobile-alt"></i> Phone</button></div>
-          <div class="palette-compare"><div><small>Draft colors</small><div class="palette-row" id="newPalette"></div></div></div>
-          <div class="compare-grid"><article><small>Before</small><img id="beforeImage" src="../../assets/pfp.jpg" alt="Current profile picture"></article><article><small>After</small><img id="afterImage" src="../../assets/pfp.jpg" alt="New profile picture preview"></article></div>
-          <div class="real-preview-shell" data-preview-size="desktop"><div class="real-preview-toolbar"><span><i class="bx bx-globe"></i> xm5o.github.io</span><button id="refreshRealPreview" type="button"><i class="bx bx-refresh"></i></button></div><iframe id="realPreviewFrame" title="Real homepage draft preview" src="../../?siteManagerPreview=1" loading="eager"></iframe></div>
-        </section>
-
-        <section class="card publish-card">
-          <div class="card-heading"><div><small>Authentication</small><h2>Private publisher</h2></div><i class="bx bx-shield-quarter"></i></div>
-          <p>Your GitHub write token stays inside Cloudflare. Use GitHub account login when OAuth is configured, or keep using your private publisher key.</p>
-          <div class="publisher-setup" id="publisherSetup">
-            <button class="button github-login" id="githubLoginButton" type="button" hidden><i class="bx bxl-github"></i> Sign in with GitHub</button><p class="publisher-help" id="oauthHint"></p><div class="auth-divider"><span>or use private key</span></div>
-            <div class="publisher-fields"><label class="publisher-field"><span>Cloudflare Worker URL</span><input id="publisherUrl" type="url" inputmode="url" autocomplete="url"></label><label class="publisher-field"><span>Publisher key</span><input id="publisherKey" type="password" placeholder="Your private ADMIN_KEY" autocomplete="current-password"></label></div>
-            <label class="remember-row"><input id="rememberPublisher" type="checkbox"> Remember this device</label><button class="button secondary" id="savePublisherButton" type="button"><i class="bx bx-lock-open-alt"></i> Unlock publisher</button><p class="publisher-help">Auto-locks after 15 minutes without activity. GitHub OAuth sessions stay in session storage.</p><div class="setup-status" id="setupStatus" aria-live="polite"></div>
-          </div>
-          <div class="publisher-connected" id="publisherConnected" hidden><div class="publisher-connected-info"><span class="publisher-connected-dot"></span><div><strong>Publisher ready</strong><small id="publisherHost"></small><small id="authModeLabel"></small></div></div><button class="publisher-forget" id="forgetPublisherButton" type="button">Lock</button></div>
-          <div class="publish-main-action"><button class="button primary" id="publishButton" type="button" disabled><i class="bx bx-layer-plus"></i> Stage profile picture</button></div>
-          <div class="deploy-state" id="deployState" data-state="idle"><span></span><strong>Nothing published yet</strong><small id="deployDetail">Publish status will appear here.</small></div><div class="publish-status" id="publishStatus">Choose a new image to continue.</div><a class="publish-result-link" id="commitLink" href="#" target="_blank" rel="noopener noreferrer" hidden>Open GitHub commit</a>
-        </section>
-
-        <section class="card settings-card">
-          <div class="card-heading"><div><small>Site controls</small><h2>Content & availability</h2></div><i class="bx bx-slider-alt"></i></div>
-          <div class="settings-grid"><label class="wide"><span>Bio</span><textarea id="bioInput" maxlength="220" rows="3"></textarea></label><label class="wide"><span>Status text</span><input id="statusInput" maxlength="72" type="text"></label><label><span>Commission slots</span><input id="commissionTotal" type="number" min="1" max="12"></label><label><span>Slots used</span><input id="commissionUsed" type="number" min="0" max="12"></label></div>
-          <label class="toggle-row"><input id="commissionOpen" type="checkbox"><span>Commissions open</span></label>
-
-          <div class="settings-subsection"><div><small>Theme</small><strong>Color source</strong></div><select id="themeMode"><option value="auto">Automatic from profile picture</option><option value="manual">Manual color override</option></select></div>
-          <div class="manual-theme-fields" id="manualThemeFields" hidden><label><span>Main</span><input id="mainColorInput" type="color" value="#ffffff"></label><label><span>Secondary</span><input id="secondaryColorInput" type="color" value="#9f9f9f"></label><label><span>Accent</span><input id="accentColorInput" type="color" value="#d7d7d7"></label></div>
-
-          <div class="settings-subsection maintenance-settings"><div><small>Maintenance</small><strong>Temporary maintenance screen</strong></div><label class="mini-toggle"><input id="maintenanceEnabled" type="checkbox"> Enabled</label></div>
-          <div class="settings-grid"><label class="wide"><span>Maintenance title</span><input id="maintenanceTitle" maxlength="80" type="text" value="Back soon"></label><label class="wide"><span>Maintenance message</span><textarea id="maintenanceMessage" maxlength="240" rows="2">The site is being updated right now.</textarea></label></div>
-
-          <div class="managed-assets">
-            <article data-kind="favicon"><div><strong>Favicon</strong><small>1:1 · 512×512</small></div><label class="asset-button">Replace<input id="faviconInput" data-asset="favicon" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" hidden></label><button class="asset-reset" data-reset-asset="favicon" type="button">Reset</button><label class="mini-toggle"><input id="faviconEnabled" type="checkbox"> Enabled</label></article>
-            <article data-kind="background"><div><strong>Background</strong><small>16:9 · 1920×1080</small></div><label class="asset-button">Replace<input id="backgroundInput" data-asset="background" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" hidden></label><button class="asset-reset" data-reset-asset="background" type="button">Reset</button><label class="mini-toggle"><input id="backgroundEnabled" type="checkbox"> Enabled</label></article>
-            <article data-kind="banner"><div><strong>Banner</strong><small>16:9 · 1600×900</small></div><label class="asset-button">Replace<input id="bannerInput" data-asset="banner" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" hidden></label><button class="asset-reset" data-reset-asset="banner" type="button">Reset</button><label class="mini-toggle"><input id="bannerEnabled" type="checkbox"> Enabled</label></article>
-          </div>
-          <button class="button primary" id="saveSettingsButton" type="button" disabled><i class="bx bx-save"></i> Save / stage site settings</button><div class="settings-status" id="settingsStatus"></div>
-        </section>
-
-        <section class="card seo-card">
-          <div class="card-heading"><div><small>SEO & sharing</small><h2>Search/social preview</h2></div><i class="bx bx-search-alt"></i></div>
-          <div class="settings-grid"><label class="wide"><span>Page title</span><input id="seoTitleInput" maxlength="90" type="text"></label><label class="wide"><span>Description</span><textarea id="seoDescriptionInput" maxlength="180" rows="3"></textarea></label><label><span>Theme color</span><input id="seoThemeColorInput" type="color" value="#0a0a0a"></label><label class="wide"><span>Social image URL</span><input id="seoImageInput" type="url" inputmode="url"></label></div>
-          <button class="text-button use-banner-button" id="useBannerSeoButton" type="button"><i class="bx bx-image"></i> Use managed banner as social image</button><div class="social-preview"><img id="socialPreviewImage" src="../../assets/Immortal-site-banner.png" alt="Social sharing preview"><div><strong id="socialPreviewTitle">Immortal</strong><p id="socialPreviewDescription"></p><small>xm5o.github.io</small></div></div>
-          <button class="button primary" id="saveSeoButton" type="button" disabled><i class="bx bx-save"></i> Save / stage SEO metadata</button><div class="settings-status" id="seoStatus"></div>
-        </section>
-
-        <section class="card backup-card">
-          <div class="card-heading"><div><small>Portable backup</small><h2>Export / Import</h2></div><i class="bx bx-package"></i></div><p class="card-copy">Export the managed site state as one JSON file, including profile/assets and presets.</p>
-          <div class="backup-actions"><button class="button secondary" id="exportBackupButton" type="button"><i class="bx bx-download"></i> Export backup</button><label class="button secondary"> <i class="bx bx-upload"></i> Import backup<input id="importBackupInput" type="file" accept="application/json,.json" hidden></label></div>
-        </section>
-
-        <section class="card logs-card">
-          <div class="card-heading"><div><small>Diagnostics</small><h2>Admin logs</h2></div><button class="text-button" id="refreshLogs" type="button"><i class="bx bx-refresh"></i> Refresh</button></div><div class="cms-logs" id="cmsLogs"><div class="history-empty">No logs loaded.</div></div>
-        </section>
-      </div>
-    </div></section>
-  </main>
+  <div class="publish-dock" id="publishDock">
+    <div class="publish-dock-left"><span class="draft-dot"></span><div class="publish-dock-copy"><strong><span id="draftCount">0</span> staged change(s)</strong><small id="globalPublishStatus">Draft workspace is clean.</small></div></div>
+    <div class="publish-dock-actions"><button class="button secondary" id="discardDraftButton" type="button" disabled><i class="bx bx-trash"></i><span>Discard</span></button><button class="button primary" id="publishAllButton" type="button" disabled><i class="bx bx-cloud-upload"></i> Publish all changes</button></div>
+  </div>
 
   <div class="asset-modal" id="assetCropModal" hidden><div class="asset-modal-backdrop" data-close-asset-modal></div><section class="asset-modal-card" role="dialog" aria-modal="true" aria-labelledby="assetCropTitle"><div class="card-heading"><div><small id="assetCropRatio">16:9</small><h2 id="assetCropTitle">Prepare image</h2></div><button class="asset-modal-close" data-close-asset-modal type="button"><i class="bx bx-x"></i></button></div><div class="asset-crop-stage" id="assetCropStage"><canvas id="assetCropCanvas" width="1600" height="900"></canvas><span><i class="bx bx-move"></i> Drag · pinch to zoom</span></div><label class="asset-zoom"><span>Zoom</span><input id="assetZoomRange" type="range" min="1" max="3" step="0.01" value="1"></label><div class="asset-modal-meta" id="assetCropInfo"></div><div class="asset-modal-actions"><button class="button secondary" id="assetCenterButton" type="button">Center</button><button class="button primary" id="assetUploadButton" type="button"><i class="bx bx-layer-plus"></i> Stage prepared image</button></div></section></div>
 
   <div class="command-palette" id="commandPalette" hidden><div class="command-backdrop" data-close-command></div><section class="command-card" role="dialog" aria-modal="true" aria-label="Command palette"><div class="command-search"><i class="bx bx-search"></i><input id="commandSearch" type="search" placeholder="Type a command…"><kbd>Esc</kbd></div><div class="command-list" id="commandList"></div></section></div>
 
-  <script type="module" src="app.js?v=20260915-8"></script>
+  <script type="module" src="app.js?v=20260916-1"></script>
 </body>
 </html>
