@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Immortal Admin">
+  <rect width="512" height="512" rx="116" fill="#090909"/>
+  <rect x="24" y="24" width="464" height="464" rx="100" fill="none" stroke="#252525" stroke-width="10"/>
+  <circle cx="256" cy="256" r="126" fill="#111" stroke="#2f2f2f" stroke-width="8"/>
+  <path d="M222 154h68v204h-68z" fill="#f2f2f2"/>
+  <circle cx="256" cy="116" r="9" fill="#888"/>
+</svg>
