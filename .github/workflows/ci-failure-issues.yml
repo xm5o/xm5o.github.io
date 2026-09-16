@@ -1,0 +1,55 @@
+name: CI failure issue manager
+
+on:
+  workflow_run:
+    workflows:
+      - Immortal Admin browser checks
+      - Immortal Admin smoke checks
+      - Whole-site quality
+      - Monthly site maintenance
+      - Optimize managed images
+    types: [completed]
+
+permissions:
+  contents: read
+  issues: write
+  actions: read
+
+jobs:
+  sync-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open, update, or close workflow issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          WORKFLOW_NAME: ${{ github.event.workflow_run.name }}
+          CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          TITLE="[CI] ${WORKFLOW_NAME}"
+          NUMBER="$(gh issue list --repo "$REPO" --state open --json number,title --jq ".[] | select(.title == \"$TITLE\") | .number" | head -n1)"
+          if [ "$CONCLUSION" = "success" ]; then
+            if [ -n "$NUMBER" ]; then
+              gh issue comment "$NUMBER" --repo "$REPO" --body "Recovered successfully. Latest green run: $RUN_URL"
+              gh issue close "$NUMBER" --repo "$REPO" --reason completed
+            fi
+            exit 0
+          fi
+          BODY=$(cat <<EOF
+          The **${WORKFLOW_NAME}** workflow finished with **${CONCLUSION}**.
+
+          - Branch: \`${HEAD_BRANCH}\`
+          - Commit: \`${HEAD_SHA}\`
+          - Run: ${RUN_URL}
+
+          This issue is managed automatically. A later successful run will close it.
+          EOF
+          )
+          if [ -n "$NUMBER" ]; then
+            gh issue comment "$NUMBER" --repo "$REPO" --body "$BODY"
+          else
+            gh issue create --repo "$REPO" --title "$TITLE" --body "$BODY"
+          fi
