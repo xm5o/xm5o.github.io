@@ -21,11 +21,15 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
       - name: Install image optimizer
         run: npm install --no-save sharp@0.34.3
+      - name: Sync latest main
+        run: git pull --rebase origin main
       - name: Generate responsive WebP and AVIF variants
         run: node scripts/optimize-managed-images.mjs
       - name: Commit generated derivatives
@@ -38,4 +42,16 @@ jobs:
             exit 0
           fi
           git commit -m 'Optimize managed site images'
-          git push
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if ! git merge-base --is-ancestor origin/main HEAD; then
+              git rebase origin/main
+              node scripts/optimize-managed-images.mjs
+              git add assets/optimized data/optimized-assets.json
+              git commit --amend --no-edit
+            fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 3))
+          done
+          echo 'Could not push optimized assets after retries.' >&2
+          exit 1
