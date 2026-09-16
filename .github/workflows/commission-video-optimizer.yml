@@ -40,7 +40,21 @@ jobs:
           set -euo pipefail
           mkdir -p commission/assets/optimized/posters
 
-          while IFS= read -r -d '' src; do
+          sources=(
+            'commission/assets/reactor.mp4'
+            'commission/assets/Astral Calamity.mp4'
+            'commission/assets/Anti-Dote.mov'
+            'commission/assets/Bloodline.mp4'
+            'commission/assets/Ignition.mp4'
+            'commission/assets/rejected.mp4'
+          )
+
+          for src in "${sources[@]}"; do
+            if [[ ! -f "$src" ]]; then
+              echo "Missing source video: $src"
+              exit 1
+            fi
+
             file="$(basename "$src")"
             stem="${file%.*}"
             full="commission/assets/optimized/${stem}.mp4"
@@ -69,7 +83,7 @@ jobs:
             ffmpeg -hide_banner -loglevel error -y -ss 0.15 -i "$src" \
               -frames:v 1 -vf "scale='min(960,iw)':-2" -q:v 4 \
               "$poster"
-          done < <(find commission/assets -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' \) -print0 | sort -z)
+          done
 
       - name: Commit optimized media
         shell: bash
