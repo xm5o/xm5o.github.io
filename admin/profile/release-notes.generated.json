@@ -3,8 +3,14 @@
   "name": "Quality Automation",
   "channel": "stable",
   "releasedAt": "2026-09-16T13:45:00.000Z",
-  "generatedAt": "2026-09-16T14:07:10.364Z",
+  "generatedAt": "2026-09-16T14:11:26.039Z",
   "commits": [
+    {
+      "sha": "d5284d5e39290676bfbb707e75d2236858725bd3",
+      "shortSha": "d5284d5",
+      "date": "2026-09-16T14:07:11Z",
+      "message": "Generate Immortal Admin release notes"
+    },
     {
       "sha": "0c0e65e86730bdb8eb397bcaaaca5d779191be4a",
       "shortSha": "0c0e65e",
@@ -118,12 +124,6 @@
       "shortSha": "7401801",
       "date": "2026-09-16T16:07:44+03:00",
       "message": "Restore staged profile preview when reopening admin"
-    },
-    {
-      "sha": "72c5b8aedabfd0d0ec73bc29cd5d7cf11bd9ce8c",
-      "shortSha": "72c5b8a",
-      "date": "2026-09-16T16:07:21+03:00",
-      "message": "Extend retention for manual site snapshots"
     }
   ]
 }
