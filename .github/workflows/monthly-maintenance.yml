@@ -1,0 +1,52 @@
+name: Monthly site maintenance
+
+on:
+  schedule:
+    - cron: '15 4 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  actions: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Generate maintenance report
+        run: node tests/site-maintenance.mjs
+      - name: Append recent deployment timing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo '## Recent GitHub Actions timing'
+            echo
+            gh run list --limit 30 --json name,createdAt,updatedAt,conclusion --jq '[.[] | select(.conclusion == "success") | . + {seconds: ((.updatedAt|fromdateiso8601)-(.createdAt|fromdateiso8601))}] | group_by(.name) | map({name: .[0].name, avg: ((map(.seconds)|add)/length|round), count:length}) | sort_by(.name) | .[] | "- **\(.name)** — average \(.avg)s across \(.count) recent successful run(s)"' || true
+            echo
+          } >> artifacts/maintenance-report.md
+      - name: Upload maintenance artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: monthly-maintenance-report
+          path: artifacts/maintenance-report.md
+          retention-days: 90
+      - name: Create monthly maintenance issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TITLE="[Maintenance] Monthly site report $(date -u +%Y-%m)"
+          EXISTING="$(gh issue list --state open --json number,title --jq ".[] | select(.title == \"$TITLE\") | .number" | head -n1)"
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body-file artifacts/maintenance-report.md
+          else
+            gh issue create --title "$TITLE" --body-file artifacts/maintenance-report.md
+          fi
