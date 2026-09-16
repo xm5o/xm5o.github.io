@@ -19,7 +19,7 @@ concurrency:
 jobs:
   optimize:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -58,7 +58,6 @@ jobs:
             file="$(basename "$src")"
             stem="${file%.*}"
             full="commission/assets/optimized/${stem}.mp4"
-            preview="commission/assets/optimized/${stem}-preview.mp4"
             poster="commission/assets/optimized/posters/${stem}.jpg"
 
             echo "Optimizing: $src"
@@ -66,21 +65,13 @@ jobs:
             ffmpeg -hide_banner -loglevel error -y -i "$src" \
               -map 0:v:0 -map 0:a? \
               -vf "scale=-2:'min(720,ih)'" \
-              -c:v libx264 -preset medium -crf 26 -maxrate 3000k -bufsize 6000k \
+              -c:v libx264 -preset veryfast -crf 27 -maxrate 2500k -bufsize 5000k \
               -pix_fmt yuv420p -profile:v high -level 4.1 \
               -c:a aac -b:a 96k -ar 44100 \
               -movflags +faststart \
               "$full"
 
-            ffmpeg -hide_banner -loglevel error -y -i "$src" \
-              -map 0:v:0 -an \
-              -vf "scale=-2:'min(480,ih)'" \
-              -c:v libx264 -preset medium -crf 30 -maxrate 1200k -bufsize 2400k \
-              -pix_fmt yuv420p -profile:v main -level 4.0 \
-              -movflags +faststart \
-              "$preview"
-
-            ffmpeg -hide_banner -loglevel error -y -ss 0.15 -i "$src" \
+            ffmpeg -hide_banner -loglevel error -y -ss 0.15 -i "$full" \
               -frames:v 1 -vf "scale='min(960,iw)':-2" -q:v 4 \
               "$poster"
           done
