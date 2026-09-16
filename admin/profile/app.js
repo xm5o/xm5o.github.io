@@ -12,6 +12,7 @@ import{initWorkspaceLoader}from'./workspace-loader.js';
 import{initReleaseUi}from'./release.js';
 import{initAdminPreferences}from'./preferences.js';
 import{initAdminInsights}from'./insights.js';
+import{initStagingUi}from'./staging-ui.js';
 
 function loadExtraStyle(href,key){if(document.querySelector(`link[data-${key}]`))return;const link=document.createElement('link');link.rel='stylesheet';link.href=href;link.dataset[key]='true';document.head.append(link)}
 async function init(){
@@ -22,6 +23,7 @@ async function init(){
   initAdminPreferences();
   initReleaseUi();
   initAdminInsights();
+  initStagingUi();
   initWorkspaceLoader();
   initAdminLayout();
   initSiteControls();
