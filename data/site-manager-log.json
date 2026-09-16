@@ -1,5 +1,11 @@
 [
   {
+    "id": "cca36760-ba40-4967-bfc3-712a1f98965d",
+    "action": "publish",
+    "detail": "settings",
+    "at": "2026-09-16T13:08:58.456Z"
+  },
+  {
     "id": "65370537-db06-431c-932f-ac30bfe898ca",
     "action": "publish",
     "detail": "settings",
