@@ -1,11 +1,11 @@
 {
-  "version": "1.3.0-beta.1",
-  "name": "Beta Channel",
-  "releasedAt": "2026-09-16T13:30:00.000Z",
+  "version": "1.4.0-beta.1",
+  "name": "Next Beta",
+  "releasedAt": "2026-09-16T13:45:00.000Z",
   "channel": "beta",
   "highlights": [
-    "Opt-in beta release stream is enabled for Immortal Admin.",
-    "Beta notices can ship before they are promoted to Stable.",
-    "Switch back to Stable at any time from System → Admin appearance."
+    "Beta remains the opt-in channel for pre-release Immortal Admin experiments.",
+    "Stable 1.3.0 now contains the quality automation and operations suite.",
+    "Future beta-only notices and experiments can ship without changing the Stable channel."
   ]
 }
