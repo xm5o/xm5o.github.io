@@ -22,5 +22,14 @@
       "type": "image/jpeg",
       "purpose": "any"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "Open staging preview",
+      "short_name": "Staging",
+      "description": "Preview the browser-local Immortal Admin draft.",
+      "url": "/admin/profile/stage.html",
+      "icons": [{"src": "/admin/profile/admin-icon.svg", "sizes": "any", "type": "image/svg+xml"}]
+    }
   ]
 }
