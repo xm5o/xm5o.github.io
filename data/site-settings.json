@@ -11,8 +11,8 @@
   "mainColor": "#ffffff",
   "secondaryColor": "#9f9f9f",
   "accentColor": "#d7d7d7",
-  "maintenanceEnabled": true,
+  "maintenanceEnabled": false,
   "maintenanceTitle": "Back soon",
   "maintenanceMessage": "The site is being updated right now.",
-  "updatedAt": "2026-09-15T19:50:04.601Z"
+  "updatedAt": "2026-09-16T09:32:59.466Z"
 }
