@@ -1,7 +1,7 @@
 {
   "bio": "He/Him — I build websites and Discord bots, and I make FNF mods for fun",
   "statusText": "Available for Freelance",
-  "commissionOpen": false,
+  "commissionOpen": true,
   "commissionTotal": 6,
   "commissionUsed": 0,
   "backgroundEnabled": false,
@@ -14,5 +14,5 @@
   "maintenanceEnabled": false,
   "maintenanceTitle": "Oops... Looks It's under Maintenance!",
   "maintenanceMessage": "The site is being updated right now. Coming back Soon!",
-  "updatedAt": "2026-09-16T13:31:43.853Z"
+  "updatedAt": "2026-09-16T21:13:05.249Z"
 }
