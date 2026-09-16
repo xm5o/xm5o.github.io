@@ -1,0 +1,25 @@
+import{chromium}from'playwright';
+import fs from'node:fs/promises';
+const base=process.env.ADMIN_TEST_URL||'http://127.0.0.1:4173';
+await fs.mkdir('artifacts',{recursive:true});
+const browser=await chromium.launch({headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:1000}});
+const pageErrors=[];page.on('pageerror',e=>pageErrors.push(e.message));
+await page.route('https://xm5o-github-io.eminem13981398.workers.dev/**',async route=>{const u=new URL(route.request().url());if(u.pathname==='/auth/config')return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,oauthReady:false,allowedLogin:'xm5o',fallbackKey:true})});return route.fulfill({status:401,contentType:'application/json',body:JSON.stringify({ok:false,error:'Test publisher locked.'})})});
+function assert(value,message){if(!value)throw new Error(message)}
+async function noHorizontalOverflow(){return page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+3)}
+await page.goto(`${base}/admin/profile/`,{waitUntil:'networkidle'});
+await page.waitForSelector('[data-workspace="overview"]:not([hidden])');
+assert(await page.locator('#workspaceTitle').textContent()==='Overview','Overview workspace did not load.');
+assert(await noHorizontalOverflow(),'Desktop admin has horizontal overflow.');
+const sidebarWidth=await page.locator('#adminSidebar').evaluate(el=>el.getBoundingClientRect().width);assert(sidebarWidth>=220&&sidebarWidth<=300,`Unexpected sidebar width: ${sidebarWidth}`);
+await page.locator('[data-workspace-target="appearance"]').first().click();await page.waitForSelector('[data-workspace="appearance"]:not([hidden])');assert(await page.locator('#workspaceTitle').textContent()==='Appearance','Appearance navigation failed.');
+await page.keyboard.press('Control+K');await page.waitForSelector('#commandPalette:not([hidden])');await page.keyboard.press('Escape');
+await page.evaluate(async()=>{const d=await import('/admin/profile/draft.js');d.stageSettings({bio:'CI recovered draft',statusText:'Testing',commissionOpen:true,commissionTotal:4,commissionUsed:0,backgroundEnabled:false,bannerEnabled:false,faviconEnabled:false,themeMode:'auto',mainColor:'#ffffff',secondaryColor:'#999999',accentColor:'#dddddd',maintenanceEnabled:false,maintenanceTitle:'Back soon',maintenanceMessage:'Testing'},'CI recovery test')});
+await page.waitForTimeout(350);await page.reload({waitUntil:'networkidle'});await page.waitForFunction(()=>Number(document.getElementById('draftCount')?.textContent||0)>=1);assert(Number(await page.locator('#draftCount').textContent())>=1,'Persisted draft did not recover after reload.');
+await page.screenshot({path:'artifacts/admin-desktop.png',fullPage:true});
+await page.goto(`${base}/admin/profile/stage.html`,{waitUntil:'networkidle'});await page.waitForFunction(()=>/staged change/.test(document.getElementById('stageStatus')?.textContent||''));await page.screenshot({path:'artifacts/admin-staging.png',fullPage:true});
+await page.goto(`${base}/admin/profile/`,{waitUntil:'networkidle'});await page.evaluate(async()=>{const d=await import('/admin/profile/draft.js');d.clearDraft()});
+await page.setViewportSize({width:390,height:844});await page.reload({waitUntil:'networkidle'});assert(await page.locator('.mobile-bottom-nav').evaluate(el=>getComputedStyle(el).display!=='none'),'Mobile bottom navigation is hidden.');assert(await noHorizontalOverflow(),'Mobile admin has horizontal overflow.');await page.locator('.mobile-bottom-nav [data-workspace-target="profile"]').click();assert(await page.locator('#workspaceTitle').textContent()==='Profile','Mobile profile navigation failed.');await page.locator('#mobileMoreButton').click();assert(await page.evaluate(()=>document.body.classList.contains('admin-menu-open')),'Mobile More button did not open sidebar.');await page.screenshot({path:'artifacts/admin-mobile.png',fullPage:true});
+assert(pageErrors.length===0,`Browser page errors: ${pageErrors.join(' | ')}`);
+await browser.close();console.log('Immortal Admin browser checks passed.');
