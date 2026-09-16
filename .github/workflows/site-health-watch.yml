@@ -1,0 +1,79 @@
+name: Site health watch
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check public site and Worker health
+        id: health
+        env:
+          WORKER: https://xm5o-github-io.eminem13981398.workers.dev
+        run: |
+          set +e
+          SITE_OK=false
+          STATUS='{}'
+          for i in 1 2 3; do
+            if curl -fsS --max-time 15 https://xm5o.github.io/ >/dev/null; then SITE_OK=true; fi
+            STATUS="$(curl -fsS --max-time 20 "$WORKER/health/status" 2>/dev/null || echo '{}')"
+            WORKER_OK="$(printf '%s' "$STATUS" | jq -r '.workerOk // false')"
+            GITHUB_OK="$(printf '%s' "$STATUS" | jq -r '.githubOk // false')"
+            LIVE_OK="$(printf '%s' "$STATUS" | jq -r '.liveOk // false')"
+            if [ "$SITE_OK" = true ] && [ "$WORKER_OK" = true ] && [ "$GITHUB_OK" = true ] && [ "$LIVE_OK" = true ]; then break; fi
+            sleep 15
+          done
+          OAUTH_READY="$(printf '%s' "$STATUS" | jq -r '.oauthReady // false')"
+          LATEST="$(printf '%s' "$STATUS" | jq -r '.latestCommit // "unknown"')"
+          printf 'site_ok=%s\nworker_ok=%s\ngithub_ok=%s\nlive_ok=%s\noauth_ready=%s\nlatest=%s\n' "$SITE_OK" "$WORKER_OK" "$GITHUB_OK" "$LIVE_OK" "$OAUTH_READY" "$LATEST" >> "$GITHUB_OUTPUT"
+          if [ "$SITE_OK" = true ] && [ "$WORKER_OK" = true ] && [ "$GITHUB_OK" = true ] && [ "$LIVE_OK" = true ]; then exit 0; fi
+          exit 1
+      - name: Open or update health incident
+        if: failure() && steps.health.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SITE_OK: ${{ steps.health.outputs.site_ok }}
+          WORKER_OK: ${{ steps.health.outputs.worker_ok }}
+          GITHUB_OK: ${{ steps.health.outputs.github_ok }}
+          LIVE_OK: ${{ steps.health.outputs.live_ok }}
+          OAUTH_READY: ${{ steps.health.outputs.oauth_ready }}
+          LATEST: ${{ steps.health.outputs.latest }}
+        run: |
+          TITLE='[Health] xm5o.github.io service degradation'
+          BODY=$(cat <<EOF
+          Automated health checks still failed after three attempts.
+
+          - Public site reachable: **${SITE_OK}**
+          - Worker runtime healthy: **${WORKER_OK}**
+          - Worker → GitHub access: **${GITHUB_OK}**
+          - GitHub Pages managed state synchronized: **${LIVE_OK}**
+          - GitHub OAuth configured: **${OAUTH_READY}**
+          - Latest repository commit seen by Worker: \`${LATEST}\`
+          - Checked: $(date -u +%FT%TZ)
+
+          This issue closes automatically when the next health check is fully green.
+          EOF
+          )
+          NUMBER="$(gh issue list --repo "$REPO" --state open --json number,title --jq ".[] | select(.title == \"$TITLE\") | .number" | head -n1)"
+          if [ -n "$NUMBER" ]; then gh issue comment "$NUMBER" --repo "$REPO" --body "$BODY"; else gh issue create --repo "$REPO" --title "$TITLE" --body "$BODY"; fi
+      - name: Close recovered health incident
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          TITLE='[Health] xm5o.github.io service degradation'
+          NUMBER="$(gh issue list --repo "$REPO" --state open --json number,title --jq ".[] | select(.title == \"$TITLE\") | .number" | head -n1)"
+          if [ -n "$NUMBER" ]; then
+            gh issue comment "$NUMBER" --repo "$REPO" --body "Health checks recovered at $(date -u +%FT%TZ)."
+            gh issue close "$NUMBER" --repo "$REPO" --reason completed
+          fi
