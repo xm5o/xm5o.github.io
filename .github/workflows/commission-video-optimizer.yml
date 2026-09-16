@@ -1,0 +1,99 @@
+name: Commission video optimizer
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'commission/assets/*.mp4'
+      - 'commission/assets/*.mov'
+      - '.github/workflows/commission-video-optimizer.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commission-video-optimizer
+  cancel-in-progress: true
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure ffmpeg is available
+        shell: bash
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+
+      - name: Build mobile-friendly videos and posters
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p commission/assets/optimized/posters
+
+          while IFS= read -r -d '' src; do
+            file="$(basename "$src")"
+            stem="${file%.*}"
+            full="commission/assets/optimized/${stem}.mp4"
+            preview="commission/assets/optimized/${stem}-preview.mp4"
+            poster="commission/assets/optimized/posters/${stem}.jpg"
+
+            echo "Optimizing: $src"
+
+            ffmpeg -hide_banner -loglevel error -y -i "$src" \
+              -map 0:v:0 -map 0:a? \
+              -vf "scale=-2:'min(720,ih)'" \
+              -c:v libx264 -preset medium -crf 26 -maxrate 3000k -bufsize 6000k \
+              -pix_fmt yuv420p -profile:v high -level 4.1 \
+              -c:a aac -b:a 96k -ar 44100 \
+              -movflags +faststart \
+              "$full"
+
+            ffmpeg -hide_banner -loglevel error -y -i "$src" \
+              -map 0:v:0 -an \
+              -vf "scale=-2:'min(480,ih)'" \
+              -c:v libx264 -preset medium -crf 30 -maxrate 1200k -bufsize 2400k \
+              -pix_fmt yuv420p -profile:v main -level 4.0 \
+              -movflags +faststart \
+              "$preview"
+
+            ffmpeg -hide_banner -loglevel error -y -ss 0.15 -i "$src" \
+              -frames:v 1 -vf "scale='min(960,iw)':-2" -q:v 4 \
+              "$poster"
+          done < <(find commission/assets -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' \) -print0 | sort -z)
+
+      - name: Commit optimized media
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add commission/assets/optimized
+
+          if git diff --cached --quiet; then
+            echo "No media changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Optimize commission portfolio videos"
+
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if git rebase origin/main && git push origin HEAD:main; then
+              exit 0
+            fi
+            git rebase --abort || true
+            sleep $((attempt * 3))
+          done
+
+          echo "Could not push optimized media after retries."
+          exit 1
