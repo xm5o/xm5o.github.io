@@ -11,7 +11,7 @@
   "mainColor": "#ffffff",
   "secondaryColor": "#9f9f9f",
   "accentColor": "#d7d7d7",
-  "maintenanceEnabled": true,
+  "maintenanceEnabled": false,
   "maintenanceTitle": "Oops... Looks It's under Maintenance!",
   "maintenanceMessage": "The site is being updated right now. Coming back Soon!",
   "updatedAt": "2026-09-16T13:31:43.853Z"

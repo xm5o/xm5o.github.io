@@ -1,12 +1,14 @@
 import settings from './settings.js?v=20260914-1';
 
 const PORTFOLIO_DETAILS = Object.freeze({
+  'Reactor': { service: 'Charting', engine: 'Psych Engine', level: 'Advanced', focus: 'Chart, Events, and Scripts' },
   'Astral Calamity': { service: 'Charting', engine: 'Not listed', level: 'Advanced', focus: 'Chart flow, note placement, timing, and difficulty.' },
   'Custom gameplay mechanic': { service: 'Custom coding', engine: 'Psych Engine', level: 'Gameplay mechanic', focus: 'Lua logic and a custom gameplay mechanic.' },
   'Lua scripting': { service: 'Custom coding', engine: 'Psych Engine', level: 'Lua scripting', focus: 'Lua scripting, events, and gameplay logic.' },
-  'Tutorial chart': { service: 'Charting', engine: 'Not listed', level: 'Clean flow', focus: 'Timing, readability, and smooth chart flow.' },
-  'Bloodline modchart practice': { service: 'Modchart practice', engine: 'Codename Engine', level: 'Learning', focus: 'Note movement, beat sync, camera timing, and visual effects.' },
-  'Ignition modchart practice': { service: 'Modchart practice', engine: 'Codename Engine', level: 'Learning', focus: 'Note movement, beat sync, camera timing, and visual effects.' }
+  'Anti Dote chart': { service: 'Charting', engine: 'Not listed', level: 'Clean flow', focus: 'Timing, readability, and smooth chart flow.' },
+  'Bloodline modchart practice': { service: 'Modchart practice', engine: 'Codename Engine', level: 'Learning', focus: 'Note Charting, Note movement, beat sync, camera timing, and visual effects.' },
+  'Ignition Note modchart practice': { service: 'Modchart practice', engine: 'Psych Engine Engine', level: 'Learning', focus: 'Note movements/modchart, and Charting' },
+  'Rejected Chart': { service: 'Modchart practice', engine: 'Psych Engine Engine', level: 'Learning', focus: 'Note movements/modchart, and Charting [VERY OLD]' }
 });
 
 function ensureStyles() {
