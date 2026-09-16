@@ -1,18 +1,26 @@
 {
   "name": "Immortal Admin",
-  "short_name": "Immortal Admin",
+  "short_name": "Immortal",
   "description": "Private site manager for xm5o.github.io",
   "start_url": "/admin/profile/",
   "scope": "/admin/profile/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
   "background_color": "#080808",
   "theme_color": "#080808",
+  "orientation": "any",
   "icons": [
+    {
+      "src": "/admin/profile/admin-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
     {
       "src": "/assets/pfp.jpg",
       "sizes": "any",
       "type": "image/jpeg",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
