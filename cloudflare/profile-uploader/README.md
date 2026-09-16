@@ -25,15 +25,13 @@ Required encrypted runtime secrets under **Worker → Settings → Variables and
 
 `GITHUB_TOKEN` should be a fine-grained token restricted to `xm5o/xm5o.github.io` with **Contents: Read and write** only.
 
-`ADMIN_KEY` is the fallback site-manager login secret. Use a long random value. Never put either secret in Wrangler config, build-variable names, website JavaScript, or Git commits.
+`ADMIN_KEY` is the emergency fallback site-manager login secret. Use a long random value. Never put either secret in Wrangler config, build-variable names, website JavaScript, Git commits, screenshots, or logs.
 
-The Worker URL is currently used by the admin app as its default publisher origin.
+## GitHub account login
 
-## Optional GitHub account login
+The CMS supports GitHub OAuth in addition to the emergency `ADMIN_KEY`.
 
-The CMS supports GitHub OAuth in addition to the fallback `ADMIN_KEY`.
-
-To enable it, create a GitHub OAuth App owned by the `xm5o` account and use this callback URL:
+Create a GitHub OAuth App owned by the `xm5o` account and use this callback URL:
 
 ```text
 https://xm5o-github-io.eminem13981398.workers.dev/auth/github/callback
@@ -44,13 +42,13 @@ Then add these as encrypted Worker runtime secrets:
 - `GITHUB_OAUTH_CLIENT_ID`
 - `GITHUB_OAUTH_CLIENT_SECRET`
 
-`GITHUB_ALLOWED_LOGIN` is already fixed to `xm5o` in `wrangler.jsonc`. The OAuth callback rejects any other GitHub account. Successful login creates a signed, temporary admin session using the Worker-side `ADMIN_KEY`; the browser does not receive the GitHub OAuth access token.
+`GITHUB_ALLOWED_LOGIN` is fixed to `xm5o` in `wrangler.jsonc`. The callback rejects any other account.
 
-If OAuth is not configured, Immortal Admin automatically keeps the private-key login available.
+Successful OAuth creates a signed **four-hour** admin session. The session contains only the allowed GitHub login and timing/nonce metadata. The GitHub OAuth access token is used server-side for the account lookup and is never returned to the admin browser.
 
 ## CMS features
 
-The Worker now supports:
+The Worker supports:
 
 - Profile picture upload, history and restore
 - Managed favicon, background and banner
@@ -58,13 +56,46 @@ The Worker now supports:
 - Static SEO / Open Graph / Twitter metadata
 - Draft **Publish All** transactions using one Git commit
 - Automatic pre-publish restore points and **Undo last publish**
-- Whole-site snapshots
+- Whole-site named snapshots
 - Image library
 - Theme presets
 - Scheduled preset changes
 - Portable JSON export/import
 - Health checks and admin logs
-- Optional GitHub OAuth admin login
+- GitHub OAuth admin login with emergency-key fallback
+
+## Security model
+
+The repository, branch, managed paths, and allowed browser origin are fixed on the Worker side. The browser cannot select arbitrary repository paths.
+
+Security protections include:
+
+- CORS restricted to `https://xm5o.github.io`
+- Constant-time comparison for the fallback admin key
+- Signed, expiring GitHub OAuth sessions
+- Four-hour OAuth session lifetime
+- Ten-minute signed OAuth state window
+- Per-IP throttling for repeated failed admin authentication
+- Per-IP throttling for OAuth start/callback spam
+- `Cache-Control: no-store` on API responses
+- HSTS, `nosniff`, no-referrer, permissions restrictions, frame denial, and API CSP headers
+- Managed JPEG validation before repository writes
+- Automatic backup creation before instant legacy writes and transactional publishes
+
+Rate limiting is intentionally a lightweight Worker-isolate guard. It is useful against repeated accidental/brute-force attempts but is not a substitute for Cloudflare account-level WAF/rate-limit rules if the Worker ever becomes a high-traffic public API.
+
+## Retention rules
+
+The Worker bounds repository-managed state so it does not grow indefinitely:
+
+- Automatic pre-publish backups: 20
+- Manual named snapshots: 50
+- Admin log entries: 60
+- Image library results returned to the admin: 80
+- Theme presets: 30
+- Scheduled change records: 40
+
+Manual snapshots are stored separately from automatic backup metadata.
 
 ## Scheduled changes
 
@@ -75,14 +106,6 @@ The Worker now supports:
 ```
 
 Immortal Admin stores scheduled preset changes in `data/site-schedule.json`. The scheduled Worker handler applies due presets and records their result.
-
-## Safety model
-
-The browser cannot select an arbitrary repository. The repository and branch are fixed by Worker environment variables.
-
-The transactional publisher accepts only the managed site files and known CMS data files. Images are prepared as JPEGs in the admin UI, and the Worker validates managed image payloads before committing them.
-
-Automatic backup metadata is stored in `data/site-auto-backups.json`, so managed publishes can be reversed without rolling back unrelated repository code.
 
 ## Main routes
 
@@ -117,4 +140,8 @@ CMS data:
 - `GET /backup/export`
 - `POST /backup/import`
 
-Browser CORS is restricted to `https://xm5o.github.io`.
+## Public-site headers
+
+The Worker can harden its own API responses, but `xm5o.github.io` itself is served by GitHub Pages. Repository code cannot configure arbitrary HTTP response headers for GitHub Pages.
+
+If strict server-level CSP/HSTS/custom header control is later needed for the public site, place a configurable CDN/proxy or a different hosting layer in front of the site rather than pretending a meta tag is equivalent to an HTTP security header.
