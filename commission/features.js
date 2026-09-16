@@ -1,3 +1,4 @@
+import './media-performance.js?v=20260916-1';
 import settings from './settings.js?v=20260914-1';
 
 const PORTFOLIO_DETAILS = Object.freeze({
@@ -48,7 +49,7 @@ function renderPortfolioDetails(title) {
 
 function setupPortfolioDetails() {
   document.querySelectorAll('.work-card').forEach(card => card.addEventListener('click', () => queueMicrotask(() => renderPortfolioDetails(card.dataset.title || ''))));
-  document.querySelector('[data-hero-preview]')?.addEventListener('click', () => queueMicrotask(() => renderPortfolioDetails('Astral Calamity')));
+  document.querySelector('[data-hero-preview]')?.addEventListener('click', () => queueMicrotask(() => renderPortfolioDetails('Reactor')));
 }
 
 function getSubmissionEndpoint() {
