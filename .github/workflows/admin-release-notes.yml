@@ -1,0 +1,46 @@
+name: Generate admin release notes
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'admin/profile/release.json'
+      - 'admin/profile/release-beta.json'
+      - 'scripts/generate-admin-release-notes.mjs'
+      - '.github/workflows/admin-release-notes.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  notes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Generate stable notes
+        env:
+          RELEASE_FILE: admin/profile/release.json
+          RELEASE_NOTES_FILE: admin/profile/release-notes.generated.json
+        run: node scripts/generate-admin-release-notes.mjs
+      - name: Generate beta notes
+        env:
+          RELEASE_FILE: admin/profile/release-beta.json
+          RELEASE_NOTES_FILE: admin/profile/release-notes.beta.generated.json
+        run: node scripts/generate-admin-release-notes.mjs
+      - name: Commit generated release notes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add admin/profile/release-notes.generated.json admin/profile/release-notes.beta.generated.json
+          if git diff --cached --quiet; then
+            echo 'Release notes already current.'
+            exit 0
+          fi
+          git commit -m 'Generate Immortal Admin release notes'
+          git push
