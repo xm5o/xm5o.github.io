@@ -13,9 +13,10 @@ import{initReleaseUi}from'./release.js';
 import{initAdminPreferences}from'./preferences.js';
 import{initAdminInsights}from'./insights.js';
 
-function loadPolishStyle(){if(document.querySelector('link[data-admin-polish]'))return;const link=document.createElement('link');link.rel='stylesheet';link.href='polish.css?v=20260916-2';link.dataset.adminPolish='true';document.head.append(link)}
+function loadExtraStyle(href,key){if(document.querySelector(`link[data-${key}]`))return;const link=document.createElement('link');link.rel='stylesheet';link.href=href;link.dataset[key]='true';document.head.append(link)}
 async function init(){
-  loadPolishStyle();
+  loadExtraStyle('polish.css?v=20260916-2','adminPolish');
+  loadExtraStyle('advanced.css?v=20260916-1','adminAdvanced');
   const restoredDraft=await initDraftState();
   initUx();
   initAdminPreferences();
