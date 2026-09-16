@@ -10,20 +10,27 @@ import{initPwa}from'./pwa.js';
 import{initUx,showToast,friendlyError}from'./ux.js';
 import{initWorkspaceLoader}from'./workspace-loader.js';
 import{initReleaseUi}from'./release.js';
+import{initReleaseChannel}from'./release-channel.js';
 import{initAdminPreferences}from'./preferences.js';
 import{initAdminInsights}from'./insights.js';
 import{initStagingUi}from'./staging-ui.js';
+import{initAdminSearch}from'./admin-search.js';
+import{initPowerShortcuts}from'./power-shortcuts.js';
 
 function loadExtraStyle(href,key){if(document.querySelector(`link[data-${key}]`))return;const link=document.createElement('link');link.rel='stylesheet';link.href=href;link.dataset[key]='true';document.head.append(link)}
 async function init(){
   loadExtraStyle('polish.css?v=20260916-2','adminPolish');
   loadExtraStyle('advanced.css?v=20260916-1','adminAdvanced');
+  loadExtraStyle('admin-search.css?v=20260916-1','adminSearch');
   const restoredDraft=await initDraftState();
   initUx();
   initAdminPreferences();
+  initReleaseChannel();
   initReleaseUi();
   initAdminInsights();
   initStagingUi();
+  initAdminSearch();
+  initPowerShortcuts();
   initWorkspaceLoader();
   initAdminLayout();
   initSiteControls();
