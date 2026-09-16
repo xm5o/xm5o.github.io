@@ -16,6 +16,7 @@ permissions:
 jobs:
   notes:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -23,6 +24,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Sync latest main
+        run: git pull --rebase origin main
       - name: Generate stable notes
         env:
           RELEASE_FILE: admin/profile/release.json
@@ -43,4 +46,17 @@ jobs:
             exit 0
           fi
           git commit -m 'Generate Immortal Admin release notes'
-          git push
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if ! git merge-base --is-ancestor origin/main HEAD; then
+              git rebase origin/main
+              RELEASE_FILE=admin/profile/release.json RELEASE_NOTES_FILE=admin/profile/release-notes.generated.json node scripts/generate-admin-release-notes.mjs
+              RELEASE_FILE=admin/profile/release-beta.json RELEASE_NOTES_FILE=admin/profile/release-notes.beta.generated.json node scripts/generate-admin-release-notes.mjs
+              git add admin/profile/release-notes.generated.json admin/profile/release-notes.beta.generated.json
+              git commit --amend --no-edit
+            fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 3))
+          done
+          echo 'Could not push generated release notes after retries.' >&2
+          exit 1
