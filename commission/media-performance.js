@@ -24,11 +24,11 @@ function sourceParts(value) {
   const decoded = decodeURIComponent(filename);
   const rawStem = decoded.replace(/\.[^.]+$/, '');
   const stem = STEM_CASE[rawStem.toLowerCase()] || rawStem;
-  const full = `assets/optimized/${stem}.mp4`;
+
   return {
     original: `assets/${stem}${/anti-dote/i.test(stem) ? '.mov' : '.mp4'}`,
-    full,
-    preview: full,
+    desktop: `assets/optimized/${stem}.mp4`,
+    mobile: `assets/optimized/${stem}-mobile.mp4`,
     poster: `assets/optimized/posters/${stem}.jpg`
   };
 }
@@ -57,8 +57,26 @@ function stopAndDetach(video) {
 
 async function resolveMedia(original) {
   const parts = sourceParts(original);
-  const optimized = await exists(parts.full);
-  return optimized ? parts : { ...parts, full: parts.original, preview: parts.original, poster: '' };
+  const mobileReady = await exists(parts.mobile);
+
+  if (mobileReady) {
+    if (mobileLayout) {
+      return { ...parts, full: parts.mobile, preview: parts.mobile };
+    }
+
+    const desktopReady = await exists(parts.desktop);
+    return {
+      ...parts,
+      full: desktopReady ? parts.desktop : parts.mobile,
+      preview: parts.mobile
+    };
+  }
+
+  if (await exists(parts.desktop)) {
+    return { ...parts, full: parts.desktop, preview: parts.desktop };
+  }
+
+  return { ...parts, full: parts.original, preview: parts.original, poster: '' };
 }
 
 function ensurePreview(video) {
