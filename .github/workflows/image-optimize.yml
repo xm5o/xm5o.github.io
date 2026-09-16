@@ -1,0 +1,41 @@
+name: Optimize managed images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/pfp.jpg'
+      - 'assets/site-favicon.jpg'
+      - 'assets/site-background.jpg'
+      - 'assets/site-banner.jpg'
+      - 'scripts/optimize-managed-images.mjs'
+      - '.github/workflows/image-optimize.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install image optimizer
+        run: npm install --no-save sharp@0.34.3
+      - name: Generate responsive WebP and AVIF variants
+        run: node scripts/optimize-managed-images.mjs
+      - name: Commit generated derivatives
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/optimized data/optimized-assets.json
+          if git diff --cached --quiet; then
+            echo 'Managed image variants already up to date.'
+            exit 0
+          fi
+          git commit -m 'Optimize managed site images'
+          git push
