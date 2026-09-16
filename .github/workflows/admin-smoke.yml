@@ -1,0 +1,32 @@
+name: Immortal Admin smoke checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'admin/profile/**'
+      - 'cloudflare/profile-uploader/src/**'
+      - 'tests/admin-smoke.mjs'
+      - '.github/workflows/admin-smoke.yml'
+  pull_request:
+    paths:
+      - 'admin/profile/**'
+      - 'cloudflare/profile-uploader/src/**'
+      - 'tests/admin-smoke.mjs'
+      - '.github/workflows/admin-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run admin smoke checks
+        run: node tests/admin-smoke.mjs
+      - name: Check JavaScript syntax
+        run: find admin/profile cloudflare/profile-uploader/src -name '*.js' -print0 | xargs -0 -n1 node --check
