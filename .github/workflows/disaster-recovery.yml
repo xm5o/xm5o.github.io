@@ -1,0 +1,35 @@
+name: Build disaster recovery bundle
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build secret-free recovery bundle
+        run: |
+          mkdir -p recovery/data recovery/assets recovery/docs recovery/admin recovery/cloudflare
+          for f in data/site-settings.json data/site-seo.json data/site-auto-backups.json data/site-snapshots.json data/theme-presets.json data/site-schedule.json; do
+            [ -f "$f" ] && cp --parents "$f" recovery/
+          done
+          for f in assets/pfp.jpg assets/site-favicon.jpg assets/site-background.jpg assets/site-banner.jpg; do
+            [ -f "$f" ] && cp --parents "$f" recovery/
+          done
+          cp -R admin/profile recovery/admin/
+          cp -R cloudflare/profile-uploader recovery/cloudflare/
+          cp docs/DISASTER-RECOVERY.md recovery/docs/
+          printf 'Repository: %s\nCommit: %s\nGenerated: %s\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA" "$(date -u +%FT%TZ)" > recovery/RECOVERY-METADATA.txt
+          find recovery -type f -print0 | sort -z | xargs -0 sha256sum > recovery/SHA256SUMS.txt
+          tar -czf immortal-admin-recovery.tar.gz recovery
+      - name: Upload recovery bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: immortal-admin-recovery-${{ github.sha }}
+          path: immortal-admin-recovery.tar.gz
+          retention-days: 90
