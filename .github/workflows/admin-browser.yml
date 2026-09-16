@@ -1,0 +1,47 @@
+name: Immortal Admin browser checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'admin/profile/**'
+      - 'tests/admin-browser.mjs'
+      - '.github/workflows/admin-browser.yml'
+  pull_request:
+    paths:
+      - 'admin/profile/**'
+      - 'tests/admin-browser.mjs'
+      - '.github/workflows/admin-browser.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Start local site
+        run: |
+          python3 -m http.server 4173 > /tmp/immortal-admin-http.log 2>&1 &
+          for i in {1..20}; do curl -fsS http://127.0.0.1:4173/admin/profile/ >/dev/null && exit 0; sleep 0.5; done
+          cat /tmp/immortal-admin-http.log
+          exit 1
+      - name: Run browser and visual smoke checks
+        run: node tests/admin-browser.mjs
+      - name: Upload visual snapshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: immortal-admin-visuals
+          path: artifacts/
+          if-no-files-found: ignore
+          retention-days: 14
