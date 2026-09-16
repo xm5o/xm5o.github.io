@@ -15,6 +15,7 @@ const workspaceMeta={
 function storedWorkspace(){try{return localStorage.getItem(WORKSPACE_KEY)||'overview'}catch{return'overview'}}
 function storeWorkspace(value){try{localStorage.setItem(WORKSPACE_KEY,value)}catch{}}
 function closeMenu(){document.body.classList.remove('admin-menu-open');$('adminSidebar')?.setAttribute('aria-hidden','false')}
+function reflectDraft(detail={}){const dock=$('publishDock');if(!dock)return;dock.classList.toggle('has-changes',Boolean(detail.hasChanges));const status=$('globalPublishStatus');if(status&&!detail.hasChanges&&!status.classList.contains('success')&&!status.classList.contains('error'))status.textContent=detail.enabled===false?'Instant Mode is enabled.':'Draft workspace is clean.'}
 export function navigateWorkspace(name,{scroll=true}={}){
   const target=document.querySelector(`[data-workspace="${name}"]`);if(!target)return;
   document.querySelectorAll('[data-workspace]').forEach(section=>{section.hidden=section!==target;section.classList.toggle('is-active',section===target)});
@@ -32,5 +33,6 @@ export function initAdminLayout(){
   $('sidebarCloseButton')?.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();closeMenu()});$('sidebarBackdrop')?.addEventListener('click',closeMenu);
   window.addEventListener('keydown',event=>{if(event.key==='Escape'&&document.body.classList.contains('admin-menu-open'))closeMenu()});
   window.addEventListener('immortal:navigate',event=>navigateWorkspace(event.detail?.workspace||'overview'));
+  window.addEventListener('immortal:draft-change',event=>reflectDraft(event.detail));
   const saved=storedWorkspace();navigateWorkspace(workspaceMeta[saved]?saved:'overview',{scroll:false});
 }
