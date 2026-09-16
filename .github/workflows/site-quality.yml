@@ -1,0 +1,110 @@
+name: Whole-site quality
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - '404.html'
+      - 'privacy.html'
+      - 'analytics.html'
+      - 'commission/**'
+      - 'selina/**'
+      - 'css/**'
+      - 'scripts/**'
+      - 'assets/**'
+      - 'data/**'
+      - 'tests/site-visual.mjs'
+      - 'lighthouserc.json'
+      - '.github/workflows/site-quality.yml'
+  pull_request:
+    paths:
+      - 'index.html'
+      - '404.html'
+      - 'privacy.html'
+      - 'analytics.html'
+      - 'commission/**'
+      - 'selina/**'
+      - 'css/**'
+      - 'scripts/**'
+      - 'assets/**'
+      - 'data/**'
+      - 'tests/site-visual.mjs'
+      - 'lighthouserc.json'
+      - '.github/workflows/site-quality.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install visual test dependencies
+        run: |
+          npm install --no-save playwright@1.55.0 pixelmatch@7.1.0 pngjs@7.0.0
+          npx playwright install --with-deps chromium
+      - name: Start local site
+        run: |
+          python3 -m http.server 4173 > /tmp/immortal-site-http.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && exit 0; sleep 0.5; done
+          cat /tmp/immortal-site-http.log
+          exit 1
+      - name: Download previous visual baseline
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p artifacts/site-baseline
+          PREV="$(gh run list --workflow site-quality.yml --branch main --status success --limit 1 --json databaseId --jq '.[0].databaseId // empty')"
+          if [ -n "$PREV" ]; then
+            gh run download "$PREV" -n site-visual-baseline -D artifacts/site-baseline || true
+          fi
+      - name: Run whole-site visual regression
+        env:
+          VISUAL_MAX_DIFF: '0.05'
+        run: node tests/site-visual.mjs
+      - name: Upload visual baseline and diffs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-visual-baseline
+          path: |
+            artifacts/site-current/
+            artifacts/site-diff/
+          if-no-files-found: ignore
+          retention-days: 30
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Lighthouse CI
+        run: npm install --no-save @lhci/cli@0.14.0
+      - name: Start local site
+        run: |
+          python3 -m http.server 4173 > /tmp/immortal-lhci-http.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && exit 0; sleep 0.5; done
+          cat /tmp/immortal-lhci-http.log
+          exit 1
+      - name: Run Lighthouse CI
+        run: npx lhci autorun --config=./lighthouserc.json
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: artifacts/lighthouse/
+          if-no-files-found: ignore
+          retention-days: 30
