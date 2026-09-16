@@ -1,5 +1,6 @@
 import{initAuth,onAuthChange}from'./auth.js';
 import{initDraftState}from'./draft.js';
+import{initAdminLayout}from'./layout.js';
 import{initSiteControls,loadAllSiteData}from'./site-controls.js';
 import{initProfileEditor,loadHistory}from'./profile-editor.js';
 import{initAssetEditor}from'./asset-editor.js';
@@ -7,9 +8,8 @@ import{initCmsUi,loadCmsData}from'./cms-ui.js';
 import{initCommandPalette}from'./command-palette.js';
 import{initPwa}from'./pwa.js';
 
-function loadCmsStyle(){if(document.querySelector('link[data-cms-style]'))return;const link=document.createElement('link');link.rel='stylesheet';link.href='cms.css?v=20260915-1';link.dataset.cmsStyle='true';document.head.append(link)}
 async function init(){
-  loadCmsStyle();
+  initAdminLayout();
   initDraftState();
   initSiteControls();
   initProfileEditor();
@@ -23,6 +23,6 @@ async function init(){
 
 init().catch(error=>{
   console.error('[Immortal Admin]',error);
-  const status=document.getElementById('setupStatus');
+  const status=document.getElementById('setupStatus')||document.getElementById('settingsStatus');
   if(status){status.textContent=error?.message||'Could not start the site manager.';status.className='setup-status error';}
 });
