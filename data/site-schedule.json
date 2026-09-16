@@ -4,7 +4,9 @@
     "presetId": "db95f5ef-0e3a-42b2-8d5d-399cc85990e6",
     "presetName": "Kawuro",
     "runAt": "2026-09-16T12:00:00.000Z",
-    "status": "pending",
-    "createdAt": "2026-09-16T11:06:46.000Z"
+    "status": "failed",
+    "createdAt": "2026-09-16T11:06:46.000Z",
+    "error": "GitRPC::BadObjectState",
+    "completedAt": "2026-09-16T12:00:57.981Z"
   }
 ]
