@@ -29,7 +29,7 @@ function openMenu(){document.body.classList.add('admin-menu-open');$('adminSideb
 export function initAdminLayout(){
   document.querySelectorAll('[data-workspace-target]').forEach(button=>button.addEventListener('click',()=>navigateWorkspace(button.dataset.workspaceTarget)));
   $('mobileMenuButton')?.addEventListener('click',()=>document.body.classList.contains('admin-menu-open')?closeMenu():openMenu());
-  $('sidebarCloseButton')?.addEventListener('click',closeMenu);$('sidebarBackdrop')?.addEventListener('click',closeMenu);
+  $('sidebarCloseButton')?.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();closeMenu()});$('sidebarBackdrop')?.addEventListener('click',closeMenu);
   window.addEventListener('keydown',event=>{if(event.key==='Escape'&&document.body.classList.contains('admin-menu-open'))closeMenu()});
   window.addEventListener('immortal:navigate',event=>navigateWorkspace(event.detail?.workspace||'overview'));
   const saved=storedWorkspace();navigateWorkspace(workspaceMeta[saved]?saved:'overview',{scroll:false});
