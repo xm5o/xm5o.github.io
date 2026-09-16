@@ -34,11 +34,12 @@ jobs:
             sudo apt-get install -y ffmpeg
           fi
 
-      - name: Build mobile-friendly videos and posters
+      - name: Build desktop, mobile and poster media
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p commission/assets/optimized/posters
+          rm -f commission/assets/optimized/*-preview.mp4
 
           sources=(
             'commission/assets/reactor.mp4'
@@ -58,6 +59,7 @@ jobs:
             file="$(basename "$src")"
             stem="${file%.*}"
             full="commission/assets/optimized/${stem}.mp4"
+            mobile="commission/assets/optimized/${stem}-mobile.mp4"
             poster="commission/assets/optimized/posters/${stem}.jpg"
 
             echo "Optimizing: $src"
@@ -71,7 +73,16 @@ jobs:
               -movflags +faststart \
               "$full"
 
-            ffmpeg -hide_banner -loglevel error -y -ss 0.15 -i "$full" \
+            ffmpeg -hide_banner -loglevel error -y -i "$src" \
+              -map 0:v:0 -map 0:a? \
+              -vf "scale=-2:'min(480,ih)'" \
+              -c:v libx264 -preset veryfast -crf 30 -maxrate 1100k -bufsize 2200k \
+              -pix_fmt yuv420p -profile:v main -level 4.0 \
+              -c:a aac -b:a 64k -ar 44100 \
+              -movflags +faststart \
+              "$mobile"
+
+            ffmpeg -hide_banner -loglevel error -y -ss 0.15 -i "$mobile" \
               -frames:v 1 -vf "scale='min(960,iw)':-2" -q:v 4 \
               "$poster"
           done
@@ -82,7 +93,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add commission/assets/optimized
+          git add -A commission/assets/optimized
 
           if git diff --cached --quiet; then
             echo "No media changes to commit."
