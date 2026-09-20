@@ -635,5 +635,9 @@
   "VIP RATE": "سعر VIP",
   "Special Offer": "عرض خاص",
   "Limited time": "لفترة محدودة",
-  "Don't miss out on this amazing deal!": "لا يفوتك العرض!"
+  "Don't miss out on this amazing deal!": "لا يفوتك العرض!",
+  "WebSocket disconnected": "انقطع اتصال Discord",
+  "Failed to connect WebSocket:": "تعذر الاتصال بـ Discord:",
+  "Tag Icon": "أيقونة الوسم",
+  "✅ Inquiry sent successfully! I'll get back to you within 24 hours.": "✅ تم إرسال الاستفسار بنجاح! برد عليك غالبًا خلال 24 ساعة."
 }
