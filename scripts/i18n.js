@@ -24,7 +24,7 @@
   const language = getLanguage();
   const isArabic = language === 'ar';
   function dynamic(text){
-    if (AR[text]) return AR[text];
+    if (Object.prototype.hasOwnProperty.call(AR,text)) return AR[text];
     let m;
     if ((m=text.match(/^(\d[\d,.]*) visitors today$/i))) return m[1]+' زائر اليوم';
     if ((m=text.match(/^(\d[\d,.]*) daily uniques in 7 days$/i))) return m[1]+' زائر فريد خلال 7 أيام';
