@@ -3,7 +3,8 @@ import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-
 
 const db = getAnalyticsDb();
 const SUMMARY_REF = doc(db, ANALYTICS_DOCS.summary.collection, ANALYTICS_DOCS.summary.document);
-const formatNumber = value => Number(value || 0).toLocaleString();
+const formatNumber = value => Number(value || 0).toLocaleString(window.ImmortalI18n?.isArabic ? 'ar-SA-u-nu-latn' : undefined);
+const tr = value => window.ImmortalI18n?.t?.(value) || value;
 
 function setText(id, value) {
   const element = document.getElementById(id);
@@ -89,7 +90,7 @@ function renderDailyChart(rows) {
   if (!rows.length) {
     ctx.fillStyle = textColor;
     ctx.font = '14px system-ui';
-    ctx.fillText('No daily analytics yet.', padding.left, height / 2);
+    ctx.fillText(tr('No daily analytics yet.'), padding.left, height / 2);
     return;
   }
 
@@ -219,3 +220,7 @@ window.addEventListener('resize', () => {
 });
 
 loadDashboard();
+
+window.addEventListener('immortal-language-ready', () => {
+  loadDashboard();
+});
