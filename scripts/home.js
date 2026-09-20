@@ -51,7 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initTypewriterEffect() {
-  const roles = ["Web Developer", "Frontend Dev", "Discord Bot Dev", "Open-Source Contributor"];
+  const roles = window.ImmortalI18n?.isArabic
+    ? ["مطوّر ويب", "مطوّر واجهات", "مطوّر بوتات Discord", "مساهم في مشاريع مفتوحة المصدر"]
+    : ["Web Developer", "Frontend Dev", "Discord Bot Dev", "Open-Source Contributor"];
   const roleElement = document.querySelector('.animated-role');
   if (!roleElement) return;
   let currentRoleIndex = 0;
