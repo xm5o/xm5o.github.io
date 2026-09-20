@@ -46,6 +46,7 @@ for(const[viewportName,viewport]of viewports){
   for(const[name,url]of pages){
     await page.goto(base+url,{waitUntil:'domcontentloaded',timeout:30000});
     await page.waitForFunction(()=>document.documentElement.dataset.siteLanguage==='ar'&&document.querySelector('.site-language-switch'),null,{timeout:10000});
+    await page.addStyleTag({content:'*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}html{scroll-behavior:auto!important}'}).catch(()=>{});
     await page.waitForTimeout(900);
     const state=await page.evaluate(()=>({dir:document.documentElement.dir,lang:document.documentElement.lang,arabic:/[\u0600-\u06FF]/.test(document.body.innerText),overflow:document.documentElement.scrollWidth<=window.innerWidth+4}));
     if(state.dir!=='rtl'||state.lang!=='ar-SA'||!state.arabic)failures.push(name+'-'+viewportName+': Arabic/RTL state missing');
