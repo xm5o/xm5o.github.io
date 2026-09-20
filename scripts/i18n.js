@@ -26,6 +26,8 @@
   function dynamic(text){
     if (Object.prototype.hasOwnProperty.call(AR,text)) return AR[text];
     let m;
+    const months={Jan:'يناير',Feb:'فبراير',Mar:'مارس',Apr:'أبريل',May:'مايو',Jun:'يونيو',Jul:'يوليو',Aug:'أغسطس',Sep:'سبتمبر',Oct:'أكتوبر',Nov:'نوفمبر',Dec:'ديسمبر'};
+    if ((m=text.match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s+(\d{4})$/))) return m[2]+' '+months[m[1]]+' '+m[3];
     if ((m=text.match(/^(\d[\d,.]*) visitors today$/i))) return m[1]+' زائر اليوم';
     if ((m=text.match(/^(\d[\d,.]*) daily uniques in 7 days$/i))) return m[1]+' زائر فريد خلال 7 أيام';
     if ((m=text.match(/^(\d[\d,.]*) views(?: · (\d[\d,.]*) visitors)?$/i))) return m[1]+' مشاهدة'+(m[2]?' · '+m[2]+' زائر':'');
