@@ -44,8 +44,9 @@ const allowedExact = new Set([
   'Ignition','IGNITION','Cigarettes After Sex','Hideaway','Opera House','Heavenly','Hentai',
   'Dreams From Bunker Hill','Keep on Loving You','Apocalypse','Flash','Sweet','Neon Moon',
   'Affection',"X's","You're The Only Good Thing In My Life",'creativity','console.log',
-  '"hello world"','&times;'
+  '"hello world"','&times;','Discord Quest Finisher','FNF Chart Creator'
 ]);
+const allowedLower = new Set([...allowedExact].map(value => value.toLowerCase()));
 
 const allowedPatterns = [
   /^\/[a-z0-9_-]+$/i,
@@ -70,7 +71,7 @@ const allowedPatterns = [
 
 function allowed(text) {
   if (!text || !/[A-Za-z]/.test(text)) return true;
-  if (normalizedDictionary.has(text) || allowedExact.has(text)) return true;
+  if (normalizedDictionary.has(text) || allowedExact.has(text) || allowedLower.has(text.toLowerCase())) return true;
   return allowedPatterns.some(pattern => pattern.test(text));
 }
 
@@ -97,16 +98,19 @@ for (const file of htmlFiles) {
 }
 
 const dynamicPatterns = [
-  { kind:'textContent', re:/(?:textContent|innerText)\s*=\s*(['"])([^'"\n]+)\1/g },
-  { kind:'message', re:/(?:showToast|setStatus|setSeoStatus|friendlyError)\(\s*(['"])([^'"\n]+)\1/g },
-  { kind:'UI object text', re:/\b(?:title|subtitle|description|message)\s*:\s*(['"])([^'"\n]+)\1/g }
+  { kind:'textContent', re:/(?:textContent|innerText)\s*=\s*'((?:\\.|[^'\\])*)'/g },
+  { kind:'textContent', re:/(?:textContent|innerText)\s*=\s*"((?:\\.|[^"\\])*)"/g },
+  { kind:'message', re:/(?:showToast|setStatus|setSeoStatus|friendlyError)\(\s*'((?:\\.|[^'\\])*)'/g },
+  { kind:'message', re:/(?:showToast|setStatus|setSeoStatus|friendlyError)\(\s*"((?:\\.|[^"\\])*)"/g },
+  { kind:'UI object text', re:/\b(?:title|subtitle|description|message)\s*:\s*'((?:\\.|[^'\\])*)'/g },
+  { kind:'UI object text', re:/\b(?:title|subtitle|description|message)\s*:\s*"((?:\\.|[^"\\])*)"/g }
 ];
 
 for (const file of jsFiles) {
   const source = await readFile(path.join(root, file), 'utf8');
   for (const {kind,re} of dynamicPatterns) {
     for (const match of source.matchAll(re)) {
-      const value = normalize(match[2]);
+      const value = normalize(match[1].replace(/\\'/g,"'").replace(/\\"/g,'"'));
       if (!value || /[{}<>;$]/.test(value) || /^\w+[.#:[\]]/.test(value)) continue;
       requireTranslation(file, value, kind);
     }
