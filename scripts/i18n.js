@@ -24,15 +24,23 @@
   const language = getLanguage();
   const isArabic = language === 'ar';
   function dynamic(text){
-    if (Object.prototype.hasOwnProperty.call(AR,text)) return AR[text];
+    const raw=String(text??'');
+    if (Object.prototype.hasOwnProperty.call(AR,raw)) return AR[raw];
+    const normalized=raw.replace(/\s+/g,' ').trim();
+    if (Object.prototype.hasOwnProperty.call(AR,normalized)) return AR[normalized];
+    if (raw.includes('\n')) {
+      const translated=raw.split('\n').map(line=>dynamic(line)).join('\n');
+      if (translated!==raw) return translated;
+    }
     let m;
+    const target=normalized;
     const months={Jan:'يناير',Feb:'فبراير',Mar:'مارس',Apr:'أبريل',May:'مايو',Jun:'يونيو',Jul:'يوليو',Aug:'أغسطس',Sep:'سبتمبر',Oct:'أكتوبر',Nov:'نوفمبر',Dec:'ديسمبر'};
-    if ((m=text.match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s+(\d{4})$/))) return m[2]+' '+months[m[1]]+' '+m[3];
-    if ((m=text.match(/^(\d[\d,.]*) visitors today$/i))) return m[1]+' زائر اليوم';
-    if ((m=text.match(/^(\d[\d,.]*) daily uniques in 7 days$/i))) return m[1]+' زائر فريد خلال 7 أيام';
-    if ((m=text.match(/^(\d[\d,.]*) views(?: · (\d[\d,.]*) visitors)?$/i))) return m[1]+' مشاهدة'+(m[2]?' · '+m[2]+' زائر':'');
-    if ((m=text.match(/^Copied @(.+) to your clipboard\.$/))) return 'تم نسخ @'+m[1]+' للحافظة.';
-    if ((m=text.match(/^Analytics data could not be loaded:\s*(.+)$/))) return 'تعذر تحميل بيانات الإحصائيات: '+m[1];
+    if ((m=target.match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s+(\d{4})$/))) return m[2]+' '+months[m[1]]+' '+m[3];
+    if ((m=target.match(/^(\d[\d,.]*) visitors today$/i))) return m[1]+' زائر اليوم';
+    if ((m=target.match(/^(\d[\d,.]*) daily uniques in 7 days$/i))) return m[1]+' زائر فريد خلال 7 أيام';
+    if ((m=target.match(/^(\d[\d,.]*) views(?: · (\d[\d,.]*) visitors)?$/i))) return m[1]+' مشاهدة'+(m[2]?' · '+m[2]+' زائر':'');
+    if ((m=target.match(/^Copied @(.+) to your clipboard\.$/))) return 'تم نسخ @'+m[1]+' للحافظة.';
+    if ((m=target.match(/^Analytics data could not be loaded:\s*(.+)$/))) return 'تعذر تحميل بيانات الإحصائيات: '+m[1];
     const labels = [
       [/^Service:\s*(.+)$/,'الخدمة: '],
       [/^Song \/ project:\s*(.+)$/,'الأغنية / المشروع: '],
@@ -42,9 +50,8 @@
       [/^Difficulty \/ style:\s*(.+)$/,'الصعوبة / الأسلوب: '],
       [/^Deadline:\s*(.+)$/,'الموعد المطلوب: ']
     ];
-    for (const [re,label] of labels) { m=text.match(re); if (m) return label+(AR[m[1]]||m[1]); }
-    if (text.includes('\n')) return text.split('\n').map(dynamic).join('\n');
-    return text;
+    for (const [re,label] of labels) { m=target.match(re); if (m) return label+(AR[m[1]]||m[1]); }
+    return raw;
   }
   function t(value){
     if (!isArabic) return String(value??'');
