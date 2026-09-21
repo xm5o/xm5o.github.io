@@ -14,7 +14,9 @@
     '/selina/': ['Selina | بوت Discord للمجتمعات','Selina بوت Discord للإشراف والمستويات ومحادثة الذكاء الاصطناعي وأدوات المجتمعات.'],
     '/selina/index.html': ['Selina | بوت Discord للمجتمعات','Selina بوت Discord للإشراف والمستويات ومحادثة الذكاء الاصطناعي وأدوات المجتمعات.'],
     '/analytics.html': ['إحصائيات الموقع | Immortal','لوحة إحصائيات مجمعة تحترم الخصوصية لموقع Immortal.'],
-    '/404.html': ['404 | الصفحة مو موجودة','الصفحة اللي تدور عليها مو موجودة.']
+    '/404.html': ['404 | الصفحة مو موجودة','الصفحة اللي تدور عليها مو موجودة.'],
+    '/projects/selina/': ['دراسة مشروع Selina | Immortal','نظرة على تصميم وتطوير Selina، بوت Discord للمجتمعات من Immortal.'],
+    '/projects/selina/index.html': ['دراسة مشروع Selina | Immortal','نظرة على تصميم وتطوير Selina، بوت Discord للمجتمعات من Immortal.']
   };
   function normalize(value){ return SUPPORTED.has(value) ? value : DEFAULT_LANGUAGE; }
   function getLanguage(){
