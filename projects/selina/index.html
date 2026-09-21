@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A case study of Selina, Immortal's Discord community bot with moderation, leveling, AI chat, and server tools." />
+  <meta property="og:title" content="Selina Case Study | Immortal" />
+  <meta property="og:description" content="How I built Selina: a Discord community bot with moderation, leveling, AI chat, Fortnite status tools, and server utilities." />
+  <meta property="og:image" content="https://xm5o.github.io/assets/selina-features/ai-chat.png" />
+  <meta property="og:url" content="https://xm5o.github.io/projects/selina/" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Selina Case Study | Immortal" />
+  <meta name="twitter:description" content="A closer look at the design and development of Selina, my Discord community bot." />
+  <meta name="twitter:image" content="https://xm5o.github.io/assets/selina-features/ai-chat.png" />
+  <link rel="canonical" href="https://xm5o.github.io/projects/selina/" />
+  <meta name="theme-color" content="#08080a" />
+  <link rel="icon" href="../../assets/pfp.jpg" type="image/jpeg" />
+  <title>Selina Case Study | Immortal</title>
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../case-study.css" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <script src="../../scripts/pfp-theme.js"></script>
+  <script defer src="../../scripts/i18n.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"SoftwareApplication",
+    "name":"Selina",
+    "applicationCategory":"CommunicationApplication",
+    "operatingSystem":"Discord",
+    "description":"A Discord bot for communities with moderation, leveling, AI chat, and server tools.",
+    "author":{"@type":"Person","name":"Immortal","url":"https://xm5o.github.io/"}
+  }
+  </script>
+</head>
+<body class="case-study">
+  <div class="case-shell">
+    <nav class="case-nav" aria-label="Case study navigation">
+      <a class="case-back" href="../../#projects"><i class="bx bx-arrow-back"></i><span>Back to Projects</span></a>
+      <a class="case-brand" href="../../">Immortal</a>
+      <div class="case-nav-actions">
+        <a href="../../selina/"><i class="bx bx-window-open"></i><span>Selina site</span></a>
+        <a href="https://discord.com/oauth2/authorize?client_id=1303374162533941331&permissions=8&integration_type=0&scope=bot" target="_blank" rel="noopener noreferrer"><i class="bx bxl-discord-alt"></i><span>Invite</span></a>
+      </div>
+    </nav>
+
+    <main>
+      <section class="case-hero">
+        <div>
+          <div class="case-kicker"><span class="case-kicker-dot"></span>Project Case Study · Discord Bot</div>
+          <h1 class="case-title">Selina</h1>
+          <p class="case-lede">A community-focused Discord bot I build and maintain. Selina combines moderation, leveling, AI chat, live service tools, and server utilities in one experience that is meant to feel useful without getting in the way.</p>
+          <div class="case-hero-actions">
+            <a class="case-button primary" href="../../selina/"><i class="bx bx-window-open"></i>Explore Selina</a>
+            <a class="case-button" href="https://discord.com/oauth2/authorize?client_id=1303374162533941331&permissions=8&integration_type=0&scope=bot" target="_blank" rel="noopener noreferrer"><i class="bx bxl-discord-alt"></i>Invite to Discord</a>
+            <a class="case-button" href="https://discord.gg/JM4zh72bKx" target="_blank" rel="noopener noreferrer"><i class="bx bx-message-square-dots"></i>Support Server</a>
+          </div>
+        </div>
+
+        <div class="case-hero-visual" aria-label="Selina project identity">
+          <div class="case-avatar-wrap">
+            <img src="../../assets/selina.jpg" alt="Selina Discord bot profile image" />
+          </div>
+          <span class="case-floating-chip one">Public Beta</span>
+          <span class="case-floating-chip two">AI + Community Tools</span>
+        </div>
+      </section>
+
+      <section class="case-stats" aria-label="Project summary">
+        <article class="case-stat"><strong>Discord</strong><span>Platform</span></article>
+        <article class="case-stat"><strong>Public Beta</strong><span>Current status</span></article>
+        <article class="case-stat"><strong>5+</strong><span>Showcased systems</span></article>
+        <article class="case-stat"><strong>Active</strong><span>Development</span></article>
+      </section>
+
+      <section class="case-section" id="overview">
+        <div class="case-section-head">
+          <div><span class="case-eyebrow">01 · Overview</span><h2 class="case-heading">What I built</h2></div>
+          <p class="case-section-intro">Selina started as a Discord bot project and grew into a collection of systems for running a community: moderation, activity progression, AI assistance, server status information, setup tools, and everyday utilities.</p>
+        </div>
+
+        <div class="case-overview-grid">
+          <article class="case-panel">
+            <h3>My role</h3>
+            <p>I handle the bot's development and maintenance, from command behavior and user-facing Discord components to AI integrations and the systems that keep features working together.</p>
+            <div class="case-role-list">
+              <span class="case-tag"><i class="bx bx-code-alt"></i>Development</span>
+              <span class="case-tag"><i class="bx bx-layout"></i>Discord UX</span>
+              <span class="case-tag"><i class="bx bx-bot"></i>AI integration</span>
+              <span class="case-tag"><i class="bx bx-wrench"></i>Maintenance</span>
+            </div>
+          </article>
+          <article class="case-panel">
+            <h3>Core stack</h3>
+            <p>The project is centered around JavaScript and Discord's bot platform, with AI and external APIs connected where they add something useful.</p>
+            <div class="case-stack">
+              <span class="case-tag">Node.js</span>
+              <span class="case-tag">discord.js</span>
+              <span class="case-tag">JavaScript</span>
+              <span class="case-tag">Groq</span>
+              <span class="case-tag">REST APIs</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="case-section" id="features">
+        <div class="case-section-head">
+          <div><span class="case-eyebrow">02 · Product</span><h2 class="case-heading">Systems that are already live</h2></div>
+          <p class="case-section-intro">These are real parts of Selina that are built and running. The screenshots come directly from the current bot experience.</p>
+        </div>
+
+        <div class="case-feature-grid">
+          <article class="case-feature wide">
+            <a class="case-feature-media" href="../../assets/selina-features/ai-chat.png" target="_blank" rel="noopener noreferrer" aria-label="Open AI Chat screenshot">
+              <img src="../../assets/selina-features/ai-chat.png" alt="AI chat conversation with Selina" loading="lazy" />
+            </a>
+            <div class="case-feature-copy">
+              <small>AI</small>
+              <h3>AI Chat</h3>
+              <p>Members can talk to Selina directly for useful answers. The AI layer is designed as part of the bot instead of feeling like a separate website pasted into Discord.</p>
+            </div>
+          </article>
+
+          <article class="case-feature">
+            <a class="case-feature-media" href="../../assets/selina-features/ai-mod-log.png" target="_blank" rel="noopener noreferrer" aria-label="Open AI moderation screenshot">
+              <img src="../../assets/selina-features/ai-mod-log.png" alt="AI flagged message moderation log from Selina" loading="lazy" />
+            </a>
+            <div class="case-feature-copy">
+              <small>Moderation</small>
+              <h3>AI-Automated Moderation</h3>
+              <p>Selina can identify harmful messages, take configured moderation actions, and leave a readable log explaining what happened.</p>
+            </div>
+          </article>
+
+          <article class="case-feature">
+            <a class="case-feature-media" href="../../assets/selina-features/leveling.png" target="_blank" rel="noopener noreferrer" aria-label="Open leveling screenshot">
+              <img src="../../assets/selina-features/leveling.png" alt="Member level and XP rank card from Selina" loading="lazy" />
+            </a>
+            <div class="case-feature-copy">
+              <small>Community</small>
+              <h3>Leveling System</h3>
+              <p>Message activity and voice time can contribute to progression, with a visual rank card that makes progress easy to understand.</p>
+            </div>
+          </article>
+
+          <article class="case-feature">
+            <a class="case-feature-media" href="../../assets/selina-features/fortnite-status.png" target="_blank" rel="noopener noreferrer" aria-label="Open Fortnite status screenshot">
+              <img src="../../assets/selina-features/fortnite-status.png" alt="Fortnite server status embed from Selina" loading="lazy" />
+            </a>
+            <div class="case-feature-copy">
+              <small>Live data</small>
+              <h3>Fortnite Server Status</h3>
+              <p>A server can keep an up-to-date Fortnite status message and manually refresh it when needed, without members leaving Discord.</p>
+            </div>
+          </article>
+
+          <article class="case-feature">
+            <a class="case-feature-media" href="../../assets/selina-features/server-lockdown.png" target="_blank" rel="noopener noreferrer" aria-label="Open server lockdown screenshot">
+              <img src="../../assets/selina-features/server-lockdown.png" alt="Server lockdown command result from Selina" loading="lazy" />
+            </a>
+            <div class="case-feature-copy">
+              <small>Server control</small>
+              <h3>Server Lockdown</h3>
+              <p>One command can pause activity across the server or selected channels when a community needs a quick maintenance or safety response.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="case-section" id="decisions">
+        <div class="case-section-head">
+          <div><span class="case-eyebrow">03 · Engineering</span><h2 class="case-heading">What I focus on</h2></div>
+          <p class="case-section-intro">A Discord bot can collect a lot of commands quickly. My goal with Selina is to make the systems feel connected, understandable, and reliable instead of adding features just to increase the command count.</p>
+        </div>
+
+        <div class="case-challenges">
+          <article class="case-challenge"><i class="bx bx-message-check"></i><h3>Clear moderation</h3><p>Automated actions need context. Moderation logs are designed to show what happened and why, so server staff can understand the result.</p></article>
+          <article class="case-challenge"><i class="bx bx-pulse"></i><h3>Reliable live features</h3><p>Status tools and external integrations need graceful fallbacks when an API or network request is slow, unavailable, or changes behavior.</p></article>
+          <article class="case-challenge"><i class="bx bx-shape-circle"></i><h3>Consistent Discord UX</h3><p>Commands, embeds, buttons, and setup flows should feel like one product. I keep improving the visual and interaction patterns as Selina grows.</p></article>
+        </div>
+      </section>
+
+      <section class="case-section" id="process">
+        <div class="case-section-head">
+          <div><span class="case-eyebrow">04 · Process</span><h2 class="case-heading">How the project evolves</h2></div>
+          <p class="case-section-intro">Selina is still actively developed. I use the public beta to improve existing systems, find reliability problems, and decide which ideas are worth turning into permanent features.</p>
+        </div>
+
+        <div class="case-timeline">
+          <article class="case-step"><strong>Build</strong><p>A feature starts as a focused command or system with a clear job inside a Discord community.</p></article>
+          <article class="case-step"><strong>Test</strong><p>I use it in real servers and check the edge cases that do not show up in a simple local test.</p></article>
+          <article class="case-step"><strong>Refine</strong><p>The interaction, reliability, logging, and visual presentation get cleaned up before I consider the feature settled.</p></article>
+          <article class="case-step"><strong>Maintain</strong><p>APIs, Discord behavior, AI models, and dependencies change, so existing features keep getting revisited instead of being abandoned after launch.</p></article>
+        </div>
+      </section>
+
+      <section class="case-cta">
+        <div>
+          <h2>Want to see Selina in action?</h2>
+          <p>The dedicated Selina page has the current command list and more product details, or you can add the public beta directly to a Discord server.</p>
+        </div>
+        <div class="case-hero-actions">
+          <a class="case-button primary" href="../../selina/"><i class="bx bx-window-open"></i>Open Selina</a>
+          <a class="case-button" href="https://discord.com/oauth2/authorize?client_id=1303374162533941331&permissions=8&integration_type=0&scope=bot" target="_blank" rel="noopener noreferrer"><i class="bx bxl-discord-alt"></i>Invite</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="case-footer">
+      <span>Selina · Project case study by Immortal</span>
+      <a href="../../#projects">Back to all projects</a>
+    </footer>
+  </div>
+</body>
+</html>
