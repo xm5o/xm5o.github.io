@@ -45,7 +45,7 @@ const allowedExact = new Set([
   'Ignition','IGNITION','Cigarettes After Sex','Hideaway','Opera House','Heavenly','Hentai',
   'Dreams From Bunker Hill','Keep on Loving You','Apocalypse','Flash','Sweet','Neon Moon',
   'Affection',"X's","You're The Only Good Thing In My Life",'creativity','console.log',
-  '"hello world"','&times;','Discord Quest Finisher','FNF Chart Creator',"FNF': Immortality Collection"
+  '"hello world"','&times;','Discord Quest Finisher','FNF Chart Creator',"FNF': Immortality Collection",'Node.js','discord.js','REST APIs','AI'
 ]);
 const allowedLower = new Set([...allowedExact].map(value => value.toLowerCase()));
 
