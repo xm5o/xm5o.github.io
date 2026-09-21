@@ -80,7 +80,7 @@ jobs:
           mkdir -p artifacts/site-baseline
           PREV="$(gh run list --workflow site-quality.yml --branch main --status success --limit 1 --json databaseId --jq '.[0].databaseId // empty')"
           if [ -n "$PREV" ]; then
-            gh run download "$PREV" -n site-visual-baseline -D artifacts/site-baseline || true
+            gh run download "$PREV" -n site-visual-baseline-v2 -D artifacts/site-baseline || true
           fi
       - name: Run whole-site visual regression
         env:
@@ -90,7 +90,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: site-visual-baseline
+          name: site-visual-baseline-v2
           path: |
             artifacts/site-current/
             artifacts/site-diff/
