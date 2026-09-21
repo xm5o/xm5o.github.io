@@ -15,6 +15,7 @@ on:
       - 'assets/**'
       - 'data/**'
       - 'tests/site-visual.mjs'
+      - 'tests/translation-coverage.mjs'
       - 'lighthouserc.json'
       - '.github/workflows/site-quality.yml'
   pull_request:
@@ -30,6 +31,7 @@ on:
       - 'assets/**'
       - 'data/**'
       - 'tests/site-visual.mjs'
+      - 'tests/translation-coverage.mjs'
       - 'lighthouserc.json'
       - '.github/workflows/site-quality.yml'
   workflow_dispatch:
@@ -39,6 +41,17 @@ permissions:
   actions: read
 
 jobs:
+  translation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check Arabic translation coverage
+        run: node tests/translation-coverage.mjs
+
   visual:
     runs-on: ubuntu-latest
     timeout-minutes: 15
