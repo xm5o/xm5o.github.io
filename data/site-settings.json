@@ -1,6 +1,8 @@
 {
   "bio": "He/Him — I build websites and Discord bots, and I make FNF mods for fun",
+  "bioAr": "ولد — اسوي مواقع و بوت Discord, برضو اسوي مودات في FNF",
   "statusText": "Available for Freelance",
+  "statusTextAr": "متوفر للتعاون",
   "commissionOpen": true,
   "commissionTotal": 6,
   "commissionUsed": 0,
@@ -13,10 +15,8 @@
   "accentColor": "#d7d7d7",
   "maintenanceEnabled": false,
   "maintenanceTitle": "Oops... Looks It's under Maintenance!",
+  "maintenanceTitleAr": "تحت الصيانة",
   "maintenanceMessage": "The site is being updated right now. Coming back Soon!",
-  "updatedAt": "2026-09-16T21:13:05.249Z",
-  "bioAr": "هو / له — أبني مواقع وبوتات Discord وأسوي مودات FNF للمتعة.",
-  "statusTextAr": "متاح للعمل الحر",
-  "maintenanceTitleAr": "أوه... شكله الموقع تحت الصيانة!",
-  "maintenanceMessageAr": "الموقع قاعد يتحدث الحين، وبرجع قريب!"
+  "maintenanceMessageAr": "الموقع حاليا تحت الصيانة. شيك على الموقع بعدين!",
+  "updatedAt": "2026-09-21T23:06:57.946Z"
 }
