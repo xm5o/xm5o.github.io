@@ -1,0 +1,289 @@
+/* Shared mobile/readability polish for public secondary pages.
+   The main homepage keeps its own tuned responsive system. */
+
+/* Case studies are authored against the browser-standard rem scale.
+   The homepage stylesheet uses a 60% rem base, so reset it here. */
+html:has(body.case-study){font-size:100%}
+
+body.case-study,
+body.commission-page,
+body.privacy-page,
+body.analytics-page,
+body.not-found-page{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  font-synthesis:none;
+  text-rendering:optimizeLegibility;
+}
+
+@media (max-width:768px){
+  /* Case study */
+  body.case-study .case-shell{width:min(100% - 28px,1180px)}
+  body.case-study .case-nav{min-height:58px;gap:10px;padding:10px 0}
+  body.case-study .case-back{font-size:.95rem}
+  body.case-study .case-nav-actions{gap:6px}
+  body.case-study .case-nav-actions a{
+    min-width:42px;min-height:42px;justify-content:center;padding:0 12px;
+    font-size:.9rem
+  }
+  body.case-study .case-hero{
+    min-height:auto;gap:34px;padding:42px 0 56px
+  }
+  body.case-study .case-hero-visual{order:-1}
+  body.case-study .case-avatar-wrap{
+    width:min(290px,76vw);border-radius:28px
+  }
+  body.case-study .case-avatar-wrap img{width:66%}
+  body.case-study .case-floating-chip{
+    font-size:.76rem;padding:8px 11px
+  }
+  body.case-study .case-floating-chip.one{left:0;top:7%}
+  body.case-study .case-floating-chip.two{right:0;bottom:12%}
+  body.case-study .case-kicker{
+    margin-bottom:14px;font-size:.8rem;letter-spacing:.1em
+  }
+  body.case-study .case-title{
+    margin-bottom:20px;font-size:clamp(3.6rem,19vw,5.6rem);line-height:.9
+  }
+  body.case-study .case-lede{
+    font-size:1.05rem;line-height:1.72
+  }
+  body.case-study .case-hero-actions{
+    display:grid;grid-template-columns:1fr;gap:9px;margin-top:26px
+  }
+  body.case-study .case-button{
+    width:100%;min-height:50px;font-size:.95rem
+  }
+  body.case-study .case-stats{
+    grid-template-columns:1fr 1fr;gap:9px;margin:0 0 46px
+  }
+  body.case-study .case-stat{padding:16px}
+  body.case-study .case-stat strong{font-size:1.15rem}
+  body.case-study .case-stat span{font-size:.86rem}
+  body.case-study .case-section{padding:50px 0}
+  body.case-study .case-section-head{
+    grid-template-columns:1fr;gap:16px;margin-bottom:26px
+  }
+  body.case-study .case-eyebrow{font-size:.78rem}
+  body.case-study .case-heading{
+    font-size:clamp(2.15rem,11vw,3.15rem);line-height:1.02
+  }
+  body.case-study .case-section-intro,
+  body.case-study .case-panel p,
+  body.case-study .case-feature-copy p,
+  body.case-study .case-challenge p,
+  body.case-study .case-step p,
+  body.case-study .case-cta p{
+    font-size:1rem;line-height:1.72
+  }
+  body.case-study .case-panel,
+  body.case-study .case-feature-copy,
+  body.case-study .case-challenge{padding:20px}
+  body.case-study .case-panel h3,
+  body.case-study .case-feature-copy h3{font-size:1.18rem}
+  body.case-study .case-tag{font-size:.84rem;padding:8px 10px}
+  body.case-study .case-feature-grid{grid-template-columns:1fr;gap:12px}
+  body.case-study .case-feature.wide{display:block;grid-column:auto}
+  body.case-study .case-feature-media,
+  body.case-study .case-feature.wide .case-feature-media{
+    min-height:0;aspect-ratio:16/10
+  }
+  body.case-study .case-feature-copy small{font-size:.84rem}
+  body.case-study .case-challenges{grid-template-columns:1fr;gap:11px}
+  body.case-study .case-challenge i{margin-bottom:16px}
+  body.case-study .case-challenge h3{font-size:1.08rem}
+  body.case-study .case-step{
+    grid-template-columns:1fr;gap:7px;padding:19px
+  }
+  body.case-study .case-step strong{font-size:.9rem}
+  body.case-study .case-cta{
+    display:block;padding:26px 20px;margin:38px 0 64px;border-radius:24px
+  }
+  body.case-study .case-cta h2{
+    font-size:clamp(2rem,10vw,2.8rem)
+  }
+  body.case-study .case-cta .case-hero-actions{margin-top:22px}
+  body.case-study .case-footer{
+    flex-direction:column;align-items:flex-start;font-size:.84rem
+  }
+
+  /* Selina product page. It intentionally inherits the homepage 60% rem scale,
+     so raise only its content typography rather than changing the root. */
+  body.selina-page .selina-hero{
+    min-height:auto;padding:9rem 5% 5.5rem
+  }
+  body.selina-page .selina-avatar{
+    width:118px;height:118px;margin-bottom:2rem
+  }
+  body.selina-page .selina-badge{font-size:1.45rem}
+  body.selina-page .selina-hero h1{font-size:clamp(4.4rem,15vw,6rem)}
+  body.selina-page .selina-hero p.selina-sub{
+    max-width:560px;font-size:1.8rem;line-height:1.68
+  }
+  body.selina-page .selina-cta-group{
+    width:min(100%,520px);margin-left:auto;margin-right:auto
+  }
+  body.selina-page .selina-cta-group .enhanced-btn{
+    flex:1 1 100%;justify-content:center;min-height:52px;font-size:1.65rem
+  }
+  body.selina-page .selina-note{font-size:1.45rem}
+  body.selina-page .selina-features{
+    min-height:0;padding:5rem 5% 6rem
+  }
+  body.selina-page .selina-features .section-header{
+    margin-bottom:3.2rem
+  }
+  body.selina-page .selina-features .section-header .gradient-heading{
+    font-size:clamp(3.8rem,12vw,5rem)
+  }
+  body.selina-page .selina-features .section-subtitle{
+    font-size:1.65rem;line-height:1.65
+  }
+  body.selina-page .selina-shots-grid,
+  body.selina-page .selina-commands-grid{
+    grid-template-columns:1fr;gap:1.8rem
+  }
+  body.selina-page .selina-shot-card,
+  body.selina-page .selina-command-category{
+    border-radius:18px
+  }
+  body.selina-page .selina-shot-card .shot-frame{padding:1.1rem}
+  body.selina-page .selina-shot-card .shot-info{padding:2rem}
+  body.selina-page .selina-shot-card h3,
+  body.selina-page .selina-command-category .cat-header h3{
+    font-size:2rem
+  }
+  body.selina-page .selina-shot-card p{
+    font-size:1.55rem;line-height:1.68
+  }
+  body.selina-page .selina-command-category{padding:2rem}
+  body.selina-page .command-row{padding:1.35rem 0}
+  body.selina-page .command-row .command-name{font-size:1.55rem}
+  body.selina-page .command-row .command-desc{
+    font-size:1.5rem;line-height:1.62
+  }
+  body.selina-page .command-and-more,
+  body.selina-page .selina-eta{font-size:1.45rem}
+  body.selina-page .selina-back{
+    width:44px;height:44px;padding:0;justify-content:center
+  }
+
+  /* Commission */
+  body.commission-page .site-header{
+    min-height:62px;border-radius:18px
+  }
+  body.commission-page .hero{
+    min-height:auto;padding-top:106px;padding-bottom:62px;gap:28px
+  }
+  body.commission-page .hero h1{
+    font-size:clamp(3rem,13vw,4.6rem);line-height:.98
+  }
+  body.commission-page .hero-lead{
+    font-size:1.02rem;line-height:1.72
+  }
+  body.commission-page .eyebrow,
+  body.commission-page .section-kicker,
+  body.commission-page .notice-label{
+    font-size:.78rem;letter-spacing:.12em
+  }
+  body.commission-page .hero-actions{
+    display:grid;grid-template-columns:1fr;gap:9px
+  }
+  body.commission-page .hero-actions .button{
+    width:100%;min-height:50px;font-size:.92rem
+  }
+  body.commission-page .availability-strip{margin-top:28px}
+  body.commission-page .availability-item{padding:14px 8px}
+  body.commission-page .availability-item small{font-size:.75rem}
+  body.commission-page .availability-item strong{font-size:.88rem}
+  body.commission-page .hero-showcase{min-height:390px}
+  body.commission-page .hero-work{width:min(340px,88vw)}
+  body.commission-page .floating-chip{display:none}
+  body.commission-page .training-notice{padding:19px;border-radius:18px}
+  body.commission-page .training-notice h2{font-size:1.35rem}
+  body.commission-page .training-notice p{font-size:.95rem;line-height:1.7}
+  body.commission-page .training-notice>a{font-size:.9rem}
+  body.commission-page .section{padding-top:64px;padding-bottom:68px}
+  body.commission-page .section-heading h2{font-size:2.25rem}
+  body.commission-page .section-heading p{font-size:.98rem;line-height:1.7}
+  body.commission-page .service-card,
+  body.commission-page .price-card,
+  body.commission-page .builder-card,
+  body.commission-page .request-preview{
+    border-radius:18px
+  }
+  body.commission-page .service-card p,
+  body.commission-page .service-card li,
+  body.commission-page .price-card p,
+  body.commission-page .process-grid p,
+  body.commission-page .terms-row p,
+  body.commission-page .contact-panel p{
+    font-size:.94rem;line-height:1.65
+  }
+  body.commission-page .button{font-size:.92rem}
+  body.commission-page input,
+  body.commission-page textarea,
+  body.commission-page select{font-size:1rem}
+
+  /* Privacy */
+  body.privacy-page{font-size:17px;line-height:1.76}
+  body.privacy-page main{
+    width:min(100% - 28px,780px);padding:34px 0 56px
+  }
+  body.privacy-page h1{font-size:2.35rem;margin:.7rem 0}
+  body.privacy-page h2{font-size:1.28rem;margin-top:28px}
+  body.privacy-page .card{padding:20px;margin-top:22px;border-radius:16px}
+  body.privacy-page .privacy-status{font-size:.95rem}
+  body.privacy-page .privacy-actions{display:grid;grid-template-columns:1fr}
+  body.privacy-page button{
+    width:100%;min-height:48px;font-size:1rem
+  }
+
+  /* Analytics */
+  body.analytics-page .analytics-shell{
+    width:min(100% - 26px,1180px);padding:28px 0 56px
+  }
+  body.analytics-page .analytics-back{font-size:.95rem}
+  body.analytics-page .analytics-hero h1{
+    font-size:clamp(2.35rem,11vw,3.4rem)
+  }
+  body.analytics-page .analytics-hero p{
+    font-size:1rem;line-height:1.7
+  }
+  body.analytics-page .analytics-kicker{font-size:.82rem}
+  body.analytics-page .analytics-status{font-size:.92rem}
+  body.analytics-page .analytics-card{padding:18px;border-radius:18px}
+  body.analytics-page .analytics-card .label{font-size:.92rem}
+  body.analytics-page .analytics-card .value{font-size:2.15rem}
+  body.analytics-page .analytics-card .subvalue{font-size:.86rem}
+  body.analytics-page .analytics-panel{
+    padding:19px;border-radius:18px
+  }
+  body.analytics-page .analytics-panel h2{font-size:1.08rem}
+  body.analytics-page .analytics-row-copy strong{font-size:.94rem}
+  body.analytics-page .analytics-row-copy span,
+  body.analytics-page .analytics-rank{font-size:.82rem}
+  body.analytics-page .analytics-empty{font-size:.92rem}
+  body.analytics-page .analytics-privacy-note{
+    padding:16px;font-size:.92rem
+  }
+
+  /* 404 */
+  body.not-found-page .error-container{padding:32px 22px}
+  body.not-found-page .error-title{font-size:clamp(30px,8vw,38px)}
+  body.not-found-page .error-subtitle{
+    max-width:340px;font-size:17px;line-height:1.65;margin-bottom:38px
+  }
+  body.not-found-page .back-button{
+    min-height:52px;padding:0 34px;font-size:17px
+  }
+}
+
+@media (max-width:430px){
+  body.case-study .case-stats{grid-template-columns:1fr}
+  body.case-study .case-floating-chip.two{display:none}
+  body.case-study .case-nav-actions a{padding:0 10px}
+  body.selina-page .selina-hero{padding-left:18px;padding-right:18px}
+  body.commission-page .hero-showcase{min-height:350px}
+  body.commission-page .hero-work{width:min(320px,90vw)}
+}
