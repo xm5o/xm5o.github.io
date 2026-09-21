@@ -19,7 +19,15 @@
     document.querySelectorAll('[data-birthday]').forEach((el) => {
       const birthday = el.getAttribute('data-birthday');
       if (!birthday) return;
-      el.textContent = calculateAge(birthday);
+      const age = calculateAge(birthday);
+      const intro = el.closest('.intro-text');
+
+      if (window.ImmortalI18n?.isArabic && intro) {
+        intro.innerHTML = `أنا <span class="highlight">Immortal</span>، مطوّر أحب الإبداع، عمري <span data-birthday="${birthday}">${age}</span> سنة.`;
+        return;
+      }
+
+      el.textContent = age;
     });
   });
 })();
