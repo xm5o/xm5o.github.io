@@ -95,6 +95,7 @@ class ProjectsManager {
           { icon: 'fas fa-comment-dots', text: 'AI Chat' }
         ],
         links: {
+          caseStudy: 'projects/selina/',
           website: 'selina/index.html',
           demo: null,
           github: null
@@ -237,6 +238,14 @@ class ProjectsManager {
   generateQuickActions(project) {
     const actions = [];
 
+    if (project.links.caseStudy) {
+      actions.push(`
+                <a href="${project.links.caseStudy}" class="quick-action-btn" aria-label="View Case Study">
+                    <i class="fas fa-layer-group"></i>
+                </a>
+            `);
+    }
+
     if (project.links.website) {
       actions.push(`
                 <a href="${project.links.website}" class="quick-action-btn" target="_blank" rel="noopener noreferrer" aria-label="Visit Website">
@@ -301,7 +310,11 @@ class ProjectsManager {
     let buttonText = '';
     let icon = '';
 
-    if (project.links.website) {
+    if (project.links.caseStudy) {
+      primaryLink = project.links.caseStudy;
+      buttonText = 'View Case Study';
+      icon = 'fas fa-layer-group';
+    } else if (project.links.website) {
       primaryLink = project.links.website;
       buttonText = 'Visit Website';
       icon = 'fas fa-external-link-alt';
@@ -317,8 +330,9 @@ class ProjectsManager {
 
     if (!primaryLink) return '';
 
+    const external = /^https?:\/\//i.test(primaryLink);
     return `
-    <a href="${primaryLink}" class="add-button primary" target="_blank" rel="noopener noreferrer">
+    <a href="${primaryLink}" class="add-button primary"${external ? ' target="_blank" rel="noopener noreferrer"' : ''}>
       <i class="${icon}"></i>
       <span>${buttonText}</span>
     </a>
