@@ -9,7 +9,8 @@ const htmlFiles = [
   '404.html',
   'analytics.html',
   'selina/index.html',
-  'commission/index.html'
+  'commission/index.html',
+  'projects/selina/index.html'
 ];
 const jsFiles = [
   'scripts/home.js',
