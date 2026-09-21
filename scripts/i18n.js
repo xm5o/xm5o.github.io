@@ -4,6 +4,7 @@
   const DEFAULT_LANGUAGE = 'ar';
   const SUPPORTED = new Set(['ar','en']);
   let AR = {};
+  let MANAGED_SEO = null;
   const META = {
     '/': ['Immortal | مطوّر، بوتات Discord ومودات FNF','موقع Immortal الشخصي: مشاريع ويب، بوتات Discord، مودات FNF، والأشياء اللي أشتغل عليها حاليًا.'],
     '/index.html': ['Immortal | مطوّر، بوتات Discord ومودات FNF','موقع Immortal الشخصي: مشاريع ويب، بوتات Discord، مودات FNF، والأشياء اللي أشتغل عليها حاليًا.'],
@@ -73,10 +74,10 @@
     root.querySelectorAll?.('*').forEach(attrs);
   }
   function meta(){
-    if(!isArabic) return; const m=META[location.pathname||'/']; if(!m) return; document.title=m[0];
+    if(!isArabic) return; const path=location.pathname||'/'; const base=META[path]; if(!base) return; const managedHome=(path==='/'||path==='/index.html')&&MANAGED_SEO; const title=managedHome?.titleAr||base[0],description=managedHome?.descriptionAr||base[1]; document.title=title;
     const set=(s,v)=>{const e=document.querySelector(s);if(e)e.setAttribute('content',v)};
-    set('meta[name="description"]',m[1]);set('meta[property="og:title"]',m[0]);set('meta[property="og:description"]',m[1]);
-    set('meta[name="twitter:title"]',m[0]);set('meta[name="twitter:description"]',m[1]);
+    set('meta[name="description"]',description);set('meta[property="og:title"]',title);set('meta[property="og:description"]',description);
+    set('meta[name="twitter:title"]',title);set('meta[name="twitter:description"]',description);
   }
   function styles(){
     if(document.getElementById('immortal-i18n-styles'))return;
@@ -98,7 +99,13 @@
   async function boot(){
     document.documentElement.lang=isArabic?'ar-SA':'en';document.documentElement.dir=isArabic?'rtl':'ltr';document.documentElement.dataset.siteLanguage=language;
     styles();
-    if(isArabic){ try{ const r=await fetch('/data/i18n-ar.json',{cache:'no-cache'}); if(r.ok) AR=await r.json(); }catch(e){console.warn('[i18n] Arabic dictionary failed to load',e)} }
+    if(isArabic){
+      try{
+        const [dictResponse,seoResponse]=await Promise.all([fetch('/data/i18n-ar.json',{cache:'no-cache'}),fetch('/data/site-seo.json',{cache:'no-cache'})]);
+        if(dictResponse.ok) AR=await dictResponse.json();
+        if(seoResponse.ok) MANAGED_SEO=await seoResponse.json();
+      }catch(e){console.warn('[i18n] Arabic resources failed to load',e)}
+    }
     meta(); if(isArabic)subtree(document.body); switcher(); observer();
     window.dispatchEvent(new CustomEvent('immortal-language-ready',{detail:{language,isArabic}}));
   }
