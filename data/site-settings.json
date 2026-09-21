@@ -14,5 +14,9 @@
   "maintenanceEnabled": false,
   "maintenanceTitle": "Oops... Looks It's under Maintenance!",
   "maintenanceMessage": "The site is being updated right now. Coming back Soon!",
-  "updatedAt": "2026-09-16T21:13:05.249Z"
+  "updatedAt": "2026-09-16T21:13:05.249Z",
+  "bioAr": "هو / له — أبني مواقع وبوتات Discord وأسوي مودات FNF للمتعة.",
+  "statusTextAr": "متاح للعمل الحر",
+  "maintenanceTitleAr": "أوه... شكله الموقع تحت الصيانة!",
+  "maintenanceMessageAr": "الموقع قاعد يتحدث الحين، وبرجع قريب!"
 }
