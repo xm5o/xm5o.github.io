@@ -39,6 +39,8 @@
     if ((m=target.match(/^(\d[\d,.]*) visitors today$/i))) return m[1]+' زائر اليوم';
     if ((m=target.match(/^(\d[\d,.]*) daily uniques in 7 days$/i))) return m[1]+' زائر فريد خلال 7 أيام';
     if ((m=target.match(/^(\d[\d,.]*) views(?: · (\d[\d,.]*) visitors)?$/i))) return m[1]+' مشاهدة'+(m[2]?' · '+m[2]+' زائر':'');
+    if ((m=target.match(/^Open · (\d+)\/(\d+) available$/i))) return 'مفتوح · '+m[1]+'/'+m[2]+' متاح';
+    if ((m=target.match(/^(\d+) of (\d+) commission slots used$/i))) return 'تم استخدام '+m[1]+' من '+m[2]+' خانات للطلبات';
     if ((m=target.match(/^Copied @(.+) to your clipboard\.$/))) return 'تم نسخ @'+m[1]+' للحافظة.';
     if ((m=target.match(/^Analytics data could not be loaded:\s*(.+)$/))) return 'تعذر تحميل بيانات الإحصائيات: '+m[1];
     const labels = [
