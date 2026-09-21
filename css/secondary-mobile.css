@@ -16,6 +16,34 @@ body.not-found-page{
   text-rendering:optimizeLegibility;
 }
 
+/* Keep secondary pages from drifting into 11–12px UI copy on larger screens. */
+body.selina-page .selina-badge,
+body.selina-page .selina-note,
+body.selina-page .selina-back{font-size:1.4rem}
+body.selina-page .selina-shot-card p{font-size:1.5rem}
+body.selina-page .command-row .command-name{font-size:1.5rem}
+body.selina-page .command-row .command-desc{font-size:1.45rem;line-height:1.58}
+body.selina-page .command-and-more,
+body.selina-page .selina-eta{font-size:1.4rem}
+
+body.commission-page .site-nav a,
+body.commission-page .main-site-link,
+body.commission-page .header-cta{font-size:.84rem}
+body.commission-page .eyebrow,
+body.commission-page .section-kicker,
+body.commission-page .notice-label{font-size:.74rem}
+body.commission-page .button{font-size:.88rem}
+body.commission-page .availability-item small{font-size:.7rem}
+body.commission-page .availability-item strong{font-size:.82rem}
+
+body.analytics-page .analytics-card .label{font-size:.88rem}
+body.analytics-page .analytics-card .subvalue{font-size:.82rem}
+body.analytics-page .analytics-panel h2{font-size:1.05rem}
+body.analytics-page .analytics-row-copy strong{font-size:.9rem}
+body.analytics-page .analytics-row-copy span,
+body.analytics-page .analytics-rank{font-size:.78rem}
+body.analytics-page .analytics-privacy-note{font-size:.9rem}
+
 @media (max-width:768px){
   /* Case study */
   body.case-study .case-shell{width:min(100% - 28px,1180px)}
