@@ -13,6 +13,7 @@ const pages=[
   ['home','/'],
   ['commission','/commission/'],
   ['selina','/selina/'],
+  ['selina-case-study','/projects/selina/'],
   ['privacy','/privacy.html'],
   ['not-found','/404.html']
 ];
