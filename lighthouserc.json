@@ -5,6 +5,7 @@
         "http://127.0.0.1:4173/",
         "http://127.0.0.1:4173/commission/",
         "http://127.0.0.1:4173/selina/",
+        "http://127.0.0.1:4173/projects/selina/",
         "http://127.0.0.1:4173/privacy.html"
       ],
       "numberOfRuns": 1,
@@ -15,13 +16,48 @@
     },
     "assert": {
       "assertions": {
-        "categories:performance": ["warn", {"minScore": 0.55}],
-        "categories:accessibility": ["error", {"minScore": 0.75}],
-        "categories:best-practices": ["warn", {"minScore": 0.70}],
-        "categories:seo": ["warn", {"minScore": 0.75}],
-        "uses-responsive-images": ["warn", {"maxLength": 2}],
-        "image-size-responsive": ["warn", {"maxLength": 2}],
-        "errors-in-console": ["warn", {"maxLength": 0}]
+        "categories:performance": [
+          "warn",
+          {
+            "minScore": 0.55
+          }
+        ],
+        "categories:accessibility": [
+          "error",
+          {
+            "minScore": 0.75
+          }
+        ],
+        "categories:best-practices": [
+          "warn",
+          {
+            "minScore": 0.7
+          }
+        ],
+        "categories:seo": [
+          "warn",
+          {
+            "minScore": 0.75
+          }
+        ],
+        "uses-responsive-images": [
+          "warn",
+          {
+            "maxLength": 2
+          }
+        ],
+        "image-size-responsive": [
+          "warn",
+          {
+            "maxLength": 2
+          }
+        ],
+        "errors-in-console": [
+          "warn",
+          {
+            "maxLength": 0
+          }
+        ]
       }
     },
     "upload": {
