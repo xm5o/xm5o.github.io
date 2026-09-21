@@ -143,10 +143,10 @@ body.analytics-page .analytics-privacy-note{font-size:.9rem}
   body.selina-page .selina-avatar{
     width:118px;height:118px;margin-bottom:2rem
   }
-  body.selina-page .selina-badge{font-size:1.45rem}
+  body.selina-page .selina-badge{font-size:1.65rem}
   body.selina-page .selina-hero h1{font-size:clamp(4.4rem,15vw,6rem)}
   body.selina-page .selina-hero p.selina-sub{
-    max-width:560px;font-size:1.8rem;line-height:1.68
+    max-width:560px;font-size:1.9rem;line-height:1.68
   }
   body.selina-page .selina-cta-group{
     width:min(100%,520px);margin-left:auto;margin-right:auto
@@ -154,7 +154,7 @@ body.analytics-page .analytics-privacy-note{font-size:.9rem}
   body.selina-page .selina-cta-group .enhanced-btn{
     flex:1 1 100%;justify-content:center;min-height:52px;font-size:1.65rem
   }
-  body.selina-page .selina-note{font-size:1.45rem}
+  body.selina-page .selina-note{font-size:1.65rem}
   body.selina-page .selina-features{
     min-height:0;padding:5rem 5% 6rem
   }
@@ -165,7 +165,7 @@ body.analytics-page .analytics-privacy-note{font-size:.9rem}
     font-size:clamp(3.8rem,12vw,5rem)
   }
   body.selina-page .selina-features .section-subtitle{
-    font-size:1.65rem;line-height:1.65
+    font-size:1.75rem;line-height:1.65
   }
   body.selina-page .selina-shots-grid,
   body.selina-page .selina-commands-grid{
@@ -182,16 +182,16 @@ body.analytics-page .analytics-privacy-note{font-size:.9rem}
     font-size:2rem
   }
   body.selina-page .selina-shot-card p{
-    font-size:1.55rem;line-height:1.68
+    font-size:1.75rem;line-height:1.68
   }
   body.selina-page .selina-command-category{padding:2rem}
   body.selina-page .command-row{padding:1.35rem 0}
-  body.selina-page .command-row .command-name{font-size:1.55rem}
+  body.selina-page .command-row .command-name{font-size:1.7rem}
   body.selina-page .command-row .command-desc{
-    font-size:1.5rem;line-height:1.62
+    font-size:1.7rem;line-height:1.62
   }
   body.selina-page .command-and-more,
-  body.selina-page .selina-eta{font-size:1.45rem}
+  body.selina-page .selina-eta{font-size:1.65rem}
   body.selina-page .selina-back{
     width:44px;height:44px;padding:0;justify-content:center
   }
