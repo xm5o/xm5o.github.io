@@ -643,5 +643,13 @@
   "He/Him — I build websites and Discord bots, and I make FNF mods for fun": "هو / له — أبني مواقع وبوتات Discord وأسوي مودات FNF للمتعة.",
   "Open · 1/1 available": "مفتوح · 1/1 متاح",
   "Oops... Looks It's under Maintenance!": "أوه... شكله الموقع تحت الصيانة!",
-  "The site is being updated right now. Coming back Soon!": "الموقع قاعد يتحدث الحين، وبرجع قريب!"
+  "The site is being updated right now. Coming back Soon!": "الموقع قاعد يتحدث الحين، وبرجع قريب!",
+  ". Like any internet service you connect to, that provider receives the network request and can see the public IP used for that request. The site code intentionally discards the returned IP address and writes only coarse country, region, and city fields to Firestore.": "مثل أي خدمة تتصل فيها عبر الإنترنت، يستقبل مزود الخدمة طلب الشبكة وقد يشوف عنوان IP العام المستخدم للطلب. كود الموقع يتجاهل عنوان IP بعد الاستعلام ويكتب فقط بيانات تقريبية للدولة والمنطقة والمدينة في Firestore.",
+  "Some pages load content or status information from services such as Discord, Spotify, Google Fonts, content delivery networks, Firebase, and the coarse-location provider described above. Those services may receive normal connection information when your browser requests their resources.": "بعض الصفحات تحمل محتوى أو معلومات حالة من خدمات مثل Discord وSpotify وGoogle Fonts وشبكات توصيل المحتوى وFirebase ومزود الموقع التقريبي المذكور فوق. هذي الخدمات قد تستقبل معلومات الاتصال المعتادة لما متصفحك يطلب مواردها.",
+  "Added to favorites! ❤️": "تمت الإضافة للمفضلة! ❤️",
+  "Removed from favorites": "تمت الإزالة من المفضلة",
+  "Please fill in all required fields": "عبّ كل الحقول المطلوبة لو سمحت",
+  "Limited Time Offer! 🎨": "عرض لفترة محدودة! 🎨",
+  "Special commission pricing": "أسعار خاصة للطلبات",
+  "Get professional artwork, charts, and modcharts at discounted rates. Perfect for your FNF projects!": "خذ شغل احترافي وتشارتات ومودتشارتات بأسعار مخفضة، مناسبة لمشاريع FNF."
 }
