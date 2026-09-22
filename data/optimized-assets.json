@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-16T14:10:41.740Z",
+  "generatedAt": "2026-09-22T21:20:26.181Z",
   "assets": {
     "assets/pfp.jpg": {
       "source": "assets/pfp.jpg",
-      "sha256": "eb546484f1e9dc948f6e09752c9f48ff08d97b405998c9c4a6644c315ea1ff7c",
+      "sha256": "8106e5ea9374b30aac25ace7b7341245410a3091c2ef007b91f4b2722ef1c527",
       "width": 720,
       "height": 720,
       "webp": [
@@ -12,19 +12,19 @@
           "width": 256,
           "height": 256,
           "path": "/assets/optimized/pfp-256.webp",
-          "bytes": 7424
+          "bytes": 6588
         },
         {
           "width": 512,
           "height": 512,
           "path": "/assets/optimized/pfp-512.webp",
-          "bytes": 22608
+          "bytes": 18482
         },
         {
           "width": 720,
           "height": 720,
           "path": "/assets/optimized/pfp-720.webp",
-          "bytes": 37332
+          "bytes": 29656
         }
       ],
       "avif": [
@@ -32,19 +32,19 @@
           "width": 256,
           "height": 256,
           "path": "/assets/optimized/pfp-256.avif",
-          "bytes": 5963
+          "bytes": 5257
         },
         {
           "width": 512,
           "height": 512,
           "path": "/assets/optimized/pfp-512.avif",
-          "bytes": 16692
+          "bytes": 13272
         },
         {
           "width": 720,
           "height": 720,
           "path": "/assets/optimized/pfp-720.avif",
-          "bytes": 26722
+          "bytes": 20093
         }
       ]
     },
