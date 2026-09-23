@@ -1,5 +1,12 @@
 [
   {
+    "id": "2400aeb0-271c-4a63-9105-be388148cb37",
+    "createdAt": "2026-09-23T19:52:43.341Z",
+    "baseCommit": "0d53754331533236a0ba606213721ba4397eb07f",
+    "label": "Before profile history restore",
+    "undoneAt": null
+  },
+  {
     "id": "397b0214-66d6-4f82-a3e7-48fee21ec1b6",
     "createdAt": "2026-09-22T21:27:10.956Z",
     "baseCommit": "0bc8270d5aac035109eac92d156276e4dec7ac77",
