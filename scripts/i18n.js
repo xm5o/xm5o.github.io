@@ -6,17 +6,17 @@
   let AR = {};
   let MANAGED_SEO = null;
   const META = {
-    '/': ['Immortal | مطوّر، بوتات Discord ومودات FNF','موقع Immortal الشخصي: مشاريع ويب، بوتات Discord، مودات FNF، والأشياء اللي أشتغل عليها حاليًا.'],
-    '/index.html': ['Immortal | مطوّر، بوتات Discord ومودات FNF','موقع Immortal الشخصي: مشاريع ويب، بوتات Discord، مودات FNF، والأشياء اللي أشتغل عليها حاليًا.'],
-    '/commission/': ['طلبات FNF | Immortal','طلبات تشارت Psych Engine وCodename Engine، برمجة Psych Engine مخصصة، وتدريب مودتشارت على Codename Engine.'],
-    '/commission/index.html': ['طلبات FNF | Immortal','طلبات تشارت Psych Engine وCodename Engine، برمجة Psych Engine مخصصة، وتدريب مودتشارت على Codename Engine.'],
+    '/': ['Immortal | مطوّر ويب، بوتات Discord ومودات FNF','موقع Immortal الشخصي: بوتات Discord، تطوير ويب، تشارتات ومودات FNF، ومشاريع مثل Selina.'],
+    '/index.html': ['Immortal | مطوّر ويب، بوتات Discord ومودات FNF','موقع Immortal الشخصي: بوتات Discord، تطوير ويب، تشارتات ومودات FNF، ومشاريع مثل Selina.'],
+    '/commission/': ['طلبات تشارت FNF | Psych وCodename Engine | Immortal','طلبات تشارت FNF لـ Psych Engine وCodename Engine، سكربتات Lua مخصصة لـ Psych، وتدريب مودتشارت على Codename Engine.'],
+    '/commission/index.html': ['طلبات تشارت FNF | Psych وCodename Engine | Immortal','طلبات تشارت FNF لـ Psych Engine وCodename Engine، سكربتات Lua مخصصة لـ Psych، وتدريب مودتشارت على Codename Engine.'],
     '/privacy.html': ['الخصوصية | Immortal','تفاصيل الخصوصية والإحصائيات في موقع Immortal وخيارات التحكم بالبيانات.'],
-    '/selina/': ['Selina | بوت Discord للمجتمعات','Selina بوت Discord للإشراف والمستويات ومحادثة الذكاء الاصطناعي وأدوات المجتمعات.'],
-    '/selina/index.html': ['Selina | بوت Discord للمجتمعات','Selina بوت Discord للإشراف والمستويات ومحادثة الذكاء الاصطناعي وأدوات المجتمعات.'],
+    '/selina/': ['Selina | بوت Discord للذكاء الاصطناعي والموسيقى والإشراف','Selina بوت Discord للمجتمعات فيه AI، AutoMod، موسيقى، مستويات، حالة Fortnite، إعداد متعدد اللغات وأدوات إدارة السيرفر.'],
+    '/selina/index.html': ['Selina | بوت Discord للذكاء الاصطناعي والموسيقى والإشراف','Selina بوت Discord للمجتمعات فيه AI، AutoMod، موسيقى، مستويات، حالة Fortnite، إعداد متعدد اللغات وأدوات إدارة السيرفر.'],
     '/analytics.html': ['إحصائيات الموقع | Immortal','لوحة إحصائيات مجمعة تحترم الخصوصية لموقع Immortal.'],
     '/404.html': ['404 | الصفحة مو موجودة','الصفحة اللي تدور عليها مو موجودة.'],
-    '/projects/selina/': ['دراسة مشروع Selina | Immortal','نظرة على تصميم وتطوير Selina، بوت Discord للمجتمعات من Immortal.'],
-    '/projects/selina/index.html': ['دراسة مشروع Selina | Immortal','نظرة على تصميم وتطوير Selina، بوت Discord للمجتمعات من Immortal.']
+    '/projects/selina/': ['Selina Discord Bot | دراسة المشروع | Immortal','دراسة مشروع Selina، بوت Discord فيه AI وAutoMod وموسيقى ومستويات وحالة Fortnite وأدوات إدارة السيرفر.'],
+    '/projects/selina/index.html': ['Selina Discord Bot | دراسة المشروع | Immortal','دراسة مشروع Selina، بوت Discord فيه AI وAutoMod وموسيقى ومستويات وحالة Fortnite وأدوات إدارة السيرفر.']
   };
   function normalize(value){ return SUPPORTED.has(value) ? value : DEFAULT_LANGUAGE; }
   function getLanguage(){
