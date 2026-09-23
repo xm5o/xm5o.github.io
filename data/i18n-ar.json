@@ -740,5 +740,15 @@
   "Fortnite status shows the live state of Epic services inside the server.": "حالة Fortnite تعرض حالة خدمات Epic المباشرة داخل السيرفر.",
   "Status history gives members context around recent Fortnite service changes instead of only the current state.": "سجل الحالة يعطي الأعضاء سياق عن تغييرات خدمات Fortnite الأخيرة بدل عرض الحالة الحالية فقط.",
   "Lockdown gives staff a fast server-wide response when they need to pause activity.": "القفل يعطي الإدارة استجابة سريعة على مستوى السيرفر وقت الحاجة لإيقاف النشاط مؤقتًا.",
-  "Unlock restores normal server activity after the situation or maintenance window is finished.": "فتح السيرفر يرجع النشاط الطبيعي بعد انتهاء الحالة أو فترة الصيانة."
+  "Unlock restores normal server activity after the situation or maintenance window is finished.": "فتح السيرفر يرجع النشاط الطبيعي بعد انتهاء الحالة أو فترة الصيانة.",
+  "Selina Discord Bot": "بوت Selina على Discord",
+  "Selina is a community-focused Discord bot I build and maintain, combining AI chat, AutoMod, music, leveling, Fortnite server status, multilingual setup, and server management in one experience.": "Selina بوت Discord للمجتمعات أبنيه وأطوره، ويجمع محادثة AI وAutoMod والموسيقى والمستويات وحالة سيرفرات Fortnite والإعداد متعدد اللغات وأدوات إدارة السيرفر في تجربة واحدة.",
+  "A Discord bot built for communities": "بوت Discord مبني للمجتمعات",
+  "Selina grew into a Discord community bot for moderation, AI assistance, music, leveling, Fortnite service status, multilingual setup, and everyday server management.": "تطورت Selina إلى بوت Discord للمجتمعات يجمع الإشراف ومساعدة الذكاء الاصطناعي والموسيقى والمستويات وحالة خدمات Fortnite والإعداد متعدد اللغات وإدارة السيرفر اليومية.",
+  "An all-in-one Discord community bot with AI chat, moderation, music, leveling, Fortnite server status, and server tools.": "بوت Discord متكامل للمجتمعات فيه محادثة AI وإشراف وموسيقى ومستويات وحالة سيرفرات Fortnite وأدوات للسيرفر.",
+  "Invite Selina and set up the features your community needs.": "أضف Selina واضبط المزايا اللي يحتاجها مجتمعك.",
+  "FNF charting commissions": "طلبات تشارت FNF",
+  "built around your song.": "مصممة حول أغنيتك.",
+  "I make Friday Night Funkin' charts for Psych Engine and Codename Engine, plus custom Psych Engine Lua/scripts. I am also learning modcharting in Codename Engine.": "أسوي تشارتات Friday Night Funkin' لـ Psych Engine وCodename Engine، بالإضافة إلى سكربتات Lua مخصصة لـ Psych Engine. وأتعلم حاليًا المودتشارت في Codename Engine.",
+  "FNF charting, coding, and modchart work": "تشارت وبرمجة ومودتشارت FNF"
 }
