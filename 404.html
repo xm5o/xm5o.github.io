@@ -1,926 +1,296 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Lost in the Void</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            overflow-y: none;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex,follow">
+  <title>404 - Lost in the Void</title>
 
-        :root {
-            /* Desktop Theme */
-            --primary-bg: #000000;
-            --surface-1: rgba(8, 8, 8, 0.95);
-            --surface-2: rgba(16, 16, 16, 0.8);
-            --text-primary: #ffffff;
-            --text-secondary: #888888;
-            --accent: rgba(255, 255, 255, 0.02);
-            --glow: rgba(255, 255, 255, 0.05);
-            --border: rgba(32, 32, 32, 0.5);
-            --gradient-1: linear-gradient(135deg, rgba(6, 6, 6, 0.8) 0%, rgba(2, 2, 2, 0.9) 100%);
-            
-            /* Mobile Theme Variables */
-            --mobile-bg: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
-            --mobile-surface: rgba(20, 20, 20, 0.9);
-            --mobile-border: rgba(60, 60, 60, 0.3);
-            --mobile-accent: #333333;
-            --mobile-glow: rgba(255, 255, 255, 0.08);
-        }
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #000;
+      --surface: #0b0b0c;
+      --surface-hover: #121214;
+      --text: #f5f5f7;
+      --muted: #8d8d95;
+      --faint: #343438;
+      --border: #202024;
+      --focus: #fff;
+    }
 
-        html {
-            font-size: 16px;
-            scroll-behavior: smooth;
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
-            background: var(--primary-bg);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--text-primary);
-            position: relative;
-            cursor: default;
-            font-optical-sizing: auto;
-            font-synthesis: none;
-            text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            overflow-x: hidden;
-        }
+    html {
+      min-height: 100%;
+      background: var(--bg);
+      overscroll-behavior-y: none;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
 
-        /* Desktop Background System */
-        .bg-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-            contain: paint;
-        }
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(255,255,255,.035), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
 
-        .bg-layer::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: 
-                radial-gradient(1400px ellipse at var(--cursor-x, 50%) var(--cursor-y, 50%), 
-                    rgba(8, 8, 8, 0.4) 0%, 
-                    transparent 65%),
-                conic-gradient(from 45deg at 30% 30%, 
-                    transparent 0deg, 
-                    rgba(4, 4, 4, 0.6) 60deg, 
-                    transparent 120deg),
-                radial-gradient(circle at 70% 80%, 
-                    rgba(12, 12, 12, 0.5) 0%, 
-                    transparent 60%);
-            animation: backgroundFlow 30s ease-in-out infinite;
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    main {
+      width: min(680px, calc(100% - 36px));
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0 auto;
+      padding:
+        max(32px, env(safe-area-inset-top))
+        0
+        max(32px, env(safe-area-inset-bottom));
+      display: grid;
+      place-items: center;
+    }
 
-        @keyframes backgroundFlow {
-            0%, 100% { 
-                opacity: 0.5;
-                filter: blur(0px) contrast(1.1);
-                transform: scale(1);
-            }
-            25% { 
-                opacity: 0.8;
-                filter: blur(2px) contrast(1.2);
-                transform: scale(1.02);
-            }
-            50% { 
-                opacity: 0.6;
-                filter: blur(1px) contrast(1.15);
-                transform: scale(0.98);
-            }
-            75% { 
-                opacity: 0.9;
-                filter: blur(3px) contrast(1.3);
-                transform: scale(1.01);
-            }
-        }
+    .error {
+      width: 100%;
+      text-align: center;
+      animation: enter .45s cubic-bezier(.2,.7,.2,1) both;
+    }
 
-        .bg-layer::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: 
-                repeating-conic-gradient(from 0deg at 2px 2px, 
-                    transparent 0deg 85deg, 
-                    rgba(255,255,255,0.004) 85deg 90deg),
-                repeating-linear-gradient(45deg, 
-                    transparent 0px 3px, 
-                    rgba(255,255,255,0.002) 3px 6px);
-            background-size: 40px 40px, 2px 2px;
-            animation: grainFlow 15s linear infinite;
-            mix-blend-mode: soft-light;
-        }
+    .error-code {
+      margin: 0 0 26px;
+      color: var(--faint);
+      font-size: clamp(112px, 23vw, 250px);
+      font-weight: 800;
+      line-height: .72;
+      letter-spacing: -.12em;
+      font-variant-numeric: tabular-nums;
+      user-select: none;
+    }
 
-        @keyframes grainFlow {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(-2px, 2px) rotate(0.2deg); }
-            50% { transform: translate(2px, -2px) rotate(-0.2deg); }
-            75% { transform: translate(-2px, -2px) rotate(0.1deg); }
-            100% { transform: translate(0, 0) rotate(0deg); }
-        }
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 6vw, 52px);
+      line-height: 1.02;
+      letter-spacing: -.045em;
+      font-weight: 750;
+    }
 
-        /* Enhanced floating particles */
-        .particles {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-        }
+    .subtitle {
+      max-width: 500px;
+      margin: 18px auto 0;
+      color: var(--muted);
+      font-size: clamp(16px, 2.4vw, 18px);
+      line-height: 1.65;
+    }
 
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: particleFloat 25s linear infinite;
-        }
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
 
-        .particle:nth-child(1) { left: 8%; animation-delay: 0s; animation-duration: 28s; }
-        .particle:nth-child(2) { left: 18%; animation-delay: -6s; animation-duration: 32s; }
-        .particle:nth-child(3) { left: 28%; animation-delay: -12s; animation-duration: 22s; }
-        .particle:nth-child(4) { left: 38%; animation-delay: -18s; animation-duration: 38s; }
-        .particle:nth-child(5) { left: 48%; animation-delay: -24s; animation-duration: 28s; }
-        .particle:nth-child(6) { left: 58%; animation-delay: -30s; animation-duration: 35s; }
-        .particle:nth-child(7) { left: 68%; animation-delay: -36s; animation-duration: 25s; }
-        .particle:nth-child(8) { left: 78%; animation-delay: -42s; animation-duration: 30s; }
-        .particle:nth-child(9) { left: 88%; animation-delay: -48s; animation-duration: 33s; }
+    .action {
+      min-height: 48px;
+      min-width: 142px;
+      padding: 0 18px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      color: var(--text);
+      background: var(--surface);
+      text-decoration: none;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 650;
+      cursor: pointer;
+      transition:
+        background-color .18s ease,
+        border-color .18s ease,
+        transform .18s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        @keyframes particleFloat {
-            0% { 
-                transform: translateY(110vh) scale(0) rotate(0deg);
-                opacity: 0;
-            }
-            15% {
-                opacity: 1;
-                transform: translateY(85vh) scale(1) rotate(45deg);
-            }
-            85% {
-                opacity: 1;
-                transform: translateY(15vh) scale(1.2) rotate(315deg);
-            }
-            100% { 
-                transform: translateY(-15vh) scale(0) rotate(360deg);
-                opacity: 0;
-            }
-        }
+    .action.primary {
+      background: var(--text);
+      color: #080808;
+      border-color: var(--text);
+    }
 
-        /* Main container */
-        .error-container {
-            text-align: center;
-            position: relative;
-            z-index: 10;
-            max-width: 800px;
-            width: 95%;
-            padding: 0 32px;
-            animation: containerEntrance 2.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+    .action:hover {
+      background: var(--surface-hover);
+      border-color: #38383d;
+      transform: translateY(-1px);
+    }
 
-        @keyframes containerEntrance {
-            0% {
-                opacity: 0;
-                transform: translateY(100px) scale(0.8) rotateX(10deg);
-                filter: blur(30px) brightness(0.3);
-            }
-            30% {
-                opacity: 0.4;
-                transform: translateY(50px) scale(0.9) rotateX(5deg);
-                filter: blur(15px) brightness(0.6);
-            }
-            60% {
-                opacity: 0.8;
-                transform: translateY(20px) scale(0.96) rotateX(2deg);
-                filter: blur(5px) brightness(0.85);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1) rotateX(0deg);
-                filter: blur(0) brightness(1);
-            }
-        }
+    .action.primary:hover {
+      background: #fff;
+      border-color: #fff;
+    }
 
-        /* Enhanced 404 number */
-        .error-code {
-            font-size: clamp(180px, 32vw, 420px);
-            font-weight: 900;
-            color: var(--text-primary);
-            margin-bottom: 48px;
-            letter-spacing: -0.15em;
-            line-height: 0.7;
-            position: relative;
-            font-variant-numeric: tabular-nums;
-            text-shadow: 
-                0 0 80px rgba(255, 255, 255, 0.03),
-                0 0 160px rgba(255, 255, 255, 0.02);
-            animation: codePresence 6s ease-in-out infinite alternate;
-        }
+    .action:active {
+      transform: translateY(0);
+    }
 
-        @keyframes codePresence {
-            0% { 
-                opacity: 0.85;
-                text-shadow: 
-                    0 0 80px rgba(255, 255, 255, 0.03),
-                    0 0 160px rgba(255, 255, 255, 0.02);
-                transform: scale(1) perspective(1000px) rotateX(0deg);
-            }
-            100% { 
-                opacity: 1;
-                text-shadow: 
-                    0 0 120px rgba(255, 255, 255, 0.08),
-                    0 0 240px rgba(255, 255, 255, 0.04);
-                transform: scale(1.01) perspective(1000px) rotateX(0.5deg);
-            }
-        }
+    .action:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 3px;
+    }
 
-        .error-code::before,
-        .error-code::after {
-            content: '404';
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            animation: layerFloat 10s ease-in-out infinite;
-        }
+    .action svg {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+    }
 
-        .error-code::before {
-            color: rgba(255, 255, 255, 0.012);
-            transform: scale(1.03) translateZ(-10px);
-            animation-delay: -1.5s;
-        }
+    .home-mark {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: .7;
+    }
 
-        .error-code::after {
-            color: rgba(255, 255, 255, 0.006);
-            transform: scale(1.06) translateZ(-20px);
-            animation-delay: -3s;
-        }
+    @keyframes enter {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        @keyframes layerFloat {
-            0%, 100% { 
-                transform: translate(0, 0) scale(1.03) rotateZ(0deg); 
-                opacity: 0.7;
-            }
-            25% { 
-                transform: translate(2px, -2px) scale(1.035) rotateZ(0.15deg); 
-                opacity: 0.9;
-            }
-            50% { 
-                transform: translate(-2px, 2px) scale(1.02) rotateZ(-0.15deg); 
-                opacity: 0.5;
-            }
-            75% { 
-                transform: translate(2px, 2px) scale(1.04) rotateZ(0.08deg); 
-                opacity: 0.8;
-            }
-        }
+    @media (max-width: 560px) {
+      body {
+        background: var(--bg);
+      }
 
-        /* Enhanced typography */
-        .error-title {
-            font-size: clamp(42px, 8vw, 64px);
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: 32px;
-            letter-spacing: -0.05em;
-            line-height: 1.02;
-            opacity: 0.98;
-            animation: titleReveal 2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
-            font-feature-settings: 'kern' 1, 'liga' 1;
-            text-shadow: 0 0 40px rgba(255, 255, 255, 0.04);
-        }
+      main {
+        width: min(100% - 28px, 680px);
+        padding:
+          max(24px, env(safe-area-inset-top))
+          0
+          max(24px, env(safe-area-inset-bottom));
+      }
 
-        @keyframes titleReveal {
-            0% {
-                opacity: 0;
-                transform: translateY(40px) rotateX(20deg) scale(0.9);
-                filter: blur(8px);
-            }
-            100% {
-                opacity: 0.98;
-                transform: translateY(0) rotateX(0deg) scale(1);
-                filter: blur(0);
-            }
-        }
+      .error-code {
+        margin-bottom: 22px;
+        font-size: clamp(100px, 34vw, 148px);
+      }
 
-        .error-subtitle {
-            font-size: clamp(20px, 3.5vw, 26px);
-            color: var(--text-secondary);
-            margin-bottom: 72px;
-            line-height: 1.7;
-            font-weight: 400;
-            max-width: 520px;
-            margin-left: auto;
-            margin-right: auto;
-            opacity: 0.94;
-            animation: subtitleReveal 2s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
-            font-feature-settings: 'kern' 1;
-        }
+      h1 {
+        font-size: clamp(30px, 9vw, 38px);
+      }
 
-        @keyframes subtitleReveal {
-            0% {
-                opacity: 0;
-                transform: translateY(30px) scale(0.95);
-                filter: blur(5px);
-            }
-            100% {
-                opacity: 0.94;
-                transform: translateY(0) scale(1);
-                filter: blur(0);
-            }
-        }
+      .subtitle {
+        max-width: 340px;
+        margin-top: 14px;
+        font-size: 16px;
+        line-height: 1.6;
+      }
 
-        /* Premium button design */
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            background: var(--surface-1);
-            backdrop-filter: blur(60px) saturate(1.4);
-            color: var(--text-primary);
-            padding: 24px 48px;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 18px;
-            min-width: 200px;
-            position: relative;
-            overflow: hidden;
-            animation: buttonReveal 2s cubic-bezier(0.16, 1, 0.3, 1) 1.2s both;
-            box-shadow: 
-                0 16px 50px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.03),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            font-feature-settings: 'kern' 1;
-        }
+      .actions {
+        display: grid;
+        width: min(100%, 340px);
+        margin: 28px auto 0;
+      }
 
-        @keyframes buttonReveal {
-            0% {
-                opacity: 0;
-                transform: translateY(20px) scale(0.9) rotateX(10deg);
-                filter: blur(4px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1) rotateX(0deg);
-                filter: blur(0);
-            }
-        }
+      .action {
+        width: 100%;
+        min-height: 50px;
+      }
+    }
 
-        .back-button::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.04) 40%, 
-                rgba(255, 255, 255, 0.08) 50%,
-                rgba(255, 255, 255, 0.04) 60%,
-                transparent 100%);
-            transform: translateX(-120%);
-            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
 
-        .back-button::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--surface-2);
-            opacity: 0;
-            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+    @media (prefers-contrast: more) {
+      :root {
+        --muted: #b8b8bf;
+        --border: #5b5b62;
+        --faint: #595960;
+      }
+    }
+  </style>
 
-        .back-button:hover::before {
-            transform: translateX(120%);
-        }
-
-        .back-button:hover::after {
-            opacity: 1;
-        }
-
-        .back-button:hover {
-            transform: translateY(-6px) scale(1.03);
-            border-color: rgba(64, 64, 64, 0.9);
-            box-shadow: 
-                0 25px 80px rgba(0, 0, 0, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.06),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .back-button:active {
-            transform: translateY(-3px) scale(1.015);
-            box-shadow: 
-                0 12px 40px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.03);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .arrow-icon {
-            width: 24px;
-            height: 24px;
-            stroke-width: 2.5;
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            z-index: 1;
-        }
-
-        .back-button:hover .arrow-icon {
-            transform: translateX(-8px) scale(1.15) rotateZ(-5deg);
-        }
-
-        /* MOBILE-SPECIFIC STYLES */
-        @media (max-width: 768px) {
-            body {
-                background: var(--mobile-bg);
-                overflow-y: auto;
-            }
-
-            /* Mobile Background System */
-            .bg-layer::before {
-                background: 
-                    radial-gradient(800px circle at 50% 30%, 
-                        rgba(25, 25, 25, 0.6) 0%, 
-                        transparent 70%),
-                    linear-gradient(180deg, 
-                        rgba(15, 15, 15, 0.8) 0%, 
-                        rgba(5, 5, 5, 0.9) 50%,
-                        rgba(20, 20, 20, 0.7) 100%);
-                animation: mobileBackgroundFlow 20s ease-in-out infinite;
-            }
-
-            @keyframes mobileBackgroundFlow {
-                0%, 100% { 
-                    opacity: 0.8;
-                    transform: scale(1) rotate(0deg);
-                }
-                50% { 
-                    opacity: 1;
-                    transform: scale(1.05) rotate(0.5deg);
-                }
-            }
-
-            .bg-layer::after {
-                background-image: 
-                    radial-gradient(circle at 25% 25%, rgba(255,255,255,0.01) 1px, transparent 1px),
-                    radial-gradient(circle at 75% 75%, rgba(255,255,255,0.008) 1px, transparent 1px);
-                background-size: 50px 50px, 30px 30px;
-                animation: mobileGrainFlow 18s linear infinite;
-            }
-
-            @keyframes mobileGrainFlow {
-                0% { transform: translate(0, 0); }
-                25% { transform: translate(-25px, 25px); }
-                50% { transform: translate(25px, -25px); }
-                75% { transform: translate(-25px, -25px); }
-                100% { transform: translate(0, 0); }
-            }
-
-            /* Mobile Particles */
-            .particle {
-                width: 3px;
-                height: 3px;
-                background: radial-gradient(circle, var(--mobile-glow) 0%, transparent 60%);
-                box-shadow: 0 0 20px rgba(255, 255, 255, 0.02);
-            }
-
-            /* Mobile Container */
-            .error-container {
-                padding: 40px 24px;
-                max-width: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                min-height: 100vh;
-                animation: mobileContainerEntrance 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            }
-
-            @keyframes mobileContainerEntrance {
-                0% {
-                    opacity: 0;
-                    transform: translateY(60px) scale(0.9);
-                    filter: blur(15px);
-                }
-                100% {
-                    opacity: 1;
-                    transform: translateY(0) scale(1);
-                    filter: blur(0);
-                }
-            }
-
-            /* Mobile 404 Code */
-            .error-code {
-                font-size: clamp(120px, 25vw, 200px);
-                margin-bottom: 32px;
-                background: linear-gradient(135deg, 
-                    #ffffff 0%, 
-                    #cccccc 50%, 
-                    #ffffff 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                text-shadow: none;
-                animation: mobileCodeGlow 4s ease-in-out infinite alternate;
-                position: relative;
-            }
-
-            @keyframes mobileCodeGlow {
-                0% { 
-                    filter: brightness(0.9) contrast(1.1);
-                    transform: scale(1);
-                }
-                100% { 
-                    filter: brightness(1.1) contrast(1.3);
-                    transform: scale(1.02);
-                }
-            }
-
-            .error-code::before,
-            .error-code::after {
-                display: none;
-            }
-
-            /* Mobile Typography */
-            .error-title {
-                font-size: clamp(28px, 6vw, 36px);
-                margin-bottom: 20px;
-                background: linear-gradient(135deg, 
-                    var(--text-primary) 0%, 
-                    #cccccc 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                text-shadow: none;
-            }
-
-            .error-subtitle {
-                font-size: clamp(16px, 4vw, 20px);
-                margin-bottom: 48px;
-                color: #aaaaaa;
-                line-height: 1.6;
-                max-width: 320px;
-            }
-
-            /* Mobile Button */
-            .back-button {
-                padding: 20px 40px;
-                font-size: 16px;
-                border-radius: 16px;
-                background: var(--mobile-surface);
-                border: 1px solid var(--mobile-border);
-                backdrop-filter: blur(20px);
-                box-shadow: 
-                    0 10px 30px rgba(0, 0, 0, 0.3),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-                gap: 12px;
-                min-width: 160px;
-                position: relative;
-            }
-
-            .back-button::before {
-                background: linear-gradient(135deg, 
-                    transparent 0%, 
-                    var(--mobile-glow) 50%,
-                    transparent 100%);
-            }
-
-            .back-button::after {
-                background: rgba(40, 40, 40, 0.8);
-            }
-
-            .back-button:hover {
-                transform: translateY(-3px) scale(1.02);
-                border-color: var(--mobile-accent);
-                box-shadow: 
-                    0 15px 40px rgba(0, 0, 0, 0.4),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-            }
-
-            .back-button:active {
-                transform: translateY(-1px) scale(1.01);
-                box-shadow: 
-                    0 5px 20px rgba(0, 0, 0, 0.3),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.03);
-            }
-
-            .arrow-icon {
-                width: 20px;
-                height: 20px;
-                stroke-width: 2.8;
-            }
-
-            .back-button:hover .arrow-icon {
-                transform: translateX(-4px) scale(1.1);
-            }
-        }
-
-        /* Small Mobile Adjustments */
-        @media (max-width: 480px) {
-            .error-container {
-                padding: 32px 20px;
-            }
-            
-            .error-code {
-                font-size: clamp(100px, 22vw, 160px);
-                margin-bottom: 24px;
-            }
-            
-            .error-title {
-                font-size: clamp(24px, 5.5vw, 32px);
-                margin-bottom: 16px;
-            }
-            
-            .error-subtitle {
-                font-size: clamp(15px, 3.8vw, 18px);
-                margin-bottom: 40px;
-                max-width: 280px;
-            }
-            
-            .back-button {
-                padding: 18px 36px;
-                font-size: 15px;
-                gap: 10px;
-                min-width: 140px;
-            }
-            
-            .arrow-icon {
-                width: 18px;
-                height: 18px;
-            }
-        }
-
-        /* Enhanced accessibility */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        @media (prefers-contrast: high) {
-            :root {
-                --text-primary: #ffffff;
-                --text-secondary: #e0e0e0;
-                --border: rgba(160, 160, 160, 0.8);
-                --mobile-border: rgba(180, 180, 180, 0.6);
-            }
-            
-            .back-button {
-                border-width: 2px;
-                background: #2a2a2a;
-            }
-
-            @media (max-width: 768px) {
-                .back-button {
-                    background: #252525;
-                }
-            }
-        }
-
-        /* Focus states */
-        .back-button:focus-visible {
-            outline: 3px solid rgba(255, 255, 255, 0.7);
-            outline-offset: 6px;
-        }
-
-        @media (max-width: 768px) {
-            .back-button:focus-visible {
-                outline-width: 2px;
-                outline-offset: 4px;
-            }
-        }
-
-        /* Touch-friendly interactions for mobile */
-        @media (max-width: 768px) {
-            .back-button {
-                -webkit-tap-highlight-color: transparent;
-                touch-action: manipulation;
-            }
-
-            .back-button:active {
-                transition: all 0.1s ease;
-            }
-        }
-    </style>
-  <link rel="stylesheet" href="css/secondary-mobile.css">
   <script defer src="scripts/i18n.js"></script>
 </head>
 <body class="not-found-page">
-    <div class="bg-layer"></div>
-    
-    <div class="particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
+  <main>
+    <section class="error" aria-labelledby="error-title">
+      <p class="error-code" aria-hidden="true">404</p>
 
-    <main class="error-container">
-        <div class="error-code" aria-label="404 Error">404</div>
-        <h1 class="error-title">Lost in the Void</h1>
-        <p class="error-subtitle">
-            This page has drifted beyond the digital horizon. Let's navigate you back to familiar territory.
-        </p>
-        
-        <a href="javascript:history.back()" 
-           class="back-button" 
-           role="button"
-           aria-label="Go back to previous page">
-            <svg class="arrow-icon" 
-                 fill="none" 
-                 stroke="currentColor" 
-                 viewBox="0 0 24 24"
-                 aria-hidden="true">
-                <path stroke-linecap="round" 
-                      stroke-linejoin="round" 
-                      d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-            </svg>
-            <span>Go Back</span>
+      <h1 id="error-title">Lost in the Void</h1>
+      <p class="subtitle">
+        This page has drifted beyond the digital horizon. Let's navigate you back to familiar territory.
+      </p>
+
+      <nav class="actions" aria-label="404 navigation">
+        <a class="action primary" href="/">
+          <span class="home-mark" aria-hidden="true"></span>
+          <span>Back to home</span>
         </a>
-    </main>
 
-    <script>
-        if (window.innerWidth > 768) {
-            let cursorX = 50;
-            let cursorY = 50;
-            let targetX = 50;
-            let targetY = 50;
+        <button class="action" id="go-back" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M19 12H5"></path>
+            <path d="m12 19-7-7 7-7"></path>
+          </svg>
+          <span>Go Back</span>
+        </button>
+      </nav>
+    </section>
+  </main>
 
-            function updateCursor() {
-                cursorX += (targetX - cursorX) * 0.08;
-                cursorY += (targetY - cursorY) * 0.08;
-                
-                document.documentElement.style.setProperty('--cursor-x', cursorX + '%');
-                document.documentElement.style.setProperty('--cursor-y', cursorY + '%');
-                
-                requestAnimationFrame(updateCursor);
-            }
+  <script>
+    (() => {
+      const back = document.getElementById('go-back');
 
-            document.addEventListener('mousemove', (e) => {
-                targetX = (e.clientX / window.innerWidth) * 100;
-                targetY = (e.clientY / window.innerHeight) * 100;
-            });
+      back.addEventListener('click', () => {
+        const sameSiteReferrer = (() => {
+          if (!document.referrer) return false;
+          try {
+            return new URL(document.referrer).origin === location.origin;
+          } catch {
+            return false;
+          }
+        })();
 
-            updateCursor();
+        if (history.length > 1 && sameSiteReferrer) {
+          history.back();
+          return;
         }
 
-        document.addEventListener('keydown', (e) => {
-            const button = document.querySelector('.back-button');
-            
-            switch(e.key) {
-                case 'Enter':
-                case ' ':
-                    if (document.activeElement === button) {
-                        e.preventDefault();
-                        button.click();
-                    }
-                    break;
-                case 'Escape':
-                case 'Backspace':
-                    if (e.target === document.body) {
-                        e.preventDefault();
-                        history.back();
-                    }
-                    break;
-            }
-        });
+        location.href = '/';
+      });
+    })();
+  </script>
 
-        if (window.innerWidth <= 768) {
-            const isLowPowerDevice = navigator.hardwareConcurrency <= 2 || 
-                                   navigator.deviceMemory <= 2 ||
-                                   navigator.connection?.effectiveType === 'slow-2g' ||
-                                   navigator.connection?.effectiveType === '2g';
-            
-            if (isLowPowerDevice) {
-                document.body.classList.add('reduced-motion');
-                const style = document.createElement('style');
-                style.textContent = `
-                    .reduced-motion .particle,
-                    .reduced-motion .bg-layer::before,
-                    .reduced-motion .bg-layer::after {
-                        animation-duration: 0.01ms !important;
-                        animation-iteration-count: 1 !important;
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-        }
-
-        window.addEventListener('popstate', () => {
-            document.body.style.opacity = '0.7';
-            document.body.style.transform = 'scale(0.98)';
-            
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-                document.body.style.transform = 'scale(1)';
-            }, 150);
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const button = document.querySelector('.back-button');
-            
-            setTimeout(() => {
-                if (document.activeElement === document.body) {
-                    button.focus();
-                }
-            }, 2500);
-        });
-
-        document.addEventListener('visibilitychange', () => {
-            const particles = document.querySelectorAll('.particle');
-            const bgLayer = document.querySelector('.bg-layer');
-            
-            if (document.hidden) {
-                particles.forEach(particle => {
-                    particle.style.animationPlayState = 'paused';
-                });
-                bgLayer.style.animationPlayState = 'paused';
-            } else {
-                particles.forEach(particle => {
-                    particle.style.animationPlayState = 'running';
-                });
-                bgLayer.style.animationPlayState = 'running';
-            }
-        });
-
-        const backButton = document.querySelector('.back-button');
-        
-        backButton.addEventListener('click', (e) => {
-            if (window.history.length <= 1) {
-                e.preventDefault();
-                window.location.href = '/';
-            }
-        });
-
-        if ('ontouchstart' in window) {
-            let touchStartTime = 0;
-            
-            backButton.addEventListener('touchstart', () => {
-                touchStartTime = Date.now();
-            }, { passive: true });
-            
-            backButton.addEventListener('touchend', (e) => {
-                const touchDuration = Date.now() - touchStartTime;
-                
-                if (touchDuration < 50 || touchDuration > 500) {
-                    e.preventDefault();
-                    return false;
-                }
-            });
-        }
-
-        let konamiCode = [];
-        const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // ↑↑↓↓←→←→BA
-        
-        document.addEventListener('keydown', (e) => {
-            konamiCode.push(e.keyCode);
-            
-            if (konamiCode.length > konami.length) {
-                konamiCode.shift();
-            }
-            
-            if (konamiCode.join(',') === konami.join(',')) {
-                document.body.style.filter = 'hue-rotate(180deg) saturate(2)';
-                document.querySelector('.error-title').textContent = 'You Found Me!';
-                document.querySelector('.error-subtitle').textContent = 'The legendary Konami code still works in the void.';
-                
-                setTimeout(() => {
-                    document.body.style.filter = '';
-                    document.querySelector('.error-title').textContent = 'Lost in the Void';
-                    document.querySelector('.error-subtitle').textContent = 'This page has drifted beyond the digital horizon. Let\'s navigate you back to familiar territory.';
-                }, 3000);
-                
-                konamiCode = [];
-            }
-        });
-
-//         console.log(`
-    // ╔══════════════════════════════════════╗
-    // ║              404 - VOID              ║
-    // ║                                      ║
-    // ║  Try the Konami code: ↑↑↓↓←→←→BA     ║
-    // ╚══════════════════════════════════════╝
-//         `);
-    </script>
   <script type="module" src="scripts/analytics.js"></script>
 </body>
 </html>
