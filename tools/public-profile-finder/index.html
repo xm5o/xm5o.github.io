@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0b0f" />
+  <title>Public Profile Finder</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="badge">PUBLIC OSINT ONLY</div>
+      <h1>Public Profile Finder</h1>
+      <p>Check public username matches across social platforms without using private data.</p>
+    </section>
+
+    <section class="card">
+      <label for="username">Username</label>
+      <div class="inputRow">
+        <input id="username" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="example_user" />
+        <button id="searchBtn">Search</button>
+      </div>
+
+      <details>
+        <summary>Optional alternate username</summary>
+        <input id="altUsername" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="example.alt" />
+      </details>
+
+      <p class="hint">The app creates public profile candidates and search links. You confirm identity yourself from visible public information.</p>
+    </section>
+
+    <section id="summary" class="summary hidden"></section>
+    <section id="results" class="grid"></section>
+  </main>
+
+  <template id="resultTemplate">
+    <article class="resultCard">
+      <div class="topline">
+        <div>
+          <h2 class="platform"></h2>
+          <p class="handle"></p>
+        </div>
+        <span class="status">Candidate</span>
+      </div>
+
+      <div class="actions">
+        <a class="btn primary profileLink" target="_blank" rel="noopener noreferrer">Open profile</a>
+        <a class="btn searchLink" target="_blank" rel="noopener noreferrer">Search web</a>
+      </div>
+
+      <div class="verify">
+        <label>
+          <input type="checkbox" class="confirmed" />
+          I confirmed this public profile belongs to the same person
+        </label>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
