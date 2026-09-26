@@ -3,57 +3,143 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0b0b0f" />
+  <meta name="theme-color" content="#09090b" />
   <title>Public Profile Finder</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main class="shell">
-    <section class="hero">
-      <div class="badge">PUBLIC OSINT ONLY</div>
+    <header class="hero">
+      <div class="eyebrow">PUBLIC OSINT WORKSPACE</div>
       <h1>Public Profile Finder</h1>
-      <p>Check public username matches across social platforms without using private data.</p>
-    </section>
+      <p>Build deeper searches from public identifiers, then keep findings tied to visible evidence.</p>
+    </header>
 
-    <section class="card">
-      <label for="username">Username</label>
-      <div class="inputRow">
-        <input id="username" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="example_user" />
-        <button id="searchBtn">Search</button>
+    <section class="panel">
+      <div class="sectionHead">
+        <div>
+          <span class="step">01</span>
+          <h2>Public clues</h2>
+        </div>
+        <button class="ghost small" id="loadExample" type="button">Example</button>
       </div>
 
-      <details>
-        <summary>Optional alternate username</summary>
-        <input id="altUsername" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="example.alt" />
-      </details>
+      <div class="fields two">
+        <label>
+          Known usernames
+          <textarea id="usernames" rows="3" placeholder="scythes._&#10;another.public.handle"></textarea>
+          <span>One per line. Handles only, no phone numbers or private identifiers.</span>
+        </label>
 
-      <p class="hint">The app creates public profile candidates and search links. You confirm identity yourself from visible public information.</p>
+        <label>
+          Public display name
+          <input id="displayName" type="text" placeholder="Name shown publicly on the profile" />
+          <span>Optional. Used only to narrow public web searches.</span>
+        </label>
+      </div>
+
+      <div class="fields two">
+        <label>
+          Public bio phrases
+          <textarea id="bioPhrases" rows="3" placeholder="A phrase copied from a public bio&#10;Another public phrase"></textarea>
+          <span>Exact public phrases work best.</span>
+        </label>
+
+        <label>
+          Known public URLs
+          <textarea id="knownUrls" rows="3" placeholder="https://instagram.com/example&#10;https://tiktok.com/@example"></textarea>
+          <span>Profiles, Linktree, Beacons, Carrd, or a public website.</span>
+        </label>
+      </div>
+
+      <div class="runRow">
+        <label class="engineLabel">
+          Search engine
+          <select id="engine">
+            <option value="google">Google</option>
+            <option value="bing">Bing</option>
+            <option value="duck">DuckDuckGo</option>
+          </select>
+        </label>
+        <button class="primary" id="buildSearches" type="button">Build deep search</button>
+      </div>
+
+      <p class="privacy">Public sources only. No leaked databases, phone or email reverse lookup, private-account bypasses, face matching, or location tracking.</p>
     </section>
 
-    <section id="summary" class="summary hidden"></section>
-    <section id="results" class="grid"></section>
+    <section id="searchSection" class="panel hidden">
+      <div class="sectionHead">
+        <div>
+          <span class="step">02</span>
+          <h2>Search plan</h2>
+        </div>
+        <span id="queryCount" class="pill">0 searches</span>
+      </div>
+
+      <div id="signalSummary" class="signalSummary"></div>
+
+      <div class="toolbar">
+        <input id="queryFilter" type="search" placeholder="Filter searches..." />
+        <button class="ghost" id="copyAll" type="button">Copy queries</button>
+      </div>
+
+      <div id="queryGroups" class="queryGroups"></div>
+    </section>
+
+    <section id="findingsSection" class="panel hidden">
+      <div class="sectionHead">
+        <div>
+          <span class="step">03</span>
+          <h2>Evidence board</h2>
+        </div>
+        <button class="ghost small" id="clearFindings" type="button">Clear</button>
+      </div>
+
+      <form id="findingForm" class="findingForm">
+        <input id="candidateUrl" type="url" required placeholder="Public candidate profile URL" />
+        <input id="candidateHandle" type="text" placeholder="Observed username" />
+        <select id="candidatePlatform">
+          <option>Snapchat</option>
+          <option>Instagram</option>
+          <option>TikTok</option>
+          <option>X</option>
+          <option>YouTube</option>
+          <option>Twitch</option>
+          <option>Reddit</option>
+          <option>GitHub</option>
+          <option>Pinterest</option>
+          <option>Other</option>
+        </select>
+
+        <div class="evidenceChecks">
+          <label><input id="evLinked" type="checkbox" /> Directly linked from a known public profile <b>+60</b></label>
+          <label><input id="evHandle" type="checkbox" /> Exact known username match <b>+25</b></label>
+          <label><input id="evName" type="checkbox" /> Same public display name <b>+8</b></label>
+          <label><input id="evBio" type="checkbox" /> Matching public bio phrase <b>+7</b></label>
+        </div>
+
+        <textarea id="candidateNotes" rows="2" placeholder="Public evidence notes, source page, what matched..."></textarea>
+        <button class="primary" type="submit">Add finding</button>
+      </form>
+
+      <div id="findings" class="findings"></div>
+
+      <div class="exportRow">
+        <button class="ghost" id="exportJson" type="button">Export case JSON</button>
+      </div>
+    </section>
   </main>
 
-  <template id="resultTemplate">
-    <article class="resultCard">
-      <div class="topline">
-        <div>
-          <h2 class="platform"></h2>
-          <p class="handle"></p>
-        </div>
-        <span class="status">Candidate</span>
+  <template id="queryTemplate">
+    <article class="queryCard">
+      <div class="queryMeta">
+        <span class="queryType"></span>
+        <span class="queryTarget"></span>
       </div>
-
-      <div class="actions">
-        <a class="btn primary profileLink" target="_blank" rel="noopener noreferrer">Open profile</a>
-        <a class="btn searchLink" target="_blank" rel="noopener noreferrer">Search web</a>
-      </div>
-
-      <div class="verify">
-        <label>
-          <input type="checkbox" class="confirmed" />
-          I confirmed this public profile belongs to the same person
-        </label>
+      <code class="queryText"></code>
+      <div class="queryActions">
+        <a class="buttonLink primary queryOpen" target="_blank" rel="noopener noreferrer">Search</a>
+        <button class="ghost queryCopy" type="button">Copy</button>
       </div>
     </article>
   </template>
