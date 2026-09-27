@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b0c10">
+  <meta name="description" content="مراجعة قدرات سريعة بأسئلة كمية ولفظية، مؤقت، تحليل للمستوى، ومراجعة للأخطاء.">
+  <title>مراجعة القدرات | Immortal</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="ambient ambient-a" aria-hidden="true"></div>
+  <div class="ambient ambient-b" aria-hidden="true"></div>
+
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="https://xm5o.github.io/" aria-label="العودة للموقع الرئيسي">
+        <span class="brand-dot"></span>
+        <span>Immortal</span>
+      </a>
+      <div class="top-actions">
+        <button id="soundToggle" class="icon-btn" type="button" aria-label="تشغيل أو إيقاف صوت التنبيه">صوت</button>
+        <button id="resetAll" class="icon-btn danger-ghost" type="button">مسح التقدم</button>
+      </div>
+    </header>
+
+    <section id="homeScreen" class="screen active">
+      <div class="hero">
+        <div class="eyebrow">مراجعة أخيرة قبل الاختبار</div>
+        <h1>قدرات، بدون تشتيت.</h1>
+        <p class="hero-copy">أسئلة أصلية على نمط القدرات اللفظي والكمي. اختبر نفسك، راجع أخطاءك، واعرف القسم اللي يحتاج تركيز.</p>
+
+        <div id="examCountdownCard" class="countdown-card">
+          <div>
+            <span class="muted">اختبارك اليوم</span>
+            <strong>8:15 ص</strong>
+          </div>
+          <div class="countdown" id="examCountdown">--:--:--</div>
+        </div>
+      </div>
+
+      <div class="mode-grid">
+        <button class="mode-card recommended" data-mode="quick" type="button">
+          <span class="pill">أنسب شيء الآن</span>
+          <div class="mode-icon">20</div>
+          <h2>مراجعة سريعة</h2>
+          <p>20 سؤال، 25 دقيقة، خليط لفظي وكمي.</p>
+          <div class="mode-meta"><span>10 لفظي</span><span>10 كمي</span></div>
+        </button>
+
+        <button class="mode-card" data-mode="full" type="button">
+          <div class="mode-icon">36</div>
+          <h2>محاكاة أطول</h2>
+          <p>36 سؤال، 45 دقيقة، تحليل أوسع لنقاط القوة والضعف.</p>
+          <div class="mode-meta"><span>18 لفظي</span><span>18 كمي</span></div>
+        </button>
+
+        <button class="mode-card" data-mode="weak" type="button">
+          <div class="mode-icon">12</div>
+          <h2>ركز على أضعف قسم</h2>
+          <p>يبني جولة قصيرة من القسم الأقل في نتائجك السابقة.</p>
+          <div class="mode-meta"><span>12 سؤال</span><span>يتكيف معك</span></div>
+        </button>
+      </div>
+
+      <section class="dashboard-card" aria-labelledby="progressTitle">
+        <div class="section-head">
+          <div>
+            <span class="muted">تقدمك على هذا الجهاز</span>
+            <h2 id="progressTitle">ملخص المراجعة</h2>
+          </div>
+          <span id="attemptsBadge" class="score-badge">0 محاولات</span>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat"><span>أفضل نتيجة</span><strong id="bestScore">--</strong></div>
+          <div class="stat"><span>اللفظي</span><strong id="verbalBest">--</strong></div>
+          <div class="stat"><span>الكمي</span><strong id="quantBest">--</strong></div>
+          <div class="stat"><span>أخطاء محفوظة</span><strong id="mistakeCount">0</strong></div>
+        </div>
+
+        <button id="reviewMistakesHome" class="secondary-btn wide" type="button">راجع أخطاءك المحفوظة</button>
+      </section>
+
+      <div class="tiny-note">هذه مراجعة تدريبية وليست تابعة لهيئة تقويم التعليم والتدريب، والنتيجة هنا ليست درجة قياس الرسمية.</div>
+    </section>
+
+    <section id="quizScreen" class="screen" aria-live="polite">
+      <div class="quiz-top">
+        <button id="quitQuiz" class="text-btn" type="button">إنهاء</button>
+        <div class="quiz-progress-wrap">
+          <div class="quiz-label-row">
+            <span id="questionCounter">1 / 20</span>
+            <span id="sectionLabel">كمي</span>
+          </div>
+          <div class="progress-track"><div id="progressBar" class="progress-fill"></div></div>
+        </div>
+        <div id="timer" class="timer">25:00</div>
+      </div>
+
+      <article class="question-card">
+        <div class="question-tags">
+          <span id="typeTag" class="tag">نسب</span>
+          <button id="flagQuestion" class="flag-btn" type="button" aria-pressed="false">علّم للمراجعة</button>
+        </div>
+        <h2 id="questionText" class="question-text"></h2>
+        <div id="choices" class="choices"></div>
+
+        <div id="explanationBox" class="explanation hidden">
+          <div id="answerStatus" class="answer-status"></div>
+          <p id="explanationText"></p>
+        </div>
+
+        <div class="quiz-actions">
+          <button id="prevQuestion" class="secondary-btn" type="button">السابق</button>
+          <button id="checkAnswer" class="primary-btn" type="button">تأكيد الإجابة</button>
+          <button id="nextQuestion" class="primary-btn hidden" type="button">التالي</button>
+        </div>
+      </article>
+
+      <div id="questionDots" class="question-dots" aria-label="التنقل بين الأسئلة"></div>
+    </section>
+
+    <section id="resultScreen" class="screen">
+      <div class="result-hero">
+        <span class="eyebrow">انتهت الجولة</span>
+        <div class="score-ring" id="scoreRing">
+          <div><strong id="finalScore">0%</strong><span>نتيجتك</span></div>
+        </div>
+        <h1 id="resultTitle">ممتاز.</h1>
+        <p id="resultSummary"></p>
+      </div>
+
+      <div class="result-grid">
+        <div class="result-card">
+          <span>لفظي</span>
+          <strong id="verbalScore">0%</strong>
+          <div class="mini-track"><div id="verbalBar"></div></div>
+        </div>
+        <div class="result-card">
+          <span>كمي</span>
+          <strong id="quantScore">0%</strong>
+          <div class="mini-track"><div id="quantBar"></div></div>
+        </div>
+        <div class="result-card">
+          <span>صحيح</span>
+          <strong id="correctCount">0</strong>
+        </div>
+        <div class="result-card">
+          <span>الوقت</span>
+          <strong id="timeUsed">00:00</strong>
+        </div>
+      </div>
+
+      <section class="analysis-card">
+        <div class="section-head">
+          <div>
+            <span class="muted">تحليل حسب النوع</span>
+            <h2>وين تركز الآن؟</h2>
+          </div>
+        </div>
+        <div id="categoryBreakdown" class="category-list"></div>
+      </section>
+
+      <section class="analysis-card">
+        <div class="section-head">
+          <div>
+            <span class="muted">الأسئلة غير الصحيحة</span>
+            <h2>راجع أخطاء الجولة</h2>
+          </div>
+          <span id="wrongBadge" class="score-badge">0 أخطاء</span>
+        </div>
+        <div id="wrongList" class="wrong-list"></div>
+      </section>
+
+      <div class="result-actions">
+        <button id="retryWeak" class="primary-btn" type="button">اختبر أضعف قسم</button>
+        <button id="backHome" class="secondary-btn" type="button">الصفحة الرئيسية</button>
+      </div>
+      <div class="tiny-note">تعامل مع النسبة كأداة مراجعة فقط. نظام درجة القدرات الفعلي معياري ومختلف عن هذه النسبة.</div>
+    </section>
+
+    <section id="mistakesScreen" class="screen">
+      <div class="page-head">
+        <div>
+          <span class="eyebrow">مراجعة مركزة</span>
+          <h1>أخطاؤك المحفوظة</h1>
+        </div>
+        <button id="mistakesBack" class="secondary-btn" type="button">رجوع</button>
+      </div>
+      <div id="savedMistakesList" class="wrong-list"></div>
+    </section>
+  </main>
+
+  <dialog id="confirmDialog">
+    <form method="dialog" class="dialog-card">
+      <h2 id="dialogTitle">متأكد؟</h2>
+      <p id="dialogText">سيتم إنهاء الجولة الحالية.</p>
+      <div class="dialog-actions">
+        <button value="cancel" class="secondary-btn">إلغاء</button>
+        <button id="dialogConfirm" value="confirm" class="primary-btn">تأكيد</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="./app.js"></script>
+</body>
+</html>
