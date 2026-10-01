@@ -14409,3 +14409,118 @@ html[dir="rtl"] .faq-question{
     margin-bottom:1rem!important;
   }
 }
+
+
+/* 2026 mobile projects balance fix */
+@media(max-width:768px){
+  .projects{
+    padding-top:5.8rem;
+    padding-inline:1rem;
+  }
+
+  .projects .section-header,
+  html[dir="rtl"] .projects .section-header{
+    width:100%;
+    max-width:34rem;
+    margin:0 auto 1.8rem;
+    text-align:center!important;
+  }
+
+  .projects .gradient-heading,
+  html[dir="rtl"] .projects .gradient-heading{
+    width:100%;
+    margin:0 auto .75rem;
+    text-align:center!important;
+    font-size:clamp(3.5rem,14.5vw,5rem);
+    line-height:.94;
+  }
+
+  .projects .section-subtitle,
+  html[dir="rtl"] .projects .section-subtitle{
+    max-width:31rem;
+    margin:0 auto;
+    text-align:center!important;
+    font-size:clamp(1.12rem,4.4vw,1.36rem);
+    line-height:1.5;
+  }
+
+  .projects-filter{
+    width:100%!important;
+    max-width:100%!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    flex-wrap:nowrap!important;
+    gap:.55rem!important;
+    margin:0 0 1.8rem!important;
+    padding:.15rem 0 .55rem!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x proximity;
+    scrollbar-width:none;
+  }
+
+  .projects-filter::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  .projects-filter .filter-btn{
+    display:inline-flex!important;
+    flex:0 0 auto!important;
+    width:auto!important;
+    min-width:max-content!important;
+    margin:0!important;
+    padding:.72rem 1rem!important;
+    white-space:nowrap!important;
+    scroll-snap-align:start;
+  }
+
+  .projects-grid{
+    width:100%;
+  }
+
+  .project-img-container{
+    height:15.5rem!important;
+  }
+
+  .project-card.project-featured .project-img-container{
+    height:18rem!important;
+  }
+
+  .project-img{
+    background-size:cover!important;
+    background-position:center!important;
+  }
+
+  .project-content{
+    padding:1.4rem 1.3rem 1.35rem;
+  }
+
+  .project-card.project-featured .project-content{
+    padding-top:1.5rem;
+  }
+}
+
+@media(max-width:390px){
+  .projects{
+    padding-inline:.85rem;
+  }
+
+  .projects .section-header{
+    margin-bottom:1.55rem;
+  }
+
+  .projects-filter{
+    margin-bottom:1.55rem!important;
+  }
+
+  .project-img-container{
+    height:14.25rem!important;
+  }
+
+  .project-card.project-featured .project-img-container{
+    height:16.75rem!important;
+  }
+}
