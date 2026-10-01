@@ -40,6 +40,7 @@ class ProjectsManager {
         title: 'FNF Commissions',
         description: 'I make custom charts, modcharts, and code for Friday Night Funkin\'. Some for free, some paid.',
         category: 'web',
+        featured: true,
         status: 'active',
         image: './assets/fnf_commission.png',
         features: ['Chart', 'Modchart', 'Code'],
@@ -87,6 +88,7 @@ class ProjectsManager {
         title: 'Selina',
         description: 'A Discord bot for communities. Moderation, leveling, and AI chat. Public beta in development.',
         category: 'app',
+        featured: true,
         status: 'active',
         image: './assets/selina.jpg',
         features: [
@@ -120,9 +122,13 @@ class ProjectsManager {
     const filterButtons = document.querySelectorAll('.filter-btn');
     filterButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const filter = e.target.getAttribute('data-filter');
+        const button = e.currentTarget;
+        const filter = button.getAttribute('data-filter');
         this.filterProjects(filter);
-        this.updateActiveFilter(e.target);
+        this.updateActiveFilter(button);
+        if (window.innerWidth <= 768) {
+          button.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
       });
     });
   }
@@ -153,6 +159,7 @@ class ProjectsManager {
   createProjectCard(project, index) {
     const card = document.createElement('div');
     card.className = 'project-card';
+    if (project.featured) card.classList.add('project-featured');
     card.setAttribute('data-category', project.category);
     card.setAttribute('data-project-id', project.id);
     card.style.animationDelay = `${index * 0.2}s`;
@@ -195,7 +202,7 @@ class ProjectsManager {
     grid.innerHTML = '';
 
     const filteredProjects = this.currentFilter === 'all'
-      ? this.projects
+      ? [...this.projects].sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)))
       : this.projects.filter(project => project.category === this.currentFilter);
 
     filteredProjects.forEach((project, index) => {
