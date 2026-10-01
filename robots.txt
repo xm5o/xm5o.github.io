@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /analytics.html
 
 Sitemap: https://xm5o.github.io/sitemap.xml
