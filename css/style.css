@@ -14647,3 +14647,57 @@ html[dir="rtl"] .faq-question{
     font-size:1.65rem!important;
   }
 }
+
+
+/* 2026 Arabic project artwork */
+.project-card.project-art-ar .project-img-ar{
+  position:relative;
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle at 78% 22%,rgba(var(--main-color-rgb),.18),transparent 34%),
+    linear-gradient(145deg,#111416,#08090a 70%);
+  overflow:hidden;
+}
+
+.project-card.project-art-ar .project-img-ar::before{
+  content:"";
+  position:absolute;
+  inset:14% 9%;
+  border:1px solid rgba(var(--main-color-rgb),.16);
+  border-radius:1.1rem;
+  transform:rotate(-3deg);
+}
+
+.project-card.project-art-ar .project-img-ar::after{
+  content:"";
+  position:absolute;
+  width:8rem;
+  height:8rem;
+  border-radius:50%;
+  background:rgba(var(--main-color-rgb),.08);
+  filter:blur(18px);
+}
+
+.project-art-ar-copy{
+  position:relative;
+  z-index:2;
+  display:grid;
+  gap:.45rem;
+  place-items:center;
+  text-align:center;
+}
+
+.project-art-ar-copy strong{
+  color:var(--main-color);
+  font-size:clamp(2.8rem,12vw,4.5rem);
+  line-height:.9;
+  font-weight:950;
+  letter-spacing:-.06em;
+}
+
+.project-art-ar-copy span{
+  color:rgba(var(--text-color-rgb),.66);
+  font-size:clamp(.9rem,3.7vw,1.1rem);
+  font-weight:700;
+}
