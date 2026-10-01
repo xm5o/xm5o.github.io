@@ -51,17 +51,24 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initTypewriterEffect() {
+  const roleElement = document.querySelector('.animated-role');
+  if (!roleElement) return;
+
+  const setMobileRole = () => {
+    const isArabic = document.documentElement.dir === 'rtl' || Boolean(window.ImmortalI18n?.isArabic);
+    roleElement.textContent = isArabic ? 'مطوّر ويب' : 'Web Developer';
+  };
 
   if (window.matchMedia('(max-width: 768px)').matches) {
-    roleElement.textContent = window.ImmortalI18n?.isArabic ? 'مطوّر ويب' : 'Web Developer';
+    setMobileRole();
+    window.addEventListener('immortal-language-ready', setMobileRole);
     return;
   }
 
   const roles = window.ImmortalI18n?.isArabic
     ? ["مطوّر ويب", "مطوّر واجهات", "مطوّر بوتات Discord", "مساهم في مشاريع مفتوحة المصدر"]
     : ["Web Developer", "Frontend Dev", "Discord Bot Dev", "Open-Source Contributor"];
-  const roleElement = document.querySelector('.animated-role');
-  if (!roleElement) return;
+
   let currentRoleIndex = 0;
   let currentCharIndex = 0;
   let isDeleting = false;
@@ -87,6 +94,7 @@ function initTypewriterEffect() {
       currentRoleIndex = (currentRoleIndex + 1) % roles.length;
       typeSpeed = 500;
     }
+
     setTimeout(typeRole, typeSpeed);
   }
 
