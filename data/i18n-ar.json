@@ -187,7 +187,7 @@
   "AI Chat": "محادثة AI",
   "Public Beta": "تجريبي عام",
   "Visit Website": "زيارة الموقع",
-  "View Source": "عرض الكود",
+  "View Source": "عرض المصدر",
   "Play Now": "العب الحين",
   "Connecting to Discord...": "جاري الاتصال بـ Discord...",
   "WebSocket connected": "تم اتصال WebSocket",
@@ -778,5 +778,14 @@
   "View Code": "عرض الكود",
   "Play Demo": "تشغيل التجربة",
   "Launching In": "الإطلاق خلال",
-  "Something amazing is being crafted": "شيء جديد قيد التجهيز"
+  "Something amazing is being crafted": "شيء جديد قيد التجهيز",
+  "BotDock": "BotDock",
+  "A desktop app for running and managing local Discord bots. Start, stop, restart, read logs, and watch CPU and memory from one place.": "تطبيق سطح مكتب لتشغيل وإدارة بوتات Discord المحلية. شغّل وأوقف وأعد التشغيل واقرأ السجلات وراقب المعالج والذاكرة من مكان واحد.",
+  "FNF Asset Prep": "FNF Asset Prep",
+  "A small desktop tool that prepares image and audio files for FNF. Images go to PNG and audio goes to OGG.": "أداة سطح مكتب صغيرة تجهز ملفات الصور والصوت لـ FNF. الصور تتحول إلى PNG والصوت يتحول إلى OGG.",
+  "Windows": "Windows",
+  "PNG": "PNG",
+  "OGG": "OGG",
+  "Download": "تحميل",
+  "Open Releases": "فتح الإصدارات"
 }
