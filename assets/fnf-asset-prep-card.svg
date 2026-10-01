@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">FNF Asset Prep project card</title>
+  <desc id="desc">Technical project artwork made from vector shapes and text.</desc>
+  <rect width="1200" height="650" fill="#090b0d"/>
+  <g stroke="#172027" stroke-width="1">
+    <path d="M0 130H1200M0 260H1200M0 390H1200M0 520H1200"/>
+    <path d="M150 0V650M300 0V650M450 0V650M600 0V650M750 0V650M900 0V650M1050 0V650"/>
+  </g>
+  <text x="72" y="115" fill="#86bfd2" font-family="Arial, sans-serif" font-size="54" font-weight="800">FNF ASSET PREP</text>
+  <text x="74" y="154" fill="#74818a" font-family="Arial, sans-serif" font-size="23" letter-spacing="3">SOURCE FILES TO GAME READY FORMATS</text>
+  <g transform="translate(75 230)">
+    <rect width="360" height="300" rx="28" fill="#0f1317" stroke="#26323a" stroke-width="2"/>
+    <text x="34" y="58" fill="#89949d" font-family="monospace" font-size="20">IMAGE INPUT</text>
+    <g fill="#161c21" stroke="#303b43">
+      <rect x="34" y="90" width="88" height="58" rx="10"/>
+      <rect x="136" y="90" width="88" height="58" rx="10"/>
+      <rect x="238" y="90" width="88" height="58" rx="10"/>
+    </g>
+    <g fill="#b2bdc5" font-family="monospace" font-size="18" text-anchor="middle">
+      <text x="78" y="126">JPG</text><text x="180" y="126">WEBP</text><text x="282" y="126">BMP</text>
+    </g>
+    <path d="M60 205H295" stroke="#42505a" stroke-width="4"/>
+    <path d="M278 190L302 205L278 220" fill="none" stroke="#86bfd2" stroke-width="5"/>
+    <text x="34" y="270" fill="#86bfd2" font-family="Arial, sans-serif" font-size="42" font-weight="800">PNG</text>
+  </g>
+  <g transform="translate(475 230)">
+    <rect width="650" height="300" rx="28" fill="#0f1317" stroke="#26323a" stroke-width="2"/>
+    <text x="34" y="58" fill="#89949d" font-family="monospace" font-size="20">AUDIO INPUT</text>
+    <g fill="#161c21" stroke="#303b43">
+      <rect x="34" y="90" width="105" height="58" rx="10"/>
+      <rect x="153" y="90" width="105" height="58" rx="10"/>
+      <rect x="272" y="90" width="105" height="58" rx="10"/>
+      <rect x="391" y="90" width="105" height="58" rx="10"/>
+    </g>
+    <g fill="#b2bdc5" font-family="monospace" font-size="18" text-anchor="middle">
+      <text x="86" y="126">WAV</text><text x="205" y="126">MP3</text><text x="324" y="126">FLAC</text><text x="443" y="126">M4A</text>
+    </g>
+    <path d="M60 205H545" stroke="#42505a" stroke-width="4"/>
+    <path d="M528 190L552 205L528 220" fill="none" stroke="#86bfd2" stroke-width="5"/>
+    <text x="34" y="270" fill="#86bfd2" font-family="Arial, sans-serif" font-size="42" font-weight="800">OGG</text>
+    <text x="170" y="267" fill="#6f7d87" font-family="monospace" font-size="18">VORBIS Q6</text>
+  </g>
+</svg>
