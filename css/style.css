@@ -13761,3 +13761,119 @@ html[dir="rtl"] .faq-question{
     margin-top:1.3rem;
   }
 }
+
+
+/* 2026 compact mobile hero pfp */
+@media(max-width:768px){
+  .hero-image{
+    display:block!important;
+    position:absolute;
+    top:8.05rem;
+    right:1.1rem;
+    left:auto;
+    width:auto;
+    margin:0;
+    z-index:4;
+    pointer-events:none;
+    animation:mobileCompactPfpIn .55s cubic-bezier(.16,1,.3,1) .08s both;
+  }
+
+  .image-wrapper{
+    width:clamp(64px,18vw,78px);
+    height:clamp(64px,18vw,78px);
+    max-width:none;
+    margin:0;
+  }
+
+  .profile-container{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    border-radius:50%;
+    border:1px solid rgba(var(--main-color-rgb),.48);
+    background:var(--second-bg-color);
+    box-shadow:
+      0 10px 28px rgba(0,0,0,.34),
+      0 0 0 4px rgba(var(--main-color-rgb),.055);
+  }
+
+  .profile-img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    border-radius:50%;
+    transform:none!important;
+    filter:grayscale(10%) contrast(105%) brightness(1.03);
+  }
+
+  .profile-img:hover{
+    transform:none!important;
+    filter:grayscale(10%) contrast(105%) brightness(1.03);
+  }
+
+  .hero-image .image-border,
+  .hero-image .orbital-ring,
+  .hero-image .glow-effect,
+  .hero-image .profile-overlay,
+  .hero-image .floating-icon{
+    display:none!important;
+  }
+
+  .subtitle-container{
+    padding-right:clamp(5.7rem,21vw,8.5rem);
+  }
+
+  [dir="rtl"] .hero-image{
+    right:auto;
+    left:1.1rem;
+  }
+
+  [dir="rtl"] .subtitle-container{
+    padding-right:0;
+    padding-left:clamp(5.7rem,21vw,8.5rem);
+  }
+}
+
+@media(max-width:390px){
+  .hero-image{
+    top:7.85rem;
+    right:1rem;
+  }
+
+  [dir="rtl"] .hero-image{
+    right:auto;
+    left:1rem;
+  }
+
+  .image-wrapper{
+    width:62px;
+    height:62px;
+  }
+
+  .subtitle-container{
+    padding-right:7.2rem;
+  }
+
+  [dir="rtl"] .subtitle-container{
+    padding-right:0;
+    padding-left:7.2rem;
+  }
+}
+
+@keyframes mobileCompactPfpIn{
+  from{
+    opacity:0;
+    transform:translateY(-8px) scale(.9);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .hero-image{
+    animation:none!important;
+  }
+}
