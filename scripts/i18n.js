@@ -92,7 +92,14 @@
     const w=document.createElement('div');w.className='site-language-switch';w.setAttribute('role','group');w.setAttribute('aria-label',isArabic?'اختيار اللغة':'Choose language');
     w.innerHTML='<button type="button" data-lang="ar" aria-pressed="'+isArabic+'">عربي</button><span class="divider" aria-hidden="true">·</span><button type="button" data-lang="en" aria-pressed="'+(!isArabic)+'">EN</button>';
     w.addEventListener('click',e=>{const b=e.target.closest('button[data-lang]');if(!b)return;const next=normalize(b.dataset.lang);if(next===language)return;try{localStorage.setItem(STORAGE_KEY,next)}catch{}location.reload()});
-    document.body.append(w);
+    const place=()=>{
+      const mobile=window.matchMedia('(max-width:1024px)').matches;
+      const nav=document.querySelector('.navbar');
+      const host=mobile&&nav ? nav : document.body;
+      if(w.parentElement!==host) host.append(w);
+    };
+    place();
+    window.addEventListener('resize',place,{passive:true});
   }
   function observer(){
     if(!isArabic||!document.body)return; const o=new MutationObserver(rs=>{for(const r of rs){if(r.type==='characterData'){textNode(r.target);continue}if(r.type==='attributes'){attrs(r.target);continue}for(const n of r.addedNodes)subtree(n)}});
