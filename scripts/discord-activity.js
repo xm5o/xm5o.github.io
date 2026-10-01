@@ -497,7 +497,7 @@ function updateSpotify(spotifyData) {
     }
     
     updateProgress();
-    progressInterval = setInterval(updateProgress, 100);
+    progressInterval = setInterval(updateProgress, 1000);
     
     const spotifyButtons = document.getElementById('spotifyButtons');
     spotifyButtons.innerHTML = '';
@@ -733,7 +733,7 @@ function updateActivities(activities) {
             }
             
             updateActivityProgress();
-            activityIntervals[activity.id] = setInterval(updateActivityProgress, 100);
+            activityIntervals[activity.id] = setInterval(updateActivityProgress, 1000);
             
         } else if (activity.created_at) {
             activityTimeElement.style.display = 'flex';
