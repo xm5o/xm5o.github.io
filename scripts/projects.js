@@ -113,6 +113,40 @@ class ProjectsManager {
         badge: 'Public Beta',
         badgeType: 'beta',
         releaseDate: null
+      },
+      {
+        id: 'botdock',
+        title: 'BotDock',
+        description: 'A desktop app for running and managing local Discord bots. Start, stop, restart, read logs, and watch CPU and memory from one place.',
+        category: 'app',
+        featured: true,
+        status: 'active',
+        image: './assets/botdock-card.svg',
+        features: ['Open-source', 'Node.js', 'Windows'],
+        links: {
+          download: 'https://github.com/xm5o/BotDock/releases',
+          github: 'https://github.com/xm5o/BotDock'
+        },
+        badge: 'Open-source',
+        badgeType: 'success',
+        releaseDate: null
+      },
+      {
+        id: 'fnf-asset-prep',
+        title: 'FNF Asset Prep',
+        description: 'A small desktop tool that prepares image and audio files for FNF. Images go to PNG and audio goes to OGG.',
+        category: 'app',
+        featured: true,
+        status: 'active',
+        image: './assets/fnf-asset-prep-card.svg',
+        features: ['Open-source', 'PNG', 'OGG'],
+        links: {
+          download: 'https://github.com/xm5o/FNF-Asset-Prep/releases',
+          github: 'https://github.com/xm5o/FNF-Asset-Prep'
+        },
+        badge: 'Open-source',
+        badgeType: 'success',
+        releaseDate: null
       }
     ];
   }
@@ -287,6 +321,14 @@ class ProjectsManager {
             `);
     }
 
+    if (project.links.download) {
+      actions.push(`
+                <a href="${project.links.download}" class="quick-action-btn" target="_blank" rel="noopener noreferrer" aria-label="Open Releases">
+                    <i class="fas fa-download"></i>
+                </a>
+            `);
+    }
+
     if (project.links.github) {
       actions.push(`
                 <a href="${project.links.github}" class="quick-action-btn" target="_blank" rel="noopener noreferrer" aria-label="View Code">
@@ -339,6 +381,10 @@ class ProjectsManager {
       primaryLink = project.links.caseStudy;
       buttonText = 'View Case Study';
       icon = 'fas fa-layer-group';
+    } else if (project.links.download) {
+      primaryLink = project.links.download;
+      buttonText = 'Download';
+      icon = 'fas fa-download';
     } else if (project.links.website) {
       primaryLink = project.links.website;
       buttonText = 'Visit Website';
@@ -359,7 +405,7 @@ class ProjectsManager {
     return `
     <a href="${primaryLink}" class="add-button primary"${external ? ' target="_blank" rel="noopener noreferrer"' : ''}>
       <i class="${icon}"></i>
-      <span>${buttonText}</span>
+      <span>${this.translate(buttonText)}</span>
     </a>
   `;
   }
@@ -384,7 +430,7 @@ class ProjectsManager {
         break;
     }
 
-    return `<div class="${badgeClass}">${project.badge}</div>`;
+    return `<div class="${badgeClass}">${this.translate(project.badge)}</div>`;
   }
 
   filterProjects(filter) {
