@@ -14524,3 +14524,126 @@ html[dir="rtl"] .faq-question{
     height:16.75rem!important;
   }
 }
+
+
+/* 2026 mobile hero rtl + centering fix */
+@media(max-width:768px){
+  /* Use logical positioning so the hero mirrors cleanly in RTL. */
+  .hero-image,
+  [dir="rtl"] .hero-image{
+    left:auto!important;
+    right:auto!important;
+    inset-inline-end:1.1rem!important;
+  }
+
+  .subtitle-container,
+  [dir="rtl"] .subtitle-container{
+    padding-left:0!important;
+    padding-right:0!important;
+    padding-inline-end:clamp(5.7rem,21vw,8.5rem)!important;
+    text-align:start!important;
+  }
+
+  .text-reveal,
+  .home .gradient-heading{
+    width:100%;
+  }
+
+  .home .gradient-heading,
+  [dir="rtl"] .home .gradient-heading{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    text-align:start!important;
+  }
+
+  [dir="rtl"] .home .gradient-heading{
+    align-items:flex-end;
+  }
+
+  .home .gradient-heading .word-animate:first-child,
+  [dir="rtl"] .home .gradient-heading .word-animate:first-child{
+    margin-inline:0!important;
+    text-align:start!important;
+  }
+
+  .home .immortal-text{
+    direction:ltr;
+    unicode-bidi:isolate;
+  }
+
+  [dir="rtl"] .subtitle-container{
+    margin-bottom:clamp(2.6rem,9vw,3.5rem)!important;
+  }
+
+  .animated-titles,
+  .typewriter,
+  .enhanced-tagline,
+  [dir="rtl"] .animated-titles,
+  [dir="rtl"] .typewriter,
+  [dir="rtl"] .enhanced-tagline{
+    text-align:start!important;
+  }
+
+  /* Center socials independently of document direction. */
+  .enhanced-social,
+  [dir="rtl"] .enhanced-social{
+    width:100%!important;
+    max-width:none!important;
+    margin-inline:auto!important;
+  }
+
+  .social-buttons,
+  [dir="rtl"] .social-buttons{
+    width:100%!important;
+    display:flex!important;
+    flex-direction:row!important;
+    direction:ltr;
+    justify-content:center!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:clamp(.55rem,2.2vw,.9rem)!important;
+    padding-inline:0!important;
+    margin-inline:auto!important;
+  }
+
+  .social-btn,
+  .social-btn[data-mobile-main="true"]{
+    flex:0 0 auto!important;
+  }
+
+  /* The primary CTA icon should use the site accent, never inherit black. */
+  .projects-cta .btn-icon,
+  .projects-cta .btn-icon i{
+    color:var(--main-color)!important;
+  }
+}
+
+@media(max-width:390px){
+  .hero-image,
+  [dir="rtl"] .hero-image{
+    inset-inline-end:1rem!important;
+  }
+
+  .subtitle-container,
+  [dir="rtl"] .subtitle-container{
+    padding-inline-end:7.2rem!important;
+  }
+
+  [dir="rtl"] .subtitle-container{
+    margin-bottom:2.8rem!important;
+  }
+
+  .social-buttons,
+  [dir="rtl"] .social-buttons{
+    gap:clamp(.35rem,1.9vw,.62rem)!important;
+  }
+
+  .social-btn,
+  .social-btn[data-mobile-main="true"]{
+    width:2.9rem!important;
+    height:2.9rem!important;
+    min-width:2.9rem!important;
+    font-size:1.65rem!important;
+  }
+}
