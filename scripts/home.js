@@ -29,20 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  const socialMore = document.getElementById('mobileSocialMore');
-  const socialButtons = document.querySelector('.social-buttons');
-  if (socialMore && socialButtons) {
-    socialMore.addEventListener('click', () => {
-      const expanded = socialButtons.classList.toggle('mobile-expanded');
-      socialMore.setAttribute('aria-expanded', String(expanded));
-      const icon = socialMore.querySelector('i');
-      if (icon) {
-        icon.classList.toggle('bx-plus', !expanded);
-        icon.classList.toggle('bx-x', expanded);
-      }
-    });
-  }
-
   document.querySelector('.projects-cta')?.addEventListener('click', (e) => {
     e.preventDefault();
     document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -65,6 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initTypewriterEffect() {
+
+  if (window.matchMedia('(max-width: 768px)').matches) {
+    roleElement.textContent = window.ImmortalI18n?.isArabic ? 'مطوّر ويب' : 'Web Developer';
+    return;
+  }
+
   const roles = window.ImmortalI18n?.isArabic
     ? ["مطوّر ويب", "مطوّر واجهات", "مطوّر بوتات Discord", "مساهم في مشاريع مفتوحة المصدر"]
     : ["Web Developer", "Frontend Dev", "Discord Bot Dev", "Open-Source Contributor"];
