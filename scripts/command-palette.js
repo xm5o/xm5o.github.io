@@ -159,7 +159,15 @@
       }
     });
 
-    const trigger = document.getElementById('commandPaletteTrigger');\n    if (trigger) {\n      trigger.addEventListener('click', event => {\n        event.preventDefault();\n        open();\n      });\n    }\n\n    window.addEventListener('immortal-language-ready', copy);
+    const trigger = document.getElementById('commandPaletteTrigger');
+    if (trigger) {
+      trigger.addEventListener('click', event => {
+        event.preventDefault();
+        open();
+      });
+    }
+
+    window.addEventListener('immortal-language-ready', copy);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', build, { once: true });
