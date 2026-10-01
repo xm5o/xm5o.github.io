@@ -12164,3 +12164,56 @@ html[dir="rtl"] .faq-question{
     font-size:1rem;
   }
 }
+
+
+/* 2026 mobile hero profile sizing fix */
+@media(max-width:768px){
+  .hero-image{
+    width:100%;
+    max-width:none;
+    margin:1.5rem auto 0;
+    display:grid;
+    place-items:center;
+    order:-1;
+  }
+
+  .image-wrapper{
+    --mobile-profile-size:clamp(165px,46vw,205px);
+    width:var(--mobile-profile-size);
+    height:var(--mobile-profile-size);
+    max-width:none;
+    margin:0 auto;
+    flex:0 0 auto;
+  }
+
+  .profile-container{
+    width:100%;
+    height:100%;
+  }
+
+  .profile-img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+  }
+
+  .image-border{
+    inset:-4px;
+  }
+
+  .orbital-ring{
+    width:118%;
+    height:118%;
+  }
+}
+
+@media(max-width:390px){
+  .image-wrapper{
+    --mobile-profile-size:clamp(155px,44vw,180px);
+  }
+
+  .hero-image{
+    margin-top:1rem;
+  }
+}
