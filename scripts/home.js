@@ -29,6 +29,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  const socialMore = document.getElementById('mobileSocialMore');
+  const socialButtons = document.querySelector('.social-buttons');
+  if (socialMore && socialButtons) {
+    socialMore.addEventListener('click', () => {
+      const expanded = socialButtons.classList.toggle('mobile-expanded');
+      socialMore.setAttribute('aria-expanded', String(expanded));
+      const icon = socialMore.querySelector('i');
+      if (icon) {
+        icon.classList.toggle('bx-plus', !expanded);
+        icon.classList.toggle('bx-x', expanded);
+      }
+    });
+  }
+
   document.querySelector('.projects-cta')?.addEventListener('click', (e) => {
     e.preventDefault();
     document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
