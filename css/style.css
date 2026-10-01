@@ -13199,3 +13199,9 @@ html[dir="rtl"] .faq-question{
     animation:none!important;
   }
 }
+
+
+/* Keep the mobile social expander off desktop. */
+@media(min-width:769px){
+  .mobile-social-more{display:none!important}
+}
