@@ -12007,3 +12007,59 @@ main, .content {
     justify-content: center;
   }
 }
+
+
+/* 2026 homepage refinement */
+.faq-question{
+  width:100%;
+  border:0;
+  font:inherit;
+  color:inherit;
+  text-align:inherit;
+}
+.songs-grid .song-card:nth-of-type(n+5){
+  display:none;
+}
+.music-more-actions{
+  display:flex;
+  justify-content:center;
+  margin-top:2rem;
+}
+.music-more-link{
+  display:inline-flex;
+  align-items:center;
+  gap:.7rem;
+  min-height:46px;
+  padding:.75rem 1rem;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:999px;
+  background:rgba(255,255,255,.045);
+  color:var(--text-color,#fff);
+  text-decoration:none;
+  transition:transform .2s ease,border-color .2s ease,background .2s ease;
+}
+.music-more-link:hover{
+  transform:translateY(-2px);
+  border-color:rgba(255,255,255,.24);
+  background:rgba(255,255,255,.075);
+}
+@supports (content-visibility:auto){
+  #discord-activity,#about,#now,#services,#projects,#music,#faq,#contact{
+    content-visibility:auto;
+    contain-intrinsic-size:auto 900px;
+  }
+}
+@media(max-width:900px){
+  .home .code-elements,
+  .home .grid-background,
+  .contact-particles,
+  .contact-geometric-bg{
+    display:none!important;
+  }
+  .home .geometric-bg .geo-shape:nth-child(n+4){
+    display:none!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .music-more-link{transition:none}
+}
