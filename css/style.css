@@ -14387,3 +14387,25 @@ html[dir="rtl"] .faq-question{
     height:12.25rem;
   }
 }
+
+
+/* 2026 mobile menu visibility fix */
+@media(max-width:1024px){
+  .navbar>a,
+  .navbar.active>a{
+    opacity:1!important;
+    visibility:visible!important;
+    transform:none!important;
+    animation:none!important;
+    pointer-events:auto!important;
+  }
+
+  .navbar .site-language-switch{
+    margin-top:auto!important;
+    margin-bottom:.15rem!important;
+  }
+
+  #commandPaletteTrigger{
+    margin-bottom:1rem!important;
+  }
+}
