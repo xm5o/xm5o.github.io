@@ -12,6 +12,14 @@ class ProjectsManager {
     this.loadProjects();
     this.setupEventListeners();
     this.handleMobileView();
+
+    window.addEventListener('immortal-language-ready', () => {
+      this.renderProjects();
+    });
+  }
+
+  translate(value) {
+    return window.ImmortalI18n?.t ? window.ImmortalI18n.t(value) : String(value ?? '');
   }
 
   loadProjects() {
@@ -169,10 +177,20 @@ class ProjectsManager {
     const actionButton = this.generateActionButton(project);
     const badge = this.generateBadge(project);
     const comingSoonOverlay = this.generateComingSoonOverlay(project);
+    const isArabicProjectArt = Boolean(window.ImmortalI18n?.isArabic) && project.id === 'fnf-commission';
+    if (isArabicProjectArt) card.classList.add('project-art-ar');
+    const imageMarkup = isArabicProjectArt
+      ? `<div class="project-img project-img-ar">
+          <div class="project-art-ar-copy">
+            <strong>FNF</strong>
+            <span>${this.translate('Chart')} · ${this.translate('Modchart')} · ${this.translate('Code')}</span>
+          </div>
+        </div>`
+      : `<div class="project-img" style="background-image: url('${project.image}')"></div>`;
 
     card.innerHTML = `
         <div class="project-img-container">
-            <div class="project-img" style="background-image: url('${project.image}')"></div>
+            ${imageMarkup}
             ${badge}
             ${project.status === 'coming-soon' ? comingSoonOverlay : `
                 <div class="project-overlay">
@@ -183,8 +201,8 @@ class ProjectsManager {
             `}
         </div>
         <div class="project-content">
-            <h3 class="project-title">${project.title}</h3>
-            <p class="project-description">${project.description}</p>
+            <h3 class="project-title">${this.translate(project.title)}</h3>
+            <p class="project-description">${this.translate(project.description)}</p>
             ${features}
             <div class="project-actions">
                 ${actionButton}
@@ -223,18 +241,18 @@ class ProjectsManager {
                     </div>
                     ${project.releaseDate ? `
                         <div class="countdown-container">
-                            <h4>Launching In</h4>
+                            <h4>${this.translate('Launching In')}</h4>
                             <div class="countdown" data-target="${project.releaseDate}" data-project="${project.id}">
                                 <div class="countdown-loading">
                                     <i class="fas fa-spinner fa-spin"></i>
-                                    <span>Loading...</span>
+                                    <span>${this.translate('Loading...')}</span>
                                 </div>
                             </div>
                         </div>
                     ` : `
                         <div class="coming-soon-text">
-                            <h4>Coming Soon</h4>
-                            <p>Something amazing is being crafted</p>
+                            <h4>${this.translate('Coming Soon')}</h4>
+                            <p>${this.translate('Something amazing is being crafted')}</p>
                         </div>
                     `}
                 </div>
@@ -285,12 +303,12 @@ class ProjectsManager {
 
     const featureItems = features.map(feature => {
       if (typeof feature === 'string') {
-        return `<div class="feature">${feature}</div>`;
+        return `<div class="feature">${this.translate(feature)}</div>`;
       } else {
         return `
                     <div class="feature">
                         <i class="${feature.icon}"></i>
-                        <span>${feature.text}</span>
+                        <span>${this.translate(feature.text)}</span>
                     </div>
                 `;
       }
@@ -308,7 +326,7 @@ class ProjectsManager {
       return `
       <a class="add-button disabled">
         <i class="fas fa-hourglass-half"></i>
-        <span>Coming Soon</span>
+        <span>${this.translate('Coming Soon')}</span>
       </a>
     `;
     }
