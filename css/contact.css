@@ -2167,3 +2167,15 @@
     margin-top: 1rem;
   }
 }
+
+
+/* 2026 simplified contact layout */
+.enhanced-contact-container{
+  grid-template-columns:minmax(0,780px)!important;
+  justify-content:center;
+}
+.enhanced-primary-contact{
+  width:100%;
+  max-width:780px;
+  margin-inline:auto;
+}
