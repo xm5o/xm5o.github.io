@@ -491,7 +491,7 @@
       if (activity.kind === 'spotify') {
         setText(this.type, 'Listening');
         setText(this.name, activity.name || 'Spotify');
-        setText(this.details, activity.details ? `by ${activity.details}` : '');
+        setText(this.details, activity.details || '');
         setText(this.state, activity.state || '');
         this.renderArtwork(activity.album_art_url, '', 'Album artwork');
         this.renderActions([
@@ -635,9 +635,7 @@
         }
 
         const label = document.createElement('span');
-        label.textContent = activity.kind === 'spotify'
-          ? `Spotify · ${activity.name || 'Listening'}`
-          : `${ACTIVITY_LABELS[activity.type] || 'Active'} · ${activity.name || 'Discord'}`;
+        label.textContent = activity.name || (activity.kind === 'spotify' ? 'Spotify' : 'Discord');
 
         item.appendChild(label);
         this.secondaryList.appendChild(item);
@@ -681,7 +679,7 @@
       } else {
         setHidden(this.progress, true);
         setHidden(this.elapsed, false);
-        setText(this.elapsedText, `${formatDuration(elapsed)} elapsed`);
+        setText(this.elapsedText, formatDuration(elapsed));
       }
     }
 
