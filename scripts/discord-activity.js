@@ -54,7 +54,8 @@
 
   function normalizeColor(value) {
     if (typeof value === 'number' && Number.isFinite(value)) {
-      return `#${value.toString(16).padStart(6, '0').slice(-6)}`;
+      const rgbValue = (value >>> 0) & 0xffffff;
+      return `#${rgbValue.toString(16).padStart(6, '0')}`;
     }
 
     if (typeof value !== 'string') return '';
@@ -71,6 +72,55 @@
       g: parseInt(match[2], 16),
       b: parseInt(match[3], 16)
     };
+  }
+
+  function discordCreatedAt(userId) {
+    try {
+      const timestamp = (BigInt(userId) >> 22n) + 1420070400000n;
+      return new Date(Number(timestamp));
+    } catch {
+      return null;
+    }
+  }
+
+  function formatMemberSince(userId) {
+    const date = discordCreatedAt(userId);
+    if (!date || Number.isNaN(date.getTime())) return '';
+
+    return new Intl.DateTimeFormat('en', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    }).format(date);
+  }
+
+  function profileMetadata(data) {
+    const candidates = [
+      data?.user,
+      data?.profile,
+      data?.profile_metadata,
+      data?.user?.profile,
+      data?.user?.user_profile,
+      data?.user_profile
+    ].filter(value => value && typeof value === 'object' && !Array.isArray(value));
+
+    return Object.assign({}, ...candidates);
+  }
+
+  function effectAssetUrl(effect, reducedMotion = false) {
+    if (!effect || typeof effect !== 'object') return '';
+
+    const direct = reducedMotion
+      ? effect.reducedMotionSrc || effect.staticFrameSrc
+      : effect.thumbnailPreviewSrc || effect.src || effect.effects?.find(item => item?.src)?.src;
+
+    const safeDirect = safeHttpUrl(direct);
+    if (safeDirect) return safeDirect;
+
+    const id = effect.id || effect.sku_id || effect.skuId;
+    if (!id) return '';
+
+    return `${DISCORD_CDN}/media/v1/collectibles-shop/${id}/${reducedMotion ? 'static' : 'animated'}`;
   }
 
   function formatDuration(milliseconds) {
@@ -196,8 +246,13 @@
       this.status = qs('#statusIndicator');
       this.displayName = qs('#displayName');
       this.username = qs('#username');
+      this.pronouns = qs('#profilePronouns');
       this.badges = qs('#badgesContainer');
       this.customStatus = qs('#customStatus');
+      this.bioWrap = qs('#profileBioWrap');
+      this.bio = qs('#profileBio');
+      this.memberSince = qs('#memberSince');
+      this.profileEffect = qs('#profileEffect');
       this.devices = qs('#deviceIcons');
       this.tagRow = qs('#tagRow');
       this.tagInfo = qs('#tagInfo');
@@ -230,6 +285,7 @@
       this.renderCustomStatus(presence.activities || []);
       this.renderDevices(presence);
       this.renderServerTag(user.primary_guild);
+      this.renderMemberSince(user.id || USER_ID);
     }
 
     renderStatus(status = 'offline') {
@@ -336,13 +392,50 @@
       setHidden(this.tagRow, false);
     }
 
-    renderExtras(data) {
-      const user = data?.user;
-      if (!user) return;
+    renderMemberSince(userId) {
+      setText(this.memberSince, formatMemberSince(userId || USER_ID));
+    }
 
-      this.renderBanner(user);
-      this.renderBadges(data.badges || []);
-      this.applyAccent(user.banner_color ?? user.accent_color);
+    renderProfileMetadata(profile) {
+      const pronouns = typeof profile?.pronouns === 'string' ? profile.pronouns.trim() : '';
+      setText(this.pronouns, pronouns);
+      setHidden(this.pronouns, !pronouns);
+
+      const bio = typeof profile?.bio === 'string' ? profile.bio.trim() : '';
+      setText(this.bio, bio);
+      setHidden(this.bioWrap, !bio);
+
+      this.applyTheme(profile?.theme_colors, profile?.accent_color ?? profile?.banner_color);
+      this.renderProfileEffect(profile?.profile_effect);
+    }
+
+    renderProfileEffect(effect) {
+      if (!this.profileEffect) return;
+
+      this.profileEffect.onload = null;
+      this.profileEffect.onerror = null;
+      this.profileEffect.removeAttribute('src');
+      setHidden(this.profileEffect, true);
+
+      const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
+      const url = effectAssetUrl(effect, reducedMotion);
+      if (!url) return;
+
+      this.profileEffect.onload = () => setHidden(this.profileEffect, false);
+      this.profileEffect.onerror = () => {
+        this.profileEffect.removeAttribute('src');
+        setHidden(this.profileEffect, true);
+      };
+      this.profileEffect.src = url;
+    }
+
+    renderExtras(data) {
+      const user = data?.user || {};
+      const profile = profileMetadata(data);
+
+      this.renderBanner({ ...user, ...profile });
+      this.renderBadges(data?.badges || []);
+      this.renderProfileMetadata(profile);
     }
 
     renderBanner(user) {
@@ -394,6 +487,32 @@
 
       this.shell.style.setProperty('--presence-profile-accent', hex);
       this.shell.style.setProperty('--presence-profile-accent-rgb', `${rgb.r}, ${rgb.g}, ${rgb.b}`);
+    }
+
+    applyTheme(themeColors, fallbackAccent) {
+      const colors = Array.isArray(themeColors)
+        ? themeColors.map(normalizeColor).filter(Boolean).slice(0, 2)
+        : [];
+
+      const fallback = normalizeColor(fallbackAccent);
+      const primary = colors[0] || fallback;
+      const secondary = colors[1] || colors[0] || fallback;
+
+      if (!primary || !secondary || !this.shell) {
+        this.applyAccent(fallbackAccent);
+        return;
+      }
+
+      const primaryRgb = hexToRgb(primary);
+      const secondaryRgb = hexToRgb(secondary);
+      if (!primaryRgb || !secondaryRgb) return;
+
+      this.shell.style.setProperty('--presence-theme-primary', primary);
+      this.shell.style.setProperty('--presence-theme-primary-rgb', `${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}`);
+      this.shell.style.setProperty('--presence-theme-secondary', secondary);
+      this.shell.style.setProperty('--presence-theme-secondary-rgb', `${secondaryRgb.r}, ${secondaryRgb.g}, ${secondaryRgb.b}`);
+
+      this.applyAccent(secondary);
     }
   }
 
