@@ -775,6 +775,7 @@
 
       <div class="presence-shell is-loading" id="presenceShell" aria-live="polite">
         <aside class="presence-profile" aria-label="Discord profile">
+          <img id="profileEffect" class="presence-profile-effect" src="" alt="" aria-hidden="true" hidden>
           <div class="presence-banner" id="presenceBanner">
             <img id="profileBanner" src="" alt="" hidden>
             <img id="profileBannerGif" src="" alt="" hidden>
@@ -795,11 +796,19 @@
                   <h3 id="displayName">Immortal</h3>
                   <div class="presence-badges" id="badgesContainer" aria-label="Discord badges"></div>
                 </div>
-                <p id="username">@trr0</p>
+                <div class="presence-handle-row">
+                  <p id="username">@trr0</p>
+                  <span class="presence-pronouns" id="profilePronouns" data-i18n-ignore hidden></span>
+                </div>
               </div>
             </div>
 
             <div class="presence-custom-status" id="customStatus" hidden></div>
+
+            <div class="presence-about" id="profileBioWrap" hidden>
+              <span class="presence-meta-label">About me</span>
+              <p id="profileBio" data-i18n-ignore></p>
+            </div>
 
             <div class="presence-meta">
               <div class="presence-meta-row" id="deviceRow">
@@ -812,6 +821,11 @@
               <div class="presence-meta-row" id="tagRow" hidden>
                 <span class="presence-meta-label">Server tag</span>
                 <div id="tagInfo" class="presence-tag"></div>
+              </div>
+
+              <div class="presence-meta-row" id="memberSinceRow">
+                <span class="presence-meta-label">Member since</span>
+                <div class="presence-member-since" id="memberSince"></div>
               </div>
             </div>
 
