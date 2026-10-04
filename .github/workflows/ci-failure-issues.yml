@@ -8,7 +8,6 @@ on:
       - Whole-site quality
       - XM5O Guard
       - XM5O Guard external links
-      - XM5O Guard deploy verification
       - Monthly site maintenance
       - Optimize managed images
     types: [completed]

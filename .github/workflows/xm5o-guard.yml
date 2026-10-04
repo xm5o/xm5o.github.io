@@ -98,10 +98,40 @@ jobs:
           if-no-files-found: ignore
           retention-days: 30
 
+  production:
+    name: Production verification
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [static, browser, api]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install production browser dependency
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Verify deployed production commit
+        env:
+          SITE_URL: https://xm5o.github.io
+          EXPECTED_SHA: ${{ github.sha }}
+        run: node tests/site-deploy-verify.mjs
+      - name: Upload production verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xm5o-guard-production
+          path: artifacts/xm5o-guard/deploy.md
+          if-no-files-found: ignore
+          retention-days: 30
+
   report:
     name: Guard report
     if: always()
-    needs: [static, browser, api]
+    needs: [static, browser, api, production]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -120,6 +150,7 @@ jobs:
             echo "- Static integrity: **${{ needs.static.result }}**"
             echo "- Browser + accessibility: **${{ needs.browser.result }}**"
             echo "- API health: **${{ needs.api.result }}**"
+            echo "- Production verification: **${{ needs.production.result }}**"
             echo
             find artifacts/report-parts -type f -name '*.md' -print0 | sort -z | xargs -0 -r cat
           } > artifacts/xm5o-guard-report.md
