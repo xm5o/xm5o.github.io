@@ -3,6 +3,10 @@ name: XM5O Guard external links
 on:
   schedule:
     - cron: '35 2 * * *'
+  pull_request:
+    paths:
+      - 'tests/site-external-links.mjs'
+      - '.github/workflows/xm5o-guard-external-links.yml'
   workflow_dispatch:
 
 permissions:
