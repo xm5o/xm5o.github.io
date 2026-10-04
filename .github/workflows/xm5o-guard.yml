@@ -15,23 +15,118 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  guard:
-    name: Guard site integrity
+  static:
+    name: Static integrity
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
     steps:
       - name: Checkout full history
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Use Node.js 20
+      - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-
-      - name: Run XM5O Guard
+          node-version: '24'
+      - name: Run static guard
         env:
           XM5O_GUARD_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: node tests/site-guard.mjs
+      - name: Upload static report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xm5o-guard-static
+          path: artifacts/xm5o-guard/static.md
+          if-no-files-found: ignore
+          retention-days: 30
+
+  browser:
+    name: Browser and accessibility
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install browser guard dependencies
+        run: |
+          npm install --no-save playwright@1.55.0 axe-core@4.10.3
+          npx playwright install --with-deps chromium
+      - name: Start local site
+        run: |
+          python3 -m http.server 4173 > /tmp/xm5o-guard-http.log 2>&1 &
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && exit 0; sleep 0.5; done
+          cat /tmp/xm5o-guard-http.log
+          exit 1
+      - name: Run browser and accessibility guard
+        env:
+          XM5O_GUARD_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: node tests/site-guard-browser.mjs
+      - name: Upload browser report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xm5o-guard-browser
+          path: artifacts/xm5o-guard/browser.md
+          if-no-files-found: ignore
+          retention-days: 30
+
+  api:
+    name: API health
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check site dependencies
+        run: node tests/site-guard-api.mjs
+      - name: Upload API report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xm5o-guard-api
+          path: artifacts/xm5o-guard/api.md
+          if-no-files-found: ignore
+          retention-days: 30
+
+  report:
+    name: Guard report
+    if: always()
+    needs: [static, browser, api]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Download Guard reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: xm5o-guard-*
+          path: artifacts/report-parts
+          merge-multiple: true
+      - name: Build combined report
+        run: |
+          mkdir -p artifacts
+          {
+            echo '# XM5O Guard V2 report'
+            echo
+            echo "- Static integrity: **${{ needs.static.result }}**"
+            echo "- Browser + accessibility: **${{ needs.browser.result }}**"
+            echo "- API health: **${{ needs.api.result }}**"
+            echo
+            find artifacts/report-parts -type f -name '*.md' -print0 | sort -z | xargs -0 -r cat
+          } > artifacts/xm5o-guard-report.md
+          cat artifacts/xm5o-guard-report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload combined Guard report
+        uses: actions/upload-artifact@v4
+        with:
+          name: xm5o-guard-report
+          path: artifacts/xm5o-guard-report.md
+          retention-days: 30
