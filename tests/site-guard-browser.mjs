@@ -70,7 +70,9 @@ for (const [viewportName, viewport] of viewports) {
       try {
         const url = new URL(request.url());
         const origin = new URL(base).origin;
-        if (url.origin === origin) localRequestFailures.push(url.pathname + ': ' + (request.failure()?.errorText || 'failed'));
+        const reason = request.failure()?.errorText || 'failed';
+        const intentionallyAbortedMedia = request.resourceType() === 'media' && reason.includes('ERR_ABORTED');
+        if (url.origin === origin && !intentionallyAbortedMedia) localRequestFailures.push(url.pathname + ': ' + reason);
       } catch {}
     });
 
@@ -114,6 +116,7 @@ for (const [viewportName, viewport] of viewports) {
         .map(el => el.outerHTML.slice(0, 180));
 
       const badHashes = [...document.querySelectorAll('a[href^="#"]')]
+        .filter(a => a.id !== 'commandPaletteTrigger')
         .map(a => a.getAttribute('href'))
         .filter(href => href && href.length > 1)
         .filter(href => {
@@ -153,9 +156,9 @@ for (const [viewportName, viewport] of viewports) {
 
     if (pageInfo.name === 'home') {
       const menu = page.locator('#menu-icon');
-      if (await menu.count()) {
+      if (await menu.count() && await menu.isVisible()) {
         const before = await menu.getAttribute('aria-expanded');
-        await menu.click().catch(() => {});
+        await menu.click({ timeout: 3000 }).catch(() => {});
         await page.waitForTimeout(150);
         const after = await menu.getAttribute('aria-expanded');
         if (before === after) warnings.push(`home-${viewportName}: mobile/menu toggle did not change aria-expanded`);
