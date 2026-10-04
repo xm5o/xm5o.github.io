@@ -3,7 +3,6 @@ import { mkdir, writeFile } from 'node:fs/promises';
 
 const base = process.env.SITE_URL || 'https://xm5o.github.io';
 const expectedSha = (process.env.EXPECTED_SHA || '').trim();
-const worker = 'https://xm5o-github-io.eminem13981398.workers.dev/health/status';
 
 const pages = [
   { name: 'home', url: '/', selector: '#home, main, body', text: 'Immortal' },
@@ -17,24 +16,51 @@ const errors = [];
 const warnings = [];
 const rows = [];
 
-async function verifyWorkerCommit() {
-  let last = null;
-  for (let attempt = 1; attempt <= 5; attempt++) {
-    try {
-      const response = await fetch(worker, {
-        headers: { 'user-agent': 'XM5O-Deploy-Verify/2.0' },
-        signal: AbortSignal.timeout(15000)
-      });
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      const data = await response.json();
-      last = data.latestCommit || null;
-      if (!expectedSha || last === expectedSha) return { ok: true, latest: last };
-    } catch (error) {
-      last = error.message;
-    }
-    await new Promise(resolve => setTimeout(resolve, 8000));
+async function fetchText(url) {
+  const response = await fetch(url, {
+    redirect: 'follow',
+    cache: 'no-store',
+    headers: {
+      'user-agent': 'XM5O-Deploy-Verify/2.0',
+      'cache-control': 'no-cache'
+    },
+    signal: AbortSignal.timeout(20000)
+  });
+  if (!response.ok) throw new Error('HTTP ' + response.status + ' for ' + url);
+  return response.text();
+}
+
+async function waitForExpectedProduction() {
+  if (!expectedSha) return { ok: false, detail: 'Expected commit SHA was not supplied.' };
+
+  let expected;
+  try {
+    expected = await fetchText(
+      'https://raw.githubusercontent.com/xm5o/xm5o.github.io/' +
+      encodeURIComponent(expectedSha) +
+      '/index.html'
+    );
+  } catch (error) {
+    return { ok: false, detail: 'Could not fetch expected index.html: ' + error.message };
   }
-  return { ok: false, latest: last };
+
+  let lastDetail = 'production index did not match yet';
+  for (let attempt = 1; attempt <= 12; attempt++) {
+    try {
+      const live = await fetchText(base + '/index.html?xm5o_guard=' + Date.now());
+      if (live === expected) return { ok: true, attempts: attempt };
+      lastDetail = 'live index differs from expected commit';
+    } catch (error) {
+      lastDetail = error.message;
+    }
+    if (attempt < 12) await new Promise(resolve => setTimeout(resolve, 10000));
+  }
+  return { ok: false, detail: lastDetail };
+}
+
+const deployment = await waitForExpectedProduction();
+if (!deployment.ok) {
+  errors.push('Production never matched commit ' + expectedSha + ': ' + deployment.detail);
 }
 
 const browser = await chromium.launch({ headless: true });
@@ -47,8 +73,11 @@ page.on('pageerror', error => pageErrors.push(error.message));
 page.on('requestfailed', request => {
   try {
     const url = new URL(request.url());
-    if (url.hostname === 'xm5o.github.io') {
-      localFailures.push(url.pathname + ': ' + (request.failure()?.errorText || 'failed'));
+    const reason = request.failure()?.errorText || 'failed';
+    const mediaPath = /\.(?:mp4|webm|mov|mp3|ogg|wav)$/i.test(url.pathname);
+    const intentionalMediaAbort = reason.includes('ERR_ABORTED') && mediaPath;
+    if (url.hostname === 'xm5o.github.io' && !intentionalMediaAbort) {
+      localFailures.push(url.pathname + ': ' + reason);
     }
   } catch {}
 });
@@ -79,18 +108,14 @@ for (const item of pages) {
 await context.close();
 await browser.close();
 
-const commit = await verifyWorkerCommit();
-if (!commit.ok) {
-  errors.push('Worker/GitHub managed state did not report deployed commit ' + expectedSha + '; latest was ' + commit.latest);
-}
-
 await mkdir('artifacts/xm5o-guard', { recursive: true });
 const report = [
   '# XM5O Guard production deploy verification',
   '',
-  ...rows.map(row => '- ' + row.name + ': HTTP ' + row.status + ', ' + (row.ok ? 'content verified' : 'failed')),
-  '- Worker latest commit: ' + (commit.latest || 'unknown'),
   '- Expected commit: ' + (expectedSha || 'not supplied'),
+  '- Production commit match: ' + (deployment.ok ? 'verified' : 'failed'),
+  '- Match attempts: ' + (deployment.attempts || 'n/a'),
+  ...rows.map(row => '- ' + row.name + ': HTTP ' + row.status + ', ' + (row.ok ? 'content verified' : 'failed')),
   '',
   'Hard failures: **' + errors.length + '**',
   'Warnings: **' + warnings.length + '**',
