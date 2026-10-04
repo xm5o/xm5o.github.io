@@ -74,18 +74,27 @@ async function resolveLocalRef(raw, sourceFile) {
   return false;
 }
 
+function collectCssUrls(cssText, refs) {
+  for (const match of cssText.matchAll(/url\(\s*([^)]+?)\s*\)/gi)) refs.push(match[1]);
+}
+
 function collectRefs(text, file) {
   const refs = [];
   if (file.endsWith('.html')) {
-    for (const match of text.matchAll(/\b(?:src|href|poster)\s*=\s*["']([^"']+)["']/gi)) refs.push(match[1]);
-    for (const match of text.matchAll(/\bsrcset\s*=\s*["']([^"']+)["']/gi)) {
-      for (const part of match[1].split(',')) refs.push(part.trim().split(/\s+/)[0]);
+    const tags = text.matchAll(/<(?:a|area|audio|embed|iframe|img|input|link|object|script|source|track|video)\b[^>]*>/gi);
+    for (const tagMatch of tags) {
+      const tag = tagMatch[0];
+      for (const match of tag.matchAll(/\b(?:src|href|poster|data-src)\s*=\s*["']([^"']+)["']/gi)) refs.push(match[1]);
+      for (const match of tag.matchAll(/\bsrcset\s*=\s*["']([^"']+)["']/gi)) {
+        for (const part of match[1].split(',')) refs.push(part.trim().split(/\s+/)[0]);
+      }
+      for (const match of tag.matchAll(/\bstyle\s*=\s*["']([^"']+)["']/gi)) collectCssUrls(match[1], refs);
     }
+    for (const match of text.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)) collectCssUrls(match[1], refs);
+  } else if (file.endsWith('.css')) {
+    collectCssUrls(text, refs);
   }
-  if (file.endsWith('.html') || file.endsWith('.css')) {
-    for (const match of text.matchAll(/url\(\s*([^)]+?)\s*\)/gi)) refs.push(match[1]);
-  }
-  return refs;
+  return unique(refs);
 }
 
 for (const file of [...htmlFiles, ...cssFiles]) {
