@@ -1,4 +1,4 @@
-import { access, readFile, readdir, stat } from 'node:fs/promises';
+import { access, readFile, readdir, stat, mkdir, writeFile } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 
@@ -215,6 +215,8 @@ if (warnings.length) summary.push('## Warnings', '', ...warnings.slice(0, 100).m
 if (notes.length) summary.push('## Notes', '', ...notes.map(item => '- ' + item), '');
 if (!errors.length) summary.push('Guard result: PASS');
 
+await mkdir('artifacts/xm5o-guard', { recursive: true });
+await writeFile('artifacts/xm5o-guard/static.md', summary.join('\n') + '\n');
 console.log(summary.join('\n'));
 if (process.env.GITHUB_STEP_SUMMARY) {
   const { appendFile } = await import('node:fs/promises');
