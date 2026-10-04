@@ -1,0 +1,31 @@
+name: XM5O Guard external links
+
+on:
+  schedule:
+    - cron: '35 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    name: Check external links
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Run external link watch
+        run: node tests/site-external-links.mjs
+      - name: Upload link report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xm5o-guard-external-links
+          path: artifacts/xm5o-guard/
+          if-no-files-found: ignore
+          retention-days: 30
