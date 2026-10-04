@@ -71,7 +71,8 @@ for (const [viewportName, viewport] of viewports) {
         const url = new URL(request.url());
         const origin = new URL(base).origin;
         const reason = request.failure()?.errorText || 'failed';
-        const intentionallyAbortedMedia = request.resourceType() === 'media' && reason.includes('ERR_ABORTED');
+        const mediaPath = /\.(?:mp4|webm|mov|mp3|ogg|wav)$/i.test(url.pathname);
+        const intentionallyAbortedMedia = reason.includes('ERR_ABORTED') && (request.resourceType() === 'media' || mediaPath);
         if (url.origin === origin && !intentionallyAbortedMedia) localRequestFailures.push(url.pathname + ': ' + reason);
       } catch {}
     });
