@@ -1,5 +1,12 @@
 [
   {
+    "id": "e3193a67-9415-473b-a946-a9860108c2c0",
+    "createdAt": "2026-10-05T12:29:14.970Z",
+    "baseCommit": "75850d3b06e611ecf0b408a5072257bf6f589f2a",
+    "label": "Automatic pre-publish backup",
+    "undoneAt": null
+  },
+  {
     "id": "2400aeb0-271c-4a63-9105-be388148cb37",
     "createdAt": "2026-09-23T19:52:43.341Z",
     "baseCommit": "0d53754331533236a0ba606213721ba4397eb07f",

@@ -1,5 +1,11 @@
 [
   {
+    "id": "1da22c3c-6bac-4a74-8495-0b41df7f214a",
+    "action": "publish",
+    "detail": "settings",
+    "at": "2026-10-05T12:29:15.193Z"
+  },
+  {
     "id": "78ed6962-cd20-4d31-97ce-05a87c7804e1",
     "action": "publish",
     "detail": "settings, SEO",
