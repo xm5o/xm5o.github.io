@@ -52,7 +52,7 @@ Manual snapshots are separate from automatic backups.
 
 Preferred: GitHub OAuth. The Worker only accepts the configured GitHub account and issues a signed four-hour admin session. The GitHub OAuth access token is used server-side for the account lookup and is not returned to the browser.
 
-Fallback: the emergency `ADMIN_KEY`. Keep it in Cloudflare secrets only; do not place it in repository files or screenshots.
+Fallback: the emergency `ADMIN_KEY`. Keep it in Cloudflare secrets only; do not place it in repository files or screenshots. The admin browser holds an entered emergency key in memory only for the current page. Reloading or locking the page clears it, and startup deletes any keys saved by older versions of the UI. Do not add a remember-device option for this key.
 
 Repeated failed authentication and OAuth-start attempts are rate-limited by the Worker.
 
