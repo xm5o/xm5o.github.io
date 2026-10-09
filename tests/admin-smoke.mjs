@@ -18,4 +18,10 @@ const router=await readFile(path.join(root,'cloudflare/profile-uploader/src/rout
 const cms=await readFile(path.join(root,'cloudflare/profile-uploader/src/cms.js'),'utf8');ok(cms.includes('AUTO_BACKUP_LIMIT=20'),'Automatic backup retention rule is missing.');ok(cms.includes('LOG_LIMIT=60'),'Log retention rule is missing.');for(const field of['bioAr','statusTextAr','maintenanceTitleAr','maintenanceMessageAr','titleAr','descriptionAr'])ok(cms.includes(field),`Bilingual managed field missing from CMS: ${field}`);
 const oauth=await readFile(path.join(root,'cloudflare/profile-uploader/src/oauth.js'),'utf8');ok(oauth.includes('SESSION_MS=4*60*60*1000'),'OAuth admin session duration must remain four hours.');
 for(const file of['tests/site-visual.mjs','tests/translation-coverage.mjs','tests/site-maintenance.mjs','lighthouserc.json','scripts/optimize-managed-images.mjs','scripts/generate-admin-release-notes.mjs','.github/workflows/site-quality.yml','.github/workflows/monthly-maintenance.yml','.github/workflows/disaster-recovery.yml','.github/workflows/image-optimize.yml','.github/workflows/site-health-watch.yml','.github/workflows/ci-failure-issues.yml','.github/workflows/admin-release-notes.yml','docs/DISASTER-RECOVERY.md'])ok(await exists(path.join(root,file)),`Missing quality/operations file: ${file}`);
+const auth=await readFile(path.join(admin,'auth.js'),'utf8');
+ok(!html.includes('id="rememberPublisher"'),'Emergency key must not offer device persistence.');
+ok(auth.includes("forgetSavedEmergencyKey()"),'Legacy persisted emergency key cleanup is required.');
+for(const pattern of [/getLocal\(LOCAL_KEY\)/,/getSession\(SESSION_KEY\)/,/setLocal\(LOCAL_KEY,\s*(?:value|key|token|publisherKey)\)/,/setSession\(SESSION_KEY,\s*(?:value|key|token|publisherKey)\)/])ok(!pattern.test(auth),'Emergency credentials must not be loaded from or stored in persistent browser storage.');
+ok(auth.includes("setLocal(LOCAL_KEY,'')"),'Legacy localStorage emergency key must be removed.');
+
 console.log(`Immortal Admin smoke checks passed (${jsFiles.length} browser modules checked).`);
