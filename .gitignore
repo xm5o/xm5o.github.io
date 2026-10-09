@@ -1,0 +1,28 @@
+# Local configuration and privileged credentials
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+.npmrc
+.pypirc
+credentials.json
+service-account.json
+*.pem
+*.p12
+*.pfx
+*.key
+id_rsa
+id_ed25519
+
+# Generated build artifacts and local tooling
+node_modules/
+artifacts/
+.wrangler/
+playwright-report/
+test-results/
+.DS_Store
+
+# Never publish generated source maps unintentionally
+*.js.map
+*.css.map
