@@ -1,0 +1,39 @@
+name: Preview isolated public deployment
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/build-public-preview.mjs'
+      - 'tests/public-build-preview.mjs'
+      - '.github/workflows/public-preview.yml'
+      - 'docs/PRIVATE-SOURCE-MIGRATION.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    name: Build and audit public bundle
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Build public preview without deployment
+        run: node scripts/build-public-preview.mjs --copy
+      - name: Verify runtime files and internal exclusions
+        run: node tests/public-build-preview.mjs
+      - name: Upload manifest and exclusions report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-preview-manifest
+          path: artifacts/deployment/
+          if-no-files-found: ignore
+          retention-days: 14
