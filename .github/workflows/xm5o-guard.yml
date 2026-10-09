@@ -15,6 +15,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  security:
+    name: Committed-file security
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout files
+        uses: actions/checkout@v4
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Scan committed files for sensitive material
+        run: node tests/site-security.mjs
+      - name: Upload security report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xm5o-guard-security
+          path: artifacts/xm5o-guard/security.md
+          if-no-files-found: ignore
+          retention-days: 30
+
   static:
     name: Static integrity
     runs-on: ubuntu-latest
@@ -131,7 +153,7 @@ jobs:
   report:
     name: Guard report
     if: always()
-    needs: [static, browser, api, production]
+    needs: [security, static, browser, api, production]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -147,6 +169,7 @@ jobs:
           {
             echo '# XM5O Guard V2 report'
             echo
+            echo "- Security scan: **${{ needs.security.result }}**"
             echo "- Static integrity: **${{ needs.static.result }}**"
             echo "- Browser + accessibility: **${{ needs.browser.result }}**"
             echo "- API health: **${{ needs.api.result }}**"
