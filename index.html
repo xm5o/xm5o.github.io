@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="ML7YwmIDCUZqh7CT3_KYSraci6RD0zArtkr-j_3pM2o" />
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+  <meta name="author" content="Immortal" />
+  <meta name="description" content="Immortal (xm5o) is a developer portfolio featuring Discord bots, web development, FNF charting, modding, and projects like Selina." />
+<meta property="og:title" content="Immortal (xm5o) | Discord Bots, FNF &amp; Web Development" />
+  <meta property="og:image" content="https://xm5o.github.io/assets/Immortal-site-banner.png" />
+  <meta property="og:description" content="Immortal (xm5o) builds Discord bots, web projects, FNF charts and mods, including Selina." />
+  <meta property="og:url" content="https://xm5o.github.io/" />
+  <!-- <meta property="og:image:width" content="1280" /> -->
+  <!-- <meta property="og:image:height" content="720" /> -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Immortal" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Immortal (xm5o) | Discord Bots, FNF &amp; Web Development" />
+  <meta name="twitter:description" content="Immortal (xm5o) builds Discord bots, web projects, FNF charts and mods, including Selina." />
+  <meta name="twitter:image" content="https://xm5o.github.io/assets/Immortal-site-banner.png" />
+<link rel="canonical" href="https://xm5o.github.io/" />
+  <meta name="theme-color" content="#a7c6ff" />
+  <link rel="icon" href="assets/pfp.jpg" type="image/jpeg" />
+  <title>Immortal (xm5o) | Discord Bots, FNF &amp; Web Development</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/discord-activity.css" />
+  <link rel="stylesheet" href="css/contact.css" />
+  <link rel="stylesheet" href="css/loading.css" />
+  <link rel="stylesheet" href="css/analytics.css" />
+  <link rel="stylesheet" href="css/command-palette.css" />
+
+  <link rel="stylesheet" href="css/account-disabled-modal.css" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<script src="scripts/loading.js"></script>
+  <script src="scripts/pfp-theme.js"></script>
+  <script defer src="scripts/i18n.js"></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://xm5o.github.io/#website",
+        "url": "https://xm5o.github.io/",
+        "name": "Immortal",
+        "alternateName": ["xm5o", "xm5o.github.io"]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://xm5o.github.io/#creator",
+        "name": "Immortal",
+        "alternateName": "xm5o",
+        "url": "https://xm5o.github.io/",
+        "image": "https://xm5o.github.io/assets/pfp.jpg",
+        "sameAs": [
+          "https://github.com/xm5o",
+          "https://youtube.com/@voixj"
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://xm5o.github.io/#webpage",
+        "url": "https://xm5o.github.io/",
+        "name": "Immortal (xm5o) | Discord Bots, FNF & Web Development",
+        "description": "Immortal (xm5o) is a developer portfolio featuring Discord bots, web development, FNF charting, modding, and projects like Selina.",
+        "isPartOf": {"@id": "https://xm5o.github.io/#website"},
+        "about": {"@id": "https://xm5o.github.io/#creator"}
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body class="is-loading">
+  <!-- Loading Screen -->
+  <header class="header" role="banner">
+    <a href="#home" class="logo" aria-label="Immortal home">Immortal</a>
+
+    <button id="menu-icon" type="button" aria-label="Toggle Mobile Menu" aria-expanded="false">
+      <i class="bx bx-menu"></i>
+    </button>
+
+    <!-- Menu Backdrop Overlay -->
+    <div class="menu-backdrop" id="menuBackdrop"></div>
+
+    <nav class="navbar" role="navigation" aria-label="Main Navigation">
+      <button id="close-menu" type="button" aria-label="Close Mobile Menu">
+        <i class="bx bx-x"></i>
+      </button>
+      <div class="menu-header">
+        <h3 class="menu-title">Menu</h3>
+        <div class="menu-divider"></div>
+      </div>
+      <a href="#home" data-translate="nav.home">
+        <i class="bx bx-home"></i>
+        <span>Home</span>
+      </a>
+<a href="#about" data-translate="nav.about">
+        <i class="bx bx-user"></i>
+        <span>About</span>
+      </a>
+      <a href="#now" data-translate="nav.now">
+        <i class="bx bx-time-five"></i>
+        <span>Now</span>
+      </a>
+      <a href="#services" data-translate="nav.skills">
+        <i class="bx bx-code-alt"></i>
+        <span>Skills</span>
+      </a>
+      <a href="#projects" data-translate="nav.projects">
+        <i class="bx bx-folder"></i>
+        <span>Projects</span>
+      </a>
+      <a href="#music" data-translate="nav.music">
+        <i class="bx bx-music"></i>
+        <span>Music</span>
+      </a>
+      <a href="#faq" data-translate="nav.faq">
+        <i class="bx bx-help-circle"></i>
+        <span>FAQ</span>
+      </a>
+      <!-- <a href="#game-collection" data-translate="nav.game_collection">Games</a> -->
+      <a href="#contact" data-translate="nav.contact">
+        <i class="bx bx-envelope"></i>
+        <span>Contact</span>
+      </a>
+      <a href="#search" id="commandPaletteTrigger" aria-label="Search site">
+        <i class="bx bx-search-alt"></i>
+        <span>Search</span>
+      </a>
+</nav>
+</header>
+
+  <!-- Home Section -->
+  <section class="home" id="home">
+    <!-- Enhanced Floating Particles Background -->
+    <div class="particles-container">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+
+    <!-- Enhanced Geometric Background Elements -->
+    <div class="geometric-bg">
+      <div class="geo-shape geo-circle"></div>
+      <div class="geo-shape geo-triangle"></div>
+      <div class="geo-shape geo-square"></div>
+      <div class="geo-shape geo-hexagon"></div>
+      <div class="geo-shape geo-diamond"></div>
+    </div>
+
+    <!-- Animated Background Grid -->
+    <div class="grid-background">
+      <div class="grid-line grid-vertical"></div>
+      <div class="grid-line grid-horizontal"></div>
+    </div>
+
+    <!-- Floating Code Elements -->
+    <div class="code-elements">
+      <div class="code-snippet code-1">
+        <span class="code-bracket">{</span>
+        <span class="code-text">creativity</span>
+        <span class="code-bracket">}</span>
+      </div>
+      <!-- <div class="code-snippet code-2">
+          <span class="code-bracket">&lt;</span>
+          <span class="code-text">innovation</span>
+          <span class="code-bracket">/&gt;</span>
+        </div> -->
+      <div class="code-snippet code-3">
+        <span class="code-text">console.log</span>
+        <span class="code-bracket">(</span>
+        <span class="code-string">"hello world"</span>
+        <span class="code-bracket">)</span>
+      </div>
+    </div>
+
+    <div class="home-content">
+      <div class="hero-text">
+        <!-- Enhanced Text Reveal with Stagger Animation -->
+        <div class="text-reveal-container">
+          <div class="text-reveal">
+            <h1 class="gradient-heading">
+              <span class="word-animate" style="--delay: 0.1s">It's</span>
+              <span class="immortal-text word-animate" style="--delay: 0.3s">Immortal</span>
+              <div class="heading-decoration"></div>
+            </h1>
+          </div>
+
+          <!-- Subtitle with Enhanced Animation -->
+          <div class="subtitle-container">
+            <div class="subtitle-line"></div>
+            <p class="subtitle-text">Code with a bit of creativity</p>
+            <div class="subtitle-line"></div>
+          </div>
+        </div>
+
+        <div class="animated-titles">
+          <h3 class="typewriter">
+            I'm a <span class="role-switch animated-role">Web Developer</span>
+          </h3>
+          <p class="tagline enhanced-tagline">
+            <span class="tagline-highlight">He/Him</span> — I build websites and Discord bots,
+            and I make <span class="tagline-highlight">FNF mods</span> for fun
+          </p>
+</div>
+
+        <!-- Enhanced Social Links with New Design -->
+        <div class="social-links enhanced-social">
+          <!-- <div class="social-label">Connect with me</div> -->
+          <div class="social-buttons">
+            <a href="https://youtube.com/@voixj" target="_blank" aria-label="YouTube" class="social-btn youtube" rel="noopener noreferrer">
+              <div class="social-bg"></div>
+              <i class="bx bxl-youtube"></i>
+              <span class="social-tooltip">YouTube</span>
+              <div class="hover-ripple"></div>
+            </a>
+            <a href="https://instagram.com/xm5o_" target="_blank" aria-label="Instagram" class="social-btn instagram" rel="noopener noreferrer">
+              <div class="social-bg"></div>
+              <i class="bx bxl-instagram"></i>
+              <span class="social-tooltip">Instagram</span>
+              <div class="hover-ripple"></div>
+            </a>
+            <a href="https://discord.com/users/1282747277206884436" target="_blank" aria-label="Discord"
+              class="social-btn discord" rel="noopener noreferrer">
+              <div class="social-bg"></div>
+              <i class="bx bxl-discord-alt"></i>
+              <span class="social-tooltip">Discord</span>
+              <div class="hover-ripple"></div>
+            </a>
+            <a href="https://www.tiktok.com/@xm5o_" target="_blank" aria-label="TikTok" class="social-btn tiktok" rel="noopener noreferrer">
+              <div class="social-bg"></div>
+              <i class="bx bxl-tiktok"></i>
+              <span class="social-tooltip">TikTok</span>
+              <div class="hover-ripple"></div>
+            </a>
+            <a href="https://x.com/x_5mt" target="_blank" aria-label="Twitter" class="social-btn twitter" rel="noopener noreferrer">
+              <div class="social-bg"></div>
+              <i class="bx bxl-twitter"></i>
+              <span class="social-tooltip">X</span>
+              <div class="hover-ripple"></div>
+            </a>
+            <a href="https://github.com/xm5o" target="_blank" aria-label="Github" class="social-btn github" rel="noopener noreferrer">
+              <div class="social-bg"></div>
+              <i class="bx bxl-github"></i>
+              <span class="social-tooltip">GitHub</span>
+              <div class="hover-ripple"></div>
+            </a>
+            <a href="https://open.spotify.com/user/eminem_1398" target="_blank" aria-label="Spotify"
+              class="social-btn spotify" rel="noopener noreferrer">
+              <div class="social-bg"></div>
+              <i class="bx bxl-spotify"></i>
+              <span class="social-tooltip">Spotify</span>
+              <div class="hover-ripple"></div>
+            </a>
+            <a href="https://www.twitch.tv/xm5o_" target="_blank" aria-label="Twitch" class="social-btn twitch" rel="noopener noreferrer">
+              <div class="social-bg"></div>
+              <i class="bx bxl-twitch"></i>
+              <span class="social-tooltip">Twitch</span>
+              <div class="hover-ripple"></div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Enhanced CTA Buttons with New Design -->
+        <div class="cta-group enhanced-cta">
+          <a href="#projects" class="cta-btn projects-cta enhanced-btn primary-btn">
+            <div class="btn-bg"></div>
+            <div class="btn-icon">
+              <i class="bx bx-code-alt"></i>
+            </div>
+            <span class="btn-text" style="color: var(--text-color);">Explore My Work</span>
+            <div class="btn-shine"></div>
+            <div class="btn-particles">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </a>
+          <a href="commission/index.html" class="cta-btn commission-cta enhanced-btn secondary-btn">
+            <div class="btn-bg"></div>
+            <div class="btn-icon">
+              <i class="bx bx-brush"></i>
+            </div>
+            <span class="btn-text" style="color: var(--accent-color);">Commission</span>
+            <div class="btn-shine"></div>
+          </a>
+        </div>
+
+        <!-- New Skills Preview -->
+        <div class="skills-preview" style="display: none;">
+          <!-- <div class="skill-tag">Lua</div> -->
+          <!-- <div class="skill-tag">Haxe</div> -->
+          <div class="skill-tag">JavaScript</div>
+          <div class="skill-tag">CSS3</div>
+          <div class="skill-tag">HTML5</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Hero Image -->
+    <div class="hero-image">
+      <div class="image-wrapper">
+        <!-- Animated Border -->
+        <div class="image-border">
+          <div class="border-segment"></div>
+          <div class="border-segment"></div>
+          <div class="border-segment"></div>
+          <div class="border-segment"></div>
+        </div>
+
+        <!-- Profile Image with Enhanced Effects -->
+        <div class="profile-container">
+          <img src="assets/pfp.jpg" alt="Immortal profile" loading="eager" fetchpriority="high" decoding="async" class="profile-img" />
+          <div class="profile-overlay"></div>
+
+          <!-- Floating Icons Around Image -->
+          <div class="floating-icon floating-icon-1">
+            <i class="bx bx-code-curly"></i>
+          </div>
+          <div class="floating-icon floating-icon-2">
+            <i class="bx bx-palette"></i>
+          </div>
+          <div class="floating-icon floating-icon-3">
+            <i class="bx bx-rocket"></i>
+          </div>
+          <div class="floating-icon floating-icon-4">
+            <i class="bx bx-bulb"></i>
+          </div>
+        </div>
+
+        <!-- Enhanced Glow Effects -->
+        <div class="glow-effect primary-glow"></div>
+        <div class="glow-effect secondary-glow"></div>
+        <div class="orbital-ring"></div>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+      <!-- <div class="scroll-text">Scroll Down</div> -->
+      <div class="scroll-arrow">
+        <i class="bx bx-chevron-down"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured work first -->
+<section class="projects" id="projects">
+      <div class="particles-container">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      </div>
+
+      <div class="geometric-bg">
+        <div class="geo-shape geo-circle"></div>
+        <div class="geo-shape geo-triangle"></div>
+        <div class="geo-shape geo-square"></div>
+      </div>
+
+      <div class="container">
+        <div class="section-header">
+          <h2 class="gradient-heading">My <span>Projects</span></h2>
+          <p class="section-subtitle">
+            Things I've built — bots, tools, and FNF mods
+          </p>
+        </div>
+
+        <div class="projects-filter">
+          <button class="filter-btn active" data-filter="all">
+            All Projects
+          </button>
+          <button class="filter-btn" data-filter="app">Apps</button>
+          <button class="filter-btn" data-filter="game">Games</button>
+          <button class="filter-btn" data-filter="script">Script</button>
+          <button class="filter-btn" data-filter="web">Web</button>
+        </div>
+
+        <div class="projects-grid">
+        </div>
+      </div>
+    </section>
+
+  <!-- Discord Activity Section -->
+  
+
+  <!-- Highlighted Section -->
+  <!-- <section class="highlighted" id="highlighted">
+    <div class="highlighted-container">
+      <h2 class="heading" data-translate="highlighted.title">Featured Content</h2>
+      <div class="highlighted-card">
+        <div class="card-thumbnail">
+          <img src="https://i.ytimg.com/vi/kcxuXk9uP84/hqdefault.jpg" alt="Thumbnail for IGNITION Fanchart" loading="lazy" />
+          <a href="https://www.youtube.com/watch?v=kcxuXk9uP84" target="_blank" class="play-button"
+            aria-label="Watch video on YouTube" rel="noopener noreferrer">
+            <i class="bx bxl-youtube"></i>
+          </a>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">New FNF Fanchart: IGNITION | IMMORTAL</h3>
+          <p class="card-description"></p>
+          <a href="https://www.youtube.com/watch?v=kcxuXk9uP84" target="_blank"
+            class="cta-btn watch-now-btn enhanced-btn primary-btn" rel="noopener noreferrer">
+            <div class="btn-bg"></div>
+            <div class="btn-icon">
+              <i class="bx bx-play-circle"></i>
+            </div>
+            <span class="btn-text">Watch Now</span>
+            <div class="btn-shine"></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- Discord Server Modal -->
+  <div id="discordModal" class="discord-modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+
+      <div id="serverBanner" class="server-banner">
+        <img id="serverIcon" src="assets/pfp.jpg" alt="Server Icon" class="server-icon" />
+      </div>
+
+      <div class="server-info">
+        <h3 id="serverName">Immortal Community</h3>
+        <p id="serverDescription">
+          My Discord server — come chat, share ideas, and see what I'm working on.
+        </p>
+
+        <div class="server-stats">
+          <div class="stat">
+            <i class="bx bxs-user"></i>
+            <div class="stat-number" id="memberCount">0</div>
+            <div class="stat-label">Members</div>
+          </div>
+          <div class="stat">
+            <i class="bx bxs-user-check"></i>
+            <div class="stat-number" id="onlineCount">0</div>
+            <div class="stat-label">Online</div>
+          </div>
+        </div>
+
+        <a id="joinButton" href="https://discord.gg/WBQssXDfKJ" target="_blank" class="join-btn" rel="noopener noreferrer">
+          <i class="bx bxl-discord-alt"></i>
+          Join Server
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <!-- <div id="loadingIndicator" class="loading-indicator">
+    <div class="spinner">
+      <div class="spinner-inner"></div>
+    </div>
+    <p>Please wait...</p>
+     <div class="progress-bar">
+        <div class="progress"></div>
+  </div>
+  </div>
+      </div>
+  </div> -->
+
+  <div id="mainContent">
+    <!-- About Section -->
+    <section class="about-modern" id="about">
+      <div class="container">
+        <div class="about-wrapper">
+          <!-- Left Side: Visual Identity -->
+          <div class="about-visual">
+            <div class="image-stack">
+              <div class="main-image">
+                <img src="assets/pfp.jpg" alt="Immortal profile" loading="lazy" decoding="async" />
+                <div class="image-overlay"></div>
+              </div>
+              <div class="floating-card experience-card">
+                <span class="number">4+</span>
+                <span class="label">Years of
+                  Crafting Code</span>
+              </div>
+              <div class="floating-card status-card">
+                <div class="status-dot"></div>
+                <span class="label">Available for Freelance</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side: Narrative & Details -->
+          <div class="about-info">
+            <div class="section-header">
+              <h2 class="gradient-heading">Behind the <span>Code</span></h2>
+              <p class="intro-text">
+                I'm <span class="highlight">Immortal</span>, a creative developer focused on websites, Discord bots, and FNF projects.
+              </p>
+            </div>
+
+            <div class="bio-content">
+              <p>
+                For 4 years, I've been building things that work well and feel good to use — from websites to full
+                FNF modcharts. I like clean code and small details that make a project feel polished.
+              </p>
+              <p>
+                Right now I'm learning more about frontend development, and building Selina, a Discord bot for
+                communities.
+              </p>
+            </div>
+
+            <div class="personal-grid">
+              <div class="grid-item">
+                <i class='bx bx-user'></i>
+                <div>
+                  <span class="label">Identity</span>
+                  <span class="value">Immortal (He/Him)</span>
+                </div>
+              </div>
+              <div class="grid-item">
+                <i class='bx bx-map-alt'></i>
+                <div>
+                  <span class="label">Focus</span>
+                  <span class="value">Web Dev & FNF Modding</span>
+                </div>
+              </div>
+              <div class="grid-item">
+                <i class='bx bx-map-pin'></i>
+                <div>
+                  <span class="label">Based in</span>
+                  <span class="value">Saudi Arabia</span>
+                </div>
+              </div>
+              <div class="grid-item">
+                <i class='bx bx-rocket'></i>
+                <div>
+                  <span class="label">Status</span>
+                  <span class="value">Open for Collaboration</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="about-cta">
+              <a href="#contact" class="primary-btn">
+                <span style="color: var(--text-color)">Start a Project</span>
+                <i class='bx bx-right-arrow-alt' style="color: var(--text-color)"></i>
+              </a>
+              <div class="social-mini">
+                <a href="https://github.com/xm5o" target="_blank" rel="noopener noreferrer"><i class='bx bxl-github'></i></a>
+                <a href="https://discord.com/users/1282747277206884436" target="_blank" rel="noopener noreferrer"><i
+                    class='bx bxl-discord-alt'></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience Timeline (Integrated ) -->
+        <div class="experience-showcase">
+          <h3 class="sub-heading">My Journey</h3>
+          <div class="journey-grid">
+            <div class="journey-item">
+              <span class="year">2025</span>
+              <h4>Selina Bot</h4>
+              <p>Building community and moderation tools for Discord. Still in progress.</p>
+            </div>
+            <div class="journey-item">
+              <span class="year">2023</span>
+              <h4>FNF Modding</h4>
+              <p>Making custom mechanics and modcharts for the FNF community.</p>
+            </div>
+            <div class="journey-item">
+              <span class="year">2022</span>
+              <h4>Started Freelancing</h4>
+              <p>Began taking on small web projects and commissions.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Now Section -->
+    <section class="now-section" id="now">
+      <div class="particles-container">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      </div>
+
+      <div class="geometric-bg">
+        <div class="geo-shape geo-circle"></div>
+        <div class="geo-shape geo-triangle"></div>
+        <div class="geo-shape geo-square"></div>
+      </div>
+
+      <div class="container">
+        <div class="section-header">
+          <h2 class="gradient-heading">What I'm <span>Doing Now</span></h2>
+          <p class="section-subtitle">
+            A quick look at what I'm working on today.
+          </p>
+        </div>
+
+        <div class="now-grid">
+          <div class="now-card">
+            <div class="card-glow"></div>
+            <div class="now-icon">
+              <i class='bx bx-bot'></i>
+            </div>
+            <h3>Building Selina</h3>
+            <p>Working on AI chat and cleaning up the database for my Discord bot.</p>
+            <span class="now-status status-progress">In Progress</span>
+          </div>
+
+          <div class="now-card">
+            <div class="card-glow"></div>
+            <div class="now-icon">
+              <i class='bx bx-code-alt'></i>
+            </div>
+            <h3>This Website</h3>
+            <p>Rewriting the text, fixing bugs, and making it work better on phones.</p>
+            <span class="now-status status-progress">In Progress</span>
+          </div>
+
+          <div class="now-card">
+            <div class="card-glow"></div>
+            <div class="now-icon">
+              <i class='bx bx-controller'></i>
+            </div>
+            <h3>Learning</h3>
+            <p>Getting better at frontend design and clean, simple UI.</p>
+            <span class="now-status status-ongoing">Ongoing</span>
+          </div>
+        </div>
+
+        <p class="now-updated">Last updated: <span id="nowUpdatedDate">September 2026</span></p>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="skills-section" id="services">
+      <div class="particles-container">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      </div>
+
+      <div class="geometric-bg">
+        <div class="geo-shape geo-circle"></div>
+        <div class="geo-shape geo-triangle"></div>
+        <div class="geo-shape geo-square"></div>
+      </div>
+
+      <div class="container">
+        <div class="section-header">
+          <h2 class="gradient-heading">My <span>Skills</span></h2>
+          <p class="section-subtitle">
+            What I know and what I'm still learning.
+          </p>
+        </div>
+
+        <div class="skills-grid">
+          <!-- Development Category -->
+          <div class="skill-card">
+            <div class="card-glow"></div>
+            <div class="skill-content">
+              <div class="skill-icon">
+                <i class='bx bx-code-alt'></i>
+              </div>
+              <h3>Development</h3>
+              <p>I build websites and small tools with these languages.</p>
+              <div class="skill-tags">
+                <span class="skill-tag">HTML5/CSS3</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">Lua</span>
+                <span class="skill-tag">Haxe</span>
+              </div>
+              <div class="skill-stats">
+                <div class="stat-item">
+                  <div class="stat-info"><span>Very Comfortable</span></div>
+                  <div class="stat-bar">
+                    <div class="stat-fill" style="width: 92%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Creative & Modding Category -->
+          <div class="skill-card">
+            <div class="card-glow"></div>
+            <div class="skill-content">
+              <div class="skill-icon">
+                <i class='bx bx-paint'></i>
+              </div>
+              <h3>Creative & Modding</h3>
+              <p>Making modcharts and designs for Friday Night Funkin'.</p>
+              <div class="skill-tags">
+                <span class="skill-tag">Modcharting</span>
+                <span class="skill-tag">UI Design</span>
+                <span class="skill-tag">Animation</span>
+                <span class="skill-tag">Assets</span>
+              </div>
+              <div class="skill-stats">
+                <div class="stat-item">
+                  <div class="stat-info"><span>Comfortable</span></div>
+                  <div class="stat-bar">
+                    <div class="stat-fill" style="width: 88%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Strategy & Soft Skills -->
+          <div class="skill-card">
+            <div class="card-glow"></div>
+            <div class="skill-content">
+              <div class="skill-icon">
+                <i class='bx bx-unite'></i>
+              </div>
+              <h3>Strategy & Soft Skills</h3>
+              <p>Communication and teamwork, learned from gaming and running communities.</p>
+              <div class="skill-tags">
+                <span class="skill-tag">Leadership</span>
+                <span class="skill-tag">Communication</span>
+                <span class="skill-tag">Strategy</span>
+                <span class="skill-tag">Git</span>
+              </div>
+              <div class="skill-stats">
+                <div class="stat-item">
+                  <div class="stat-info"><span>Comfortable</span></div>
+                  <div class="stat-bar">
+                    <div class="stat-fill" style="width: 85%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  <!-- Live Discord presence loads only near the viewport -->
+  <section class="discord-presence" id="discord-activity" aria-labelledby="discordPresenceTitle">
+    <div class="discord-container">
+      <header class="presence-section-header">
+        <div class="presence-kicker">
+          <span class="presence-live-dot" aria-hidden="true"></span>
+          <span>Live presence</span>
+        </div>
+        <h2 id="discordPresenceTitle">Live on Discord</h2>
+        <p>A small live window into what I’m up to right now.</p>
+      </header>
+
+      <div class="presence-shell is-loading" id="presenceShell" aria-live="polite">
+        <aside class="presence-profile" aria-label="Discord profile">
+          <img id="profileEffect" class="presence-profile-effect" src="" alt="" aria-hidden="true" hidden>
+          <div class="presence-banner" id="presenceBanner">
+            <img id="profileBanner" src="" alt="" hidden>
+            <img id="profileBannerGif" src="" alt="" hidden>
+            <div id="colorBanner" class="presence-banner-color" hidden></div>
+          </div>
+
+          <div class="presence-profile-body">
+            <div class="presence-avatar-row">
+              <div class="presence-avatar-wrap">
+                <img id="avatar" class="presence-avatar" src="" alt="Discord avatar" hidden>
+                <img id="avatarGif" class="presence-avatar" src="" alt="Discord avatar" hidden>
+                <img id="avatarDecoration" class="presence-avatar-decoration" src="" alt="" hidden>
+                <span id="statusIndicator" class="presence-status-dot status-offline" aria-label="Offline"></span>
+              </div>
+
+              <div class="presence-identity">
+                <div class="presence-name-row">
+                  <h3 id="displayName">Immortal</h3>
+                  <div class="presence-badges" id="badgesContainer" aria-label="Discord badges"></div>
+                </div>
+                <div class="presence-handle-row">
+                  <p id="username">@trr0</p>
+                  <span class="presence-pronouns" id="profilePronouns" data-i18n-ignore hidden></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="presence-custom-status" id="customStatus" hidden></div>
+
+            <div class="presence-about" id="profileBioWrap" hidden>
+              <span class="presence-meta-label">About me</span>
+              <p id="profileBio" data-i18n-ignore></p>
+            </div>
+
+            <div class="presence-meta">
+              <div class="presence-meta-row" id="deviceRow">
+                <span class="presence-meta-label">Active on</span>
+                <div class="presence-devices" id="deviceIcons">
+                  <span class="presence-muted">Loading</span>
+                </div>
+              </div>
+
+              <div class="presence-meta-row" id="tagRow" hidden>
+                <span class="presence-meta-label">Server tag</span>
+                <div id="tagInfo" class="presence-tag"></div>
+              </div>
+
+              <div class="presence-meta-row" id="memberSinceRow">
+                <span class="presence-meta-label">Member since</span>
+                <div class="presence-member-since" id="memberSince"></div>
+              </div>
+            </div>
+
+            <a class="presence-profile-link" href="https://discord.com/users/1282747277206884436" target="_blank" rel="noopener noreferrer">
+              <i class="bx bxl-discord-alt" aria-hidden="true"></i>
+              <span>Open Discord profile</span>
+              <i class="bx bx-up-arrow-alt presence-link-arrow" aria-hidden="true"></i>
+            </a>
+          </div>
+        </aside>
+
+        <main class="presence-activity" aria-label="Current Discord activity">
+          <div class="presence-activity-topbar">
+            <div>
+              <span class="presence-overline" id="activityEyebrow">Current activity</span>
+              <span class="presence-source" id="activitySource">Discord</span>
+            </div>
+            <div class="presence-connection" id="connectionStatus" data-state="connecting">
+              <span class="presence-connection-dot" aria-hidden="true"></span>
+              <span>Connecting</span>
+            </div>
+          </div>
+
+          <div class="presence-stage" id="activityStage">
+            <div class="presence-skeleton" id="presenceSkeleton" aria-hidden="true">
+              <div class="presence-skeleton-art"></div>
+              <div class="presence-skeleton-copy">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+
+            <div class="presence-empty" id="presenceEmpty" hidden>
+              <div class="presence-empty-icon"><i class="bx bx-moon" aria-hidden="true"></i></div>
+              <div>
+                <h3>Nothing playing right now</h3>
+                <p>My Discord profile is still live here when I’m not in a game or listening to music.</p>
+              </div>
+            </div>
+
+            <div class="presence-error" id="presenceError" hidden>
+              <div>
+                <span class="presence-overline">Presence unavailable</span>
+                <h3>Discord did not respond.</h3>
+                <p>The rest of the page still works. You can retry the live connection here.</p>
+              </div>
+              <button type="button" class="presence-retry" id="presenceRetry">
+                <i class="bx bx-refresh" aria-hidden="true"></i>
+                Retry
+              </button>
+            </div>
+
+            <div class="presence-activity-content" id="activityContent" hidden>
+              <div class="presence-art-wrap" id="activityArtWrap">
+                <img class="presence-art" id="activityLargeImage" src="" alt="" hidden>
+                <img class="presence-art-small" id="activitySmallImage" src="" alt="" hidden>
+                <div class="presence-art-fallback" id="activityArtFallback">
+                  <i class="bx bx-joystick" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <div class="presence-copy">
+                <div class="presence-activity-heading">
+                  <span class="presence-activity-type" id="activityType">Active</span>
+                  <h3 id="activityName">Discord</h3>
+                </div>
+
+                <p class="presence-detail" id="activityDetails"></p>
+                <p class="presence-state" id="activityState"></p>
+
+                <div class="presence-progress" id="activityProgress" hidden>
+                  <div class="presence-progress-track">
+                    <span id="activityProgressBar"></span>
+                  </div>
+                  <div class="presence-time-row">
+                    <span id="activityCurrentTime">0:00</span>
+                    <span id="activityTotalTime">0:00</span>
+                  </div>
+                </div>
+
+                <div class="presence-elapsed" id="activityElapsed" hidden>
+                  <i class="bx bx-time-five" aria-hidden="true"></i>
+                  <span id="activityElapsedText">0:00</span>
+                </div>
+
+                <div class="presence-actions" id="activityButtons"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="presence-secondary" id="secondaryActivities" hidden>
+            <span class="presence-overline">Also active</span>
+            <div class="presence-secondary-list" id="secondaryActivitiesList"></div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+    <!-- Projects Sections -->
+    
+
+    <!-- <section>
+    <div class="container">
+      <h1>Frequently Asked Questions</h1>
+      
+      <div class="faq-container">
+
+        
+      </div>
+    </div>
+  </section> -->
+
+    <!-- Cigarettes After Sex Section -->
+    <section class="music-section" id="music">
+      <!-- Background Elements -->
+      <div class="music-particles-container">
+        <div class="music-particle"></div>
+        <div class="music-particle"></div>
+        <div class="music-particle"></div>
+        <div class="music-particle"></div>
+        <div class="music-particle"></div>
+        <div class="music-particle"></div>
+      </div>
+
+      <!-- Geometric Background -->
+      <div class="music-geometric-bg">
+        <div class="music-geo-shape music-geo-circle"></div>
+        <div class="music-geo-shape music-geo-triangle"></div>
+        <div class="music-geo-shape music-geo-square"></div>
+      </div>
+
+      <div class="music-container">
+        <!-- Band Header -->
+        <div class="band-header">
+          <div class="band-banner">
+            <div class="banner-fade-top"></div>
+            <div class="banner-fade-bottom"></div>
+          </div>
+          <h2 class="band-name">My Music Taste</h2>
+          <p class="band-description">
+            Mostly Cigarettes After Sex on repeat. Calm, dreamy tracks I listen to while coding.
+            Tap a song to open it on Spotify.
+          </p>
+        </div>
+
+        <!-- Songs Grid -->
+        <div class="songs-grid">
+          
+          <div class="song-card">
+            <div class="song-image">
+              <img loading="lazy" decoding="async" src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/669003328c84d4ebb0e0198a_Xs_3000x%20(2)%20(1).jpg" alt="Hideaway" />
+              <div class="play-overlay">
+                <a class="play-btn" href="https://open.spotify.com/track/0FxhxzAZGcUc9YTAdlaTQo?si=1a4da3cd7a614abf" target="_blank" rel="noopener" aria-label="Listen on Spotify">
+                  <i class="bx bxl-spotify"></i>
+                </a>
+              </div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Hideaway</h3>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">Jul 12, 2024</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card">
+            <div class="song-image">
+              <img loading="lazy" decoding="async" src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/657046caf7ba342d201c8b82_Cry.jpg" alt="You're The Only Good Thing In My Life" />
+              <div class="play-overlay">
+                <a class="play-btn" href="https://open.spotify.com/track/4fhJAPcYTQMK2brDmnI6kk?si=4249fb79b55d4efb" target="_blank" rel="noopener" aria-label="Listen on Spotify">
+                  <i class="bx bxl-spotify"></i>
+                </a>
+              </div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">You're The Only Good Thing In My Life</h3>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">Oct 25, 2019</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card">
+            <div class="song-image">
+              <img loading="lazy" decoding="async" src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c267729189e29e133756_Cigarettes%2BAfter%2BSex.jpg" alt="Opera House" />
+              <div class="play-overlay">
+                <a class="play-btn" href="https://open.spotify.com/track/2Ddfm2NQwTRsf7YVlt258S?si=8035d21b29de47f9" target="_blank" rel="noopener" aria-label="Listen on Spotify">
+                  <i class="bx bxl-spotify"></i>
+                </a>
+              </div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Opera House</h3>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">Jun 9, 2017</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card">
+            <div class="song-image">
+              <img loading="lazy" decoding="async" src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/64da1cab9c479466aa9a28c8_Heavenly.jpg" alt="Heavenly" />
+              <div class="play-overlay">
+                <a class="play-btn" href="https://open.spotify.com/track/5E02BgqYNN9VzafXrYP6Np?si=d76f163e92f34085" target="_blank" rel="noopener" aria-label="Listen on Spotify">
+                  <i class="bx bxl-spotify"></i>
+                </a>
+              </div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Heavenly</h3>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">Oct 25, 2019</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card">
+            <div class="song-image">
+              <img loading="lazy" decoding="async" src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/657046caf7ba342d201c8b82_Cry.jpg" alt="Hentai" />
+              <div class="play-overlay">
+                <a class="play-btn" href="https://open.spotify.com/track/4Pu3JCVM0YptKrGNjRfz6a?si=9b4d3775ba154d8c" target="_blank" rel="noopener" aria-label="Listen on Spotify">
+                  <i class="bx bxl-spotify"></i>
+                </a>
+              </div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Hentai</h3>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">Oct 25, 2019</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card">
+            <div class="song-image">
+              <img loading="lazy" decoding="async" src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/669003328c84d4ebb0e0198a_Xs_3000x%20(2)%20(1).jpg" alt="Dreams From Bunker Hill" />
+              <div class="play-overlay">
+                <a class="play-btn" href="https://open.spotify.com/track/720cFmiRJj0brle3kQ7nHH?si=4f40cd41d1b14fed" target="_blank" rel="noopener" aria-label="Listen on Spotify">
+                  <i class="bx bxl-spotify"></i>
+                </a>
+              </div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Dreams From Bunker Hill</h3>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">Jul 12, 2024</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card">
+            <div class="song-image">
+              <img loading="lazy" decoding="async" src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582b0a97316609209b9ac1e_Affection.jpg" alt="Keep on Loving You" />
+              <div class="play-overlay">
+                <a class="play-btn" href="https://open.spotify.com/track/3GUSidbQwd7xuvU6AQorRh?si=3b21d9b2203948e7" target="_blank" rel="noopener" aria-label="Listen on Spotify">
+                  <i class="bx bxl-spotify"></i>
+                </a>
+              </div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Keep on Loving You</h3>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">Oct 5, 2015</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="song-card">
+            <div class="song-image">
+              <img loading="lazy" decoding="async" src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/669003328c84d4ebb0e0198a_Xs_3000x%20(2)%20(1).jpg" alt="X's" />
+              <div class="play-overlay">
+                <a class="play-btn" href="https://open.spotify.com/track/7nHXJNSBnkHFjddclFrXiI?si=3809a01356ee4455" target="_blank" rel="noopener" aria-label="Listen on Spotify">
+                  <i class="bx bxl-spotify"></i>
+                </a>
+              </div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">X's</h3>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">Jul 12, 2024</span>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="song-card">
+            <div class="song-image">
+              <img loading="lazy" decoding="async" src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c204348e5c81ca609d67_Apocalypse.jpg" alt="Apocalypse" />
+              <div class="play-overlay">
+                <a class="play-btn" href="https://open.spotify.com/track/1oAwsWBovWRIp7qLMGPIet?si=c010c1b227304ce6" target="_blank" rel="noopener" aria-label="Listen on Spotify">
+                  <i class="bx bxl-spotify"></i>
+                </a>
+              </div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Apocalypse</h3>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">Jun 9, 2017</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card">
+            <div class="song-image">
+              <img loading="lazy" decoding="async" src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c267729189e29e133756_Cigarettes%2BAfter%2BSex.jpg" alt="Flash" />
+              <div class="play-overlay">
+                <a class="play-btn" href="https://open.spotify.com/track/6eknHC7HjAKchl23x2A7dW?si=1cd62a3110fc42bc" target="_blank" rel="noopener" aria-label="Listen on Spotify">
+                  <i class="bx bxl-spotify"></i>
+                </a>
+              </div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Flash</h3>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">Jun 9, 2017</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card">
+            <div class="song-image">
+              <img loading="lazy" decoding="async" src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582c28aa45c52849ac8aaa5_Sweet.jpg" alt="Sweet" />
+              <div class="play-overlay">
+                <a class="play-btn" href="https://open.spotify.com/track/2KhrPRV0V1FS2l4eQMJUWt?si=9287a4e02dff42d8" target="_blank" rel="noopener" aria-label="Listen on Spotify">
+                  <i class="bx bxl-spotify"></i>
+                </a>
+              </div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Sweet</h3>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">Jun 9, 2017</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card">
+            <div class="song-image">
+              <img loading="lazy" decoding="async" src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/64da1c6b5ffe29513027f945_Neon-Moon.jpg" alt="Neon Moon" />
+              <div class="play-overlay">
+                <a class="play-btn" href="https://open.spotify.com/track/5r7QVaDpYeWMcbxxrkqb6H?si=665fc42a06534bb7" target="_blank" rel="noopener" aria-label="Listen on Spotify">
+                  <i class="bx bxl-spotify"></i>
+                </a>
+              </div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Neon Moon</h3>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">Dec 17, 2019</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="song-card">
+            <div class="song-image">
+              <img loading="lazy" decoding="async" src="https://cdn.prod.website-files.com/64cb5f36172f60e17c655f5f/6582b0a97316609209b9ac1e_Affection.jpg" alt="Affection" />
+              <div class="play-overlay">
+                <a class="play-btn" href="https://open.spotify.com/track/769vrAYHcuLwOV0at2hiOf?si=4961b6920b7746f8" target="_blank" rel="noopener" aria-label="Listen on Spotify">
+                  <i class="bx bxl-spotify"></i>
+                </a>
+              </div>
+            </div>
+            <div class="song-info">
+              <h3 class="song-title">Affection</h3>
+              <div class="song-meta">
+                <span class="song-artist">Cigarettes After Sex</span>
+                <span class="song-year">Oct 5, 2015</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="music-more-actions">
+          <a class="music-more-link" href="https://open.spotify.com/user/eminem_1398" target="_blank" rel="noopener noreferrer">
+            <i class="bx bxl-spotify" aria-hidden="true"></i>
+            <span>Open my full Spotify profile</span>
+            <i class="bx bx-right-arrow-alt" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+      <div class="particles-container">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      </div>
+
+      <div class="geometric-bg">
+        <div class="geo-shape geo-circle"></div>
+        <div class="geo-shape geo-triangle"></div>
+        <div class="geo-shape geo-square"></div>
+      </div>
+
+      <div class="container">
+        <div class="section-header">
+          <h2 class="gradient-heading">Frequently Asked <span>Questions</span></h2>
+          <p class="section-subtitle">
+            Quick answers before you message me.
+          </p>
+        </div>
+
+        <div class="faq-container">
+          <div class="faq-item">
+            <button class="faq-question" type="button">
+              <span>Do you take commissions?</span>
+              <i class='bx bx-chevron-down faq-icon'></i>
+            </button>
+            <div class="faq-answer">
+              <p>Yes. I make FNF charts, modcharts, and code. Check the Projects section or message me on Discord to
+                talk about it.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" type="button">
+              <span>What do you build websites and bots with?</span>
+              <i class='bx bx-chevron-down faq-icon'></i>
+            </button>
+            <div class="faq-answer">
+              <p>HTML, CSS, and JavaScript for the web. Lua and Haxe for FNF mods.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" type="button">
+              <span>Is Selina (your Discord bot) ready to use?</span>
+              <i class='bx bx-chevron-down faq-icon'></i>
+            </button>
+            <div class="faq-answer">
+              <p>Not yet, it's still in progress. You can check the Projects section for updates.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" type="button">
+              <span>What's the best way to reach you?</span>
+              <i class='bx bx-chevron-down faq-icon'></i>
+            </button>
+            <div class="faq-answer">
+              <p>Discord. I check it the most and reply the fastest there.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+<!-- Contact Section -->
+    <section class="contact" id="contact">
+      <div class="contact-particles">
+        <div class="contact-particle"></div>
+        <div class="contact-particle"></div>
+        <div class="contact-particle"></div>
+        <div class="contact-particle"></div>
+        <div class="contact-particle"></div>
+      </div>
+
+      <div class="contact-geometric-bg">
+        <div class="contact-geo-shape contact-geo-circle-1"></div>
+        <div class="contact-geo-shape contact-geo-triangle-1"></div>
+        <div class="contact-geo-shape contact-geo-square-1"></div>
+        <div class="contact-geo-shape contact-geo-circle-2"></div>
+      </div>
+
+      <div class="section-header enhanced-section-header">
+        <div class="header-decoration top-decoration"></div>
+
+        <h2 class="heading enhanced-heading">
+          <span class="heading-word">Contact</span>
+          <span class="heading-word highlight-word">Me</span>
+          <div class="heading-underline"></div>
+        </h2>
+
+        <p class="contact-subtitle enhanced-subtitle">
+          Got a project or an idea? Let's talk
+          <span class="subtitle-highlight">about it.</span>
+          <span class="subtitle-decoration"></span>
+        </p>
+
+        <div class="header-decoration bottom-decoration"></div>
+      </div>
+
+      <div class="contact-container enhanced-contact-container">
+        <div class="primary-contact enhanced-primary-contact">
+          <div class="primary-contact-bg"></div>
+          <div class="primary-contact-glow"></div>
+
+          <div class="contact-header enhanced-contact-header">
+            <div class="discord-icon-wrapper">
+              <i class="bx bxl-discord-alt discord-icon-main"></i>
+              <div class="icon-pulse-ring"></div>
+              <div class="icon-pulse-ring delayed"></div>
+            </div>
+
+            <div class="header-text">
+              <h3 class="primary-title enhanced-primary-title">
+                Message Me on Discord
+                <span class="title-decoration"></span>
+              </h3>
+              <p class="primary-subtitle enhanced-primary-subtitle">
+                It's the best way to reach me
+                <span class="subtitle-accent">⚡</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="discord-info-card enhanced-discord-info">
+            <div class="discord-username-wrapper">
+              <div class="username-icon">
+                <i class="bx bx-user"></i>
+              </div>
+              <div class="discord-username">@trr0</div>
+              <div class="username-badge" style="display: none;">Active</div>
+            </div>
+            <div class="discord-status-indicator" style="display: none;">
+              <div class="status-dot online"></div>
+              <span class="status-text">Online Now</span>
+            </div>
+          </div>
+
+          
+
+          <div class="discord-cta enhanced-discord-cta" style="background: none;">
+            <a href="https://discord.com/users/1282747277206884436" class="discord-btn enhanced-discord-btn"
+              target="_blank" rel="noopener noreferrer">
+              <div class="btn-background"></div>
+              <div class="btn-shine-effect"></div>
+              <i class="bx bxl-discord-alt"></i>
+              <span style="color: var(--text-color);">Message Me on Discord</span>
+              <div class="btn-pulse-ring"></div>
+            </a>
+          </div>
+
+          <div class="contact-lines">
+            <div class="contact-line line-1"></div>
+            <div class="contact-line line-2"></div>
+            <div class="contact-line line-3"></div>
+            <div class="contact-line line-4"></div>
+          </div>
+        </div>
+
+        
+        </div>
+
+        
+    </section>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="social-icons" style="display: none;">
+          <a href="https://youtube.com/@voixj" target="_blank" aria-label="YouTube" rel="noopener noreferrer">
+            <i class="bx bxl-youtube"></i>
+          </a>
+          <a href="https://instagram.com/voixj" target="_blank" aria-label="Instagram" rel="noopener noreferrer">
+            <i class="bx bxl-instagram"></i>
+          </a>
+          <a href="https://discord.com/users/1282747277206884436" target="_blank" aria-label="Discord" rel="noopener noreferrer">
+            <i class="bx bxl-discord-alt"></i>
+          </a>
+          <a href="https://x.com/x_5mt" target="_blank" aria-label="Twitter" rel="noopener noreferrer">
+            <i class="bx bxl-twitter"></i>
+          </a>
+          <a href="https://www.twitch.tv/xm5o_" target="_blank" aria-label="Twitch" rel="noopener noreferrer">
+            <i class="bx bxl-twitch"></i>
+          </a>
+        </div>
+
+        <div class="site-views-card" aria-label="Site traffic summary">
+          <i class="bx bx-show" aria-hidden="true"></i>
+          <span>Site Views <strong id="visitorCount" data-value="0">—</strong></span>
+          <span class="today-views">Today <strong id="todayVisits">—</strong></span>
+        </div>
+
+        <ul class="footer-nav">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#now">Now</a></li>
+          <li><a href="#services">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#music">Music</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+        </ul>
+
+        <p class="copyright">© 2026 <span>Immortal</span> | All Rights Reserved</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="scripts/utils.js"></script>
+  <script src="scripts/navbar.js"></script>
+  <script src="scripts/home.js"></script>
+  <script src="scripts/about.js"></script>
+  <script src="scripts/skills.js"></script>
+  <script src="scripts/projects.js"></script>
+  <script src="scripts/discord-activity.js"></script>
+  <script src="scripts/account-disabled-modal.js"></script>
+  <script src="scripts/faq.js"></script>
+  <script src="scripts/command-palette.js"></script>
+  <script type="module" src="scripts/analytics.js"></script>
+
+
+</body>
+
+</html>

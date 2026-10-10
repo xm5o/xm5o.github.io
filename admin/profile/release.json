@@ -1,0 +1,12 @@
+{
+  "version": "1.3.0",
+  "name": "Quality Automation",
+  "releasedAt": "2026-09-16T13:45:00.000Z",
+  "channel": "stable",
+  "highlights": [
+    "Added whole-site visual regression testing and Lighthouse CI.",
+    "Added global admin search, power-user shortcuts, and Stable/Beta release channels.",
+    "Added automated maintenance reports, disaster-recovery bundles, and health incident monitoring.",
+    "Added managed image WebP/AVIF generation, automatic CI failure issues, and generated release notes."
+  ]
+}

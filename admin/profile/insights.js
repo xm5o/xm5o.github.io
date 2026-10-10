@@ -1,0 +1,12 @@
+import{publisherRequest,isPublisherReady,onAuthChange}from'./auth.js';
+import{getDraftSummary,onDraftChange}from'./draft.js';
+const LOG_KEY='immortalCmsLocalLogs';
+const $=id=>document.getElementById(id);
+let mounted=false,lastRemote=[];
+function localLogs(){try{return JSON.parse(localStorage.getItem(LOG_KEY)||'[]')}catch{return[]}}
+function since30(v){const t=new Date(v).getTime();return Number.isFinite(t)&&Date.now()-t<=30*24*60*60*1000}
+function ago(v){if(!v)return'None yet';const ms=Date.now()-new Date(v).getTime(),min=Math.max(0,Math.round(ms/60000));if(min<1)return'Just now';if(min<60)return`${min}m ago`;const h=Math.round(min/60);if(h<48)return`${h}h ago`;return`${Math.round(h/24)}d ago`}
+function ensure(){if(mounted)return;const actions=document.querySelector('.quick-actions');if(!actions)return;const card=document.createElement('section');card.className='admin-insights';card.id='adminInsights';card.innerHTML='<article><small>Publishes · 30d</small><strong id="insightPublishes">—</strong></article><article><small>Client errors · 30d</small><strong id="insightErrors">—</strong></article><article><small>Staged now</small><strong id="insightDraft">0</strong></article><article><small>Last publish</small><strong id="insightLast">None yet</strong></article>';actions.after(card);mounted=true;render()}
+function render(){if(!mounted)return;const publishes=lastRemote.filter(v=>String(v.action||'').includes('publish')&&since30(v.at));const errors=localLogs().filter(v=>String(v.level||'').toLowerCase()==='error'&&since30(v.at));$('insightPublishes').textContent=String(publishes.length);$('insightErrors').textContent=String(errors.length);$('insightDraft').textContent=String(getDraftSummary().count);$('insightLast').textContent=ago(publishes[0]?.at)}
+export async function refreshAdminInsights(){ensure();if(!isPublisherReady()){lastRemote=[];render();return}try{lastRemote=(await publisherRequest('/logs')).logs||[]}catch{lastRemote=[]}render()}
+export function initAdminInsights(){ensure();onDraftChange(render);onAuthChange(ready=>{if(ready)refreshAdminInsights();else{lastRemote=[];render()}});window.addEventListener('immortal:workspace-change',e=>{if(e.detail?.workspace==='overview')refreshAdminInsights()});window.addEventListener('immortal:cms-published',refreshAdminInsights);window.addEventListener('immortal:cms-undo',refreshAdminInsights);window.addEventListener('immortal:client-error',render)}

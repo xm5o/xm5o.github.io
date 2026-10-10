@@ -1,0 +1,82 @@
+/* ==========================================================================
+   Skeleton Loading System
+   Shows shimmer placeholders directly on the real hero elements — no
+   separate full-screen overlay. Placeholders match the exact size and
+   position of the content they stand in for.
+   ========================================================================== */
+
+:root {
+  --skeleton-base: rgba(255, 255, 255, 0.06);
+  --skeleton-shine: rgba(255, 255, 255, 0.16);
+}
+
+body.is-loading {
+  overflow: hidden;
+}
+
+/* Below-the-fold content fades in once loading finishes */
+#mainContent {
+  transition: opacity 0.6s ease;
+}
+
+body.is-loading #mainContent {
+  opacity: 0;
+}
+
+/* Elements that get the skeleton treatment while loading */
+body.is-loading .image-wrapper,
+body.is-loading .gradient-heading,
+body.is-loading .subtitle-text,
+body.is-loading .typewriter,
+body.is-loading .tagline {
+  position: relative;
+  color: transparent !important;
+  background: var(--skeleton-base);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+body.is-loading .image-wrapper {
+  border-radius: 50%;
+}
+
+/* Hide their real contents (icons, images, nested spans) while skeleton is up */
+body.is-loading .image-wrapper *,
+body.is-loading .gradient-heading *,
+body.is-loading .subtitle-text *,
+body.is-loading .typewriter *,
+body.is-loading .tagline * {
+  visibility: hidden !important;
+}
+
+/* The shimmer sweep */
+body.is-loading .image-wrapper::after,
+body.is-loading .gradient-heading::after,
+body.is-loading .subtitle-text::after,
+body.is-loading .typewriter::after,
+body.is-loading .tagline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--skeleton-shine), transparent);
+  transform: translateX(-100%);
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  body.is-loading .image-wrapper::after,
+  body.is-loading .gradient-heading::after,
+  body.is-loading .subtitle-text::after,
+  body.is-loading .typewriter::after,
+  body.is-loading .tagline::after {
+    animation: none;
+    opacity: 0.5;
+  }
+}
