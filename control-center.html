@@ -23,6 +23,7 @@ button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;backg
 @media(max-width:700px){.dashboard-panels{grid-template-columns:1fr}.breakdown-row{grid-template-columns:90px minmax(0,1fr) 34px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}body:has(#dashboard:not([hidden])) main{padding:18px;margin:12px auto}.metric{padding:15px}.metric strong{font-size:24px}}
 .timeline-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.timeline-head h2{margin:0}.timeline-options{display:flex;gap:6px}.timeline-options button{width:auto;margin:0;padding:8px 12px;border:1px solid #343741;background:#171920;color:#b8bdc8;font-size:12px}.timeline-options button[aria-pressed="true"]{background:#e7e8ed;color:#14161b;border-color:#e7e8ed}.timeline-chart{display:flex;align-items:flex-end;gap:3px;height:160px;border-bottom:1px solid #343741;margin:16px 0 12px;overflow:hidden}.timeline-bar{flex:1;min-width:1px;background:#bfc2d0;border-radius:3px 3px 0 0;opacity:.85}.timeline-bar:hover{background:#fff;opacity:1}.timeline-bar{border:0;padding:0;margin:0;cursor:pointer;min-width:3px}.timeline-bar[aria-pressed="true"]{background:#fff;opacity:1}.timeline-axis{display:flex;justify-content:space-between;gap:8px;color:#8d929e;font-size:11px}.timeline-detail{font-size:12px;color:#e1e2e9;margin:10px 0 0!important;min-height:18px}.timeline-chart{gap:4px}.timeline-chart[data-range="90"]{gap:1px}.timeline-chart[data-range="90"] .timeline-bar{min-width:2px}.timeline-chart[data-range="30"]{gap:3px}.timeline-status{font-size:12px;color:#a3a7b1;margin:8px 0 0!important}
 .legacy-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}.legacy-stat{border:1px solid #292c34;border-radius:10px;padding:14px;background:#111318}.legacy-stat span{display:block;color:#a3a7b1;font-size:11px;line-height:1.4}.legacy-stat strong{display:block;margin-top:8px;font-size:24px;letter-spacing:-.04em}.legacy-status{font-size:12px;color:#a3a7b1;margin-top:14px!important}@media(max-width:600px){.legacy-grid{grid-template-columns:1fr 1fr}.legacy-stat:last-child{grid-column:1/-1}}
+.backup-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}.backup-actions button{width:auto;margin:0;padding:11px 16px}.backup-note{font-size:12px;color:#a3a7b1;margin-top:12px!important;overflow-wrap:anywhere}
 </style>
 </head>
 <body>
@@ -53,6 +54,7 @@ button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;backg
   </div>
   <section class="panel" aria-label="Daily page views" style="margin-top:12px"><div class="timeline-head"><h2>Daily page views</h2><div class="timeline-options" role="group" aria-label="Timeline period"><button type="button" data-days="7" aria-pressed="true">7 days</button><button type="button" data-days="30" aria-pressed="false">30 days</button><button type="button" data-days="90" aria-pressed="false">90 days</button></div></div><div id="timeline-bars" class="timeline-chart" role="group" aria-label="Daily page views chart"></div><div class="timeline-axis"><span id="timeline-first">—</span><span id="timeline-last">—</span></div><p id="timeline-detail" class="timeline-detail" aria-live="polite">Select a bar to see the date and views.</p><p id="timeline-status" class="timeline-status" role="status" aria-live="polite">Choose a period to load daily data.</p></section>
   <section class="source-note" aria-label="Historical analytics status"><strong>Historical analytics · Firebase Firestore</strong><p>Legacy counts are separate from Cloudflare D1. Unique visitors are deduplicated by the existing browser-based counter, not verified individuals.</p><div class="legacy-grid"><div class="legacy-stat"><span>Legacy unique visitors</span><strong id="legacy-visitors">—</strong></div><div class="legacy-stat"><span>Firebase page views</span><strong id="legacy-pageviews">—</strong></div><div class="legacy-stat"><span>Firebase unique visitors (v2)</span><strong id="legacy-v2-visitors">—</strong></div></div><p class="legacy-status" id="legacy-status" role="status" aria-live="polite">Sign in to load historical statistics.</p></section>
+  <section class="source-note" aria-label="Firestore backup"><strong>Firestore backup · Owner only</strong><p>Export the four analytics and projects collections to a local JSON file. Read-only; nothing is uploaded. This is a manual data snapshot, not a managed Firestore restore point.</p><div class="backup-actions"><button type="button" id="export-backup">Export JSON backup</button></div><p class="backup-note" id="backup-status" role="status" aria-live="polite">Sign in before exporting. Keep backup files private.</p></section>
   <p id="dashboard-message" role="status" aria-live="polite"></p>
 </section>
 </main>
@@ -60,7 +62,7 @@ button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;backg
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut, setPersistence, inMemoryPersistence } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { firebaseConfig } from './scripts/analytics-config.js';
-import { initializeFirestore, doc, getDocFromServer } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { initializeFirestore, doc, collection, getDocFromServer, getDocsFromServer } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 // Configure the API URL after the Worker is securely deployed.
 // This is not a secret; never embed credentials or a service account here.
 const API_ORIGIN = 'https://xm5o-analytics.eminem13981398.workers.dev';
@@ -152,6 +154,73 @@ function clearHistorical() {
   for (const id of ['legacy-visitors', 'legacy-pageviews', 'legacy-v2-visitors']) document.getElementById(id).textContent = '—';
   document.getElementById('legacy-status').textContent = 'Sign in to load historical statistics.';
 }
+const BACKUP_COLLECTIONS = ['visitor_stats', 'geo_stats', 'unique_visitors', 'projects'];
+const backupButton = document.getElementById('export-backup');
+const backupStatus = document.getElementById('backup-status');
+function encodeFirestoreValue(value) {
+  if (value === null || typeof value !== 'object') return value;
+  if (typeof value.toDate === 'function' && typeof value.seconds === 'number') {
+    return { __firestoreType: 'timestamp', seconds: value.seconds, nanoseconds: value.nanoseconds };
+  }
+  if (typeof value.latitude === 'number' && typeof value.longitude === 'number') {
+    return { __firestoreType: 'geopoint', latitude: value.latitude, longitude: value.longitude };
+  }
+  if (typeof value.toBase64 === 'function') return { __firestoreType: 'bytes', base64: value.toBase64() };
+  if (value.path && typeof value.withConverter === 'function') return { __firestoreType: 'reference', path: value.path };
+  if (Array.isArray(value)) return value.map(encodeFirestoreValue);
+  return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, encodeFirestoreValue(item)]));
+}
+async function exportBackup() {
+  if (!authorized || !auth.currentUser) return;
+  backupButton.disabled = true;
+  backupStatus.textContent = 'Reading Firestore collections…';
+  try {
+    // Verify owner session again before reading collections. Never export on login alone.
+    const token = await auth.currentUser.getIdToken();
+    const check = await fetch(new URL('/v1/admin/session', API_ORIGIN), {
+      headers: { Authorization: 'Bearer ' + token }, cache: 'no-store'
+    });
+    if (!check.ok) throw new Error('Owner verification failed');
+    const collections = {};
+    const counts = {};
+    for (const name of BACKUP_COLLECTIONS) {
+      if (!authorized || !auth.currentUser) throw new Error('Session ended');
+      backupStatus.textContent = 'Reading ' + name + '…';
+      const snapshot = await getDocsFromServer(collection(historicalDb, name));
+      collections[name] = snapshot.docs.map(item => ({ id: item.id, path: item.ref.path, data: encodeFirestoreValue(item.data()) }));
+      counts[name] = snapshot.size;
+    }
+    if (!authorized || !auth.currentUser) throw new Error('Session ended');
+    const backup = {
+      format: 'xm5o-firestore-json-backup',
+      formatVersion: 1,
+      projectId: firebaseConfig.projectId,
+      exportedAt: new Date().toISOString(),
+      collections,
+      documentCounts: counts,
+      notes: 'Read-only client export. Not a managed Firestore backup. Subcollections are not included.'
+    };
+    const json = JSON.stringify(backup, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const filename = 'xm5o-firestore-backup-' + backup.exportedAt.slice(0, 10) + '.json';
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    // Keep the object URL available for mobile browsers to finish saving.
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    backupStatus.textContent = 'Export prepared: ' + Object.entries(counts).map(([name, n]) => name + ' ' + n).join(' · ') + '. Confirm the JSON file was saved in Files.';
+  } catch (error) {
+    console.warn('[XM5O Backup] Export failed:', error);
+    backupStatus.textContent = 'Export failed or a collection could not be read. No complete backup was created. Check Firestore permissions and retry.';
+  } finally {
+    backupButton.disabled = false;
+  }
+}
+backupButton.addEventListener('click', exportBackup);
 let selectedDays = 7;
 let timelineRequest = 0;
 async function loadTimeline() {
