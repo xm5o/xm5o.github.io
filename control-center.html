@@ -60,7 +60,7 @@ button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;backg
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut, setPersistence, inMemoryPersistence } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { firebaseConfig } from './scripts/analytics-config.js';
-import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { initializeFirestore, doc, getDocFromServer } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 // Configure the API URL after the Worker is securely deployed.
 // This is not a secret; never embed credentials or a service account here.
 const API_ORIGIN = 'https://xm5o-analytics.eminem13981398.workers.dev';
@@ -69,7 +69,9 @@ const message = document.getElementById('message');
 const button = document.getElementById('submit');
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
-const historicalDb = getFirestore(firebaseApp);
+// Use a dedicated REST-friendly Firestore transport for the private dashboard.
+// Avoid the WebChannel Listen stream, which is unreliable in some mobile browsers.
+const historicalDb = initializeFirestore(firebaseApp, { experimentalForceLongPolling: true, useFetchStreams: false });
 const access = document.getElementById('access');
 const dashboard = document.getElementById('dashboard');
 const dashboardMessage = document.getElementById('dashboard-message');
@@ -133,7 +135,7 @@ async function loadHistorical() {
   const status = document.getElementById('legacy-status');
   status.textContent = 'Loading historical statistics…';
   try {
-    const snapshot = await getDoc(doc(historicalDb, 'visitor_stats', 'main'));
+    const snapshot = await getDocFromServer(doc(historicalDb, 'visitor_stats', 'main'));
     if (!authorized || !auth.currentUser) return;
     if (!snapshot.exists()) throw new Error('Historical summary not found');
     const data = snapshot.data();
@@ -143,7 +145,7 @@ async function loadHistorical() {
     document.getElementById('legacy-v2-visitors').textContent = v2.uniqueVisitors == null ? '—' : count(v2.uniqueVisitors);
     status.textContent = 'Firebase snapshot loaded · Historical counters are not added to D1 totals.';
   } catch {
-    status.textContent = 'Historical statistics unavailable. Check Firebase access and try refreshing.';
+    status.textContent = 'Could not connect to Firestore. D1 analytics are unaffected. Try Refresh or another network.';
   }
 }
 function clearHistorical() {
