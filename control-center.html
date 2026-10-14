@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>XM5O — Control Center</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,sans-serif;background:#090a0d;color:#f2f3f5}
+*{box-sizing:border-box}body{min-height:100svh;display:grid;place-items:center;margin:0;padding:24px}
+main{width:min(100%,410px);padding:36px;border:1px solid #262932;border-radius:20px;background:#111318;box-shadow:0 18px 70px #0006}
+small{color:#9da3af;letter-spacing:.17em;text-transform:uppercase}h1{font-size:27px;letter-spacing:-.04em;margin:12px 0 8px}p{color:#a5a9b4;line-height:1.55;font-size:14px;margin-bottom:26px}
+label{display:block;color:#c7cbd2;font-size:13px;margin:18px 0 8px}input{width:100%;padding:13px 14px;border:1px solid #343741;border-radius:10px;background:#0b0d11;color:white;font:inherit;outline:none}input:focus{border-color:#a5a5bd}
+button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;background:#e7e8ed;color:#14161b;font:600 14px inherit;cursor:pointer}button:disabled{opacity:.6;cursor:wait}
+#message{min-height:20px;margin:18px 0 0;font-size:13px}a{color:#b7b8d1}
+[hidden]{display:none!important}body:has(#dashboard:not([hidden])){display:block}body:has(#dashboard:not([hidden])) main{width:min(100%,1060px);margin:36px auto;padding:30px}
+.dashboard-head{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}.dashboard-head p{margin:8px 0 0}
+.actions{display:flex;gap:9px}.actions button{width:auto;margin:0;padding:10px 16px}
+#logout{background:#272a33;color:#eee}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:26px 0}
+.metric,.panel{border:1px solid #292c34;background:#0c0e13;border-radius:14px;padding:20px}
+.metric span{font-size:12px;color:#a3a7b1}.metric strong{display:block;font-size:29px;margin-top:12px;letter-spacing:-.04em}
+.panel h2{font-size:17px;margin:0 0 18px}.panel p{margin:0}.page-row{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-top:1px solid #242730;font-size:13px}
+.page-row span{overflow-wrap:anywhere}.page-row strong{font-variant-numeric:tabular-nums}.muted{color:#a5a9b4}
+@media(max-width:700px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}body:has(#dashboard:not([hidden])) main{padding:18px;margin:12px auto}.metric{padding:15px}.metric strong{font-size:24px}}
+</style>
+</head>
+<body>
+<main>
+<small>XM5O / Private Access</small>
+<h1>Control Center</h1>
+<p>Restricted access. Sign in with your authorized Firebase account.</p>
+<form id="login">
+<label for="email">Email</label><input id="email" type="email" autocomplete="username" required>
+<label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required>
+<button id="submit" type="submit">Sign in</button>
+</form>
+<p id="message" role="status" aria-live="polite"></p>
+</main>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, signOut, setPersistence, inMemoryPersistence } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { firebaseConfig } from './scripts/analytics-config.js';
+// Configure the API URL after the Worker is securely deployed.
+// This is not a secret; never embed credentials or a service account here.
+const API_ORIGIN = 'https://xm5o-analytics.eminem13981398.workers.dev';
+const form = document.getElementById('login');
+const message = document.getElementById('message');
+const button = document.getElementById('submit');
+const auth = getAuth(initializeApp(firebaseConfig));
+const access = document.getElementById('access');
+const dashboard = document.getElementById('dashboard');
+const dashboardMessage = document.getElementById('dashboard-message');
+let authorized = false;
+const count = value => Number(value || 0).toLocaleString('en-US');
+async function loadSummary() {
+  if (!authorized || !auth.currentUser) return;
+  dashboardMessage.textContent = 'Refreshing…';
+  try {
+    const token = await auth.currentUser.getIdToken();
+    const response = await fetch(new URL('/v1/admin/summary', API_ORIGIN), { headers: { Authorization: 'Bearer ' + token }, cache: 'no-store' });
+    if (!response.ok) throw new Error('Summary unavailable');
+    const summary = await response.json();
+    const totals = Object.fromEntries((summary.byType || []).map(item => [item.event_type, Number(item.total || 0)]));
+    document.getElementById('total-events').textContent = count(summary.totalEvents);
+    document.getElementById('page-views').textContent = count(totals.page_view);
+    document.getElementById('project-opens').textContent = count(totals.project_open);
+    document.getElementById('outbound-clicks').textContent = count(totals.outbound_click);
+    const container = document.getElementById('top-pages');
+    container.replaceChildren();
+    const pages = Array.isArray(summary.topPages) ? summary.topPages : [];
+    if (!pages.length) container.textContent = 'No page views yet.';
+    for (const page of pages) {
+      const row = document.createElement('div');
+      row.className = 'page-row';
+      const path = document.createElement('span');
+      path.textContent = String(page.path || '/');
+      const views = document.createElement('strong');
+      views.textContent = count(page.views);
+      row.append(path, views);
+      container.append(row);
+    }
+    dashboardMessage.textContent = 'Updated just now.';
+  } catch {
+    dashboardMessage.textContent = 'Could not load analytics. Try refreshing.';
+  }
+}
+document.getElementById('refresh').addEventListener('click', loadSummary);
+document.getElementById('logout').addEventListener('click', async () => {
+  authorized = false;
+  await signOut(auth);
+  dashboard.hidden = true;
+  access.hidden = false;
+  message.textContent = '';
+});
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  message.textContent = '';
+  if (!API_ORIGIN || !/^https:\/\//.test(API_ORIGIN)) {
+    message.textContent = 'API endpoint not configured yet. Login is not enabled.';
+    return;
+  }
+  button.disabled = true;
+  try {
+    await setPersistence(auth, inMemoryPersistence);
+    const credential = await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value);
+    const token = await credential.user.getIdToken();
+    const response = await fetch(new URL('/v1/admin/session', API_ORIGIN), { headers: { Authorization: 'Bearer ' + token }, cache: 'no-store' });
+    if (!response.ok) throw new Error('Access denied.');
+    authorized = true;
+    access.hidden = true;
+    dashboard.hidden = false;
+    await loadSummary();
+  } catch {
+    message.textContent = 'Could not verify owner access. Check credentials or API configuration.';
+    await signOut(auth).catch(() => {});
+  } finally {
+    document.getElementById('password').value = '';
+    button.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
