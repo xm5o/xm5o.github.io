@@ -88,7 +88,18 @@ async function loadSummary() {
       const number = document.getElementById('bar-count-' + type);
       const bar = document.getElementById('bar-' + type);
       if (number) number.textContent = count(value);
-      if (bar) bar.style.width = (total ? Math.min(100, value / total * 100) : 0) + '%';
+      if (bar) { bar.style.width = (total ? Math.min(100, value / total * 100) : 0) + '%'; bar.setAttribute('aria-label', count(value) + ' events'); }
+    }
+    // Keep the breakdown synchronized with the same source values as the summary cards.
+    const breakdown = [
+      ['page_view', 'page-views'],
+      ['project_open', 'project-opens'],
+      ['outbound_click', 'outbound-clicks']
+    ];
+    for (const [type, cardId] of breakdown) {
+      const displayed = document.getElementById(cardId)?.textContent || '0';
+      const countNode = document.getElementById('bar-count-' + type);
+      if (countNode) countNode.textContent = displayed;
     }
     const container = document.getElementById('top-pages');
     if (!container) throw new Error('Missing top pages container');
