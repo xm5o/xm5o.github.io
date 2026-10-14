@@ -18,7 +18,7 @@ button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;backg
 #logout{background:#272a33;color:#eee}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:26px 0}
 .metric,.panel{border:1px solid #292c34;background:#0c0e13;border-radius:14px;padding:20px}
 .metric span{font-size:12px;color:#a3a7b1}.metric strong{display:block;font-size:29px;margin-top:12px;letter-spacing:-.04em}
-.panel h2{font-size:17px;margin:0 0 18px}.dashboard-panels{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px}.chart-note{font-size:12px;color:#a3a7b1;margin:0 0 16px!important}.breakdown-row{display:grid;grid-template-columns:100px minmax(0,1fr) 40px;align-items:center;gap:12px;padding:12px 0;font-size:12px}.breakdown-track{height:8px;border-radius:10px;background:#252832;overflow:hidden}.breakdown-fill{height:100%;width:0;background:#d6d7e0;border-radius:10px;transition:width .3s}.breakdown-row strong{text-align:right;font-variant-numeric:tabular-nums}.dashboard-footnote{font-size:12px;color:#8d929e;margin-top:12px}.panel p{margin:0}.page-row{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-top:1px solid #242730;font-size:13px}
+.panel h2{font-size:17px;margin:0 0 18px}.dashboard-panels{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px}.chart-note{font-size:12px;color:#a3a7b1;margin:0 0 16px!important}.breakdown-row{display:grid;grid-template-columns:100px minmax(0,1fr) 40px;align-items:center;gap:12px;padding:12px 0;font-size:12px}.breakdown-track{height:8px;border-radius:10px;background:#252832;overflow:hidden}.breakdown-fill{height:100%;width:0;background:#d6d7e0;border-radius:10px;transition:width .3s}.breakdown-row strong{text-align:right;font-variant-numeric:tabular-nums}.dashboard-footnote{font-size:12px;color:#8d929e;margin-top:12px}.source-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:25px}.source-heading h2{font-size:17px;margin:0}.source-heading p{font-size:12px;margin:6px 0 0}.source-tag{border:1px solid #343741;border-radius:999px;padding:7px 11px;color:#b8bdc8;font-size:11px;letter-spacing:.04em}.source-note{border:1px solid #292c34;background:#0c0e13;border-radius:14px;padding:18px 20px;margin-top:18px}.source-note strong{font-size:13px}.source-note p{margin:7px 0 0;font-size:12px}.source-heading+.metrics{margin-top:15px}.panel p{margin:0}.page-row{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-top:1px solid #242730;font-size:13px}
 .page-row span{overflow-wrap:anywhere}.page-row strong{font-variant-numeric:tabular-nums}.muted{color:#a5a9b4}
 @media(max-width:700px){.dashboard-panels{grid-template-columns:1fr}.breakdown-row{grid-template-columns:90px minmax(0,1fr) 34px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}body:has(#dashboard:not([hidden])) main{padding:18px;margin:12px auto}.metric{padding:15px}.metric strong{font-size:24px}}
 </style>
@@ -38,6 +38,7 @@ button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;backg
 </section>
 <section id="dashboard" hidden>
   <header class="dashboard-head"><div><small>XM5O / Private Access</small><h1>Analytics Overview</h1><p>Private Cloudflare D1 analytics. Legacy visitor counter is not included.</p></div><div class="actions"><button type="button" id="refresh">Refresh</button><button type="button" id="logout">Sign out</button></div></header>
+  <div class="source-heading"><div><h2>Live events</h2><p>Independent event stream. Counts are not unique visitors.</p></div><span class="source-tag">Cloudflare D1 · All time</span></div>
   <div class="metrics"><div class="metric"><span>Total events</span><strong id="total-events">—</strong></div><div class="metric"><span>Page views</span><strong id="page-views">—</strong></div><div class="metric"><span>Project opens</span><strong id="project-opens">—</strong></div><div class="metric"><span>Outbound clicks</span><strong id="outbound-clicks">—</strong></div></div>
   <div class="dashboard-panels">
   <section class="panel"><h2>Event breakdown</h2><p class="chart-note">All-time event distribution · Cloudflare D1</p>
@@ -48,6 +49,7 @@ button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;backg
   </section>
   <section class="panel"><h2>Top pages</h2><div id="top-pages" class="muted">Loading…</div></section>
   </div>
+  <section class="source-note" aria-label="Historical analytics status"><strong>Historical analytics · Firebase Firestore</strong><p>The existing visitor counter and historical statistics remain in Firebase. They are not added to the D1 event totals. A separate, owner-authorized historical view will be connected in the next integration stage.</p></section>
   <p id="dashboard-message" role="status" aria-live="polite"></p>
 </section>
 </main>
