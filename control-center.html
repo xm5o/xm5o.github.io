@@ -10,7 +10,7 @@
 main{width:min(100%,410px);padding:36px;border:1px solid #262932;border-radius:20px;background:#111318;box-shadow:0 18px 70px #0006}
 small{color:#9da3af;letter-spacing:.17em;text-transform:uppercase}h1{font-size:27px;letter-spacing:-.04em;margin:12px 0 8px}p{color:#a5a9b4;line-height:1.55;font-size:14px;margin-bottom:26px}
 label{display:block;color:#c7cbd2;font-size:13px;margin:18px 0 8px}input{width:100%;padding:13px 14px;border:1px solid #343741;border-radius:10px;background:#0b0d11;color:white;font:inherit;outline:none}input:focus{border-color:#a5a5bd}
-button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;background:#e7e8ed;color:#14161b;font:600 14px inherit;cursor:pointer}button:disabled{opacity:.6;cursor:wait}
+button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;background:#e7e8ed;color:#14161b;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}button:disabled{opacity:.6;cursor:wait}
 #message{min-height:20px;margin:18px 0 0;font-size:13px}a{color:#b7b8d1}
 [hidden]{display:none!important}body:has(#dashboard:not([hidden])){display:block}body:has(#dashboard:not([hidden])) main{width:min(100%,1060px);margin:36px auto;padding:30px}
 .dashboard-head{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}.dashboard-head p{margin:8px 0 0}
@@ -25,6 +25,7 @@ button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;backg
 </head>
 <body>
 <main>
+<section id="access">
 <small>XM5O / Private Access</small>
 <h1>Control Center</h1>
 <p>Restricted access. Sign in with your authorized Firebase account.</p>
@@ -34,6 +35,13 @@ button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;backg
 <button id="submit" type="submit">Sign in</button>
 </form>
 <p id="message" role="status" aria-live="polite"></p>
+</section>
+<section id="dashboard" hidden>
+  <header class="dashboard-head"><div><small>XM5O / Private Access</small><h1>Analytics Overview</h1><p>Private Cloudflare D1 analytics. Legacy visitor counter is not included.</p></div><div class="actions"><button type="button" id="refresh">Refresh</button><button type="button" id="logout">Sign out</button></div></header>
+  <div class="metrics"><div class="metric"><span>Total events</span><strong id="total-events">—</strong></div><div class="metric"><span>Page views</span><strong id="page-views">—</strong></div><div class="metric"><span>Project opens</span><strong id="project-opens">—</strong></div><div class="metric"><span>Outbound clicks</span><strong id="outbound-clicks">—</strong></div></div>
+  <section class="panel"><h2>Top pages</h2><div id="top-pages" class="muted">Loading…</div></section>
+  <p id="dashboard-message" role="status" aria-live="polite"></p>
+</section>
 </main>
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
