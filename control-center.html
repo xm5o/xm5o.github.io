@@ -85,10 +85,13 @@ async function loadSummary() {
     const total = Number(summary.totalEvents || 0);
     for (const type of ['page_view', 'project_open', 'outbound_click']) {
       const value = totals[type] || 0;
-      document.getElementById('bar-count-' + type).textContent = count(value);
-      document.getElementById('bar-' + type).style.width = (total ? Math.min(100, value / total * 100) : 0) + '%';
+      const number = document.getElementById('bar-count-' + type);
+      const bar = document.getElementById('bar-' + type);
+      if (number) number.textContent = count(value);
+      if (bar) bar.style.width = (total ? Math.min(100, value / total * 100) : 0) + '%';
     }
     const container = document.getElementById('top-pages');
+    if (!container) throw new Error('Missing top pages container');
     container.replaceChildren();
     const pages = Array.isArray(summary.topPages) ? summary.topPages : [];
     if (!pages.length) container.textContent = 'No page views yet.';
@@ -103,8 +106,9 @@ async function loadSummary() {
       container.append(row);
     }
     dashboardMessage.textContent = 'Updated just now.';
-  } catch {
-    dashboardMessage.textContent = 'Could not load analytics. Try refreshing.';
+  } catch (error) {
+    console.error('[XM5O Control Center] Summary render error:', error);
+    dashboardMessage.textContent = 'Could not finish updating analytics. Reload the page and try again.';
   }
 }
 document.getElementById('refresh').addEventListener('click', loadSummary);
