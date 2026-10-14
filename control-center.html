@@ -21,6 +21,7 @@ button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;backg
 .panel h2{font-size:17px;margin:0 0 18px}.dashboard-panels{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px}.chart-note{font-size:12px;color:#a3a7b1;margin:0 0 16px!important}.breakdown-row{display:grid;grid-template-columns:100px minmax(0,1fr) 40px;align-items:center;gap:12px;padding:12px 0;font-size:12px}.breakdown-track{height:8px;border-radius:10px;background:#252832;overflow:hidden}.breakdown-fill{height:100%;width:0;background:#d6d7e0;border-radius:10px;transition:width .3s}.breakdown-row strong{text-align:right;font-variant-numeric:tabular-nums}.dashboard-footnote{font-size:12px;color:#8d929e;margin-top:12px}.source-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:25px}.source-heading h2{font-size:17px;margin:0}.source-heading p{font-size:12px;margin:6px 0 0}.source-tag{border:1px solid #343741;border-radius:999px;padding:7px 11px;color:#b8bdc8;font-size:11px;letter-spacing:.04em}.source-note{border:1px solid #292c34;background:#0c0e13;border-radius:14px;padding:18px 20px;margin-top:18px}.source-note strong{font-size:13px}.source-note p{margin:7px 0 0;font-size:12px}.source-heading+.metrics{margin-top:15px}.panel p{margin:0}.page-row{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-top:1px solid #242730;font-size:13px}
 .page-row span{overflow-wrap:anywhere}.page-row strong{font-variant-numeric:tabular-nums}.muted{color:#a5a9b4}
 @media(max-width:700px){.dashboard-panels{grid-template-columns:1fr}.breakdown-row{grid-template-columns:90px minmax(0,1fr) 34px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}body:has(#dashboard:not([hidden])) main{padding:18px;margin:12px auto}.metric{padding:15px}.metric strong{font-size:24px}}
+.timeline-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.timeline-head h2{margin:0}.timeline-options{display:flex;gap:6px}.timeline-options button{width:auto;margin:0;padding:8px 12px;border:1px solid #343741;background:#171920;color:#b8bdc8;font-size:12px}.timeline-options button[aria-pressed="true"]{background:#e7e8ed;color:#14161b;border-color:#e7e8ed}.timeline-chart{display:flex;align-items:flex-end;gap:3px;height:160px;border-bottom:1px solid #343741;margin:16px 0 12px;overflow:hidden}.timeline-bar{flex:1;min-width:1px;background:#bfc2d0;border-radius:3px 3px 0 0;opacity:.85}.timeline-bar:hover{background:#fff;opacity:1}.timeline-status{font-size:12px;color:#a3a7b1;margin:8px 0 0!important}
 </style>
 </head>
 <body>
@@ -49,6 +50,7 @@ button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;backg
   </section>
   <section class="panel"><h2>Top pages</h2><div id="top-pages" class="muted">Loading…</div></section>
   </div>
+  <section class="panel" aria-label="Daily page views" style="margin-top:12px"><div class="timeline-head"><h2>Daily page views</h2><div class="timeline-options" role="group" aria-label="Timeline period"><button type="button" data-days="7" aria-pressed="true">7 days</button><button type="button" data-days="30" aria-pressed="false">30 days</button><button type="button" data-days="90" aria-pressed="false">90 days</button></div></div><div id="timeline-bars" class="timeline-chart" role="img" aria-label="Daily page views chart"></div><p id="timeline-status" class="timeline-status" role="status" aria-live="polite">Choose a period to load daily data.</p></section>
   <section class="source-note" aria-label="Historical analytics status"><strong>Historical analytics · Firebase Firestore</strong><p>The existing visitor counter and historical statistics remain in Firebase. They are not added to the D1 event totals. A separate, owner-authorized historical view will be connected in the next integration stage.</p></section>
   <p id="dashboard-message" role="status" aria-live="polite"></p>
 </section>
@@ -122,7 +124,49 @@ async function loadSummary() {
     dashboardMessage.textContent = 'Could not finish updating analytics. Reload the page and try again.';
   }
 }
-document.getElementById('refresh').addEventListener('click', loadSummary);
+let selectedDays = 7;
+async function loadTimeline() {
+  if (!authorized || !auth.currentUser) return;
+  const status = document.getElementById('timeline-status');
+  const chart = document.getElementById('timeline-bars');
+  status.textContent = 'Loading daily data…';
+  try {
+    const token = await auth.currentUser.getIdToken();
+    const response = await fetch(new URL('/v1/admin/timeline?days=' + selectedDays, API_ORIGIN), { headers: { Authorization: 'Bearer ' + token }, cache: 'no-store' });
+    if (!response.ok) throw new Error('Timeline unavailable');
+    const result = await response.json();
+    if (result.source !== 'd1' || !Array.isArray(result.rows)) throw new Error('Invalid timeline');
+    const byDay = new Map(result.rows.filter(row => row.event_type === 'page_view').map(row => [row.day, Number(row.total) || 0]));
+    const today = new Date();
+    const days = [];
+    for (let i = selectedDays - 1; i >= 0; i--) {
+      const date = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - i));
+      const day = date.toISOString().slice(0, 10);
+      days.push({ day, views: byDay.get(day) || 0 });
+    }
+    const max = Math.max(1, ...days.map(item => item.views));
+    chart.replaceChildren();
+    for (const item of days) {
+      const bar = document.createElement('div');
+      bar.className = 'timeline-bar';
+      bar.style.height = Math.max(2, item.views / max * 100) + '%';
+      bar.title = item.day + ': ' + item.views + ' page views';
+      chart.append(bar);
+    }
+    const total = days.reduce((sum, item) => sum + item.views, 0);
+    chart.setAttribute('aria-label', selectedDays + ' days, ' + count(total) + ' page views');
+    status.textContent = selectedDays + ' days · UTC · ' + count(total) + ' page views · Not unique visitors.';
+  } catch {
+    chart.replaceChildren();
+    status.textContent = 'Daily chart unavailable. Please try refreshing.';
+  }
+}
+document.querySelectorAll('[data-days]').forEach(button => button.addEventListener('click', () => {
+  selectedDays = Number(button.dataset.days);
+  document.querySelectorAll('[data-days]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+  loadTimeline();
+}));
+document.getElementById('refresh').addEventListener('click', () => { loadSummary(); loadTimeline(); });
 document.getElementById('logout').addEventListener('click', async () => {
   authorized = false;
   await signOut(auth);
@@ -148,6 +192,7 @@ form.addEventListener('submit', async (event) => {
     access.hidden = true;
     dashboard.hidden = false;
     await loadSummary();
+    await loadTimeline();
   } catch {
     message.textContent = 'Could not verify owner access. Check credentials or API configuration.';
     await signOut(auth).catch(() => {});
