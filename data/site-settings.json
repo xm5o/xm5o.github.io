@@ -13,10 +13,10 @@
   "mainColor": "#ffffff",
   "secondaryColor": "#9f9f9f",
   "accentColor": "#d7d7d7",
-  "maintenanceEnabled": false,
-  "maintenanceTitle": "Oops... Looks It's under Maintenance!",
+  "maintenanceEnabled": true,
+  "maintenanceTitle": "Under Maintenance",
   "maintenanceTitleAr": "تحت الصيانة",
   "maintenanceMessage": "The site is being updated right now. Coming back Soon!",
   "maintenanceMessageAr": "الموقع حاليا تحت الصيانة. شيك بعدين!",
-  "updatedAt": "2026-10-05T12:29:26.963Z"
+  "updatedAt": "2026-10-23T12:52:30.976Z"
 }

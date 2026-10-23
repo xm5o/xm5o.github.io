@@ -1,5 +1,11 @@
 [
   {
+    "id": "187687a0-28c9-4331-8865-ab7df7db909c",
+    "action": "publish",
+    "detail": "settings",
+    "at": "2026-10-23T12:52:30.976Z"
+  },
+  {
     "id": "22cbcad7-2e7c-4038-bbeb-b61a17aff3aa",
     "action": "publish",
     "detail": "settings",
