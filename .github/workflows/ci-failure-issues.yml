@@ -6,8 +6,6 @@ on:
       - Immortal Admin browser checks
       - Immortal Admin smoke checks
       - Whole-site quality
-      - XM5O Guard
-      - XM5O Guard external links
       - Monthly site maintenance
       - Optimize managed images
     types: [completed]
