@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-23T19:53:12.890Z",
+  "generatedAt": "2026-10-29T08:55:58.549Z",
   "assets": {
     "assets/pfp.jpg": {
       "source": "assets/pfp.jpg",
@@ -45,6 +45,64 @@
           "height": 720,
           "path": "/assets/optimized/pfp-720.avif",
           "bytes": 26722
+        }
+      ]
+    },
+    "assets/site-favicon.jpg": {
+      "source": "assets/site-favicon.jpg",
+      "sha256": "111204935c34c7c0cc7452bfe1a40417147a2a61659a084f427ed027d0837646",
+      "width": 512,
+      "height": 512,
+      "webp": [
+        {
+          "width": 64,
+          "height": 64,
+          "path": "/assets/optimized/site-favicon-64.webp",
+          "bytes": 1134
+        },
+        {
+          "width": 128,
+          "height": 128,
+          "path": "/assets/optimized/site-favicon-128.webp",
+          "bytes": 2980
+        },
+        {
+          "width": 256,
+          "height": 256,
+          "path": "/assets/optimized/site-favicon-256.webp",
+          "bytes": 6946
+        },
+        {
+          "width": 512,
+          "height": 512,
+          "path": "/assets/optimized/site-favicon-512.webp",
+          "bytes": 14470
+        }
+      ],
+      "avif": [
+        {
+          "width": 64,
+          "height": 64,
+          "path": "/assets/optimized/site-favicon-64.avif",
+          "bytes": 1146
+        },
+        {
+          "width": 128,
+          "height": 128,
+          "path": "/assets/optimized/site-favicon-128.avif",
+          "bytes": 2490
+        },
+        {
+          "width": 256,
+          "height": 256,
+          "path": "/assets/optimized/site-favicon-256.avif",
+          "bytes": 4979
+        },
+        {
+          "width": 512,
+          "height": 512,
+          "path": "/assets/optimized/site-favicon-512.avif",
+          "bytes": 9076
         }
       ]
     },
