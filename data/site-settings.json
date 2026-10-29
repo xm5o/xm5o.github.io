@@ -8,15 +8,15 @@
   "commissionUsed": 0,
   "backgroundEnabled": false,
   "bannerEnabled": false,
-  "faviconEnabled": false,
+  "faviconEnabled": true,
   "themeMode": "auto",
   "mainColor": "#ffffff",
   "secondaryColor": "#9f9f9f",
   "accentColor": "#d7d7d7",
-  "maintenanceEnabled": true,
+  "maintenanceEnabled": false,
   "maintenanceTitle": "Under Maintenance",
   "maintenanceTitleAr": "تحت الصيانة",
   "maintenanceMessage": "The site is being updated right now. Coming back Soon!",
   "maintenanceMessageAr": "الموقع حاليا تحت الصيانة. شيك بعدين!",
-  "updatedAt": "2026-10-23T12:52:30.976Z"
+  "updatedAt": "2026-10-29T08:55:26.772Z"
 }

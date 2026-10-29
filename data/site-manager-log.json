@@ -1,5 +1,11 @@
 [
   {
+    "id": "ae0b91b4-54e1-47ed-a031-925b6bfeb57a",
+    "action": "publish",
+    "detail": "settings, site-favicon.jpg",
+    "at": "2026-10-29T08:55:26.772Z"
+  },
+  {
     "id": "187687a0-28c9-4331-8865-ab7df7db909c",
     "action": "publish",
     "detail": "settings",
